@@ -1,2 +1,13 @@
 /*
 !.*
+
+.CFUserTextEncoding
+.cpan
+.cups
+*cache*
+.kde
+.qt
+.serverauth.*
+.viminfo
+
+
