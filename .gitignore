@@ -1,6 +1,9 @@
 /*
 !.*
 
+.subversion/*
+!.subversion/config
+
 .CFUserTextEncoding
 .cpan
 .cups
