@@ -4,17 +4,22 @@
 .subversion/*
 !.subversion/config
 
+.*cache*
+.*history
+
 .CFUserTextEncoding
 .cpan
 .cups
-.*cache*
 .ghc
 .kde
 .lesshst
 .qt
 .semanticdb
 .serverauth.*
+.slime*
+.sqlite_history
 .srecode
+.ssh
 .viminfo
 .ultrastar
 
