@@ -8,9 +8,15 @@
 .*history
 
 .CFUserTextEncoding
+.DS_Store
 .cpan
 .cups
+.eclipse_keyring
+.emacs.d
+.eshell
+.fontconfig
 .ghc
+.gitconfig
 .gnupg
 .gpg*
 .idapro
