@@ -4,12 +4,14 @@
 .CFUserTextEncoding
 .cpan
 .cups
-*cache*
+.*cache*
 .ghc
 .kde
 .lesshst
 .qt
+.semanticdb
 .serverauth.*
+.srecode
 .viminfo
 
 
