@@ -13,6 +13,7 @@
 .ghc
 .kde
 .lesshst
+.pgpass
 .qt
 .semanticdb
 .serverauth.*
