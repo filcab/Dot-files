@@ -1,0 +1,6 @@
+:set +t
+:set +s
+:set editor /Applications/Emacs.app/Contents/MacOS/Emacs
+
+:def hoogle \str -> return $ ":! hoogle --count=15 \"" ++ str ++ "\""
+

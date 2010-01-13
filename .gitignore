@@ -5,7 +5,9 @@
 .cpan
 .cups
 *cache*
+.ghc
 .kde
+.lesshst
 .qt
 .serverauth.*
 .viminfo
