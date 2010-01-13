@@ -18,6 +18,7 @@
 .cpan
 .cups
 .dropbox
+.dvc
 .eclipse_keyring
 .emacs.d
 .eshell
