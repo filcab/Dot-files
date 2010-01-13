@@ -11,6 +11,9 @@
 .cpan
 .cups
 .ghc
+.gnupg
+.gpg*
+.idapro
 .kde
 .lesshst
 .pgpass
