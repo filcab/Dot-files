@@ -4,13 +4,20 @@
 .subversion/*
 !.subversion/config
 
+.*authority
 .*cache*
 .*history
 
 .CFUserTextEncoding
 .DS_Store
+.Trash
+.Xmodmap
+.allegrocl
+.bazaar
+.cabal
 .cpan
 .cups
+.dropbox
 .eclipse_keyring
 .emacs.d
 .eshell
