@@ -16,8 +16,14 @@ define receiver
   po $rdi
 end
 
+# We print the two possibilitites:
+# The first is for the beginning of an objc_msgSend()
+# The second is for just before a call of objc_msgSend()
 define selector
   p (char*)$rsi
+  # %rsi is a SEL: struct objc_selector*
+  # struct objc_selector has 2 fields: void*uid and char*name (or something)
+  p *(char**)($rsi+8)
 end
 
 define arg1
