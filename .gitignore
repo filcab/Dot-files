@@ -31,6 +31,7 @@
 .idapro
 .kde
 .lesshst
+.local
 .pgpass
 .qt
 .semanticdb
@@ -41,4 +42,5 @@
 .ssh
 .viminfo
 .ultrastar
+.wine
 
