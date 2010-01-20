@@ -4,7 +4,6 @@ define loadfs
   p (char)[[NSBundle \
     bundleWithPath:@"/Applications/Dev/F-Script/FScript.framework"] load]
   p (void)[FScriptMenuItem insertInMainMenu]
-  continue
 end
 
 
