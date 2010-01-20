@@ -116,6 +116,8 @@ export PATH=$PATH:~/.cabal/bin:~/ghc/bin
 export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
 
 # Bash completion
+source ~/.bash.d/cabal-completion
+
 if [ -f /opt/local/etc/bash_completion ]; then
     . /opt/local/etc/bash_completion
 fi
