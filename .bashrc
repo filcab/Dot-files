@@ -226,14 +226,39 @@ function procs {
 }
 
 ## See if pidof already exists
-res=`pidof $0 2>/dev/null`
-if [ $? != 0 ]; then
+#res=`pidof $0 2>/dev/null`
+res=`which pidof`
+if [ -z $res ]; then
   function pidof {
     for i in "$@"; do
       procs | awk "{ if (\$2 ~ \"^-?$1\$\" || \$2 ~ \".*/$1\$\") print \$1 }"
     done
   }
 fi
+
+## Function to emulate `watch'
+res=`which watch`
+if [ -z $res ]; then
+  function watch () {
+    while true; do
+      clear
+      echo "Watching (2 secs.) command: $@\$"
+      "$@"
+      sleep 2
+    done
+  }
+fi
+
+## Function for loading F-Script Anywhere into a running app.
+function loadfs ()
+{
+  if [ -z "$1" ]; then
+    echo "Usage: loadfs application" >&2
+    echo "Example: loadfs TextEdit" >&2
+  fi
+
+  echo "loadfs $1" | gdb > /dev/null
+}
 
 # Set up some aliases (needs cleaning)
 #alias ls='ls -G'
