@@ -16,6 +16,7 @@
 .bazaar
 .bzr.log
 .cabal
+.config
 .cpan
 .cups
 .dropbox
