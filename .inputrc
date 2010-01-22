@@ -1,0 +1,8 @@
+# .inputrc file for configuring libreadline applications
+
+set blink-matching-paren   on
+
+# When inserting parens, close them automatically
+"\e(": "()\C-b"
+"\e[": "[]\C-b"
+
