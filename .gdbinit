@@ -1,11 +1,26 @@
 # Function to load FScript into a running Application
 define loadfs
   attach $arg0
-  p (char)[[NSBundle \
-    bundleWithPath:@"/Applications/Dev/F-Script/FScript.framework"] load]
-  p (void)[FScriptMenuItem insertInMainMenu]
+  loadfs_private
+  call (void)[FScriptMenuItem insertInMainMenu]
 end
-
+# Private function for effectivelly loading F-Script
+define loadfs_private
+  call (char)[[NSBundle \
+    bundleWithPath:@"/Applications/Dev/F-Script/FScript.framework"] load]
+end
+define fsconsole
+  attach $arg0
+  loadfs_private
+  call (void)[[[FScriptMenuItem alloc] init] showConsole:nil]
+  continue
+end
+define fsbrowser
+  attach $arg0
+  loadfs_private
+  call (void)[[[FScriptMenuItem alloc] init] openObjectBrowser:nil]
+  continue
+end
 
 # Objective-C debugging utility functions (x86_64)
 # Calling convention (from: http://www.x86-64.org/documentation/abi.pdf )
