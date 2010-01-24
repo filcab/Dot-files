@@ -6,19 +6,26 @@ define loadfs
 end
 # Private function for effectivelly loading F-Script
 define loadfs_private
-  call (char)[[NSBundle \
+  set $loaded = (char)[[NSBundle \
     bundleWithPath:@"/Applications/Dev/F-Script/FScript.framework"] load]
+  if ! $loaded
+    print "Couldn't load `F-Script' bundle"
+  else
+    print "Loaded `F-Script' bundle"
+  end
 end
 define fsconsole
   attach $arg0
   loadfs_private
   call (void)[[[FScriptMenuItem alloc] init] showConsole:nil]
+  print "Done!"
   continue
 end
 define fsbrowser
   attach $arg0
   loadfs_private
   call (void)[[[FScriptMenuItem alloc] init] openObjectBrowser:nil]
+  print "Done!"
   continue
 end
 
