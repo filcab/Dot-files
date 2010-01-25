@@ -27,6 +27,8 @@ export ALTERNATE_EDITOR=""
 # CDPATH ~= PATH for the `cd' command
 #export CDPATH=.:~:~/ist:~/dev/stuff
 
+# Path for hunspell dictionaries
+export DICPATH=~/.hunspell
 
 ###### PATHs ######
 # Put /usr/local/bin before /usr/bin
