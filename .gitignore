@@ -35,6 +35,7 @@
 .local
 .pgpass
 .qt
+.recentf
 .semanticdb
 .serverauth.*
 .slime*
