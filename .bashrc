@@ -246,7 +246,7 @@ if [ -z $res ]; then
   function watch () {
     while true; do
       clear
-      echo "Watching (2 secs.) command: $@\$"
+      echo "Watching (2 secs.) command: " "$@"
       "$@"
       sleep 2
     done
