@@ -49,6 +49,9 @@ end
 define receiver
   po $rdi
 end
+define ireceiver
+  po *(void**)$esp
+end
 
 # We print the two possibilitites:
 # The first is for the beginning of an objc_msgSend()
@@ -58,6 +61,9 @@ define selector
   # %rsi is a SEL: struct objc_selector*
   # struct objc_selector has 2 fields: void*uid and char*name (or something)
   p *(char**)($rsi+8)
+end
+define iselector
+  p *(char**)($esp+4)
 end
 
 define arg1
@@ -73,5 +79,8 @@ define arg4
   po $r9
 end
 
+define iarg
+  po *(void**)($esp+4*$arg0)
+end
 
 
