@@ -29,6 +29,19 @@ define fsbrowser
   continue
 end
 
+define abi-description
+  echo  i386:                                               \n
+  echo \  $esp upwards gets all the arguments (before call) \n
+  echo \  $ebp+4 upwards gets all the args (after call)     \n
+  echo  x86_64:                                             \n
+  echo \  %rdi, %rsi, %rdx, %rcx, %r8 and %r9 is used.      \n
+end
+
+# Objective-C debugging utility functions (i386) with 'i' prefix
+# Calling convention: Everything goes on the stack:
+# $esp upwards gets all the arguments (before call)
+# $ebp+4 upwards gets all the args (after call)
+
 # Objective-C debugging utility functions (x86_64)
 # Calling convention (from: http://www.x86-64.org/documentation/abi.pdf )
 # 2. If the class is INTEGER, the next available register of the sequence
