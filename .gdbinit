@@ -83,4 +83,7 @@ define iarg
   po *(void**)($esp+4*$arg0)
 end
 
+define rev-eng
+  source ~/.gdb-rev-eng
+end
 
