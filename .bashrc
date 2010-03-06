@@ -259,9 +259,9 @@ function loadfs ()
   if [ -z "$1" ]; then
     echo "Usage: loadfs application" >&2
     echo "Example: loadfs TextEdit" >&2
+  else
+    echo "loadfs $1" | gdb > /dev/null
   fi
-
-  echo "loadfs $1" | gdb > /dev/null
 }
 
 # Set up some aliases (needs cleaning)
