@@ -1,3 +1,4 @@
 {
-	"CATALINA_HOME" = "/java/apache-tomcat-5.5.28";
+	"CATALINA_HOME" = "/java/stepcat-2.0-6.0.14";
+	"STEP_HOME" = "/java/stepcat-2.0-6.0.14";
 }
