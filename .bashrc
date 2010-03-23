@@ -260,7 +260,7 @@ function loadfs ()
     echo "Usage: loadfs application" >&2
     echo "Example: loadfs TextEdit" >&2
   else
-    echo "loadfs $1" | gdb > /dev/null
+    gdb --batch -x <(echo loadfs $1)
   fi
 }
 
