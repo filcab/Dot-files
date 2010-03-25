@@ -283,3 +283,6 @@ alias erc="emacs -e '(call-interactively #\'irc)' &"
 #alias emacs='emacsclient -t'
 alias ldd='otool -L'
 
+alias mysqladmin='sudo mysqladmin5 -u root -p'
+
+
