@@ -1,5 +1,5 @@
 {
 	"CATALINA_HOME" = "/java/stepcat-2.0-6.0.14";
 	"STEP_HOME" = "/java/stepcat-2.0-6.0.14";
-	"GTW_HOME" = "/java/stepcat-2.0-6.0.14";
+	"GWT_HOME" = "/java/gwt-2.0.0";
 }
