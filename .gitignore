@@ -26,6 +26,7 @@
 .eshell
 .fontconfig
 .ghc
+.gimp-2.6
 .gitconfig
 .gnupg
 .gpg*
@@ -36,12 +37,14 @@
 .pgpass
 .qt
 .recentf
+.recently-used.xbel
 .semanticdb
 .serverauth.*
 .slime*
 .sqlite_history
 .srecode
 .ssh
+.thumbnails
 .viminfo
 .ultrastar
 .wine
