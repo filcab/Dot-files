@@ -264,6 +264,14 @@ function loadfs ()
   fi
 }
 
+## Function for getting Tracks from the GPS
+function gpstracks ()
+{
+  ~/dev/stuff/gpsbabel/gpsbabel -D5 -t -i garmin -f /dev/cu.PL2303-0000103D \
+                                       -o gpx    -F -   ## output to stdout
+}
+
+
 # Set up some aliases (needs cleaning)
 #alias ls='ls -G'
 alias cd..='cd ..'
