@@ -2,7 +2,7 @@
 #
 # DESCRIPTION: A user-friendly gdb configuration file.
 #
-# REVISION : 7.2 (11/10/2009)
+# REVISION : 7.3 (16/04/2010)
 #
 # CONTRIBUTORS: mammon_, elaine, pusillus, mong, zhang le, l0kit,
 #               truthix the cyberpunk, fG!, gln
@@ -24,6 +24,14 @@
 #						  and http://reverse.put.as/2009/08/26/gdb-patches/ (if you want the fixed binary for i386)
 #
 # CHANGELOG:
+#
+#	Version 7.3 (16/04/2010)
+#	  Support for 64bits targets. Default is 32bits, you should modify the variable or use the 32bits or 64bits to choose the mode.
+#		I couldn't find another way to recognize the type of binary… Testing the register doesn't work that well.
+#	  TODO: fix objectivec messages and stepo for 64bits
+#
+#   Version 7.2.1 (24/11/2009)
+#	  Another fix to stepo (0xFF92 missing)
 #
 #   Version 7.2 (11/10/2009)
 #	  Added the smallregisters function to create 16 and 8 bit versions from the registers EAX, EBX, ECX, EDX
@@ -146,6 +154,10 @@
 
 
 # __________________gdb options_________________
+
+# set to 1 to enable 64bits target by default (32bit is the default)
+set $64BITS = 0
+
 set confirm off
 set verbose off
 set prompt \033[31mgdb$ \033[0m
@@ -456,47 +468,81 @@ end
 
 
 define reg
+ if ($64BITS == 1)
+# 64bits stuff
     printf "  "
     echo \033[32m
-    printf "EAX:"
+    printf "RAX:"
     echo \033[0m
-    printf " %08X  ", $eax
+    printf " 0x%016lX  ", $rax
     echo \033[32m
-    printf "EBX:"
+    printf "RBX:"
     echo \033[0m
-    printf " %08X  ", $ebx
+    printf " 0x%016lX  ", $rbx
     echo \033[32m
-    printf "ECX:"
+    printf "RCX:"
     echo \033[0m
-    printf " %08X  ", $ecx
+    printf " 0x%016lX  ", $rcx
     echo \033[32m
-    printf "EDX:"
+    printf "RDX:"
     echo \033[0m
-    printf " %08X  ", $edx
+    printf " 0x%016lX  ", $rdx
     echo \033[1m\033[4m\033[31m
     flags
     echo \033[0m
     printf "  "
     echo \033[32m
-    printf "ESI:"
+    printf "RSI:"
     echo \033[0m
-    printf " %08X  ", $esi
+    printf " 0x%016lX  ", $rsi
     echo \033[32m
-    printf "EDI:"
+    printf "RDI:"
     echo \033[0m
-    printf " %08X  ", $edi
+    printf " 0x%016lX  ", $rdi
     echo \033[32m
-    printf "EBP:"
+    printf "RBP:"
     echo \033[0m
-    printf " %08X  ", $ebp
+    printf " 0x%016lX  ", $rbp
     echo \033[32m
-    printf "ESP:"
+    printf "RSP:"
     echo \033[0m
-    printf " %08X  ", $esp
+    printf " 0x%016lX  ", $rsp
     echo \033[32m
-    printf "EIP:"
+    printf "RIP:"
     echo \033[0m
-    printf " %08X\n  ", $eip
+    printf " 0x%016lX\n  ", $rip
+    echo \033[32m
+    printf "R8 :"
+    echo \033[0m
+    printf " 0x%016lX  ", $r8
+    echo \033[32m
+    printf "R9 :"
+    echo \033[0m
+    printf " 0x%016lX  ", $r9
+    echo \033[32m
+    printf "R10:"
+    echo \033[0m
+    printf " 0x%016lX  ", $r10
+    echo \033[32m
+    printf "R11:"
+    echo \033[0m
+    printf " 0x%016lX  ", $r11
+    echo \033[32m
+    printf "R12:"
+    echo \033[0m
+    printf " 0x%016lX\n  ", $r12
+    echo \033[32m
+    printf "R13:"
+    echo \033[0m
+    printf " 0x%016lX  ", $r13
+    echo \033[32m
+    printf "R14:"
+    echo \033[0m
+    printf " 0x%016lX  ", $r14
+    echo \033[32m
+    printf "R15:"
+    echo \033[0m
+    printf " 0x%016lX\n  ", $r15
     echo \033[32m
     printf "CS:"
     echo \033[0m
@@ -522,9 +568,81 @@ define reg
     echo \033[0m
     printf " %04X", $ss
     echo \033[0m
+# 32bits stuff
+ else
+    printf "  "
+    echo \033[32m
+    printf "EAX:"
+    echo \033[0m
+    printf " 0x%08X  ", $eax
+    echo \033[32m
+    printf "EBX:"
+    echo \033[0m
+    printf " 0x%08X  ", $ebx
+    echo \033[32m
+    printf "ECX:"
+    echo \033[0m
+    printf " 0x%08X  ", $ecx
+    echo \033[32m
+    printf "EDX:"
+    echo \033[0m
+    printf " 0x%08X  ", $edx
+    echo \033[1m\033[4m\033[31m
+    flags
+    echo \033[0m
+    printf "  "
+    echo \033[32m
+    printf "ESI:"
+    echo \033[0m
+    printf " 0x%08X  ", $esi
+    echo \033[32m
+    printf "EDI:"
+    echo \033[0m
+    printf " 0x%08X  ", $edi
+    echo \033[32m
+    printf "EBP:"
+    echo \033[0m
+    printf " 0x%08X  ", $ebp
+    echo \033[32m
+    printf "ESP:"
+    echo \033[0m
+    printf " 0x%08X  ", $esp
+    echo \033[32m
+    printf "EIP:"
+    echo \033[0m
+    printf " 0x%08X\n  ", $eip
+    echo \033[32m
+    printf "CS:"
+    echo \033[0m
+    printf " %04X  ", $cs
+    echo \033[32m
+    printf "DS:"
+    echo \033[0m
+    printf " %04X  ", $ds
+    echo \033[32m
+    printf "ES:"
+    echo \033[0m
+    printf " %04X  ", $es
+    echo \033[32m
+    printf "FS:"
+    echo \033[0m
+    printf " %04X  ", $fs
+    echo \033[32m
+    printf "GS:"
+    echo \033[0m
+    printf " %04X  ", $gs
+    echo \033[32m
+    printf "SS:"
+    echo \033[0m
+    printf " %04X", $ss
+    echo \033[0m
+ end
 # call smallregisters
 	smallregisters
 # display conditional jump routine
+	if ($64BITS == 1)
+	 printf "\t\t\t\t"
+	end
     dumpjump
     printf "\n"
 end
@@ -533,6 +651,35 @@ Print CPU registers.
 end
 
 define smallregisters
+ if ($64BITS == 1)
+#64bits stuff
+	# from rax
+	set $eax = $rax & 0xffffffff
+	set $ax = $rax & 0xffff
+	set $al = $ax & 0xff
+	set $ah = $ax >> 8
+	# from rbx
+	set $bx = $rbx & 0xffff
+	set $bl = $bx & 0xff
+	set $bh = $bx >> 8
+	# from rcx
+	set $ecx = $rcx & 0xffffffff
+	set $cx = $rcx & 0xffff
+	set $cl = $cx & 0xff
+	set $ch = $cx >> 8
+	# from rdx
+	set $edx = $rdx & 0xffffffff
+	set $dx = $rdx & 0xffff
+	set $dl = $dx & 0xff
+	set $dh = $dx >> 8
+	# from rsi
+	set $esi = $rsi & 0xffffffff
+	set $si = $rsi & 0xffff
+	# from rdi
+	set $edi = $rdi & 0xffffffff
+	set $di = $rdi & 0xffff		
+#32 bits stuff
+ else
 	# from eax
 	set $ax = $eax & 0xffff
 	set $al = $ax & 0xff
@@ -553,9 +700,12 @@ define smallregisters
 	set $si = $esi & 0xffff
 	# from edi
 	set $di = $edi & 0xffff		
+ end
+ 
 end
 document smallregisters
 Create the 16 and 8 bit cpu registers (gdb doesn't have them by default)
+And 32bits if we are dealing with 64bits binaries
 end
 
 define func
@@ -676,7 +826,7 @@ define hex_quad
     if $argc != 1
         help hex_quad
     else
-        printf "%02X %02X %02X %02X  %02X %02X %02X %02X", \
+        printf "%02X %02X %02X %02X %02X %02X %02X %02X", \
                *(unsigned char*)($arg0), *(unsigned char*)($arg0 + 1),     \
                *(unsigned char*)($arg0 + 2), *(unsigned char*)($arg0 + 3), \
                *(unsigned char*)($arg0 + 4), *(unsigned char*)($arg0 + 5), \
@@ -688,13 +838,16 @@ Print eight hexadecimal bytes starting at address ADDR.
 Usage: hex_quad ADDR
 end
 
-
 define hexdump
     if $argc != 1
         help hexdump
     else
         echo \033[1m
-        printf "%08X : ", $arg0
+        if ($64BITS == 1)
+         printf "0x%016lX : ", $arg0
+        else
+         printf "0x%08X : ", $arg0
+        end
         echo \033[0m
         hex_quad $arg0
         echo \033[1m
@@ -729,18 +882,24 @@ Usage: hexdump ADDR
 end
 
 
-
-
 # _______________data window__________________
 define ddump
     if $argc != 1
         help ddump
     else
         echo \033[34m
-        printf "[%04X:%08X]", $ds, $data_addr
+        if ($64BITS == 1)
+         printf "[0x%04X:0x%016lX]", $ds, $data_addr
+        else
+         printf "[0x%04X:0x%08X]", $ds, $data_addr
+        end
 	echo \033[34m
 	printf "------------------------"
-        printf "-----------------------------------"
+    printf "-------------------------------"
+    if ($64BITS == 1)
+     printf "-------------------------------------"
+	end
+
 	echo \033[1;34m
 	printf "[data]\n"
         echo \033[0m
@@ -777,6 +936,22 @@ end
 
 
 define datawin
+ if ($64BITS == 1)
+    if ((($rsi >> 0x18) == 0x40) || (($rsi >> 0x18) == 0x08) || (($rsi >> 0x18) == 0xBF))
+        set $data_addr = $rsi
+    else
+        if ((($rdi >> 0x18) == 0x40) || (($rdi >> 0x18) == 0x08) || (($rdi >> 0x18) == 0xBF))
+            set $data_addr = $rdi
+        else
+            if ((($rax >> 0x18) == 0x40) || (($rax >> 0x18) == 0x08) || (($rax >> 0x18) == 0xBF))
+                set $data_addr = $rax
+            else
+                set $data_addr = $rsp
+            end
+        end
+    end
+
+ else
     if ((($esi >> 0x18) == 0x40) || (($esi >> 0x18) == 0x08) || (($esi >> 0x18) == 0xBF))
         set $data_addr = $esi
     else
@@ -790,6 +965,7 @@ define datawin
             end
         end
     end
+ end
     ddump $CONTEXTSIZE_DATA
 end
 document datawin
@@ -1061,6 +1237,9 @@ define context
     if $SHOWCPUREGISTERS == 1
 	    printf "----------------------------------------"
 	    printf "----------------------------------"
+	    if ($64BITS == 1)
+	     printf "---------------------------------------------"
+	    end
 	    echo \033[34m\033[1m
 	    printf "[regs]\n"
 	    echo \033[0m
@@ -1069,10 +1248,17 @@ define context
     end
     if $SHOWSTACK == 1
 	echo \033[34m
-    	printf "[%04X:%08X]", $ss, $esp
+		if ($64BITS == 1)
+		 printf "[0x%04X:0x%016lX]", $ss, $rsp
+		else
+    	 printf "[0x%04X:0x%08X]", $ss, $esp
+    	end
         echo \033[34m
-	printf "-------------------------"
-    	printf "---------------------------------"
+		printf "-------------------------"
+    	printf "-----------------------------"
+	    if ($64BITS == 1)
+	     printf "-------------------------------------"
+	    end
 	echo \033[34m\033[1m
 	printf "[stack]\n"
     	echo \033[0m
@@ -1085,6 +1271,7 @@ define context
     end
 # show the objective C message being passed to msgSend
    if $SHOWOBJECTIVEC == 1
+#FIXME64
 # What a piece of crap that's going on here :)
 # detect if it's the correct opcode we are searching for
     	set $__byte1 = *(unsigned char *)$pc
@@ -1109,6 +1296,9 @@ define context
      		if $displayobjectivec == 1
       			echo \033[34m
       			printf "--------------------------------------------------------------------"
+  			    if ($64BITS == 1)
+			     printf "---------------------------------------------"
+	    		end
 			echo \033[34m\033[1m
 			printf "[ObjectiveC]\n"
       			echo \033[0m\033[30m
@@ -1119,6 +1309,9 @@ define context
     	if $displayobjectivec == 1
       		echo \033[34m
       		printf "--------------------------------------------------------------------"
+      		if ($64BITS == 1)
+	     	 printf "---------------------------------------------"
+	    	end
 		echo \033[34m\033[1m
 		printf "[ObjectiveC]\n"
       		echo \033[0m\033[30m
@@ -1129,11 +1322,14 @@ define context
 # and this is the end of this little crap
 
     if $SHOWDATAWIN == 1
-	datawin
+	 datawin
     end
 
     echo \033[34m
     printf "--------------------------------------------------------------------------"
+    if ($64BITS == 1)
+	 printf "---------------------------------------------"
+	end
     echo \033[34m\033[1m
     printf "[code]\n"
     echo \033[0m
@@ -1148,7 +1344,13 @@ define context
     end
     echo \033[34m
     printf "----------------------------------------"
-    printf "----------------------------------------\n"
+    printf "----------------------------------------"
+    if ($64BITS == 1)
+     printf "---------------------------------------------\n"
+	else
+	 printf "\n"
+	end
+
     echo \033[0m
 end
 document context
@@ -1262,6 +1464,7 @@ document main
 Run program and break on main().
 end
 
+# FIXME64
 #### WARNING ! WARNING !!
 #### More more messy stuff starting !!!
 #### I was thinking about how to do this and then it ocurred me that it could be as simple as this ! :)
@@ -1293,7 +1496,7 @@ define stepo
      set $_nextaddress = $pc + 0x3
     end
     # call *0x????????(%ebx) (0xFF93????????) || 
-    if ($_byte2 == 0x93 || $_byte2 == 0x94 || $_byte2 == 0x90)
+    if ($_byte2 == 0x93 || $_byte2 == 0x94 || $_byte2 == 0x90 || $_byte2 == 0x92)
      set $_nextaddress = $pc + 6
     end
     # call *0x????????(%ebx,%eax,4) (0xFF94??????????)
@@ -1850,9 +2053,6 @@ document cls
 Clear screen.
 end
 
-
-
-
 # _________________user tips_________________
 # The 'tips' command is used to provide tutorial-like info to the user
 define tips
@@ -2027,6 +2227,20 @@ define disabledatawin
 end
 document disabledatawin
 Disable display of data window in the context window
+end
+
+define 32bits
+	set $64BITS = 0
+end
+document 32bits
+Set gdb to work with 32bits binaries
+end
+
+define 64bits
+	set $64BITS = 1
+end
+document 64bits
+Set gdb to work with 64bits binaries
 end
 
 #EOF
