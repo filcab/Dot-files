@@ -271,9 +271,6 @@ alias cd..='cd ..'
 alias less='less -r'
 alias grep='grep --color=auto'
 
-## procs is now defined as a function
-#alias procs='ps ax -o "pid,comm"'
-
 #alias sshfs='/Applications/MacFUSE/sshfs.app/Contents/Resources/sshfs-static'
 #alias ssh='/usr/bin/ssh'
 #alias seq='gseq'
