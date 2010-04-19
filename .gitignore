@@ -30,6 +30,7 @@
 .gitconfig
 .gnupg
 .gpg*
+.gtkrc-2.0
 .idapro
 .kde
 .lesshst
@@ -47,5 +48,7 @@
 .thumbnails
 .viminfo
 .ultrastar
+.wireshark*
 .wine
+
 
