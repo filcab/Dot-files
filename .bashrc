@@ -267,8 +267,8 @@ function loadfs ()
 ## Function for getting Tracks from the GPS
 function gpstracks ()
 {
-  ~/dev/stuff/gpsbabel/gpsbabel -D5 -t -i garmin -f /dev/cu.PL2303-0000103D \
-                                       -o gpx    -F -   ## output to stdout
+  ~/dev/stuff/gpsbabel/gpsbabel -D5 -t -i garmin -f /dev/cu.PL2303-* \
+                                       -o gpx    -F tracks.gpx  ## change to $1
 }
 
 
