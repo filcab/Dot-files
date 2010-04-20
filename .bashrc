@@ -295,4 +295,15 @@ alias ldd='otool -L'
 
 alias mysqladmin='sudo mysqladmin5 -u root -p'
 
+case `hostname` in
+  fry)
+    aklog
+
+    export PATH=/stuff/src/compiled/bin:$PATH
+    export PATH=/stuff/src/compiled/llvm/bin:$PATH
+    export PATH=/opt/google/chrome:$PATH
+
+    export PS1='$(ppwd \l)\u@\h:\w> '
+  ;;
+esac
 
