@@ -272,7 +272,7 @@ function gpstracks ()
     echo "Example: gpstracks tracks.gpx" >&2
   else
     ~/dev/stuff/gpsbabel/gpsbabel -D5 -t -i garmin -f /dev/cu.PL2303-* \
-                                         -o gpx    -F tracks.gpx
+                                         -o gpx    -F $1
   fi
 }
 
