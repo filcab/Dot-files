@@ -87,3 +87,17 @@ define rev-eng
   source ~/.gdb-rev-eng
 end
 
+# Must be the first defined breakpoint...
+define avoid-ptrace
+  break ptrace if $rdx == $0x1f
+  commands
+    return
+    continue
+end
+define avoid32-ptrace
+  break ptrace if (*(int*)($esp+4)) == $0x1f
+  commands
+    return
+    continue
+end
+
