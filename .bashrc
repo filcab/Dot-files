@@ -145,7 +145,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 # Make us smile a bit...
-if [[ "`which fortune 2>/dev/null`" != "" ]];
+if which fortune &>/dev/null;
 then
   echo
   fortune -s
