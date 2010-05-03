@@ -26,12 +26,12 @@ set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set nobackup            " no backup~ files.
 
 set tabstop=4           " number of spaces a tab counts for
-set shiftwidth=4        " spaces for autoindents
-"set expandtab           " turn a tabs into spaces
+set shiftwidth=2        " spaces for autoindents
+set expandtab           " turn a tabs into spaces
 
 " misc settings
-set fileformat=unix     " file mode is unix
-"set fileformats=unix,dos    " only detect unix file format, displays that ^M with dos files
+"set fileformat=unix     " file mode is unix
+set fileformats=unix,dos    " only detect unix file format, displays that ^M with dos files
 
 set viminfo='20,\"500   " remember copy registers after quitting in the .viminfo file -- 20 jump links, regs up to 500 lines'
 set hidden              " remember undo after quitting
