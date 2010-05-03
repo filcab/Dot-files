@@ -45,6 +45,7 @@ if &t_Co > 2 || has("gui_running")
   syntax on          " enable colors
   set hlsearch       " highlight search (very useful!)
   set incsearch      " search incremently (search while typing)
+  set guioptions-=T  " Don't show toolbar
 endif
 
 " paste mode toggle (needed when using autoindent/smartindent)
