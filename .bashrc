@@ -117,7 +117,7 @@ export PATH=$PATH:~/.cabal/bin:~/ghc/bin
 export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
 
 # Bash completion
-source ~/.bash.d/cabal-completion
+#source ~/.bash.d/cabal-completion
 
 if [ -f /opt/local/etc/bash_completion ]; then
     . /opt/local/etc/bash_completion
@@ -127,12 +127,12 @@ fi
 #fi
 
 HOME_BASH_DIR=~/.bash.d
-#if [ -d $HOME_BASH_DIR -a -r $HOME_BASH_DIR -a -x $HOME_BASH_DIR ]; then
-#	for i in $HOME_BASH_DIR/*; do
-#		[[ ${i##*/} != @(*~|*.bak|*.swp|\#*\#|*.dpkg*|.rpm*) ]] &&
-#			[ \( -f $i -o -h $i \) -a -r $i ] && . $i
-#	done
-#fi
+if [ -d $HOME_BASH_DIR -a -r $HOME_BASH_DIR -a -x $HOME_BASH_DIR ]; then
+  for i in $HOME_BASH_DIR/*; do
+    [[ ${i##*/} != @(*~|*.bak|*.swp|\#*\#|*.dpkg*|.rpm*) ]] &&
+      [ \( -f $i -o -h $i \) -a -r $i ] && . $i
+  done
+fi
 
 # Color for manpages:
 export LESS_TERMCAP_mb=$'\E[01;31m'
