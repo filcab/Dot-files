@@ -1,4 +1,3 @@
-export PS1='[\[\033[01;32m\]\u\[\033[00m\]@\[\033[01;31m\]\h\[\033[01;34m\] \w\[\033[00m\]] \$ '
 export HOME=~
 
 # fix spelling errors for cd, only in interactive shell
@@ -295,6 +294,7 @@ alias ldd='otool -L'
 
 alias mysqladmin='sudo mysqladmin5 -u root -p'
 
+myPS1=$PS1
 case `hostname` in
   fry)
     aklog
@@ -303,7 +303,13 @@ case `hostname` in
     export PATH=/stuff/src/compiled/llvm/bin:$PATH
     export PATH=/opt/google/chrome:$PATH
 
-    export PS1='$(ppwd \l)\u@\h:\w> '
+    myPS1='$(ppwd \l)\u@\h:\w> '
   ;;
+  *)
+    myPS1='[\[\033[01;32m\]\u\[\033[00m\]@\[\033[01;31m\]\h\[\033[01;34m\] \w\[\033[00m\]] \$ '
 esac
+
+if [ -z "$EMACSPATH" -a -z "$MYVIMRC" ]; then
+  export PS1=$myPS1
+fi
 
