@@ -126,7 +126,7 @@ fi
 #    . /sw/etc/bash_completion
 #fi
 
-HOME_BASH_DIR=~/.bash.d
+export HOME_BASH_DIR=~/.bash.d
 if [ -d $HOME_BASH_DIR -a -r $HOME_BASH_DIR -a -x $HOME_BASH_DIR ]; then
   for i in $HOME_BASH_DIR/*; do
     [[ ${i##*/} != @(*~|*.bak|*.swp|\#*\#|*.dpkg*|.rpm*) ]] &&
@@ -312,4 +312,6 @@ esac
 if [ -z "$EMACSPATH" -a -z "$MYVIMRC" ]; then
   export PS1=$myPS1
 fi
+
+export PATH=$HOME_BASH_DIR/bin:$PATH
 

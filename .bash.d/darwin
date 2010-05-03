@@ -4,7 +4,7 @@ if [ "`uname -s`" == "Darwin" ];
 then
 
 iTunes_cmds="now next prev play pause stop activate"
-function itunes()
+function f_itunes()
 {
   local cmd
   case $1 in
@@ -21,8 +21,6 @@ function itunes()
   osascript -e "tell application \"iTunes\" to $cmd" 2>/dev/null
 }
 
-alias iTunes=itunes
-
 function _itunes()
 {
   local cur prev
@@ -35,7 +33,7 @@ function _itunes()
 }
 
 complete -F _itunes itunes
-complete -F _itunes iTunes
+complete -F _itunes f_itunes
 
 fi # Darwin
 
