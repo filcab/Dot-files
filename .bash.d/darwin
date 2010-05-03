@@ -1,0 +1,41 @@
+#!/bin/bash
+
+if [ "`uname -s`" == "Darwin" ];
+then
+
+iTunes_cmds="now next prev play pause stop activate"
+function itunes()
+{
+  local cmd
+  case $1 in
+    ""|now)
+      cmd="return (artist of current track & \" - \" & name of current track)"
+    ;;
+    next) cmd="next track";;
+    prev) cmd="previous track";;
+    play) cmd="play";;
+    pause) cmd="pause";;
+    stop) cmd="stop";;
+    *) cmd="activate";;
+  esac
+  osascript -e "tell application \"iTunes\" to $cmd" 2>/dev/null
+}
+
+alias iTunes=itunes
+
+function _itunes()
+{
+  local cur prev
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  COMPREPLY=( $(compgen -W "${iTunes_cmds}" -- "${cur}" ) )
+  return 0
+}
+
+complete -F _itunes itunes
+complete -F _itunes iTunes
+
+fi # Darwin
+
