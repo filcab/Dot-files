@@ -6,7 +6,8 @@ endif
 " display settings
 set background=dark     " enable for dark terminals
 "set nowrap              " dont wrap lines
-set wrapmargin=4        " When wrapping, set up a margin
+set textwidth=74
+"set wrapmargin=4        " When wrapping, set up a margin
 set scrolloff=2         " 2 lines above/below cursor when scrolling
 set number              " show line numbers
 set showmatch           " show matching bracket (briefly jump)
