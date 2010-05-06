@@ -11,11 +11,11 @@ function f_itunes()
     ""|now)
       cmd="return (artist of current track & \" - \" & name of current track)"
     ;;
-    next) cmd="next track";;
+    n|next) cmd="next track";;
     prev) cmd="previous track";;
-    play) cmd="play";;
+    p|play) cmd="play";;
     pause) cmd="pause";;
-    stop) cmd="stop";;
+    s|stop) cmd="stop";;
     *) cmd="activate";;
   esac
   osascript -e "tell application \"iTunes\" to $cmd" 2>/dev/null
