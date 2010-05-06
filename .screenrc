@@ -1,0 +1,6 @@
+defscrollback 100000
+defutf8 on
+
+vbell on
+vbell_msg oi?
+
