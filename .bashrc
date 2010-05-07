@@ -129,8 +129,12 @@ fi
 export HOME_BASH_DIR=~/.bash.d
 if [ -d $HOME_BASH_DIR -a -r $HOME_BASH_DIR -a -x $HOME_BASH_DIR ]; then
   for i in $HOME_BASH_DIR/*; do
-    [[ ${i##*/} != @(*~|*.bak|*.swp|\#*\#|*.dpkg*|.rpm*) ]] &&
-      [ \( -f $i -o -h $i \) -a -r $i ] && . $i
+    #[[ ${i##*/} != @(*~|*.bak|*.swp|\#*\#|*.dpkg*|.rpm*) ]] &&
+    case "${i##*/}" in
+      *~|*.bak|*.swp|\#*\#|*.dpkg*|.rpm*)
+        [ \( -f $i -o -h $i \) -a -r $i ] && . $i
+      ;;
+    esac
   done
 fi
 
