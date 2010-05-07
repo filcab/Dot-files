@@ -1,4 +1,4 @@
-defscrollback 100000
+defscrollback 10000000
 defutf8 on
 
 vbell on
