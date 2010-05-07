@@ -299,8 +299,8 @@ alias ldd='otool -L'
 alias mysqladmin='sudo mysqladmin5 -u root -p'
 
 myPS1=$PS1
-case `hostname` in
-  fry)
+case `hostname -f` in
+  *.inesc-id.pt)
     aklog
 
     export PATH=/stuff/src/compiled/bin:$PATH
@@ -313,9 +313,10 @@ case `hostname` in
     myPS1='[\[\033[01;32m\]\u\[\033[00m\]@\[\033[01;31m\]\h\[\033[01;34m\] \w\[\033[00m\]] \$ '
 esac
 
-if [ -z "$EMACSPATH" -a -z "$MYVIMRC" ]; then
+if [ -z "$EMACSPATH"]; then
   export PS1=$myPS1
 fi
 
+# My miscellaneous bash scripts
 export PATH=$HOME_BASH_DIR/bin:$PATH
 
