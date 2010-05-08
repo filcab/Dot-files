@@ -3,6 +3,9 @@
 " extend the $PATH variable with the vim scripts' dir
 let $PATH .= "~/.vim/bin"
 
+" vim is the default editor for vim's subshells
+let $EDITOR = "vim"
+
 " End of FilCab's stuff
 
 " reset to vim-defaults
