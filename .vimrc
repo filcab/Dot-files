@@ -6,6 +6,13 @@ let $PATH .= "~/.vim/bin"
 " vim is the default editor for vim's subshells
 let $EDITOR = "vim"
 
+" make grep always print the filename (default: without the -H)
+set grepprg=grep\ -nH\ $*\ /dev/null
+
+" LaTeX stuff
+let g:tex_flavor='latex'    " LaTeX is the default flavor (not plain TeX)
+set iskeyword+=:            " So fig:figure gets completion support
+
 " End of FilCab's stuff
 
 " reset to vim-defaults
