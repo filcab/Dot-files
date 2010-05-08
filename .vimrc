@@ -1,4 +1,4 @@
-" Start of FilCab's stuff
+""" Start of FilCab's stuff
 
 " extend the $PATH variable with the vim scripts' dir
 let $PATH .= "~/.vim/bin"
@@ -13,7 +13,16 @@ set grepprg=grep\ -nH\ $*\ /dev/null
 let g:tex_flavor='latex'    " LaTeX is the default flavor (not plain TeX)
 set iskeyword+=:            " So fig:figure gets completion support
 
-" End of FilCab's stuff
+" Always show the status bar
+set laststatus=2
+
+" Default statusline:
+set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
+
+" When in a git repo, tell us the current branch
+let &statusline = '%{fugitive#statusline()} ' . &statusline
+
+""" End of FilCab's stuff
 
 " reset to vim-defaults
 if &compatible          " only if not set before:
