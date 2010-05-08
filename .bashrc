@@ -19,9 +19,14 @@ export CLICOLOR=1
 
 #export SBCL_HOME=/Users/filcab/toolchains/lib/sbcl
 
+## EDITOR
 # Use emacsclient as an EDITOR. Spawn a new emacs --daemon if it isn't running
-export EDITOR="emacsclient -t"
-export ALTERNATE_EDITOR=""
+#export EDITOR="emacsclient -t"
+#export ALTERNATE_EDITOR=""
+
+# Use vim as an EDITOR
+export EDITOR=vim
+
 
 # CDPATH ~= PATH for the `cd' command
 #export CDPATH=.:~:~/ist:~/dev/stuff
