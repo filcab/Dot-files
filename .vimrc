@@ -1,3 +1,10 @@
+" Start of FilCab's stuff
+
+" extend the $PATH variable with the vim scripts' dir
+let $PATH .= "~/.vim/bin"
+
+" End of FilCab's stuff
+
 " reset to vim-defaults
 if &compatible          " only if not set before:
   set nocompatible      " use vim-defaults instead of vi-defaults (easier, more user friendly)
