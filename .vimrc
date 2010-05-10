@@ -1,4 +1,9 @@
 """ Start of FilCab's stuff
+" turn on filetype plugins
+filetype plugin on
+
+" completion (CTRL+N) options
+set completeopt+=longest
 
 " extend the $PATH variable with the vim scripts' dir
 let $PATH .= "~/.vim/bin"
