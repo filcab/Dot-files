@@ -25,7 +25,7 @@ export CLICOLOR=1
 #export ALTERNATE_EDITOR=""
 
 # Use vim as an EDITOR
-export EDITOR=vim
+export EDITOR=mvim
 
 
 # CDPATH ~= PATH for the `cd' command
