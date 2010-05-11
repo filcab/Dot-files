@@ -4,7 +4,7 @@ defutf8 on
 vbell on
 vbell_msg oi?
 
-escape ^Ss # Let's try using C-s for escape (due to bash, emacs...)
+#escape ^Ss # Let's try using C-s for escape (due to bash, emacs...)
 
 startup_message off
 autodetach on # Autodetach on hangup instead of terminating completely
