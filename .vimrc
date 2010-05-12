@@ -118,7 +118,7 @@ if has("autocmd")
   let bash_is_sh=1
 
   " change to directory of current file automatically
-  autocmd BufEnter * lcd %:p:h
+  "autocmd BufEnter * lcd %:p:h
 
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vdboor
