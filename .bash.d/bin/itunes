@@ -1,6 +1,26 @@
 #!/bin/bash
 
-source $HOME_BASH_DIR/darwin
-# A script, so we can call it from outside bash (vim, emacs, ...)
+# iTunes commands that are available
+iTunes_cmds="now next prev play pause stop activate"
+
+# Actual work
+function f_itunes()
+{
+  local cmd
+  case $1 in
+    ""|now)
+      cmd="return (artist of current track & \" - \" & name of current track)"
+    ;;
+    n|next) cmd="next track";;
+    prev) cmd="previous track";;
+    p|play) cmd="play";;
+    pause) cmd="pause";;
+    s|stop) cmd="stop";;
+    *) cmd="activate";;
+  esac
+  osascript -e "tell application \"iTunes\" to $cmd" 2>/dev/null
+}
+
+
 f_itunes $*
 

@@ -1,25 +1,10 @@
 #!/bin/bash
 
+# Copyright (c) 2010 by Filipe Cabecinhas
+# Aliases and functions to be used only on Darwin (Mac OS X) systems
+
 if [ "`uname -s`" == "Darwin" ];
 then
-
-iTunes_cmds="now next prev play pause stop activate"
-function f_itunes()
-{
-  local cmd
-  case $1 in
-    ""|now)
-      cmd="return (artist of current track & \" - \" & name of current track)"
-    ;;
-    n|next) cmd="next track";;
-    prev) cmd="previous track";;
-    p|play) cmd="play";;
-    pause) cmd="pause";;
-    s|stop) cmd="stop";;
-    *) cmd="activate";;
-  esac
-  osascript -e "tell application \"iTunes\" to $cmd" 2>/dev/null
-}
 
 function _itunes()
 {
@@ -33,7 +18,6 @@ function _itunes()
 }
 
 complete -F _itunes itunes
-complete -F _itunes f_itunes
 
-fi # Darwin
+fi # `uname -s` == Darwin
 
