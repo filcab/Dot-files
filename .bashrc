@@ -153,7 +153,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 # Make us smile a bit...
-if which fortune &>/dev/null;
+if ! type fortune &>/dev/null;
 then
   echo
   fortune -s
@@ -237,10 +237,8 @@ function procs {
   ps ax -o "pid,comm" "$@"
 }
 
-## See if pidof already exists
-#res=`pidof $0 2>/dev/null`
-res=`which pidof`
-if [ -z $res ]; then
+## Define pidof if it doesn't exist
+if ! type pidof &>/dev/null; then
   function pidof {
     for i in "$@"; do
       procs | awk "{ if (\$2 ~ \"^-?$1\$\" || \$2 ~ \".*/$1\$\") print \$1 }"
@@ -249,8 +247,7 @@ if [ -z $res ]; then
 fi
 
 ## Function to emulate `watch'
-res=`which watch`
-if [ -z $res ]; then
+if ! type watch &>/dev/null; then
   function watch () {
     while true; do
       clear
