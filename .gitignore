@@ -32,6 +32,7 @@
 .dmrc
 .dropbox
 .dvc
+.eclim
 .eclipse_keyring
 .emacs.d
 .esd_auth
@@ -82,6 +83,9 @@
 .tomboy*
 .tor
 .ultrastar
+.vim/.netrwhist
+.vim/eclim
+.vim/plugin/eclim.vim
 .viminfo
 .vmware
 .wine
