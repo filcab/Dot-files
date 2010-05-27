@@ -97,10 +97,13 @@ set mouse=v             " use mouse in visual mode (not normal,insert,command,he
 
 " color settings (if terminal/gui supports it)
 if &t_Co > 2 || has("gui_running")
-  syntax on          " enable colors
-  set hlsearch       " highlight search (very useful!)
-  set incsearch      " search incremently (search while typing)
-  set guioptions-=T  " Don't show toolbar
+  syntax on               " enable colors
+  set hlsearch            " highlight search (very useful!)
+  set incsearch           " search incremently (search while typing)
+  set guioptions-=T       " Don't show toolbar
+  if has("gui_running")   " Only in a GUI
+    colorscheme ir_black  " A nice colorscheme I found online
+  endif
 endif
 
 " paste mode toggle (needed when using autoindent/smartindent)
