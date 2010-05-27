@@ -61,7 +61,7 @@ set background=dark     " enable for dark terminals
 set textwidth=74
 "set wrapmargin=4        " When wrapping, set up a margin
 set scrolloff=2         " 2 lines above/below cursor when scrolling
-set number              " show line numbers
+set nonumber            " do not show line numbers
 set showmatch           " show matching bracket (briefly jump)
 set showmode            " show mode in status bar (insert/replace/...)
 set showcmd             " show typed command in status bar
