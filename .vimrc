@@ -68,6 +68,7 @@ set showcmd             " show typed command in status bar
 set ruler               " show cursor position in status bar
 set title               " show file in titlebar
 set wildmenu            " completion with menu
+set wildmode=longest:full " complete longest match and show menu
 
 " editor settings
 set esckeys             " map missed escape sequences (enables keypad keys)
