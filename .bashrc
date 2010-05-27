@@ -153,7 +153,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 # Make us smile a bit...
-if ! type fortune &>/dev/null;
+if type fortune &>/dev/null;
 then
   echo
   fortune -s
