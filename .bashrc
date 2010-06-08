@@ -52,7 +52,7 @@ export CPATH=$CPATH:/Library/PostgreSQL/8.4/include
 
 # Lisps/Scheme
 export PATH=$PATH:/Applications/Dev/AllegroCL
-export PATH=$PATH:/Users/filcab/dev/stuff/plt/bin
+export PATH=$PATH:"/Applications/Dev/PLT Scheme v4.2.5/bin"
 
 # Graphviz
 export PATH=$PATH:/Applications/Dev/Graphviz.app/Contents/MacOS
