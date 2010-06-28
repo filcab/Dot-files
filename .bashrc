@@ -316,7 +316,13 @@ case `hostname -f` in
 esac
 
 if [ -z "$EMACSPATH"]; then
-  export PS1=$myPS1
+  case `hostname -f` in
+    *.inesc-id.pt)
+    ;;
+    *)
+      export PS1=$myPS1
+    ;;
+  esac
 fi
 
 # My miscellaneous bash scripts
