@@ -3,6 +3,13 @@
 # iTunes commands that are available
 iTunes_cmds="now next prev play pause stop activate"
 
+function usage()
+{
+  echo "Available commands:"
+  echo $iTunes_cmds
+  echo -e "\nI'll continue writing the help section afterwards."
+}
+
 # Actual work
 function f_itunes()
 {
@@ -16,6 +23,12 @@ function f_itunes()
     p|play) cmd="play";;
     pause) cmd="pause";;
     s|stop) cmd="stop";;
+    --help)
+      usage
+      exit 0;;
+    --commands)
+      echo $iTunes_cmds
+      exit 0;;
     *) cmd="activate";;
   esac
   osascript -e "tell application \"iTunes\" to $cmd" 2>/dev/null
