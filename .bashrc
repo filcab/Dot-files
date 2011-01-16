@@ -25,7 +25,7 @@ export CLICOLOR=1
 #export ALTERNATE_EDITOR=""
 
 # Use vim as an EDITOR
-export EDITOR="mvim -f"
+export EDITOR="vim -f"
 
 
 # CDPATH ~= PATH for the `cd' command
@@ -316,7 +316,13 @@ case `hostname -f` in
 esac
 
 if [ -z "$EMACSPATH"]; then
-  export PS1=$myPS1
+  case `hostname -f` in
+    *.inesc-id.pt)
+    ;;
+    *)
+      export PS1=$myPS1
+    ;;
+  esac
 fi
 
 # My miscellaneous bash scripts
