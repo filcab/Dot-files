@@ -8,8 +8,9 @@ then
 
 function _itunes()
 {
-  local cur prev
+  local cur prev iTunes_cmds
   COMPREPLY=()
+  iTunes_cmds=`itunes --commands`
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
