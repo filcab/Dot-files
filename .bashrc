@@ -62,10 +62,10 @@ export PATH=$PATH:~/valgrind/bin
 export CPATH=$CPATH:~/valgrind/include
 
 # LLVM/clang
-export PATH=$PATH:~/llvm/bin
-export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Users/filcab/llvm/lib
-export CPATH=$CPATH:~/llvm/include
-export MANPATH=$MANPATH:~/llvm/man:~/llvm/share/man
+export PATH=$PATH:~/llvm/bin:/stuff/src/compiled/llvm/bin
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Users/filcab/llvm/lib:/stuff/src/compiled/llvm/lib
+export CPATH=$CPATH:~/llvm/include:/stuff/src/compiled/llvm/include
+export MANPATH=$MANPATH:~/llvm/man:~/llvm/share/man:/stuff/src/compiled/llvm/man:/stuff/src/compiled/llvm/share/man
 
 # System LLVM-GCC
 export PATH=$PATH:/Developer/usr/bin
