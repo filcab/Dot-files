@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # iTunes commands that are available
-iTunes_cmds="now next prev play pause stop activate"
+iTunes_cmds="now next prev play pause stop activate --help --commands"
 
 function usage()
 {
