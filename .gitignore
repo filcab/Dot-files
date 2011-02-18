@@ -61,6 +61,7 @@
 .mcop
 .mozilla
 .nautilus
+.netbeans*
 .ooo3
 .pgpass
 .pki
