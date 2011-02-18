@@ -1,0 +1,4 @@
+function futurama() {
+  curl -Is slashdot.org | egrep '^X-(F|B|L)' | cut -c 3-;
+}
+
