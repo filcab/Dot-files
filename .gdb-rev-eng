@@ -2,7 +2,7 @@
 #
 # DESCRIPTION: A user-friendly gdb configuration file.
 #
-# REVISION : 7.3 (16/04/2010)
+# REVISION : 7.3.2 (21/02/2011)
 #
 # CONTRIBUTORS: mammon_, elaine, pusillus, mong, zhang le, l0kit,
 #               truthix the cyberpunk, fG!, gln
@@ -20,25 +20,35 @@
 #                 If you load the binary from the command line, like $gdb binary-name, this will not work as it should
 #                 For more information, read it here http://reverse.put.as/2008/11/28/apples-gdb-bug/
 #
-#				  UPDATE: This bug can be fixed in gdb source. Refer to http://reverse.put.as/2009/08/10/fix-for-apples-gdb-bug-or-why-apple-forks-are-bad/
+#  UPDATE: This bug can be fixed in gdb source. Refer to http://reverse.put.as/2009/08/10/fix-for-apples-gdb-bug-or-why-apple-forks-are-bad/
 #						  and http://reverse.put.as/2009/08/26/gdb-patches/ (if you want the fixed binary for i386)
+#
+#	   An updated version of the patch and binary is available at http://reverse.put.as/2011/02/21/update-to-gdb-patches-fix-a-new-bug/
 #
 # CHANGELOG:
 #
-#	Version 7.3 (16/04/2010)
+#	Version 7.3.2 (21/02/2010) - fG!
+#	  Added the command rint3 and modified the int3 command. The new command will restore the byte in previous int3 patch.
+#
+# 	Version 7.3.1 (29/06/2010) - fG!
+#	  Added enablelib/disablelib command to quickly set the stop-on-solib-events trick
+#	  Implemented the stepoh command equivalent to the stepo but using hardware breakpoints 
+#	  More fixes to stepo
+#
+#	Version 7.3 (16/04/2010) - fG!
 #	  Support for 64bits targets. Default is 32bits, you should modify the variable or use the 32bits or 64bits to choose the mode.
-#		I couldn't find another way to recognize the type of binary… Testing the register doesn't work that well.
+#     	  I couldn't find another way to recognize the type of binary… Testing the register doesn't work that well.
 #	  TODO: fix objectivec messages and stepo for 64bits
 #
-#   Version 7.2.1 (24/11/2009)
+#   Version 7.2.1 (24/11/2009) - fG!
 #	  Another fix to stepo (0xFF92 missing)
 #
-#   Version 7.2 (11/10/2009)
+#   Version 7.2 (11/10/2009) - fG!
 #	  Added the smallregisters function to create 16 and 8 bit versions from the registers EAX, EBX, ECX, EDX
 #	  Revised and fixed all the dumpjump stuff, following Intel manuals. There were some errors (thx to rev who pointed the jle problem).
 #	  Small fix to stepo command (missed a few call types)
 #
-#   Version 7.1.7
+#   Version 7.1.7 - fG!
 #     Added the possibility to modify what's displayed with the context window. You can change default options at the gdb options part. For example, kernel debugging is much slower if the stack display is enabled...
 #     New commands enableobjectivec, enablecpuregisters, enablestack, enabledatawin and their disable equivalents (to support realtime change of default options)
 #     Fixed problem with the assemble command. I was calling /bin/echo which doesn't support the -e option ! DUH ! Should have used bash internal version.
@@ -47,27 +57,27 @@
 #     Fixed this: Possible removal of "u" command, info udot is missing in gdb 6.8-debian . Doesn't exist on OS X so bye bye !!!
 #     Displays affected flags in jump decisions
 #
-#   Version 7.1.6
+#   Version 7.1.6 - fG!
 #     Added modified assemble command from Tavis Ormandy (further modified to work with Mac OS X) (shell commands used use full path name, working for Leopard, modify for others if necessary)
 #     Renamed thread command to threads because thread is an internal gdb command that allows to move between program threads
 #
-#   Version 7.1.5 (04/01/2009)
+#   Version 7.1.5 (04/01/2009) - fG!
 #     Fixed crash on Leopard ! There was a If Else condition where the else had no code and that made gdb crash on Leopard (CRAZY!!!!)
 #     Better code indention
 #
-#   Version 7.1.4 (02/01/2009)
+#   Version 7.1.4 (02/01/2009) - fG!
 #     Bug in show objective c messages with Leopard ???
 #     Nop routine support for single address or range (contribution from gln [ghalen at hack.se])
 #     Used the same code from nop to null routine
 #
-#   Version 7.1.3 (31/12/2008)
+#   Version 7.1.3 (31/12/2008) - fG!
 #     Added a new command 'stepo'. This command will step a temporary breakpoint on next instruction after the call, so you can skip over
 #     the call. Did this because normal commands not always skip over (mainly with objc_msgSend)
 #
-#   Version 7.1.2 (31/12/2008)
+#   Version 7.1.2 (31/12/2008) - fG!
 #     Support for the jump decision (will display if a conditional jump will be taken or not)
 #
-#   Version 7.1.1 (29/12/2008)
+#   Version 7.1.1 (29/12/2008) - fG!
 #     Moved gdb options to the beginning (makes more sense)
 #     Added support to dump message being sent to msgSend (easier to understand what's going on)
 #
@@ -309,11 +319,10 @@ define bpt
 end
 document bpt
 Set a temporary breakpoint.
-Will be deleted when hit!
+This breakpoint will be automatically deleted when hit!
 Usage: bpt LOCATION
 LOCATION may be a line number, function name, or "*" and an address.
 end
-
 
 define bpm
     if $argc != 1
@@ -326,7 +335,6 @@ document bpm
 Set a read/write breakpoint on EXPRESSION, e.g. *address.
 Usage: bpm EXPRESSION
 end
-
 
 define bhb
     if $argc != 1
@@ -341,7 +349,19 @@ Usage: bhb LOCATION
 LOCATION may be a line number, function name, or "*" and an address.
 end
 
-
+define bht
+    if $argc != 1
+        help bht
+    else
+        thbreak $arg0
+    end
+end
+document bht
+Set a temporary hardware breakpoint.
+This breakpoint will be automatically deleted when hit!
+Usage: bht LOCATION
+LOCATION may be a line number, function name, or "*" and an address.
+end
 
 
 # ______________process information____________
@@ -1468,7 +1488,7 @@ end
 #### WARNING ! WARNING !!
 #### More more messy stuff starting !!!
 #### I was thinking about how to do this and then it ocurred me that it could be as simple as this ! :)
-define stepo
+define stepoframework
 ## we know that an opcode starting by 0xE8 has a fixed length
 ## for the 0xFF opcodes, we can enumerate what is possible to have
 # first we grab the first 3 bytes from the current program counter
@@ -1486,8 +1506,8 @@ define stepo
    # just other cases we might be interested in... maybe this should be removed since the 0xE8 opcode is the one we will use more
    # this is a big fucking mess and can be improved for sure :) I don't like the way it is ehehehe
    if ($_byte1 == 0xFF)
-    # call *%eax (0xFFD0) || call *%edx (0xFFD2) || call *(%ecx) (0xFFD1) || call (%eax) (0xFF10) || call *%esi (0xFFD6) || call *%ebx (0xFFD3)
-    if ($_byte2 == 0xD0 || $_byte2 == 0xD1 || $_byte2 == 0xD2 || $_byte2 == 0xD3 || $_byte2 == 0xD6 || $_byte2 == 0x10 )
+    # call *%eax (0xFFD0) || call *%edx (0xFFD2) || call *(%ecx) (0xFFD1) || call (%eax) (0xFF10) || call *%esi (0xFFD6) || call *%ebx (0xFFD3) || call   DWORD PTR [edx] (0xFF12)
+    if ($_byte2 == 0xD0 || $_byte2 == 0xD1 || $_byte2 == 0xD2 || $_byte2 == 0xD3 || $_byte2 == 0xD6 || $_byte2 == 0x10 || $_byte2 == 0x11 || $_byte2 == 0xD7 || $_byte2 == 0x12)
      set $_nextaddress = $pc + 0x2
     end
     # call *0x??(%ebp) (0xFF55??) || call *0x??(%esi) (0xFF56??) || call *0x??(%edi) (0xFF5F??) || call *0x??(%ebx)
@@ -1507,7 +1527,11 @@ define stepo
  end
 # if we have found a call to bypass we set a temporary breakpoint on next instruction and continue 
  if ($_nextaddress != 0)
-  tbreak *$_nextaddress
+  if ($arg0 == 1)
+   thbreak *$_nextaddress
+  else
+   tbreak *$_nextaddress
+  end
   continue
 # else we just single step
  else
@@ -1515,13 +1539,22 @@ define stepo
  end
 # end of stepo function
 end
+
+define stepo
+ stepoframework 0
+end
 document stepo
 Step over calls (interesting to bypass the ones to msgSend)
 This function will set a temporary breakpoint on next instruction after the call so the call will be bypassed
 You can safely use it instead nexti or n since it will single step code if it's not a call instruction (unless you want to go into the call function)
 end
 
-
+define stepoh
+ stepoframework 1 
+end
+document stepoh
+Same as stepo command but uses temporary hardware breakpoints
+end
 
 # _______________eflags commands______________
 define cfc
@@ -1679,11 +1712,15 @@ Patch a single byte at address ADDR1 to NULL (0x00), or a series of bytes betwee
 
 end
 
-
 define int3
     if $argc != 1
         help int3
     else
+# save original bytes and address
+        set $ORIGINAL_INT3BYTE = *(unsigned char *)$arg0
+# patch
+        set $ORIGINAL_INT3ADDRESS = $arg0
+
         set *(unsigned char *)$arg0 = 0xCC
     end
 end
@@ -1692,6 +1729,13 @@ Patch byte at address ADDR to an INT3 (0xCC) instruction.
 Usage: int3 ADDR
 end
 
+define rint3
+	set *(unsigned char *)$ORIGINAL_INT3ADDRESS = $ORIGINAL_INT3BYTE
+	set $eip = $ORIGINAL_INT3ADDRESS
+end
+document rint3
+Restore the original byte previous to 0xCC patch issued with "int3" command
+end
 
 
 
@@ -2159,6 +2203,7 @@ end
 # enable and disable shortcuts for stop-on-solib-events fantastic trick!
 define enablesolib
 	set stop-on-solib-events 1
+	printf "Stop-on-solib-events is enabled!\n"
 end
 document enablesolib
 Shortcut to enable stop-on-solib-events trick!
@@ -2166,6 +2211,7 @@ end
 
 define disablesolib
 	set stop-on-solib-events 0
+	printf "Stop-on-solib-events is disabled!\n"
 end
 document disablesolib
 Shortcut to disable stop-on-solib-events trick!
@@ -2241,6 +2287,20 @@ define 64bits
 end
 document 64bits
 Set gdb to work with 64bits binaries
+end
+
+define enablelib
+	set stop-on-solib-events 1
+end
+document enablelib
+Activate stop-on-solib-events
+end
+
+define disablelib
+	set stop-on-solib-events 0
+end
+document disablelib
+Deactivate stop-on-solib-events
 end
 
 #EOF
