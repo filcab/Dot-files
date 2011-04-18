@@ -300,6 +300,7 @@ alias erc="emacs -e '(call-interactively #\'irc)' &"
 alias ldd='otool -L'
 
 alias mysqladmin='sudo mysqladmin5 -u root -p'
+alias matlab=/Applications/Dev/MATLAB_R2010b.app/bin/matlab
 
 myPS1=$PS1
 case `hostname -f` in
