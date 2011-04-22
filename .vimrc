@@ -102,7 +102,9 @@ if &t_Co > 2 || has("gui_running")
   set incsearch           " search incremently (search while typing)
   set guioptions-=T       " Don't show toolbar
   if has("gui_running")   " Only in a GUI
-    colorscheme ir_black  " A nice colorscheme I found online
+    "colorscheme ir_black  " A nice colorscheme I found online
+    set background=dark
+    colorscheme solarized
   endif
 endif
 
