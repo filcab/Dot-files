@@ -1,0 +1,4 @@
+refcard() {
+  open ~/.zsh.d/refcard.pdf
+}
+
