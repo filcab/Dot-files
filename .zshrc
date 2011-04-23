@@ -23,3 +23,14 @@ autoload ${fpath[1]}/*(:t) 2>/dev/null
 MP_COMP_DIR=/opt/local/share/zsh/4.2.7/functions
 [[ $fpath = *$MP_COMP_DIR* ]] || fpath=( $fpath $MP_COMP_DIR )
 
+# For oh-my-zsh
+export ZSH=$HOME/.zsh.d/oh-my-zsh
+export ZSH_THEME="robbyrussell"
+plugins=(git macports osx perl)
+source $ZSH/oh-my-zsh.sh
+
+# case-insensitive (all),partial-word and then substring completion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+# verbose completion
+zstyle ':completion:*' verbose yes

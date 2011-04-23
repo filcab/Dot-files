@@ -1,0 +1,12 @@
+zstyle ':completion:*' verbose yes
+
+Check
+  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+I think I only want lower to uppercase, not the other way around
+
+Check this line in oh-my-zsh.sh:
+for plugin ($plugins) source $ZSH/plugins/$plugin/$plugin.plugin.zsh
+
+
+
