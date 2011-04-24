@@ -34,3 +34,13 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:
 
 # verbose completion
 zstyle ':completion:*' verbose yes
+
+source ~/.paths
+
+# Make us smile a bit...
+if type fortune &>/dev/null;
+then
+  echo
+  fortune -s
+  echo
+fi
