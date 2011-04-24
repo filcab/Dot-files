@@ -8,5 +8,5 @@ I think I only want lower to uppercase, not the other way around
 Check this line in oh-my-zsh.sh:
 for plugin ($plugins) source $ZSH/plugins/$plugin/$plugin.plugin.zsh
 
-
+Meter git_prompt_status na prompt
 
