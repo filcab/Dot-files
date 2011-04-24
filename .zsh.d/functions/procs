@@ -1,0 +1,3 @@
+procs {
+  ps ax -o "pid,comm" "$@"
+}

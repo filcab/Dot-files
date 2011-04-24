@@ -1,0 +1,13 @@
+pman()
+{
+        SECTION=""
+        if [[ $1 -ne 0 ]]; then
+                SECTION=$1
+                shift
+        fi
+    man -W $SECTION $1 &> /dev/null
+    if [[ $? -ne 0 ]]; then     # Pagina nao encontrada
+        return 1
+    fi
+        man -t $SECTION $1 | ps2pdf - - | open -f -a Preview
+}

@@ -1,0 +1,9 @@
+pidof {
+  if ! type pidof &>/dev/null; then
+    for i in "$@"; do
+      procs | awk "{ if (\$2 ~ \"^-?$1\$\" || \$2 ~ \".*/$1\$\") print \$1 }"
+    done
+  else
+    `which pidof` $*
+  fi
+}
