@@ -4,6 +4,6 @@ pidof {
       procs | awk "{ if (\$2 ~ \"^-?$1\$\" || \$2 ~ \".*/$1\$\") print \$1 }"
     done
   else
-    `which pidof` $*
+    `whereis pidof` $*
   fi
 }

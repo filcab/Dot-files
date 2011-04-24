@@ -7,7 +7,7 @@ function watch () {
       sleep 1
     done
   else
-    `which watch` $*
+    `whereis watch` $*
   fi
 }
 
