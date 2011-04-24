@@ -1,0 +1,74 @@
+# Loadable file to setup paths
+
+# Path for hunspell dictionaries
+export DICPATH=~/.hunspell
+
+###### PATHs ######
+# Put /usr/local/bin before /usr/bin
+export PATH=/usr/local/bin:$PATH
+
+# MacTeX
+export PATH=/usr/texbin:$PATH
+
+# Coq theorem prover
+export PATH=$PATH:~/coq/bin
+
+# PostgreSQL
+export PATH=$PATH:/Library/PostgreSQL/8.4/bin
+export MANPATH=$MANPATH:/Library/PostgreSQL/8.4/share/man
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Library/PostgreSQL/8.4/lib
+export CPATH=$CPATH:/Library/PostgreSQL/8.4/include
+
+# Lisps/Scheme
+export PATH=$PATH:/Applications/Dev/AllegroCL
+export PATH=$PATH:"/Applications/Dev/PLT Scheme v4.2.5/bin"
+
+# Graphviz
+export PATH=$PATH:/Applications/Dev/Graphviz.app/Contents/MacOS
+
+# Valgrind
+export PATH=$PATH:~/valgrind/bin
+export CPATH=$CPATH:~/valgrind/include
+
+# LLVM/clang
+export PATH=$PATH:~/llvm/bin:/stuff/src/compiled/llvm/bin
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Users/filcab/llvm/lib:/stuff/src/compiled/llvm/lib
+export CPATH=$CPATH:~/llvm/include:/stuff/src/compiled/llvm/include
+export MANPATH=$MANPATH:~/llvm/man:~/llvm/share/man:/stuff/src/compiled/llvm/man:/stuff/src/compiled/llvm/share/man
+
+# System LLVM-GCC
+export PATH=$PATH:/Developer/usr/bin
+
+# Chrome related stuff
+#export PATH=$PATH:~/dev/stuff/google/depot_tools
+
+# MacPorts
+export PATH=$PATH:/opt/local/bin:/opt/local/sbin
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/lib/pkgconfig
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/share/pkgconfig
+
+# We don't want this all the time
+#export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/opt/local/lib
+
+export MANPATH=$MANPATH:/opt/local/share/man
+#export QTDIR=/opt/local/lib/qt3
+
+# ghc
+export PATH=$PATH:~/.cabal/bin
+#:~/ghc/bin
+# Let's try xmonad on X-Windows
+#export USERWM=`which xmonad`
+
+# mkvtools
+export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
+
+case `hostname -f` in
+  *.inesc-id.pt)
+    aklog
+
+    export PATH=/stuff/src/compiled/bin:$PATH
+    export PATH=/stuff/src/compiled/llvm/bin:$PATH
+    export PATH=/opt/google/chrome:$PATH
+  ;;
+esac
+
