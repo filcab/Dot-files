@@ -19,20 +19,24 @@
 
 .adobe
 .allegrocl
+.android
 .bazaar
 .beagle
+.boto
 .bzr.log
 .cabal
 .chromium
 .config
 .cpan
 .cups
+.current_path~
 .darcs
 .dbus
 .dmrc
 .dropbox
 .dvc
 .eclim
+.eclipse
 .eclipse_keyring
 .emacs.d
 .esd_auth
@@ -44,6 +48,7 @@
 .ghc
 .gimp-2.6
 .gitconfig
+.gitk
 .gksu.lock
 .gnome2
 .gnupg
@@ -51,6 +56,7 @@
 .gstreamer-*
 .gtkrc-2.0*
 .hplip
+.htoprc
 .idapro
 .java
 .kde*
@@ -58,11 +64,13 @@
 .local
 .macromedia
 .mailboxlist
+.matlab
 .mcop
 .mozilla
 .nautilus
 .netbeans*
 .ooo3
+.pearrc
 .pgpass
 .pki
 .plt-scheme
@@ -72,6 +80,8 @@
 .recentf
 .recently-used
 .recently-used.xbel
+.repoconfig
+.repopickle_.gitconfig
 .semanticdb
 .serverauth.*
 .skel
@@ -79,6 +89,7 @@
 .sqlite_history
 .srecode
 .ssh
+.strapbomb
 .thumbnails
 .thunderbird
 .tomboy*
@@ -89,6 +100,7 @@
 .vim/plugin/eclim.vim
 .viminfo
 .vmware
+.wavesurfer
 .wine
 .wireshark*
 .xine
