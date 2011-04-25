@@ -25,8 +25,8 @@ MP_COMP_DIR=/opt/local/share/zsh/4.2.7/functions
 
 # For oh-my-zsh
 export ZSH=$HOME/.zsh.d/oh-my-zsh
-export ZSH_THEME="robbyrussell"
-plugins=(git macports osx perl)
+export ZSH_THEME="../../filcab" # lol, hack
+plugins=(gem git macports osx perl)
 source $ZSH/oh-my-zsh.sh
 
 # case-insensitive (all),partial-word and then substring completion
