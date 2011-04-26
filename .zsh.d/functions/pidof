@@ -1,5 +1,5 @@
-pidof {
-  if ! type pidof &>/dev/null; then
+function pidof() {
+  if type pidof | grep "is a shell function" &>/dev/null; then
     for i in "$@"; do
       procs | awk "{ if (\$2 ~ \"^-?$1\$\" || \$2 ~ \".*/$1\$\") print \$1 }"
     done
