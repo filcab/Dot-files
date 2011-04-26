@@ -1,6 +1,7 @@
 /*
 !.*
 *.pyc
+*.swp
 
 .subversion/*
 !.subversion/config
