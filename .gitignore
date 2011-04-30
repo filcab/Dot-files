@@ -81,6 +81,7 @@
 .nautilus
 .netbeans*
 .netx
+.oh-my-zsh/cache
 .ooo3
 .pearrc
 .pgpass
