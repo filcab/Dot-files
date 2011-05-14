@@ -54,7 +54,8 @@ export MANPATH=$MANPATH:/opt/local/share/man
 #export QTDIR=/opt/local/lib/qt3
 
 # ghc
-export PATH=$PATH:~/.cabal/bin
+export PATH="$HOME/Library/Haskell/bin:$PATH" # Mac OS X
+export PATH=$PATH:~/.cabal/bin # Linux
 #:~/ghc/bin
 # Let's try xmonad on X-Windows
 #export USERWM=`which xmonad`
