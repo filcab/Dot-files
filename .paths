@@ -20,8 +20,8 @@ export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Library/PostgreSQL/8.4/lib
 export CPATH=$CPATH:/Library/PostgreSQL/8.4/include
 
 # Lisps/Scheme
-export PATH=$PATH:/Applications/Dev/AllegroCL
-export PATH=$PATH:"/Applications/Dev/PLT Scheme v4.2.5/bin"
+#export PATH=$PATH:/Applications/Dev/AllegroCL
+#export PATH=$PATH:"/Applications/Dev/PLT Scheme v4.2.5/bin"
 
 # Graphviz
 export PATH=$PATH:/Applications/Dev/Graphviz.app/Contents/MacOS
@@ -43,32 +43,41 @@ export PATH=$PATH:/Developer/usr/bin
 #export PATH=$PATH:~/dev/stuff/google/depot_tools
 
 # MacPorts
-export PATH=$PATH:/opt/local/bin:/opt/local/sbin
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/lib/pkgconfig
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/share/pkgconfig
+#export PATH=$PATH:/opt/local/bin:/opt/local/sbin
+#export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/lib/pkgconfig
+#export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/share/pkgconfig
 
 # We don't want this all the time
 #export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/opt/local/lib
 
-export MANPATH=$MANPATH:/opt/local/share/man
+#export MANPATH=$MANPATH:/opt/local/share/man
 #export QTDIR=/opt/local/lib/qt3
 
 # ghc
-export PATH=$PATH:~/.cabal/bin
 #:~/ghc/bin
 # Let's try xmonad on X-Windows
 #export USERWM=`which xmonad`
 
 # mkvtools
-export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
+#export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
 
 case `hostname -f` in
+  farnsworth.local)
+    export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
+
+    # MacPorts
+    export MANPATH=$MANPATH:/opt/local/share/man
+    export PATH=$PATH:/opt/local/bin:/opt/local/sbin
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/lib/pkgconfig
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/share/pkgconfig
+  ;;
   *.inesc-id.pt)
     aklog
 
     export PATH=/stuff/src/compiled/bin:$PATH
     export PATH=/stuff/src/compiled/llvm/bin:$PATH
     export PATH=/opt/google/chrome:$PATH
+    export PATH=$PATH:~/.cabal/bin
   ;;
 esac
 
