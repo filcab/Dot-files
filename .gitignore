@@ -79,6 +79,7 @@
 .mcop
 .mozilla
 .nautilus
+.nbprofiler/machinedata.jdk16
 .netbeans*
 .netx
 .oh-my-zsh/cache
