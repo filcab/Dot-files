@@ -93,6 +93,7 @@
 .projectM
 .pulse*
 .qt
+.rc.s*
 .recentf
 .recently-used
 .recently-used.xbel
