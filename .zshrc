@@ -44,3 +44,8 @@ then
   fortune -s
   echo
 fi
+
+
+# Load additional stuff
+source .rc.*
+
