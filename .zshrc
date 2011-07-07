@@ -47,5 +47,5 @@ fi
 
 
 # Load additional stuff
-source .rc.*
+source ~/.rc.*
 
