@@ -47,5 +47,8 @@ fi
 
 
 # Load additional stuff
-source ~/.rc.*
+for f in ~/.rc.*; do
+  source $f
+done
+
 
