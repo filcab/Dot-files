@@ -155,6 +155,13 @@ if has("autocmd")
     "   
   augroup END
 
+  " LLVM stuff
+  augroup filetype
+    au! BufRead,BufNewFile *.ll     set filetype=llvm
+    au! BufRead,BufNewFile *.td     set filetype=tablegen
+  augroup END
+
+
 
   " Always jump to the last known cursor position. 
   " Don't do it when the position is invalid or when inside
