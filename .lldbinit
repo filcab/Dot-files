@@ -1,4 +1,5 @@
 command source ~/src/lldb/examples/summaries/lldb
+type category enable lldb
 
 command source ~/src/lldb/examples/summaries/essentials
 
