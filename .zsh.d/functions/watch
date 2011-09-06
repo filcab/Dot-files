@@ -1,5 +1,5 @@
 function watch () {
-  if ! type watch &>/dev/null; then
+  if type watch | grep "is a shell function" &>/dev/null; then
     while true; do
       clear
       echo "Watching (1 secs.) command: " "$@"
