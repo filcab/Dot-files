@@ -64,6 +64,9 @@ export PATH=$PATH:/Developer/usr/bin
 #export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
 
 case `hostname -f` in
+  kiff*)
+    export PATH=$HOME/dev/homebrew/bin:$PATH
+  ;;
   farnsworth*)
     export PATH="$HOME/Library/Haskell/bin:$PATH" # Mac OS X
     export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
