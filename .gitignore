@@ -55,6 +55,7 @@
 .ghc
 .gimp-2.6
 .gitconfig
+.gitignore_global
 .gitk
 .gksu.lock
 .gnome2
@@ -62,6 +63,8 @@
 .gpg*
 .gstreamer-*
 .gtkrc-2.0*
+.hgrc
+.hgignore_global
 .hplip
 .htoprc
 .icedteaplugin
