@@ -8,9 +8,15 @@ compinit
 setopt correctall
 
 # prompt
+
 autoload -U promptinit
 promptinit
 prompt walters
+
+autoload colors
+colors
+setopt prompt_subst
+
 
 # Emacs keybindings
 bindkey -e
@@ -29,6 +35,8 @@ export ZSH_THEME="../../filcab" # lol, hack
 plugins=(gem git macports osx perl)
 source $ZSH/oh-my-zsh.sh
 
+
+
 # case-insensitive (all),partial-word and then substring completion
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
@@ -45,6 +53,10 @@ then
   echo
 fi
 
+# Load additional zsh stuff
+for f in ~/.zsh.d/rc.*; do
+  source $f
+done
 
 # Load additional stuff
 for f in ~/.rc.*; do
