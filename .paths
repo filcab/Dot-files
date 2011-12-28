@@ -63,6 +63,9 @@ export PATH=$PATH:/Developer/usr/bin
 # mkvtools
 #export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
 
+# Miscelaneous programs
+export PATH=$PATH:~/.zsh.d/bin
+
 case `hostname -f` in
   kiff*)
     export PATH=$HOME/dev/homebrew/bin:$PATH
