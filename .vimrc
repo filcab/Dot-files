@@ -48,6 +48,12 @@ set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 " When in a git repo, tell us the current branch
 let &statusline = '%{fugitive#statusline()} ' . &statusline
 
+" Add highlighting for function definition in C++
+function! EnhanceCppSyntax()
+  syn match cppFuncDef "::\~\?\zs\h\w*\ze([^)]*\()\s*\(const\)\?\)\?$"
+  hi def link cppFuncDef Special
+endfunction
+
 """ End of FilCab's stuff
 
 " reset to vim-defaults
@@ -74,7 +80,7 @@ set wildmode=longest:full " complete longest match and show menu
 set esckeys             " map missed escape sequences (enables keypad keys)
 set ignorecase          " case insensitive searching
 set smartcase           " but become case sensitive if you type uppercase characters
-set smartindent         " smart auto indenting
+"set smartindent         " smart auto indenting
 set smarttab            " smart tab handling for indenting
 set magic               " change the way backslashes are used in search patterns
 set bs=indent,eol,start " Allow backspacing over everything in insert mode
@@ -161,6 +167,8 @@ if has("autocmd")
     au! BufRead,BufNewFile *.td     set filetype=tablegen
   augroup END
 
+  " Add highlighting for function definition in C++
+  autocmd Syntax cpp call EnhanceCppSyntax()
 
 
   " Always jump to the last known cursor position. 
