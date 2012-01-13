@@ -1,10 +1,39 @@
 function watch () {
+  function usage() {
+    echo "Usage: $0 [ -i interval ] command ..."
+    echo "  interval: interval between executions, in seconds"
+    exit 1
+  }
+
+  # default interval is 1 second
+  interval=1
+
+  while getopts "i:" opt; do
+    case $opt in
+      i)
+        interval=$OPTARG
+        ;;
+
+      \?)
+        usage
+        exit 1
+        ;;
+      :)
+        echo "Option -$OPTARG requires an argument." >&2
+        usage
+        exit 1
+        ;;
+    esac
+  done
+
+  shift $((OPTIND-1))
+
   if type watch | grep "is a shell function" &>/dev/null; then
     while true; do
       clear
-      echo "Watching (1 secs.) command: " "$@"
-      "$@"
-      sleep 1
+      echo "Watching ($interval secs.) command: " "$@"
+      eval "$@"
+      sleep $interval
     done
   else
     `whereis watch` $*
