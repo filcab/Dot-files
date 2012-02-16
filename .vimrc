@@ -15,8 +15,8 @@ let $EDITOR = "vim"
 set grepprg=grep\ -nH\ $*\ /dev/null
 
 " LaTeX stuff
-" enable spelling
-au BufRead,BufNewFile *.txt,*.tex,*.bib  setlocal spell spelllang=en_us
+" enable spelling in LaTeX files
+au BufRead,BufNewFile *.tex,*.bib  setlocal spell spelllang=en_us
 
 let g:tex_flavor = 'latex'    " LaTeX is the default flavor (not plain TeX)
 let g:tex_mapleader = ','     " Leader character for LaTeX plugin
@@ -91,6 +91,7 @@ set tabstop=4           " number of spaces a tab counts for
 set expandtab           " turn a tabs into spaces
 
 " misc settings
+set nospell             " Don't spell-check
 "set fileformat=unix     " file mode is unix
 set fileformats=unix,dos    " only detect unix file format, displays that ^M with dos files
 
