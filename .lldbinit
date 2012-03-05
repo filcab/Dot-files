@@ -1,5 +1,5 @@
-command source ~/src/lldb/examples/summaries/lldb
+command source ~/dev/lldb/examples/summaries/lldb
 type category enable lldb
 
-command source ~/src/lldb/examples/summaries/essentials
+command source ~/dev/lldb/examples/summaries/essentials
 
