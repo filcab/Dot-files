@@ -87,7 +87,7 @@ set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set nobackup            " no backup~ files.
 
 set tabstop=4           " number of spaces a tab counts for
-"set shiftwidth=2        " spaces for autoindents
+set shiftwidth=2        " spaces for autoindents
 set expandtab           " turn a tabs into spaces
 
 " misc settings
