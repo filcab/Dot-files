@@ -101,6 +101,8 @@ set history=50          " keep 50 lines of command history
 
 set mouse=v             " use mouse in visual mode (not normal,insert,command,help mode
 
+let g:yankring_history_file = '.vim.yankring_history'
+
 
 " color settings (if terminal/gui supports it)
 if &t_Co > 2 || has("gui_running")
