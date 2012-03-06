@@ -13,31 +13,25 @@ export PATH=/usr/texbin:$PATH
 # Coq theorem prover
 export PATH=$PATH:~/coq/bin
 
-# PostgreSQL
-export PATH=$PATH:/Library/PostgreSQL/8.4/bin
-export MANPATH=$MANPATH:/Library/PostgreSQL/8.4/share/man
-export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Library/PostgreSQL/8.4/lib
-export CPATH=$CPATH:/Library/PostgreSQL/8.4/include
-
 # Lisps/Scheme
 #export PATH=$PATH:/Applications/Dev/AllegroCL
 #export PATH=$PATH:"/Applications/Dev/PLT Scheme v4.2.5/bin"
 
 # Graphviz
-export PATH=$PATH:/Applications/Dev/Graphviz.app/Contents/MacOS
+# export PATH=$PATH:/Applications/Dev/Graphviz.app/Contents/MacOS
 
 # Valgrind
-export PATH=$PATH:~/valgrind/bin
-export CPATH=$CPATH:~/valgrind/include
+# export PATH=$PATH:~/valgrind/bin
+# export CPATH=$CPATH:~/valgrind/include
 
 # LLVM/clang
-export PATH=$PATH:~/llvm/bin:/stuff/src/compiled/llvm/bin
-export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Users/filcab/llvm/lib:/stuff/src/compiled/llvm/lib
-export CPATH=$CPATH:~/llvm/include:/stuff/src/compiled/llvm/include
-export MANPATH=$MANPATH:~/llvm/man:~/llvm/share/man:/stuff/src/compiled/llvm/man:/stuff/src/compiled/llvm/share/man
+# export PATH=$PATH:~/llvm/bin:/stuff/src/compiled/llvm/bin
+# export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Users/filcab/llvm/lib:/stuff/src/compiled/llvm/lib
+# export CPATH=$CPATH:~/llvm/include:/stuff/src/compiled/llvm/include
+# export MANPATH=$MANPATH:~/llvm/man:~/llvm/share/man:/stuff/src/compiled/llvm/man:/stuff/src/compiled/llvm/share/man
 
 # System LLVM-GCC
-export PATH=$PATH:/Developer/usr/bin
+# export PATH=$PATH:/Developer/usr/bin
 
 # Chrome related stuff
 #export PATH=$PATH:~/dev/stuff/google/depot_tools
@@ -68,6 +62,7 @@ export PATH=$PATH:~/.zsh.d/bin
 
 case `hostname -f` in
   kiff*)
+    export PATH=$HOME/dev/reverse-engineer/bin:$PATH
     export PATH=$HOME/dev/homebrew/bin:$PATH
   ;;
   farnsworth*)
