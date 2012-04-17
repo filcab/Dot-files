@@ -164,10 +164,12 @@ if has("autocmd")
     "   
   augroup END
 
-  " LLVM stuff
   augroup filetype
+  " LLVM stuff
     au! BufRead,BufNewFile *.ll     set filetype=llvm
     au! BufRead,BufNewFile *.td     set filetype=tablegen
+  " SWIG
+    au! BufRead,BufNewFile *.swig   set filetype=swig
   augroup END
 
   " Add highlighting for function definition in C++
