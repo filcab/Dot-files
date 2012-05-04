@@ -14,6 +14,9 @@ let $EDITOR = "vim"
 " make grep always print the filename (default: without the -H)
 set grepprg=grep\ -nH\ $*\ /dev/null
 
+" Make %% in the command line expand to the directory of the current file
+cabbr <expr> %% expand('%:p:h')
+
 " LaTeX stuff
 " enable spelling in LaTeX files
 au BufRead,BufNewFile *.tex,*.bib  setlocal spell spelllang=en_us
