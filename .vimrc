@@ -2,6 +2,9 @@
 " turn on filetype plugins
 filetype plugin on
 
+" Per FreeBSD's security advice
+set nomodeline
+
 " completion (CTRL+N) options
 set completeopt+=longest
 
