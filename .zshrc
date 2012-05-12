@@ -1,5 +1,9 @@
 #!/usr/bin/env zsh
 
+if hash vim &> /dev/null; then
+  export EDITOR=vim
+fi
+
 # completion
 autoload -U compinit
 compinit
