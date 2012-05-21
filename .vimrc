@@ -119,7 +119,7 @@ if &t_Co > 2 || has("gui_running")
   if has("gui_running")   " Only in a GUI
     "colorscheme ir_black  " A nice colorscheme I found online
     set background=dark
-    colorscheme solarized
+    colorscheme molokai
   endif
 endif
 
