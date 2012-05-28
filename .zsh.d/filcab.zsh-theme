@@ -32,8 +32,12 @@ function prompt_date {
   date +"%a, %d %b %Y (%H:%m)"
 }
 
+function svn_info {
+  # echo $svn_info_msg_0_
+}
+
 PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}%~%{$reset_color%}$(hg_prompt_info)$(git_prompt_info) $(prompt_date)
-$(prompt_char) '
+%(?..%{$reset_prompt%}[%{$fg[red]%}%?%{$reset_color%}] )$(svn_info)$(prompt_char) '
 
 RPROMPT='$(battery-charge)'
 
