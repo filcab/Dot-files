@@ -1,0 +1,58 @@
+#!/usr/bin/env perl
+
+my $total_slots = 10;
+
+use utf8;
+use 5.012;
+use strict;
+use POSIX qw(ceil floor);
+
+my ($max, $cur);
+if (`uname -s` == 'Darwin') {
+  open(IOREG, "-|", "ioreg -rc AppleSmartBattery")
+    or die "Can't execute ioreg: $!";
+
+  while (<IOREG>) {
+    # We're assuming MaxCapacity always comes before CurrentCapacity
+    if (/^\s*"MaxCapacity" = (\d+)$/) {
+      $max = $1;
+    } elsif (/^\s*"CurrentCapacity" = (\d+)$/) {
+      $cur = $1;
+      last;
+    }
+  }
+
+  close IOREG;
+} else {
+  die "This battery script only works on Darwin.";
+}
+  
+my $charge = $cur / $max;
+my $charge_threshold = ceil(10 * $charge);
+
+binmode STDOUT, ":encoding(utf8)";
+
+# Output
+
+my $out;
+$out = '▸' x ceil($charge_threshold * ($total_slots / 10.0));
+my $filled = length($out);
+$out .= '▹' x ($total_slots - $filled);
+
+my $color_green = "%{\033[32m%}";
+my $color_yellow = "%{\033[1;33m%}";
+my $color_red = "%{\033[31m%}";
+my $color_reset = "%{\033[00m%}";
+
+use v5.10;
+my $color_out;
+given ($filled) {
+  when ([7..10])  { $color_out = $color_green;  }
+  when ([4..6])   { $color_out = $color_yellow; }
+  default         { $color_out = $color_red;    }
+  #when [0..3]  { $color_out = $color_red;    }
+}
+
+$out = $color_out . $out . $color_reset;
+print "$out\n";
+
