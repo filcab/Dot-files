@@ -2,13 +2,18 @@
 
 my $total_slots = 10;
 
+my $color_green = "%{\033[32m%}";
+my $color_yellow = "%{\033[1;33m%}";
+my $color_red = "%{\033[31m%}";
+my $color_reset = "%{\033[00m%}";
+
 use utf8;
 use 5.012;
 use strict;
 use POSIX qw(ceil floor);
 
 my ($max, $cur);
-if (`uname -s` == 'Darwin') {
+if (`uname -s` eq 'Darwin') {
   open(IOREG, "-|", "ioreg -rc AppleSmartBattery")
     or die "Can't execute ioreg: $!";
 
@@ -24,7 +29,10 @@ if (`uname -s` == 'Darwin') {
 
   close IOREG;
 } else {
-  die "This battery script only works on Darwin.";
+  # We have no battery information
+  my $slots = '?' x $total_slots;
+  print "$color_yellow$slots$color_reset\n";
+  exit 1;
 }
   
 my $charge = $cur / $max;
@@ -38,11 +46,6 @@ my $out;
 $out = '▸' x ceil($charge_threshold * ($total_slots / 10.0));
 my $filled = length($out);
 $out .= '▹' x ($total_slots - $filled);
-
-my $color_green = "%{\033[32m%}";
-my $color_yellow = "%{\033[1;33m%}";
-my $color_red = "%{\033[31m%}";
-my $color_reset = "%{\033[00m%}";
 
 use v5.10;
 my $color_out;
