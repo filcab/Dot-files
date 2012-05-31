@@ -13,7 +13,10 @@ use strict;
 use POSIX qw(ceil floor);
 
 my ($max, $cur);
-if (`uname -s` eq 'Darwin') {
+my $os = `uname -s`;
+chomp($os);
+
+if ($os eq 'Darwin') {
   open(IOREG, "-|", "ioreg -rc AppleSmartBattery")
     or die "Can't execute ioreg: $!";
 
