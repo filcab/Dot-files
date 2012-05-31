@@ -35,10 +35,12 @@ MP_COMP_DIR=/opt/local/share/zsh/4.2.7/functions
 
 # For oh-my-zsh
 export ZSH=$HOME/.zsh.d/oh-my-zsh
-export ZSH_THEME="../../filcab" # a hack so I don't have to put my theme unser oh-my-zsh dirs
+export ZSH_THEME="filcab"
 #export ZSH_THEME="mortalscumbag"
 # Maybe also add the extract plugin...
-plugins=(brew git macports osx)
+plugins=(brew git svn macports osx)
+# for now, make our ~/.zsh.d the custom dir for oh-my-zsh
+export ZSH_CUSTOM=$HOME/.zsh.d
 source $ZSH/oh-my-zsh.sh
 
 
