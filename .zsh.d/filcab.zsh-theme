@@ -17,7 +17,7 @@
 function prompt_char {
     git branch >/dev/null 2>/dev/null && echo '±' && return
     hg root >/dev/null 2>/dev/null && echo '☿' && return
-    in_svn && echo '>' && return
+    in_svn >/dev/null 2>/dev/null && echo '⚡' && return
     echo '○'
 }
 
@@ -33,6 +33,17 @@ function prompt_date {
   date +"%a, %d %b %Y (%H:%m)"
 }
 
+# Override the function to deal with llvm repos
+function svn_get_repo_name {
+    if in_svn; then
+        svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
+        svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p" | read SVN_DIR
+
+        echo $SVN_DIR | sed -e 's-/trunk--' | read SVN_DIR
+        echo $SVN_DIR | sed -e "s-/branches/\(.*\)\$-%{$reset_color%}($ZSH_THEME_SVN_PROMPT_BRANCH_COLOR\1%{$reset_color%})-"
+    fi
+}
+
 PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}%~%{$reset_color%}$(hg_prompt_info)$(git_prompt_info)$(svn_prompt_info)  %{$fg[blue]%}[%{$reset_color%}$(prompt_date)%{$fg[blue]%}]%{$reset_color%}
 %(?..%{$reset_prompt%}[%{$fg[red]%}%?%{$reset_color%}] )$(prompt_char) '
 
@@ -46,5 +57,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 ZSH_THEME_SVN_PROMPT_PREFIX=" on %{$fg[magenta]%}"
 ZSH_THEME_SVN_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_SVN_PROMPT_BRANCH_COLOR="%{$fg[yellow]%}"
+
 #ZSH_THEME_REPO_NAME_COLOR="%{$fg[yellow]%}"
 #ZSH_PROMPT_BASE_COLOR="%{$reset_color%}"
