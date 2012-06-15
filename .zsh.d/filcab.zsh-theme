@@ -44,10 +44,11 @@ function svn_get_repo_name {
     fi
 }
 
-PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}%~%{$reset_color%}$(hg_prompt_info)$(git_prompt_info)$(svn_prompt_info)  %{$fg[blue]%}[%{$reset_color%}$(prompt_date)%{$fg[blue]%}]%{$reset_color%}
+PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}%~%{$reset_color%}$(hg_prompt_info)$(git_prompt_info)$(svn_prompt_info)
 %(?..%{$reset_prompt%}[%{$fg[red]%}%?%{$reset_color%}] )$(prompt_char) '
 
-RPROMPT='$(battery-charge)'
+#RPROMPT='$(battery-charge)'
+RPROMPT='%{$fg[blue]%}[%{$reset_color%}%D{%a, %d %b %Y (%H:%m)}%{$fg[blue]%}]%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
