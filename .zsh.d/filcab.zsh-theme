@@ -48,7 +48,7 @@ PROMPT='%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} 
 %(?..%{$reset_prompt%}[%{$fg[red]%}%?%{$reset_color%}] )$(prompt_char) '
 
 #RPROMPT='$(battery-charge)'
-RPROMPT='%{$fg[blue]%}[%{$reset_color%}%D{%a, %d %b %Y (%H:%m)}%{$fg[blue]%}]%{$reset_color%}'
+RPROMPT='%{$fg[blue]%}[%{$reset_color%}%D{%a, %d %b %Y (%H:%M)}%{$fg[blue]%}]%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
