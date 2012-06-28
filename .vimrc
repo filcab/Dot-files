@@ -97,8 +97,17 @@ set showmode            " show mode in status bar (insert/replace/...)
 set showcmd             " show typed command in status bar
 set ruler               " show cursor position in status bar
 set title               " show file in titlebar
-set wildmenu            " completion with menu
-set wildmode=longest:full " complete longest match and show menu
+
+if has("wildmenu")
+  set wildignore+=*.a,*.o
+  set wildignore+=*.pyc
+  set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png
+  set wildignore+=.DS_Store,.git,.hg,.svn
+  set wildignore+=*.framework
+  set wildignore+=*~,*.swp,*.tmp
+  set wildmenu            " completion with menu
+  set wildmode=longest:full " complete longest match and show menu
+endif
 
 " editor settings
 set esckeys             " map missed escape sequences (enables keypad keys)
