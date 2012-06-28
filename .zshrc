@@ -21,6 +21,9 @@ autoload colors
 colors
 setopt prompt_subst
 
+# If a pattern doesn't glob, use it verbatim in the command
+unsetopt nomatch
+
 
 # Emacs keybindings
 bindkey -e
