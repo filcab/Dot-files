@@ -1,11 +1,15 @@
 # .inputrc file for configuring libreadline applications
 
 set blink-matching-paren   on
+
 # Useful for Mac OS X's file names
 set completion-ignore-case on
+# Converts between _ and -, if needed
+set completion-map-case on
 # if there are more than 150 possible completions for a word, ask the
 # user if he wants to see all of them
 set completion-query-items 150
+set page-completions off
 
 # Adding this to your /etc/inputrc or ~/.inputrc will result in a character
 # being appended to any file-names returned by completion, in much the same
