@@ -197,6 +197,10 @@ if has("autocmd")
     "   
   augroup END
 
+  augroup python
+    au BufReadPre,BufNewFile *.py set shiftwidth=4
+  augroup END
+
   augroup filetype
   " LLVM stuff
     au! BufRead,BufNewFile *.ll     set filetype=llvm
