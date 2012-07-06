@@ -1,6 +1,9 @@
 """ Start of FilCab's stuff
-" turn on filetype plugins
-filetype plugin on
+
+call pathogen#infect()
+
+" turn on filetype and indent plugins
+filetype plugin indent on
 
 " Allow some commands with the first letter(s) capitalized
 if has("user_commands")
