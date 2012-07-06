@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:   llvm
 " Maintainer: The LLVM team, http://llvm.org/
-" Version:      $Revision: 114788 $
+" Version:      $Revision$
 
 if version < 600
   syntax clear
@@ -14,7 +14,7 @@ syn case match
 " Types.
 " Types also include struct, array, vector, etc. but these don't
 " benefit as much from having dedicated highlighting rules.
-syn keyword llvmType void float double
+syn keyword llvmType void float double half
 syn keyword llvmType x86_fp80 fp128 ppc_fp128
 syn keyword llvmType type label opaque
 syn match   llvmType /\<i\d\+\>/
@@ -51,7 +51,7 @@ syn keyword llvmKeyword volatile fastcc coldcc cc ccc
 syn keyword llvmKeyword x86_stdcallcc x86_fastcallcc
 syn keyword llvmKeyword ptx_kernel ptx_device
 syn keyword llvmKeyword signext zeroext inreg sret nounwind noreturn
-syn keyword llvmKeyword nocapture byval nest readnone readonly noalias
+syn keyword llvmKeyword nocapture byval nest readnone readonly noalias uwtable
 syn keyword llvmKeyword inlinehint noinline alwaysinline optsize ssp sspreq
 syn keyword llvmKeyword noredzone noimplicitfloat naked alignstack
 syn keyword llvmKeyword module asm align tail to
