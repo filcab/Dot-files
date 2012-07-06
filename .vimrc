@@ -165,21 +165,20 @@ if has("autocmd")
   " For debugging
   "set verbose=9
 
-  " if bash is sh.
-  let bash_is_sh=1
-
   " change to directory of current file automatically
   "autocmd BufEnter * lcd %:p:h
 
   " Put these in an autocmd group, so that we can delete them easily.
-  augroup vdboor
+  augroup mostfiles
     au BufReadPre,BufNewFile
     \ *.xsl,*.xml,*.css,*.html,*.js,*.php,*.sql,*.sh,*.conf,*.cc,*.cpp,*.h
-    \  set smartindent shiftwidth=2 softtabstop=2 expandtab
+    \  setlocal smartindent shiftwidth=2 softtabstop=2 expandtab
+  augroup END
 
+  augroup tex
     au BufReadPre,BufNewFile
     \ *.tex
-    \ set wrap shiftwidth=2 softtabstop=2 expandtab
+    \ set wrap setlocal shiftwidth=2 softtabstop=2 expandtab
   augroup END
 
   augroup perl
@@ -188,7 +187,7 @@ if has("autocmd")
 
     au BufReadPre,BufNewFile
     \ *.pl,*.pm
-    \ set formatoptions=croq smartindent shiftwidth=2 softtabstop=2 cindent cinkeys='0{,0},!^F,o,O,e' " tags=./tags,tags,~/devel/tags,~/devel/C
+    \ setlocal formatoptions=croq smartindent shiftwidth=2 softtabstop=2 cindent cinkeys='0{,0},!^F,o,O,e' " tags=./tags,tags,~/devel/tags,~/devel/C
     " formatoption:
     "   t - wrap text using textwidth
     "   c - wrap comments using textwidth (and auto insert comment leader)
@@ -201,14 +200,14 @@ if has("autocmd")
   augroup END
 
   augroup python
-    au BufReadPre,BufNewFile *.py set shiftwidth=4
+    au BufReadPre,BufNewFile *.py setlocal shiftwidth=4
   augroup END
 
   augroup filetype
-  " LLVM stuff
+    " LLVM stuff
     au! BufRead,BufNewFile *.ll     set filetype=llvm
     au! BufRead,BufNewFile *.td     set filetype=tablegen
-  " SWIG
+    " SWIG
     au! BufRead,BufNewFile *.swig   set filetype=swig
   augroup END
 
