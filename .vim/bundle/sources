@@ -5,6 +5,7 @@ molokai|git|git://github.com/mrtazz/molokai.vim.git
 vim-markdown|git|git://github.com/tpope/vim-markdown.git
 
 # Utilities (vcs, etc)
+ack-vim|git|git://github.com/mileszs/ack.vim.git
 vim-fugitive|git|git://github.com/tpope/vim-fugitive.git
 yankring|git|git://github.com/vim-scripts/YankRing.vim.git
 vim-surround|git|git://github.com/tpope/vim-surround.git
@@ -15,3 +16,4 @@ vim-unimpaired|git|git://github.com/tpope/vim-unimpaired.git
 vim-abolish|git|git://github.com/tpope/vim-abolish.git
 vim-afterimage|git|git://github.com/tpope/vim-afterimage.git
 vim-flatfoot|git|git://github.com/tpope/vim-flatfoot.git
+command-t|git|git://git.wincent.com/command-t.git
