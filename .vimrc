@@ -2,6 +2,13 @@
 
 call pathogen#infect()
 
+" Automatically reload changed files
+set autoread
+
+"Auto-reload vimrc
+autocmd! bufwritepost .vimrc source ~/.vimrc
+
+
 " turn on filetype and indent plugins
 filetype plugin indent on
 
