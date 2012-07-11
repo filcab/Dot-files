@@ -1,6 +1,13 @@
 #!/usr/bin/env zsh
 
-if hash vim &> /dev/null; then
+if [[ x`uname -s` == 'xDarwin' ]]; then
+  # Have we brewed a new vim?
+  if [ -f ~/dev/homebrew/bin/vim -a -x ~/dev/homebrew/bin/vim ]; then
+    export EDITOR=~/dev/homebrew/bin/vim
+  fi
+fi
+
+if [ -z "$EDITOR" ] && hash vim &> /dev/null; then
   export EDITOR=vim
 fi
 
