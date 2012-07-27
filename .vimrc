@@ -1,6 +1,8 @@
 """ Start of FilCab's stuff
-
+" Setup up pathogen and only turn on filetype stuff afterwards
+filetype off
 call pathogen#infect()
+filetype plugin indent on
 
 " Automatically reload changed files
 set autoread
@@ -8,9 +10,6 @@ set autoread
 "Auto-reload vimrc
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
-
-" turn on filetype and indent plugins
-filetype plugin indent on
 
 " Allow some commands with the first letter(s) capitalized
 if has("user_commands")
