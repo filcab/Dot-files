@@ -132,6 +132,10 @@ set tabstop=4           " number of spaces a tab counts for
 set shiftwidth=2        " spaces for autoindents
 set expandtab           " turn a tabs into spaces
 
+" splitting settings
+set splitbelow          " When splitting open the new file below or to the right
+set splitright
+
 " misc settings
 set nospell             " Don't spell-check
 "set fileformat=unix     " file mode is unix
