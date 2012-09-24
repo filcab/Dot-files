@@ -1,7 +1,9 @@
 """ Start of FilCab's stuff
 " Setup up pathogen and only turn on filetype stuff afterwards
 filetype off
+
 call pathogen#infect()
+call pathogen#helptags()
 filetype plugin indent on
 
 " Automatically reload changed files
