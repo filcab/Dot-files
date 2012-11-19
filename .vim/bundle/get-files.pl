@@ -29,7 +29,8 @@ while (<SOURCES>) {
 
     if ($#ARGV < 0 or grep(/$dir/, @ARGV)) {
         print "updating\n";
-        &{$type}($dir, @arguments);
+        # Hack. Use dispatch table
+        &{\&$type}($dir, @arguments);
     } elsif ($update) {
         if ($type eq "tgz" or $type eq "zip" or $type eq "curl") {
             print "skipped\n";
