@@ -2,6 +2,8 @@ command source ~/dev/lldb/examples/summaries/lldb
 type category enable lldb
 
 command source ~/dev/lldb/examples/summaries/essentials
+command script import ~/work/llvm.org/llvm/utils/lldbDataFormatters.py
+command script import ~/work/llvm.org/llvm/tools/clang/utils/ClangDataFormat.py
 
 # Dump PyObject* values
 command regex pyrepr 's/^(.*)$/expr -- (char*)PyString_AsString((PyObject*)PyObject_Repr((PyObject*) (%1) ))/'

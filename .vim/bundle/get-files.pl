@@ -2,8 +2,11 @@
 
 use Cwd;
 
-#use strict;
+use strict;
 use warnings;
+
+
+our @types = qw/cvs svn curl tgz zip bzr_tgz git/;
 
 open SOURCES, "<sources" or die $!;
 
@@ -19,16 +22,23 @@ while (<SOURCES>) {
     my ($dir, $type, @arguments) = split(/\|/, $_);
     print "$dir:$type:";
 
+    if (not grep /$type/, @types) {
+        print "Source type not recognized: $type\n";
+        next;
+    }
+
     if ($#ARGV < 0 or grep(/$dir/, @ARGV)) {
         print "updating\n";
-        &{$type}($dir, @arguments);
+        # Hack. Use dispatch table
+        &{\&$type}($dir, @arguments);
     } elsif ($update) {
         if ($type eq "tgz" or $type eq "zip" or $type eq "curl") {
             print "skipped\n";
             next;
         }
         print "updating\n";
-        &{$type}($dir, @arguments)
+        # Hack. Use dispatch table
+        &{\&$type}($dir, @arguments)
     } else { print "skipped\n"; }
 }
 
