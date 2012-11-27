@@ -7,7 +7,7 @@ end
 # Private function for effectivelly loading F-Script
 define loadfs_private
   set $loaded = (char)[[NSBundle \
-    bundleWithPath:@"/Applications/Dev/F-Script/FScript.framework"] load]
+    bundleWithPath:@"/Applications/F-Script/FScript.framework"] load]
   if ! $loaded
     print "Couldn't load `F-Script' bundle"
   else

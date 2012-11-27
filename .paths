@@ -64,7 +64,7 @@ export PATH=$PATH:~/dev/apple/checker
 export PATH=$PATH:~/.zsh.d/bin
 
 case `hostname -f` in
-  kiff*)
+  [Kk]iff*)
     export PATH=$HOME/dev/reverse-engineer/bin:$PATH
     export PATH=$HOME/dev/homebrew/bin:$PATH
     # zsh only. For now, I don't care
