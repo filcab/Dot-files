@@ -64,12 +64,20 @@ zstyle ':completion:*' verbose yes
 source ~/.paths
 
 # Make us smile a bit...
+# I should increase the paranoia level on this.
 if type fortune &>/dev/null;
 then
   echo
   fortune -s
   echo
 fi
+
+# Restrict to a directory we control
+if type ~/dev/homebrew/bin/vimpager &>/dev/null;
+then
+  export PAGER=vimpager
+fi
+
 
 # Load additional zsh stuff
 for f in ~/.zsh.d/rc.*; do
