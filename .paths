@@ -75,6 +75,7 @@ case `hostname -f` in
     export CPATH=$HOME/dev/homebrew/include:$CPATH
     # zsh only. For now, I don't care
     fpath+=$HOME/dev/homebrew/share/zsh/site-functions
+    export NODE_PATH=~/dev/homebrew/lib/node_modules
   ;;
   farnsworth*)
     export PATH="$HOME/Library/Haskell/bin:$PATH" # Mac OS X
