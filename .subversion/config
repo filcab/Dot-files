@@ -38,6 +38,10 @@ diff-extensions = -p
 ###   program accepts the '--diff-program' option.
 # diff3-has-program-arg = [true | false]
 
+# Kaleidoscope
+diff-cmd = ksdiff
+merge-tool-cmd = ksdiff
+
 ### Section for configuring tunnel agents.
 [tunnels]
 ### Configure svn protocol tunnel schemes here.  By default, only
