@@ -78,6 +78,8 @@ then
   export PAGER=vimpager
 fi
 
+# Load ninja autocomplete
+source ~/.zsh.d/functions/_ninja
 
 # Load additional zsh stuff
 for f in ~/.zsh.d/rc.*; do

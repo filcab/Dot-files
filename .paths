@@ -77,6 +77,7 @@ case `hostname -f` in
     # zsh only. For now, I don't care
     fpath+=$HOME/dev/homebrew/share/zsh/site-functions
     export NODE_PATH=~/dev/homebrew/lib/node_modules
+    export PATH=$PATH:~/dev/delta
   ;;
   farnsworth*)
     export PATH="$HOME/Library/Haskell/bin:$PATH" # Mac OS X
