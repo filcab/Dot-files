@@ -2,7 +2,7 @@ function watch () {
   function usage() {
     echo "Usage: $0 [ -i interval ] command ..."
     echo "  interval: interval between executions, in seconds"
-    exit 1
+    return 1
   }
 
   # default interval is 1 second
@@ -16,12 +16,12 @@ function watch () {
 
       \?)
         usage
-        exit 1
+        return 1
         ;;
       :)
         echo "Option -$OPTARG requires an argument." >&2
         usage
-        exit 1
+        return 1
         ;;
     esac
   done
