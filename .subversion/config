@@ -39,8 +39,8 @@ diff-extensions = -p
 # diff3-has-program-arg = [true | false]
 
 # Kaleidoscope.app
-diff-cmd = ksdiff
-merge-tool-cmd = ksdiff
+#diff-cmd = ksdiff
+#merge-tool-cmd = ksdiff
 
 ### Section for configuring tunnel agents.
 [tunnels]
