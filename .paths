@@ -65,6 +65,7 @@ export PATH=$PATH:~/.zsh.d/bin
 
 case `hostname -f` in
   [Kk]iff*)
+    export PATH=$PATH:$HOME/dev/phabricator/arcanist/bin
     export PATH=$HOME/dev/reverse-engineer/bin:$PATH
     export PATH=$HOME/dev/homebrew/bin:$PATH
     # zsh only. For now, I don't care
@@ -81,7 +82,10 @@ case `hostname -f` in
   ;;
   farnsworth*)
     export PATH="$HOME/Library/Haskell/bin:$PATH" # Mac OS X
+    export PATH=$PATH:$HOME/dev/phabricator/arcanist/bin
     export PATH=$PATH:/Applications/Mkvtoolnix.app/Contents/MacOS
+    # zsh only. For now, I don't care
+    fpath+=$HOME/dev/homebrew/share/zsh/site-functions
 
     # MacPorts
     export MANPATH=$MANPATH:/opt/local/share/man
