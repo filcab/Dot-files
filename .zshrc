@@ -75,7 +75,7 @@ fi
 # Restrict to a directory we control
 if type ~/dev/homebrew/bin/vimpager &>/dev/null;
 then
-  export PAGER=less -R
+  export PAGER="less -R"
   #export PAGER=vimpager
 fi
 
