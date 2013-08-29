@@ -43,6 +43,10 @@ autoload ${fpath[1]}/*(:t) 2>/dev/null
 MP_COMP_DIR=/opt/local/share/zsh/4.2.7/functions
 [[ $fpath = *$MP_COMP_DIR* ]] || fpath=( $fpath $MP_COMP_DIR )
 
+# autoload homebrew stuff
+HB_SITE_DIR=~/dev/homebrew/share/zsh/site-functions
+[[ $fpath = *$HB_SITE_DIR* ]] || fpath=( $fpath $HB_SITE_DIR )
+
 # For oh-my-zsh
 export ZSH=$HOME/.zsh.d/oh-my-zsh
 export ZSH_THEME="filcab"
