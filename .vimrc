@@ -33,7 +33,7 @@ set nomodeline
 set completeopt+=longest
 
 " extend the $PATH variable with the vim scripts' dir
-let $PATH .= "~/.vim/bin"
+"let $PATH .= "~/.vim/bin"
 
 " vim is the default editor for vim's subshells
 let $EDITOR = "vim"
@@ -171,6 +171,10 @@ map <F11> :set nopaste<CR>
 imap <F10> <C-O>:set paste<CR>
 imap <F11> <nop>
 set pastetoggle=<F11>
+
+" clang-format integration
+map <C-I> :pyf ~/.vim/clang-format.py<CR>
+imap <C-I> <ESC>:pyf ~/.vim/clang-format.py<CR>i
 
 " file type specific settings
 if has("autocmd")
