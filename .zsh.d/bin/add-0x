@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+# Try checking for pipes and, if not, use pbpaste
+
+sed -e 's/\(..\)/0x\1 /g'
