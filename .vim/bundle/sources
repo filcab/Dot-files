@@ -4,6 +4,7 @@ ir_black|git|https://github.com/wgibbs/vim-irblack
 solarized|git|git://github.com/altercation/vim-colors-solarized.git
 
 # Language modes
+YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 vim-markdown|git|git://github.com/tpope/vim-markdown.git
 python-mode|git|git://github.com/klen/python-mode.git
 
