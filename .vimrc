@@ -51,7 +51,8 @@ endif
 
 " LaTeX stuff
 " enable spelling in LaTeX files
-au BufRead,BufNewFile *.tex,*.bib  setlocal spell spelllang=en_us
+au BufRead,BufNewFile *.tex,*.bib  setlocal spell spelllang=en_us iskeyword+=: " So fig:figure gets completion support
+
 
 let g:tex_flavor = 'latex'    " LaTeX is the default flavor (not plain TeX)
 let g:tex_mapleader = ','     " Leader character for LaTeX plugin
@@ -71,8 +72,6 @@ let g:Tex_ViewRule_pdf = 'Skim'
 let g:Tex_FormatDependency_ps  = 'dvi,ps'
 let g:Tex_FormatDependency_pspdf = 'dvi,ps,pspdf'
 let g:Tex_FormatDependency_dvipdf = 'dvi,dvipdf'
-
-set iskeyword+=:            " So fig:figure gets completion support
 
 " Always show the status bar
 set laststatus=2
