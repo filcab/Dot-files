@@ -71,7 +71,7 @@ case `hostname -f` in
     # zsh only. For now, I don't care
     fpath+=$HOME/dev/homebrew/share/zsh/site-functions
   ;;
-  bandicoot*|pdsd89*|pd-vpn-*|cortex*)
+  bandicoot*|pdsd89*|pd-vpn-*|cortex*|crash*)
     export PATH=$PATH:$HOME/dev/phabricator/arcanist/bin
     export PATH=$HOME/dev/homebrew/bin:$PATH
     export CPATH=$HOME/dev/homebrew/include:$CPATH
