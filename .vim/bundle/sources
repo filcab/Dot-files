@@ -6,7 +6,7 @@ solarized|git|git://github.com/altercation/vim-colors-solarized.git
 # Language modes
 YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 vim-markdown|git|git://github.com/tpope/vim-markdown.git
-python-mode|git|git://github.com/klen/python-mode.git
+#python-mode|git|git://github.com/klen/python-mode.git
 
 # Utilities (vcs, etc)
 ack-vim|git|git://github.com/mileszs/ack.vim.git
