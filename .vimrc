@@ -220,7 +220,8 @@ if has("autocmd")
 
   augroup filetype
     " LLVM stuff
-    au! BufRead,BufNewFile *.ll     set filetype=llvm
+    " sO:" -,mO:"  ,eO:"",:"
+    au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=% comments=s0:\ -,m0:;,e0:;;,:;
     au! BufRead,BufNewFile *.td     set filetype=tablegen
     " SWIG
     au! BufRead,BufNewFile *.swig   set filetype=swig
