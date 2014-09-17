@@ -85,6 +85,8 @@ fi
 
 # Load ninja autocomplete
 source ~/.zsh.d/functions/_ninja
+# Ninja status: [left/running/finished]
+export NINJA_STATUS="[%u/%r/%f] "
 
 # Load additional zsh stuff
 for f in ~/.zsh.d/rc.*; do
