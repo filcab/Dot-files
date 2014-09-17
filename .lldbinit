@@ -1,4 +1,4 @@
-log enable lldb verbose target symbol
+#log enable lldb verbose target symbol
 
 command source ~/dev/lldb/examples/summaries/lldb
 type category enable lldb
