@@ -175,6 +175,33 @@ set pastetoggle=<F11>
 map <C-I> :pyf ~/.vim/clang-format.py<CR>
 imap <C-I> <ESC>:pyf ~/.vim/clang-format.py<CR>i
 
+" clang-check functions and keybinding
+function! ClangCheckImpl(cmd)
+  if &autowrite | wall | endif
+  echo "Running " . a:cmd . " ..."
+  let l:output = system(a:cmd)
+  cexpr l:output
+  cwindow
+  let w:quickfix_title = a:cmd
+  if v:shell_error != 0
+    cc
+  endif
+  let g:clang_check_last_cmd = a:cmd
+endfunction
+function! ClangCheck()
+  let l:filename = expand('%')
+  if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
+    call ClangCheckImpl("clang-check " . l:filename)
+  elseif exists("g:clang_check_last_cmd")
+    call ClangCheckImpl(g:clang_check_last_cmd)
+  else
+    echo "Can't detect file's compilation arguments and no previous clang-check invocation!"
+  endif
+endfunction
+
+nmap <silent> <F5> :call ClangCheck()<CR><CR>
+
+
 " file type specific settings
 if has("autocmd")
   " For debugging
@@ -221,7 +248,8 @@ if has("autocmd")
   augroup filetype
     " LLVM stuff
     " sO:" -,mO:"  ,eO:"",:"
-    au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=% comments=s0:\ -,m0:;,e0:;;,:;
+    "au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=% comments=s0:\ -,m0:;,e0:;;,:;
+    au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=@ iskeyword+=%
     au! BufRead,BufNewFile *.td     set filetype=tablegen
     " SWIG
     au! BufRead,BufNewFile *.swig   set filetype=swig
