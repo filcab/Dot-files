@@ -8,7 +8,7 @@ export DICPATH=~/.hunspell
 export PATH=/usr/local/bin:$PATH
 
 # MacTeX
-export PATH=/usr/texbin:$PATH
+export PATH=/usr/texbin/bin/x86_64-darwin:$PATH
 
 # Coq theorem prover
 export PATH=$PATH:~/coq/bin
@@ -25,7 +25,9 @@ export PATH=$PATH:~/coq/bin
 # export CPATH=$CPATH:~/valgrind/include
 
 # LLVM/clang
-export PATH=$PATH:/usr/local/llvm/bin
+#export PATH=$PATH:/usr/local/llvm/bin
+export DYLD_LIBRARY_PATH=/usr/local/lib/clang/3.5.0/lib/darwin
+
 # Apple's checker
 export PATH=$PATH:~/dev/apple/checker
 # export PATH=$PATH:~/llvm/bin:/stuff/src/compiled/llvm/bin
@@ -92,14 +94,6 @@ case `hostname -f` in
     export PATH=$PATH:/opt/local/bin:/opt/local/sbin
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/lib/pkgconfig
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/local/share/pkgconfig
-  ;;
-  *.inesc-id.pt)
-    aklog
-
-    export PATH=/stuff/src/compiled/bin:$PATH
-    export PATH=/stuff/src/compiled/llvm/bin:$PATH
-    export PATH=/opt/google/chrome:$PATH
-    export PATH=$PATH:~/.cabal/bin
   ;;
 esac
 
