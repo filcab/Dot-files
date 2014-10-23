@@ -26,7 +26,7 @@ export PATH=$PATH:~/coq/bin
 
 # LLVM/clang
 #export PATH=$PATH:/usr/local/llvm/bin
-export DYLD_LIBRARY_PATH=/usr/local/lib/clang/3.5.0/lib/darwin
+export DYLD_LIBRARY_PATH=/usr/local/lib/clang/3.6.0/lib/darwin
 
 # Apple's checker
 export PATH=$PATH:~/dev/apple/checker
