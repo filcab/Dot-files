@@ -9,6 +9,9 @@ filetype plugin indent on
 " Automatically reload changed files
 set autoread
 
+" Tell vim where to find ack
+let g:ackprg="~/dev/homebrew/bin/ack -H --nocolor --nogroup --column"
+
 "Auto-reload vimrc
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
@@ -162,6 +165,8 @@ if &t_Co > 2 || has("gui_running")
     set background=dark
     colorscheme molokai
   endif
+
+  set guifont=Monaco:h14
 endif
 
 " paste mode toggle (needed when using autoindent/smartindent)
