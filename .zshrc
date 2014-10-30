@@ -79,6 +79,9 @@ export NINJA_STATUS="[%u/%r/%f] "
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR='1;32'
 
+# ls: Use -F with an alias
+alias ls="ls -F"
+
 # v From oh-my-zsh
 # Save the location of the current completion dump file.
 ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
