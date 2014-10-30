@@ -1,3 +1,6 @@
+# Most of this file came from robbyrussell's oh-my-zsh:
+# https://github.com/robbyrussell/oh-my-zsh
+#
 #
 # Will return the current branch name
 # Usage example: git pull origin $(current_branch)

@@ -1,4 +1,7 @@
 #! /bin/zsh
+# Most of this file came from robbyrussell's oh-my-zsh:
+# https://github.com/robbyrussell/oh-my-zsh
+#
 # A script to make using 256 colors in zsh less painful.
 # P.C. Shyamshankar <sykora@lucentbeing.com>
 # Copied from http://github.com/sykora/etc/blob/master/zsh/functions/spectrum/

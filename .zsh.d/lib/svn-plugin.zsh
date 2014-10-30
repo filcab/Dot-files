@@ -1,3 +1,6 @@
+# Most of this file came from robbyrussell's oh-my-zsh:
+# https://github.com/robbyrussell/oh-my-zsh
+#
 # vim:ft=zsh ts=2 sw=2 sts=2
 #
 function svn_prompt_info() {

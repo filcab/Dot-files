@@ -1,3 +1,6 @@
+# Most of this file came from robbyrussell's oh-my-zsh:
+# https://github.com/robbyrussell/oh-my-zsh
+#
 # fixme - the load process here seems a bit bizarre
 
 unsetopt menu_complete   # do not autoselect the first completion entry

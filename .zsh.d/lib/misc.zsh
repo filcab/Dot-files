@@ -1,3 +1,6 @@
+# Most of this file came from robbyrussell's oh-my-zsh:
+# https://github.com/robbyrussell/oh-my-zsh
+#
 ## smart urls
 autoload -U url-quote-magic
 zle -N self-insert url-quote-magic

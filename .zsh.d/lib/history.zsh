@@ -1,3 +1,6 @@
+# Most of this file came from robbyrussell's oh-my-zsh:
+# https://github.com/robbyrussell/oh-my-zsh
+#
 ## Command history configuration
 if [ -z $HISTFILE ]; then
     HISTFILE=$HOME/.zsh_history

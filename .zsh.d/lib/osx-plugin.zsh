@@ -1,3 +1,6 @@
+# Most of this file came from robbyrussell's oh-my-zsh:
+# https://github.com/robbyrussell/oh-my-zsh
+#
 function pfd() {
   osascript 2>/dev/null <<EOF
     tell application "Finder"
