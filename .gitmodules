@@ -1,3 +1,0 @@
-[submodule ".zsh.d/oh-my-zsh"]
-	path = .zsh.d/oh-my-zsh
-	url = git@github.com:filcab/oh-my-zsh.git
