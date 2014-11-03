@@ -177,8 +177,8 @@ imap <F11> <nop>
 set pastetoggle=<F11>
 
 " clang-format integration
-map <C-I> :pyf ~/.vim/clang-format.py<CR>
-imap <C-I> <ESC>:pyf ~/.vim/clang-format.py<CR>i
+map <C-I> :pyf ~/.vim/clang-format.py<cr>
+imap <C-I> <c-o>:pyf ~/.vim/clang-format.py<cr><cr>
 
 " clang-check functions and keybinding
 function! ClangCheckImpl(cmd)
