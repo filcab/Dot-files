@@ -66,6 +66,7 @@ export PATH=$PATH:~/dev/apple/checker
 export PATH=$PATH:~/.zsh.d/bin
 export PATH=$HOME/dev/homebrew/bin:$PATH
 fpath+=$HOME/dev/homebrew/share/zsh/site-functions
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$HOME/dev/homebrew/lib
 
 case `hostname -f` in
   [Kk]iff*)

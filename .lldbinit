@@ -1,11 +1,11 @@
 #log enable lldb verbose target symbol
 
-command source ~/dev/lldb/examples/summaries/lldb
+command source ~/work/lldb/examples/summaries/lldb
 type category enable lldb
 
-command source ~/dev/lldb/examples/summaries/essentials
-command script import ~/work/llvm.org/llvm/utils/lldbDataFormatters.py
-command script import ~/work/llvm.org/llvm/tools/clang/utils/ClangDataFormat.py
+command source ~/work/lldb/examples/summaries/essentials
+command script import ~/work/llvm/utils/lldbDataFormatters.py
+command script import ~/work/llvm/tools/clang/utils/ClangDataFormat.py
 
 # Dump PyObject* values
 command regex pyrepr 's/^(.*)$/expr -- (char*)PyString_AsString((PyObject*)PyObject_Repr((PyObject*) (%1) ))/'

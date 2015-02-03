@@ -2,4 +2,4 @@
 
 # Try checking for pipes and, if not, use pbpaste
 
-sed -e 's/\(..\)/0x\1 /g'
+tr -cd '[0-9a-fA-F]' | sed -e 's/\(..\)/0x\1 /g'
