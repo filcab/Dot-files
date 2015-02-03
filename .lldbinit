@@ -1,9 +1,9 @@
 #log enable lldb verbose target symbol
 
-command source ~/work/lldb/examples/summaries/lldb
+command source ~/work/llvm/tools/lldb/examples/summaries/lldb
 type category enable lldb
 
-command source ~/work/lldb/examples/summaries/essentials
+command source ~/work/llvm/tools/lldb/examples/summaries/essentials
 command script import ~/work/llvm/utils/lldbDataFormatters.py
 command script import ~/work/llvm/tools/clang/utils/ClangDataFormat.py
 
