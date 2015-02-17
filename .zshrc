@@ -96,7 +96,8 @@ compinit -i -d "${ZSH_COMPDUMP}"
 autoload -U compinit
 compinit -i -d "${ZSH_COMPDUMP}"
 
-for f in ~/.zsh.d/lib/*.zsh; do
+# Source *.bash files since we have a few *.zsh based on the *.bash ones
+for f in ~/.zsh.d/lib/*.{ba,z}sh; do
   source $f
 done
 
