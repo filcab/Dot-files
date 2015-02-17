@@ -7,6 +7,9 @@ export DICPATH=~/.hunspell
 # Put /usr/local/bin before /usr/bin
 export PATH=/usr/local/bin:$PATH
 
+# git
+export PATH=/usr/local/gitprefix/bin:$PATH
+
 # MacTeX
 export PATH=/usr/texbin/bin/x86_64-darwin:$PATH
 
