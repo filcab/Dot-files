@@ -12,6 +12,10 @@ set autoread
 " Tell vim where to find ack
 let g:ackprg="~/dev/homebrew/bin/ack -H --nocolor --nogroup --column"
 
+" Tell vim where to find clang-*
+let g:clang_check_path = "~/dev/llvm-cmake/bin/clang-check"
+let g:clang_format_path = "~/dev/llvm-cmake/bin/clang-format"
+
 "Auto-reload vimrc
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
@@ -196,7 +200,7 @@ endfunction
 function! ClangCheck()
   let l:filename = expand('%')
   if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
-    call ClangCheckImpl("clang-check " . l:filename)
+    call ClangCheckImpl(g:clang_check_path . " " . l:filename)
   elseif exists("g:clang_check_last_cmd")
     call ClangCheckImpl(g:clang_check_last_cmd)
   else
