@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+
+exec vi -q <(git grep -n "$@")

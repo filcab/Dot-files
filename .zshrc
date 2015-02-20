@@ -11,6 +11,8 @@ if [ -z "$EDITOR" ] && hash vim &> /dev/null; then
   export EDITOR=vim
 fi
 
+alias gg='git grep'
+
 # completion
 autoload -U compinit
 compinit
