@@ -12,6 +12,10 @@ set autoread
 " Tell vim where to find ack
 let g:ackprg="~/dev/homebrew/bin/ack -H --nocolor --nogroup --column"
 
+" Tell vim where to find clang-*
+let g:clang_check_path = "~/dev/llvm-cmake/bin/clang-check"
+let g:clang_format_path = "~/dev/llvm-cmake/bin/clang-format"
+
 "Auto-reload vimrc
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
@@ -127,7 +131,7 @@ set esckeys             " map missed escape sequences (enables keypad keys)
 set ignorecase          " case insensitive searching
 set smartcase           " but become case sensitive if you type uppercase characters
 "set smartindent         " smart auto indenting
-set smarttab            " smart tab handling for indenting
+"set smarttab            " smart tab handling for indenting
 set magic               " change the way backslashes are used in search patterns
 set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set backupdir=~/.vim/backup " Hide backups in the .vim directory
@@ -196,7 +200,7 @@ endfunction
 function! ClangCheck()
   let l:filename = expand('%')
   if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
-    call ClangCheckImpl("clang-check " . l:filename)
+    call ClangCheckImpl(g:clang_check_path . " " . l:filename)
   elseif exists("g:clang_check_last_cmd")
     call ClangCheckImpl(g:clang_check_last_cmd)
   else
