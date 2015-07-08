@@ -11,7 +11,11 @@ if [ -z "$EDITOR" ] && hash vim &> /dev/null; then
   export EDITOR=vim
 fi
 
+# gg alias plus v alias to do the previous line with vgg (script in
+# ~/.zsh.d/bin), which opens the output of git grep in vim, as a location
+# list.
 alias gg='git grep'
+alias v='eval "v$(fc -l -n -1)"'
 
 # completion
 autoload -U compinit
