@@ -46,10 +46,6 @@ autoload ${fpath[1]}/*(:t) 2>/dev/null
 # Always build from source
 export HOMEBREW_BUILD_FROM_SOURCE=1
 
-# autoload homebrew stuff
-HB_SITE_DIR=~/dev/homebrew/share/zsh/site-functions
-[[ $fpath = *$HB_SITE_DIR* ]] || fpath=( $fpath $HB_SITE_DIR )
-
 # For oh-my-zsh
 #export ZSH=$HOME/.zsh.d/oh-my-zsh
 #export ZSH_THEME="filcab"
