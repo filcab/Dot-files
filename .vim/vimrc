@@ -105,7 +105,8 @@ endif
 " display settings
 set background=dark     " enable for dark terminals
 "set nowrap              " dont wrap lines
-set textwidth=74
+" FILCAB: Turn off textwidth in general. It's getting to be annoying.
+"set textwidth=74
 "set wrapmargin=4        " When wrapping, set up a margin
 set scrolloff=2         " 2 lines above/below cursor when scrolling
 set nonumber            " do not show line numbers
