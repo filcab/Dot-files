@@ -80,6 +80,9 @@ source ~/.zsh.d/functions/_ninja
 # Ninja status: [left/running/finished]
 export NINJA_STATUS="[%u/%r/%f] "
 
+# Disable the creepy, unacceptable, stats requests by CocoaPods
+export COCOAPODS_DISABLE_STATS=1
+
 # Set options for grep (auto colorizing)
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR='1;32'
