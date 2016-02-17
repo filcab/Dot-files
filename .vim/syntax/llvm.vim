@@ -14,56 +14,56 @@ syn case match
 " Types.
 " Types also include struct, array, vector, etc. but these don't
 " benefit as much from having dedicated highlighting rules.
-syn keyword llvmType void float double half
-syn keyword llvmType x86_fp80 fp128 ppc_fp128
-syn keyword llvmType type label opaque
+syn keyword llvmType void half float double x86_fp80 fp128 ppc_fp128
+syn keyword llvmType label metadata x86_mmx
+syn keyword llvmType type label opaque token
 syn match   llvmType /\<i\d\+\>/
 
 " Instructions.
 " The true and false tokens can be used for comparison opcodes, but it's
 " much more common for these tokens to be used for boolean constants.
-syn keyword llvmStatement add fadd sub fsub mul fmul
-syn keyword llvmStatement sdiv udiv fdiv srem urem frem
-syn keyword llvmStatement and or xor
-syn keyword llvmStatement icmp fcmp
-syn keyword llvmStatement eq ne ugt uge ult ule sgt sge slt sle
-syn keyword llvmStatement oeq ogt oge olt ole one ord ueq ugt uge
-syn keyword llvmStatement ult ule une uno
-syn keyword llvmStatement nuw nsw exact inbounds
-syn keyword llvmStatement phi call select shl lshr ashr va_arg
-syn keyword llvmStatement trunc zext sext
-syn keyword llvmStatement fptrunc fpext fptoui fptosi uitofp sitofp
-syn keyword llvmStatement ptrtoint inttoptr bitcast
-syn keyword llvmStatement ret br indirectbr switch invoke unwind unreachable
-syn keyword llvmStatement malloc alloca free load store getelementptr
-syn keyword llvmStatement extractelement insertelement shufflevector
-syn keyword llvmStatement extractvalue insertvalue
+syn keyword llvmStatement add addrspacecast alloca and arcp ashr atomicrmw
+syn keyword llvmStatement bitcast br call cmpxchg eq exact extractelement
+syn keyword llvmStatement extractvalue fadd fast fcmp fdiv fence fmul fpext
+syn keyword llvmStatement fptosi fptoui fptrunc free frem fsub getelementptr
+syn keyword llvmStatement icmp inbounds indirectbr insertelement insertvalue
+syn keyword llvmStatement inttoptr invoke landingpad load lshr malloc max min
+syn keyword llvmStatement mul nand ne ninf nnan nsw nsz nuw oeq oge ogt ole
+syn keyword llvmStatement olt one or ord phi ptrtoint resume ret sdiv select
+syn keyword llvmStatement sext sge sgt shl shufflevector sitofp sle slt srem
+syn keyword llvmStatement store sub switch trunc udiv ueq uge ugt uitofp ule ult
+syn keyword llvmStatement umax umin une uno unreachable unwind urem va_arg
+syn keyword llvmStatement xchg xor zext
 
 " Keywords.
-syn keyword llvmKeyword define declare global constant
-syn keyword llvmKeyword internal external private
-syn keyword llvmKeyword linkonce linkonce_odr weak weak_odr appending
-syn keyword llvmKeyword common extern_weak
-syn keyword llvmKeyword thread_local dllimport dllexport
-syn keyword llvmKeyword hidden protected default
-syn keyword llvmKeyword except deplibs
-syn keyword llvmKeyword volatile fastcc coldcc cc ccc
-syn keyword llvmKeyword x86_stdcallcc x86_fastcallcc
-syn keyword llvmKeyword ptx_kernel ptx_device
-syn keyword llvmKeyword signext zeroext inreg sret nounwind noreturn
-syn keyword llvmKeyword nocapture byval nest readnone readonly noalias uwtable
-syn keyword llvmKeyword inlinehint noinline alwaysinline optsize ssp sspreq
-syn keyword llvmKeyword noredzone noimplicitfloat naked alignstack
-syn keyword llvmKeyword module asm align tail to
-syn keyword llvmKeyword addrspace section alias sideeffect c gc
-syn keyword llvmKeyword target datalayout triple
-syn keyword llvmKeyword blockaddress
+syn keyword llvmKeyword acq_rel acquire sanitize_address addrspace alias align
+syn keyword llvmKeyword alignstack alwaysinline appending arm_aapcs_vfpcc
+syn keyword llvmKeyword arm_aapcscc arm_apcscc asm atomic available_externally
+syn keyword llvmKeyword blockaddress byval c catch cc ccc cleanup coldcc common
+syn keyword llvmKeyword constant datalayout declare default define deplibs
+syn keyword llvmKeyword distinct dllexport dllimport except extern_weak external
+syn keyword llvmKeyword externally_initialized fastcc filter gc global hhvmcc
+syn keyword llvmKeyword hhvm_ccc hidden initialexec inlinehint inreg
+syn keyword llvmKeyword intel_ocl_bicc inteldialect internal linkonce
+syn keyword llvmKeyword linkonce_odr localdynamic localexec minsize module
+syn keyword llvmKeyword monotonic msp430_intrcc musttail naked nest
+syn keyword llvmKeyword noalias nocapture noimplicitfloat noinline nonlazybind
+syn keyword llvmKeyword noredzone noreturn nounwind optnone optsize personality
+syn keyword llvmKeyword private protected ptx_device ptx_kernel readnone
+syn keyword llvmKeyword readonly release returns_twice sanitize_thread
+syn keyword llvmKeyword sanitize_memory section seq_cst sideeffect signext
+syn keyword llvmKeyword singlethread spir_func spir_kernel sret ssp sspreq
+syn keyword llvmKeyword sspstrong tail target thread_local to triple
+syn keyword llvmKeyword unnamed_addr unordered uwtable volatile weak weak_odr
+syn keyword llvmKeyword x86_fastcallcc x86_stdcallcc x86_thiscallcc
+syn keyword llvmKeyword x86_64_sysvcc x86_64_win64cc zeroext uselistorder
+syn keyword llvmKeyword uselistorder_bb musttail
 
 " Obsolete keywords.
 syn keyword llvmError  getresult begin end
 
 " Misc syntax.
-syn match   llvmNoName /[%@]\d\+\>/
+syn match   llvmNoName /[%@!]\d\+\>/
 syn match   llvmNumber /-\?\<\d\+\>/
 syn match   llvmFloat  /-\?\<\d\+\.\d*\(e[+-]\d\+\)\?\>/
 syn match   llvmFloat  /\<0x\x\+\>/
@@ -74,12 +74,22 @@ syn region  llvmString start=/"/ skip=/\\"/ end=/"/
 syn match   llvmLabel /[-a-zA-Z$._][-a-zA-Z$._0-9]*:/
 syn match   llvmIdentifier /[%@][-a-zA-Z$._][-a-zA-Z$._0-9]*/
 
-" Syntax-highlight dejagnu test commands.
-syn match  llvmSpecialComment /;\s*RUN:.*$/
+" Named metadata and specialized metadata keywords.
+syn match   llvmIdentifier /![-a-zA-Z$._][-a-zA-Z$._0-9]*\ze\s*$/
+syn match   llvmIdentifier /![-a-zA-Z$._][-a-zA-Z$._0-9]*\ze\s*[=!]/
+syn match   llvmType /!\zs\a\+\ze\s*(/
+syn match   llvmConstant /\<DW_TAG_[a-z_]\+\>/
+syn match   llvmConstant /\<DW_ATE_[a-zA-Z_]\+\>/
+syn match   llvmConstant /\<DW_OP_[a-zA-Z0-9_]\+\>/
+syn match   llvmConstant /\<DW_LANG_[a-zA-Z0-9_]\+\>/
+syn match   llvmConstant /\<DW_VIRTUALITY_[a-z_]\+\>/
+syn match   llvmConstant /\<DIFlag[A-Za-z]\+\>/
+
+" Syntax-highlight lit test commands and bug numbers.
 syn match  llvmSpecialComment /;\s*PR\d*\s*$/
-syn match  llvmSpecialComment /;\s*END\.\s*$/
+syn match  llvmSpecialComment /;\s*REQUIRES:.*$/
+syn match  llvmSpecialComment /;\s*RUN:.*$/
 syn match  llvmSpecialComment /;\s*XFAIL:.*$/
-syn match  llvmSpecialComment /;\s*XTARGET:.*$/
 
 if version >= 508 || !exists("did_c_syn_inits")
   if version < 508
