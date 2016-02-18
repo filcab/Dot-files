@@ -95,6 +95,10 @@ function! EnhanceCppSyntax()
   hi def link cppFuncDef Special
 endfunction
 
+" Make ninja the default makeprg and make clang the default compiler (for errorformat)
+compiler clang
+set makeprg=ninja
+
 """ End of FilCab's stuff
 
 " reset to vim-defaults
