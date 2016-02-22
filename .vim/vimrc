@@ -99,6 +99,32 @@ endfunction
 compiler clang
 set makeprg=ninja
 
+" From silvas' vimrc:
+" Showing invisible characters {{{
+set list
+" Use Knuth-y underspace for trailing space
+" I once had a problem with › where it would show up wrong. Use ` instead
+" (I've actually come to prefer it, since it is smaller).
+set listchars=tab:`\ ,trail:␣"⎕",eol:◺
+
+" experimental. note that \%# is used to match the cursor position, so that
+" we aren't marking red the area that we are just typing.
+match Error /\s\+\%#\@!$/
+
+" Some nice default for *.h files in llvm
+autocmd BufNewFile,BufRead **/*llvm*/**/*.h setlocal ft=cpp.doxygen
+" clang uses these for defining node types, so it will be cpp for now
+" (along with .def)
+autocmd BufNewFile,BufRead *.inc,*.def setlocal ft=cpp
+autocmd BufNewFile,BufRead *.modulemap setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+
+autocmd BufNewFile,BufRead *.ninja setlocal ft=ninja
+autocmd Filetype ninja setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+
+" filcab: Add the lit.* files and set them to Python mode
+autocmd BufNewFile,BufRead **/*llvm*/**/lit* setlocal ft=python
+
+
 """ End of FilCab's stuff
 
 " reset to vim-defaults
