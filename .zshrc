@@ -36,6 +36,10 @@ setopt prompt_subst
 # If a pattern doesn't glob, use it verbatim in the command
 unsetopt nomatch
 
+
+# Print the exit value if failure.
+setopt print_exit_value
+
 # Emacs keybindings
 bindkey -e
 
