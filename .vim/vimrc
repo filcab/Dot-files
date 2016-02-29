@@ -14,8 +14,8 @@ set autoread
 let g:ackprg="~/dev/homebrew/bin/ack -H --nocolor --nogroup --column"
 
 " Tell vim where to find clang-*
-let g:clang_check_path = expand("~/dev/llvm-cmake/bin/clang-check")
-let g:clang_format_path = expand("~/dev/llvm-cmake/bin/clang-format")
+let g:clang_check_path = expand("~/dev/llvm/build/bin/clang-check")
+let g:clang_format_path = expand("~/dev/llvm/build/bin/clang-format")
 
 "Auto-reload vimrc
 autocmd! bufwritepost .vimrc source ~/.vimrc
