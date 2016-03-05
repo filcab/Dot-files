@@ -7,6 +7,11 @@ call pathogen#infect()
 call pathogen#helptags()
 filetype plugin indent on
 
+" reset to vim-defaults
+if &compatible          " only if not set before:
+  set nocompatible      " use vim-defaults instead of vi-defaults (easier, more user friendly)
+endif
+
 " Automatically reload changed files
 set autoread
 
@@ -108,10 +113,6 @@ set list
 " (I've actually come to prefer it, since it is smaller).
 set listchars=tab:`\ ,trail:␣"⎕",eol:◺
 
-" experimental. note that \%# is used to match the cursor position, so that
-" we aren't marking red the area that we are just typing.
-match Error /\s\+\%#\@!$/
-
 " Some nice default for *.h files in llvm
 autocmd BufNewFile,BufRead **/*llvm*/**/*.h setlocal ft=cpp.doxygen
 " clang uses these for defining node types, so it will be cpp for now
@@ -127,11 +128,6 @@ autocmd BufNewFile,BufRead **/*llvm*/**/lit* setlocal ft=python
 
 
 """ End of FilCab's stuff
-
-" reset to vim-defaults
-if &compatible          " only if not set before:
-  set nocompatible      " use vim-defaults instead of vi-defaults (easier, more user friendly)
-endif
 
 " display settings
 set background=dark     " enable for dark terminals
@@ -162,8 +158,8 @@ endif
 set esckeys             " map missed escape sequences (enables keypad keys)
 set ignorecase          " case insensitive searching
 set smartcase           " but become case sensitive if you type uppercase characters
-"set smartindent         " smart auto indenting
-"set smarttab            " smart tab handling for indenting
+set smartindent         " smart auto indenting
+set smarttab            " smart tab handling for indenting
 set magic               " change the way backslashes are used in search patterns
 set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set backupdir=~/.vim/backup " Hide backups in the .vim directory
@@ -255,7 +251,9 @@ if has("autocmd")
   augroup mostfiles
     au BufReadPre,BufNewFile
     \ *.xsl,*.xml,*.css,*.html,*.js,*.php,*.sql,*.sh,*.conf,*.cc,*.cpp,*.h
-    \  setlocal smartindent shiftwidth=2 softtabstop=2 expandtab
+    \  setlocal shiftwidth=2 softtabstop=2 expandtab
+    "\  setlocal smartindent shiftwidth=2 softtabstop=2 expandtab
+
   augroup END
 
   augroup tex
@@ -335,3 +333,7 @@ function! AutoHighlightToggle()
   endif
 endfunction
 
+" silvas:
+" experimental. note that \%# is used to match the cursor position, so that
+" we aren't marking red the area that we are just typing.
+match Error /\s\+\%#\@!$/
