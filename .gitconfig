@@ -1,0 +1,24 @@
+[core]
+	autocrlf = input
+[credential]
+	helper = osxkeychain
+
+[diff]
+	algorithm = histogram
+[merge]
+	conflictstyle = diff3
+
+[push]
+	default = simple
+[user]
+	name = Filipe Cabecinhas
+
+# From: https://groups.google.com/forum/#!topic/binary-transparency/f-BI4o8HZW0
+# for $deity's sake, check that anything we're getting is complete and sane on
+# a regular basis
+[transfer]
+	fsckobjects = true
+[fetch]
+	fsckobjects = true
+[receive]
+	fsckObjects = true
