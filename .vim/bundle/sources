@@ -1,10 +1,10 @@
 # Color themes
 molokai|git|git://github.com/mrtazz/molokai.vim.git
 ir_black|git|https://github.com/wgibbs/vim-irblack
-solarized|git|git://github.com/altercation/vim-colors-solarized.git
+#solarized|git|git://github.com/altercation/vim-colors-solarized.git
 
 # Language modes
-YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
+#YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 vim-markdown|git|git://github.com/tpope/vim-markdown.git
 #python-mode|git|git://github.com/klen/python-mode.git
 
@@ -21,8 +21,8 @@ vim-unimpaired|git|git://github.com/tpope/vim-unimpaired.git
 vim-abolish|git|git://github.com/tpope/vim-abolish.git
 vim-afterimage|git|git://github.com/tpope/vim-afterimage.git
 vim-flatfoot|git|git://github.com/tpope/vim-flatfoot.git
-command-t|git|git://git.wincent.com/command-t.git
+#command-t|git|git://git.wincent.com/command-t.git
 
 # For gist-vim
-gist-vim|git|git://github.com/mattn/gist-vim.git
+#gist-vim|git|git://github.com/mattn/gist-vim.git
 #webapi-vim|git|git://github.com/mattn/webapi-vim.git
