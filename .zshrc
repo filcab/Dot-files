@@ -87,10 +87,6 @@ export NINJA_STATUS="%e [%u/%r/%f] "
 # Disable the creepy, unacceptable, stats requests by CocoaPods
 export COCOAPODS_DISABLE_STATS=1
 
-# Set options for grep (auto colorizing)
-export GREP_OPTIONS="--color=auto"
-export GREP_COLOR='1;32'
-
 # ls: Use -F with an alias
 alias ls="ls -F"
 
