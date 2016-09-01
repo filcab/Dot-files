@@ -12,3 +12,7 @@ command regex pyrepr 's/^(.*)$/expr -- (char*)PyString_AsString((PyObject*)PyObj
 command regex pystr 's/^(.*)$/expr -- (char*)PyString_AsString((PyObject*)PyObject_Str((PyObject*) (%1) ))/'
 command regex pyunicode 's/^(.*)$/expr -- (char*)PyString_AsString((PyObject*)PyObject_Unicode((PyObject*) (%1) ))/'
 
+# Show next few instructions
+target stop-hook add -o 'x/20i $pc'
+# LLDB command version
+#target stop-hook add -o 'memory read -f i -c 20 -a $pc'
