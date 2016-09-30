@@ -49,6 +49,8 @@ autoload ${fpath[1]}/*(:t) 2>/dev/null
 
 # Always build from source
 export HOMEBREW_BUILD_FROM_SOURCE=1
+# No analytics
+export HOMEBREW_NO_ANALYTICS=1
 
 # For oh-my-zsh
 #export ZSH=$HOME/.zsh.d/oh-my-zsh
