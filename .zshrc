@@ -2,8 +2,8 @@
 
 if [[ x`uname -s` == 'xDarwin' ]]; then
   # Have we brewed a new vim?
-  if [ -f ~/dev/homebrew/bin/vim -a -x ~/dev/homebrew/bin/vim ]; then
-    export EDITOR=~/dev/homebrew/bin/vim
+  if [ -f ~/dev/brew/bin/vim -a -x ~/dev/brew/bin/vim ]; then
+    export EDITOR=~/dev/brew/bin/vim
   fi
 fi
 
@@ -73,7 +73,7 @@ zstyle ':completion:*' verbose yes
 source ~/.paths
 
 # Restrict to a directory we control
-if type ~/dev/homebrew/bin/vimpager &>/dev/null;
+if type ~/dev/brew/bin/vimpager &>/dev/null;
 then
   #export PAGER="less -R"
   export PAGER=vimpager

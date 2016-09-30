@@ -67,9 +67,9 @@ export PATH="$HOME/Library/Haskell/bin:$PATH" # Mac OS X
 
 # Miscelaneous programs
 export PATH=$PATH:~/.zsh.d/bin
-export PATH=$HOME/dev/homebrew/bin:$PATH
-fpath+=$HOME/dev/homebrew/share/zsh/site-functions
-#export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$HOME/dev/homebrew/lib
+export PATH=$HOME/dev/brew/bin:$PATH
+fpath+=$HOME/dev/brew/share/zsh/site-functions
+#export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$HOME/dev/brew/lib
 
 case `hostname -f` in
   [Kk]iff*)
