@@ -1,28 +1,28 @@
 # Color themes
-molokai|git|git://github.com/mrtazz/molokai.vim.git
+molokai|git|https://github.com/mrtazz/molokai.vim.git
 ir_black|git|https://github.com/wgibbs/vim-irblack
-#solarized|git|git://github.com/altercation/vim-colors-solarized.git
+#solarized|git|https://github.com/altercation/vim-colors-solarized.git
 
 # Language modes
 #YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
-vim-markdown|git|git://github.com/tpope/vim-markdown.git
-#python-mode|git|git://github.com/klen/python-mode.git
+vim-markdown|git|https://github.com/tpope/vim-markdown.git
+#python-mode|git|https://github.com/klen/python-mode.git
 
 # Utilities (vcs, etc)
-ack-vim|git|git://github.com/mileszs/ack.vim.git
-vim-fugitive|git|git://github.com/tpope/vim-fugitive.git
-vim-git|git|git://github.com/tpope/vim-git.git
-yankring|git|git://github.com/vim-scripts/YankRing.vim.git
-vim-surround|git|git://github.com/tpope/vim-surround.git
-vim-eunuch|git|git://github.com/tpope/vim-eunuch.git
-vim-repeat|git|git://github.com/tpope/vim-repeat.git
-vim-commentary|git|git://github.com/tpope/vim-commentary.git
-vim-unimpaired|git|git://github.com/tpope/vim-unimpaired.git
-vim-abolish|git|git://github.com/tpope/vim-abolish.git
-vim-afterimage|git|git://github.com/tpope/vim-afterimage.git
-vim-flatfoot|git|git://github.com/tpope/vim-flatfoot.git
-#command-t|git|git://git.wincent.com/command-t.git
+ack-vim|git|https://github.com/mileszs/ack.vim.git
+vim-fugitive|git|https://github.com/tpope/vim-fugitive.git
+vim-git|git|https://github.com/tpope/vim-git.git
+yankring|git|https://github.com/vim-scripts/YankRing.vim.git
+vim-surround|git|https://github.com/tpope/vim-surround.git
+vim-eunuch|git|https://github.com/tpope/vim-eunuch.git
+vim-repeat|git|https://github.com/tpope/vim-repeat.git
+vim-commentary|git|https://github.com/tpope/vim-commentary.git
+vim-unimpaired|git|https://github.com/tpope/vim-unimpaired.git
+vim-abolish|git|https://github.com/tpope/vim-abolish.git
+vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
+vim-flatfoot|git|https://github.com/tpope/vim-flatfoot.git
+#command-t|git|https://git.wincent.com/command-t.git
 
 # For gist-vim
-#gist-vim|git|git://github.com/mattn/gist-vim.git
-#webapi-vim|git|git://github.com/mattn/webapi-vim.git
+#gist-vim|git|https://github.com/mattn/gist-vim.git
+#webapi-vim|git|https://github.com/mattn/webapi-vim.git
