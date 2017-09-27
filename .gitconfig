@@ -18,6 +18,12 @@
 	conflictstyle = diff3
 	tool = vimdiff
 
+# Test diff-highlight, which should be a bit better than regular word highlight
+[pager]
+	log = ~/.zsh.d/bin/diff-highlight | less -R
+	show = ~/.zsh.d/bin/diff-highlight | less -R
+	diff = ~/.zsh.d/bin/diff-highlight | less -R
+
 [pull]
 	rebase = true
 [push]
