@@ -10,6 +10,9 @@ export PATH=/usr/local/bin:$PATH
 # git
 export PATH=/usr/local/gitprefix/bin:$PATH
 
+# System Python user-installed files
+export PATH=$PATH:$HOME/Library/Python/2.7/bin
+
 # MacTeX
 export PATH=/usr/texbin/bin/x86_64-darwin:$PATH
 
