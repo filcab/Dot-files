@@ -101,3 +101,5 @@ define avoid32-ptrace
     continue
 end
 
+# Advice from homebrew, on macOS with SIP
+set startup-with-shell off
