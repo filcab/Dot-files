@@ -1,0 +1,63 @@
+#!/usr/bin/perl -w
+
+use strict;
+use File::Basename;
+
+my @commits;
+my %trees;
+my $blob;
+
+sub blob_in_tree {
+    my $tree = $_[0];
+    if (defined $trees{$tree}) {
+        return $trees{$tree};
+    }
+    my $r = 0;
+    open(my $f, "git cat-file -p $tree|") or die $!;
+    while (<$f>) {
+        if (/^\d+ blob (\w+)/ && $1 eq $blob) {
+            $r = 1;
+        } elsif (/^\d+ tree (\w+)/) {
+            $r = blob_in_tree($1);
+        }
+        last if $r;
+    }
+    close($f);
+    $trees{$tree} = $r;
+    return $r;
+}
+
+sub handle_commit {
+    my $commit = $_[0];
+    open(my $f, "git cat-file commit $commit|") or die $!;
+    my $tree = <$f>;
+    die unless $tree =~ /^tree (\w+)$/;
+    if (blob_in_tree($1)) {
+        print "$commit\n";
+    }
+    while (1) {
+        my $parent = <$f>;
+        last unless $parent =~ /^parent (\w+)$/;
+        push @commits, $1;
+    }
+    close($f);
+}
+
+my $prog = basename $0;
+if (!@ARGV) {
+    print STDERR "Usage: $prog blob [head ...]\n";
+    exit 1;
+}
+
+$blob = $ARGV[0];
+if (@ARGV > 1) {
+    foreach (@ARGV) {
+        handle_commit($_);
+    }
+} else {
+    handle_commit("HEAD");
+}
+while (@commits) {
+    handle_commit(pop @commits);
+}
+
