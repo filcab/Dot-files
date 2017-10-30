@@ -268,7 +268,6 @@ if has("autocmd")
     \ *.xsl,*.xml,*.css,*.html,*.js,*.php,*.sql,*.sh,*.conf,*.cc,*.cpp,*.h
     \  setlocal shiftwidth=2 softtabstop=2 expandtab
     "\  setlocal smartindent shiftwidth=2 softtabstop=2 expandtab
-
   augroup END
 
   augroup tex
@@ -279,7 +278,7 @@ if has("autocmd")
 
   augroup perl
     " reset (disable previous 'augroup perl' settings)
-    au!  
+    au!
 
     au BufReadPre,BufNewFile
     \ *.pl,*.pm
@@ -292,7 +291,7 @@ if has("autocmd")
     "   q - allow formatting of comments with "gq"
     "   a - auto formatting for paragraphs
     "   n - auto wrap numbered lists
-    "   
+    "
   augroup END
 
   augroup python
@@ -312,14 +311,13 @@ if has("autocmd")
   " Add highlighting for function definition in C++
   autocmd Syntax cpp call EnhanceCppSyntax()
 
-
-  " Always jump to the last known cursor position. 
+  " Always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside
-  " an event handler (happens when dropping a file on gvim). 
-  autocmd BufReadPost * 
-    \ if line("'\"") > 0 && line("'\"") <= line("$") | 
-    \   exe "normal g`\"" | 
-    \ endif 
+  " an event handler (happens when dropping a file on gvim).
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
 
 endif " has("autocmd")
 
