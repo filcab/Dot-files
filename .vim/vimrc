@@ -22,8 +22,25 @@ set autoread
 let g:ackprg="~/dev/homebrew/bin/ack -H --nocolor --nogroup --column"
 
 " Tell vim where to find clang-*
-let g:clang_check_path = expand("~/dev/llvm/build/bin/clang-check")
-let g:clang_format_path = expand("~/dev/llvm/build/bin/clang-format")
+let g:filcab_exe_suffix = has('win32') ? '.exe' : ''
+function! Find(prog_name, dirs)
+  if executable(a:prog_name) == 1
+    return a:prog_name
+  endif
+
+  for dir in a:dirs
+    let l:maybe_prog = dir . '/' . a:prog_name . g:filcab_exe_suffix
+    if executable(l:maybe_prog) == 1
+      return expand(l:maybe_prog)
+    endif
+  endfor
+
+  return a:prog_name . '.NOTFOUND'
+endfunction
+
+let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build-llvm/bin', '~/work/llvm-cmake/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
+let g:clang_check_path = Find('clang-check', g:filcab_llvm_dirs_to_search)
+let g:clang_format_path = Find('clang-format', g:filcab_llvm_dirs_to_search)
 
 "Auto-reload vimrc
 autocmd! bufwritepost .vimrc source ~/.vimrc
