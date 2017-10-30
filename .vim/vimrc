@@ -218,7 +218,9 @@ if &t_Co > 2 || has("gui_running")
     colorscheme molokai
   endif
 
-  set guifont=Monaco:h14
+  if has('macunix')
+    set guifont=Monaco:h14
+  endif
 endif
 
 " paste mode toggle (needed when using autoindent/smartindent)
