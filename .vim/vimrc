@@ -43,7 +43,7 @@ let g:clang_check_path = Find('clang-check', g:filcab_llvm_dirs_to_search)
 let g:clang_format_path = Find('clang-format', g:filcab_llvm_dirs_to_search)
 
 "Auto-reload vimrc
-autocmd! bufwritepost .vimrc source ~/.vimrc
+autocmd! bufwritepost vimrc source ~/.vim/vimrc
 
 
 " Allow some commands with the first letter(s) capitalized
