@@ -7,8 +7,11 @@
 
 [core]
 	autocrlf = false
+
 [credential]
+	# These are tried in succession
 	helper = osxkeychain
+	helper = wincred
 
 [diff]
 	algorithm = histogram
