@@ -11,6 +11,7 @@ our @types = qw/cvs svn curl tgz zip bzr_tgz git/;
 open SOURCES, "<sources" or die $!;
 
 our $update = 0;
+my $not_update_message = 0;
 
 if ($#::ARGV == 0) {
     $update = $::ARGV[0] eq "--update";
@@ -28,7 +29,8 @@ while (<SOURCES>) {
     }
 
     if ($#ARGV < 0 or grep(/$dir/, @ARGV)) {
-        print "updating\n";
+        print "not updating (yet)\n";
+        $not_update_message = 1;
         # Hack. Use dispatch table
         &{\&$type}($dir, @arguments);
     } elsif ($update) {
@@ -40,6 +42,10 @@ while (<SOURCES>) {
         # Hack. Use dispatch table
         &{\&$type}($dir, @arguments)
     } else { print "skipped\n"; }
+}
+
+if ($not_update_message) {
+  print "To update the repos, run with --update";
 }
 
 sub cvs ($$$$) {
