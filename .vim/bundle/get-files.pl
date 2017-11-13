@@ -169,7 +169,7 @@ sub git ($$$$) {
     $dir = shift, $git_url = shift;
 
     if ($update) {
-        open GIT, "cd $dir && git pull |";
+        open GIT, "git -C '$dir' pull |";
         print while (<GIT>);
         close GIT;
 
