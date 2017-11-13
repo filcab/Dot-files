@@ -350,3 +350,8 @@ endfunction
 " experimental. note that \%# is used to match the cursor position, so that
 " we aren't marking red the area that we are just typing.
 match Error /\s\+\%#\@!$/
+
+"nerdtree
+" From: https://vimawesome.com/plugin/nerdtree-red
+"       Close vim if the only window left open is a NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
