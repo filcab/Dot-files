@@ -225,7 +225,7 @@ endif
 
 " clang-format integration
 map <C-I> :pyf ~/.vim/clang-format.py<cr>
-imap <C-I> <c-o>:pyf ~/.vim/clang-format.py<cr><cr>
+"imap <C-I> <c-o>:pyf ~/.vim/clang-format.py<cr><cr>
 
 " clang-check functions and keybinding
 function! ClangCheckImpl(cmd)
