@@ -42,6 +42,11 @@ let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build-llvm/bin', '~/work/llvm-cm
 let g:clang_check_path = Find('clang-check', g:filcab_llvm_dirs_to_search)
 let g:clang_format_path = Find('clang-format', g:filcab_llvm_dirs_to_search)
 
+" Always use proper slashes on Windows if our shell looks like a *NIX one.
+if has('win32') && &shell =~? '.*sh.exe'
+  set shellslash
+endif
+
 "Auto-reload vimrc
 autocmd! bufwritepost vimrc source ~/.vim/vimrc
 
