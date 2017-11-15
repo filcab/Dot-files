@@ -22,8 +22,8 @@ vim-abolish|git|https://github.com/tpope/vim-abolish.git
 vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
 vim-flatfoot|git|https://github.com/tpope/vim-flatfoot.git
 #command-t|git|https://git.wincent.com/command-t.git
-nerdtree|git|https://github.com/scrooloose/nerdtree.git
-nerdtree-git-plugin|git|https://github.com/Xuyuanp/nerdtree-git-plugin.git
+#nerdtree|git|https://github.com/scrooloose/nerdtree.git
+#nerdtree-git-plugin|git|https://github.com/Xuyuanp/nerdtree-git-plugin.git
 
 # For gist-vim
 #gist-vim|git|https://github.com/mattn/gist-vim.git
