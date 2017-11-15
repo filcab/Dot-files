@@ -16,11 +16,15 @@ yankring|git|https://github.com/vim-scripts/YankRing.vim.git
 vim-surround|git|https://github.com/tpope/vim-surround.git
 vim-eunuch|git|https://github.com/tpope/vim-eunuch.git
 vim-repeat|git|https://github.com/tpope/vim-repeat.git
+vim-speeddating|git|https://github.com/tpope/vim-speeddating.git
 vim-commentary|git|https://github.com/tpope/vim-commentary.git
+vim-sleuth|git|https://github.com/tpope/vim-sleuth.git
 vim-unimpaired|git|https://github.com/tpope/vim-unimpaired.git
 vim-abolish|git|https://github.com/tpope/vim-abolish.git
 vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
 vim-flatfoot|git|https://github.com/tpope/vim-flatfoot.git
+vim-vinegar|git|https://github.com/tpope/vim-vinegar.git
+vim-commentary|git|https://github.com/tpope/vim-commentary.git
 #command-t|git|https://git.wincent.com/command-t.git
 #nerdtree|git|https://github.com/scrooloose/nerdtree.git
 #nerdtree-git-plugin|git|https://github.com/Xuyuanp/nerdtree-git-plugin.git
