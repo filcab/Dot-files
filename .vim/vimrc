@@ -1,22 +1,111 @@
 """ Start of FilCab's stuff
-" Need to clean up eventually
-scriptencoding utf-8
-set encoding=utf-8
-
 " Setup up pathogen and only turn on filetype stuff afterwards
 filetype off
 
 call pathogen#infect()
 call pathogen#helptags()
-filetype plugin indent on
 
 " reset to vim-defaults
 if &compatible          " only if not set before:
   set nocompatible      " use vim-defaults instead of vi-defaults (easier, more user friendly)
 endif
 
+" From tpope's sensible.vim (last checked on 2017-11-15):
+" https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
+" Changes are commented
+if has('autocmd' )
+  filetype plugin indent on
+endif
+if has('syntax') && !exists('g:syntax_on')
+  syntax enable
+endif
+
+set autoindent
+set backspace=indent,eol,start
+"set complete-=i  " filcab: Trying it out with this set, for now
+set complete+=d  "filcab: Trying it out with this additional one
+set smarttab
+
+"set nrformats-=octal  "filcab: haven't yet had problems with this
+
+" filcab: Set some default. I don't care much
+if !has('nvim') && &ttimeoutlen == -1
+  set ttimeout
+  set ttimeoutlen=100
+endif
+
+set incsearch
+" Use <C-L> to clear the highlighting of :set hlsearch.
+if maparg('<C-L>', 'n') ==# ''
+  nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
+
+" Always show the status bar
+set laststatus=2
+set ruler               " show cursor position in status bar
+set wildmenu
+
+if !&scrolloff
+  set scrolloff=2         " 2 lines above/below cursor when scrolling
+endif
+if !&sidescrolloff
+  set sidescrolloff=5
+endif
+set display+=lastline
+
+scriptencoding utf-8  " filcab: In sensible, this is conditional
+set encoding=utf-8    " filcab: Not in sensible
+
+if &listchars ==# 'eol:$'
+  "filcab: sensible.vim version:
+  " set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+  "
+  " From silvas' vimrc:
+  " Use Knuth-y underspace for trailing space
+  " I once had a problem with › where it would show up wrong. Use ` instead
+  " (I've actually come to prefer it, since it is smaller).
+  set listchars=tab:`\ ,trail:␣"⎕",eol:◺
+endif
+
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j " Delete comment character when joining commented lines
+endif
+
+" huh?
+if has('path_extra')
+  setglobal tags-=./tags tags-=./tags; tags^=./tags;
+endif
+
+if &shell =~# 'fish$' && (v:version < 704 || v:version == 704 && !has('patch276'))
+  set shell=/bin/bash
+endif
+
 " Automatically reload changed files
 set autoread
+
+if &history < 1000
+  set history=1000
+endif
+if &tabpagemax < 50
+  set tabpagemax=50
+endif
+if !empty(&viminfo)
+  set viminfo^=!
+endif
+set sessionoptions-=options
+
+" Load matchit.vim, but only if the user hasn't installed a newer version.
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+  runtime! macros/matchit.vim
+endif
+
+" When doing "delete to beginning of line" in insert mode, "break" undo first
+" so we can easily recover from mistakes.
+inoremap <C-U> <C-G>u<C-U>
+
+" End of tpope's sensible.vim stuff
+
+
 
 " Tell vim where to find ack
 let g:ackprg="~/dev/homebrew/bin/ack -H --nocolor --nogroup --column"
@@ -111,9 +200,6 @@ let g:Tex_FormatDependency_ps  = 'dvi,ps'
 let g:Tex_FormatDependency_pspdf = 'dvi,ps,pspdf'
 let g:Tex_FormatDependency_dvipdf = 'dvi,dvipdf'
 
-" Always show the status bar
-set laststatus=2
-
 " Default statusline:
 set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 
@@ -133,10 +219,6 @@ set makeprg=ninja
 " From silvas' vimrc:
 " Showing invisible characters {{{
 set list
-" Use Knuth-y underspace for trailing space
-" I once had a problem with › where it would show up wrong. Use ` instead
-" (I've actually come to prefer it, since it is smaller).
-set listchars=tab:`\ ,trail:␣"⎕",eol:◺
 
 " Some nice default for *.h files in llvm
 autocmd BufNewFile,BufRead **/*llvm*/**/*.h setlocal ft=cpp.doxygen
@@ -160,12 +242,10 @@ set background=dark     " enable for dark terminals
 " FILCAB: Turn off textwidth in general. It's getting to be annoying.
 "set textwidth=74
 "set wrapmargin=4        " When wrapping, set up a margin
-set scrolloff=2         " 2 lines above/below cursor when scrolling
 set nonumber            " do not show line numbers
 set showmatch           " show matching bracket (briefly jump)
 set showmode            " show mode in status bar (insert/replace/...)
 set showcmd             " show typed command in status bar
-set ruler               " show cursor position in status bar
 set title               " show file in titlebar
 
 if has("wildmenu")
@@ -184,7 +264,6 @@ set esckeys             " map missed escape sequences (enables keypad keys)
 set ignorecase          " case insensitive searching
 set smartcase           " but become case sensitive if you type uppercase characters
 set smartindent         " smart auto indenting
-set smarttab            " smart tab handling for indenting
 set magic               " change the way backslashes are used in search patterns
 set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set backupdir=~/.vim/backup " Hide backups in the .vim directory
@@ -202,9 +281,8 @@ set nospell             " Don't spell-check
 "set fileformat=unix     " file mode is unix
 set fileformats=unix,dos    " only detect unix file format, displays that ^M with dos files
 
-set viminfo='20,\"500   " remember copy registers after quitting in the .viminfo file -- 20 jump links, regs up to 500 lines'
+set viminfo+='20,<500   " remember copy registers after quitting in the .viminfo file -- 20 jump links, regs up to 500 lines'
 set hidden              " remember undo after quitting
-set history=50          " keep 50 lines of command history
 
 set mouse=v             " use mouse in visual mode (not normal,insert,command,help mode
 
@@ -213,9 +291,7 @@ let g:yankring_history_file = '.vim.yankring_history'
 
 " color settings (if terminal/gui supports it)
 if &t_Co > 2 || has("gui_running")
-  syntax on               " enable colors
   set hlsearch            " highlight search (very useful!)
-  set incsearch           " search incremently (search while typing)
   set guioptions-=T       " Don't show toolbar
   if has("gui_running")   " Only in a GUI
     "colorscheme ir_black  " A nice colorscheme I found online
