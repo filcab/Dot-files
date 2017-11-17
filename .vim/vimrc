@@ -118,9 +118,9 @@ function! Find(prog_name, dirs)
   endif
 
   for dir in a:dirs
-    let l:maybe_prog = dir . '/' . a:prog_name . g:filcab_exe_suffix
+    let l:maybe_prog = expand(dir . '/' . a:prog_name . g:filcab_exe_suffix)
     if executable(l:maybe_prog) == 1
-      return expand(l:maybe_prog)
+      return l:maybe_prog
     endif
   endfor
 
