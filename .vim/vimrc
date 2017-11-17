@@ -112,7 +112,7 @@ let g:ackprg="~/dev/homebrew/bin/ack -H --nocolor --nogroup --column"
 
 " Tell vim where to find clang-*
 let g:filcab_exe_suffix = has('win32') ? '.exe' : ''
-function! Find(prog_name, dirs)
+function! FindProgram(prog_name, dirs)
   if executable(a:prog_name) == 1
     return a:prog_name
   endif
@@ -128,8 +128,8 @@ function! Find(prog_name, dirs)
 endfunction
 
 let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build-llvm/bin', '~/work/llvm-cmake/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
-let g:clang_check_path = Find('clang-check', g:filcab_llvm_dirs_to_search)
-let g:clang_format_path = Find('clang-format', g:filcab_llvm_dirs_to_search)
+let g:clang_check_path = FindProgram('clang-check', g:filcab_llvm_dirs_to_search)
+let g:clang_format_path = FindProgram('clang-format', g:filcab_llvm_dirs_to_search)
 
 " Always use proper slashes on Windows if our shell looks like a *NIX one.
 if has('win32') && &shell =~? '.*sh.exe'
