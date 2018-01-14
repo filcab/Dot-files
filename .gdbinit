@@ -103,3 +103,5 @@ end
 
 # Advice from homebrew, on macOS with SIP
 set startup-with-shell off
+
+source /Users/filcab/Library/Python/2.7/lib/python/site-packages/voltron/entry.py

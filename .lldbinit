@@ -16,3 +16,5 @@ command regex pyunicode 's/^(.*)$/expr -- (char*)PyString_AsString((PyObject*)Py
 settings set stop-disassembly-count 20
 # LLDB command version
 #target stop-hook add -o 'memory read -f i -c 20 -a $pc'
+
+command script import /Users/filcab/Library/Python/2.7/lib/python/site-packages/voltron/entry.py
