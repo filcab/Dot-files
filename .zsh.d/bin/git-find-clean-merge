@@ -1,0 +1,201 @@
+#!/usr/bin/env python
+from __future__ import print_function
+import re
+import subprocess
+import sys
+
+
+# Usage:
+# Call with two branch names, A and B (commit-ish are probably ok).
+# The script will attempt to merge merge_base(A, B) up to B, filtering the
+# revisions on file conflicts, to minimize merge attempts.
+# Finally, if COMMIT_LAST_GOOD_MERGE is True (default), it will do a merge
+# commit of the last good merge.
+# TODO: Hook up options to an argparse parser
+
+
+VERBOSE = False
+#VERBOSE = True
+GIT_TRACE = '0'
+# Doesn't cover *all* exits yet (I want to test more)
+COMMIT_LAST_GOOD_MERGE = True
+
+
+GREEN = '\033[92m'
+RED = '\033[91m'
+OK_COLOR = GREEN
+NG_COLOR = RED
+CLEAR = '\033[0m'
+
+
+def info(*args, **kwargs):
+    start = kwargs.pop('start', '[*] ')
+    print(start, *args, **kwargs)
+
+
+def vinfo(*args, **kwargs):
+    if VERBOSE:
+        info(*args, start='[V] ', **kwargs)
+
+
+def warn(*args, **kwargs):
+    info(*args, start='[W] ', **kwargs)
+
+
+def error(*args, **kwargs):
+    ret = kwargs.pop('ret', 1)
+    label = kwargs.pop('start', '\n[E] ')
+    info(*args, start=label, **kwargs)
+    sys.exit(ret)
+
+
+def env_for_kwargs(kwargs):
+    env = {'GIT_TRACE': GIT_TRACE}
+    if 'env' in kwargs and kwargs['env']:
+        env = os.environ.copy()
+        env['GIT_TRACE'] = GIT_TRACE
+        env.update(kwargs['env'])
+        # Don't pass env twice
+        del kwargs['env']
+    return env
+
+
+def run(cmd, **kwargs):
+    env = env_for_kwargs(kwargs)
+    vinfo('Running command: "{}"'.format('" "'.join(cmd)))
+    subprocess.check_call(cmd, env=env, **kwargs)
+
+
+def run_output(cmd, **kwargs):
+    env = env_for_kwargs(kwargs)
+    vinfo('Running command for output: "{}"'.format('" "'.join(cmd)))
+    p = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **kwargs)
+    (out, err) = p.communicate()
+    return (p.returncode, out.rstrip(), err.rstrip())
+
+
+def git(*args, **kwargs):
+    check_call = kwargs.pop('check_call', False)
+    if check_call:
+        return run(['git'] + list(args), **kwargs)
+    else:
+        return run_output(['git'] + list(args), **kwargs)
+
+
+merge_base = None
+def get_merge_base(revA, revB):
+    global merge_base
+    if merge_base is None:
+        (ret, merge_base, err) = git('merge-base', revA, revB)
+        #vinfo(err)
+        assert ret == 0
+    merge_base = merge_base.rstrip()
+    info('Merge base: {}'.format(merge_base))
+    assert re.match(r'^[0-9a-f]+$', merge_base)
+    return merge_base
+
+
+# We can filter for revisions in some files only
+def get_revisions_between(revA, revB, files=[]):
+    (ret, out, err) = git('log', '--reverse', '--pretty=%H', '{}..{}'.format(revA, revB), '--', *files)
+    #vinfo(err)
+    assert ret == 0
+    return out.splitlines()
+
+
+args = sys.argv[1:]
+
+revA = args[0]
+revB = args[1]
+
+revs = get_revisions_between(get_merge_base(revA, revB), revB)
+
+
+def try_merge(rev, report=False):
+    succeeded = True
+    (ret, out, err) = git('merge', '--no-commit', rev)
+    #vinfo(err)
+
+    succeeded = ret == 0
+    # Something went wrong if the command neither succeeded nor returned 128
+    if not succeeded and ret != 1:
+        error('Process returned non-0, non-1 return code: {}'.format(ret))
+        sys.exit(1)
+
+    # Get everything back where it was.
+    git('merge', '--abort')
+    if report:
+        info('{} => [{}]'.format(rev, '{}OK{}'.format(OK_COLOR, CLEAR) if succeeded else '{}NG{}'.format(NG_COLOR, CLEAR)), start='')
+    return (succeeded, out, err)
+
+
+info('Trying to merge the next revision first: ', end='')
+if not try_merge(revs[0], report=True)[0]:
+    info('The next revision is not mergeable. Bailing out early.')
+    info('First bad revision: {}'.format(revs[0]))
+    sys.exit(0)
+
+while len(revs) > 1:
+    info('Filtering {} revisions'.format(len(revs)), end='')
+    sys.stdout.flush()
+    sys.stderr.flush()
+
+    idx = len(revs) / 2
+    rev = revs[idx]
+
+    (succeeded, merge_output, _) = try_merge(rev, report=True)
+
+    if succeeded:
+        revs = revs[idx + 1:]
+    else:
+        revs = revs[:idx]
+        if len(revs) < 2:
+            break
+
+        # Update the list of interesting revisions
+        merge_output = merge_output.splitlines()
+        # Files with conflicts
+        merge_conflicts = [x[x.rfind(' ') + 1:] for x in merge_output if x.startswith('CONFLICT')]
+
+        # Trim out revision list taking into account files that conflict
+        vinfo('revs before filtering: {}'.format(revs))
+        vinfo('merge_conflicts: {}'.format(merge_conflicts))
+        # Start on the rev before our first one, because the rev we send isn't included
+        revs = get_revisions_between('{}^'.format(revs[0]), revs[-1], files=merge_conflicts)
+        vinfo('revs after filtering: {}'.format(revs))
+
+
+vinfo('revs: {}'.format(revs))
+assert len(revs) == 1
+
+if rev == revs[0]:
+    # revs has last tested rev only
+    if succeeded:
+        info('Last good revision: {}^'.format(rev))
+        info('First bad revision: {}'.format(rev))
+    else:
+        info('Last good revision: {}'.format(rev))
+else:
+    (last_rev, last_succeeded) = (rev, succeeded)
+    rev = revs[0]
+    # Just use the same phrasing
+    info('Filtering 1 revision:', end='')
+    succeeded = try_merge(rev, report=True)[0]
+
+    # revs has a revision just before or after the last tested one
+    if succeeded:
+        info('Last good revision: {}'.format(rev))
+        if not last_succeeded:
+            info('First bad revision: {}'.format(last_rev))
+    else:
+        info('First bad revision: {}'.format(rev))
+        if last_succeeded:
+            info('Last good revision: {}'.format(last_rev))
+        else:
+            last_good = git('rev-parse', '{}^'.format(rev))[1]
+            info('Last good revision: {}'.format(last_good))
+            if COMMIT_LAST_GOOD_MERGE:
+                info('Committing {}'.format(last_good))
+                git('merge', last_good, check_call=True)
+                info('Done. Feel free to merge {} and fix the conflicts.'.format(rev))
+
