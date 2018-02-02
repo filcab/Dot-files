@@ -5,12 +5,6 @@ import subprocess
 import sys
 
 
-# Usage:
-# Call with two branch names, A and B (commit-ish are probably ok).
-# The script will attempt to merge merge_base(A, B) up to B, filtering the
-# revisions on file conflicts, to minimize merge attempts.
-# Finally, if COMMIT_LAST_GOOD_MERGE is True (default), it will do a merge
-# commit of the last good merge.
 # TODO: Hook up options to an argparse parser
 
 
@@ -101,6 +95,18 @@ def get_revisions_between(revA, revB, files=[]):
     #vinfo(err)
     assert ret == 0
     return out.splitlines()
+
+
+def usage():
+    info('Usage: {} revA revB'.format(sys.argv[0]))
+    info('Call with two branch names, A and B (commit-ish are probably ok).')
+    info('The script will attempt to merge merge_base(A, B) up to B, filtering the revisions on file conflicts, to minimize merge attempts.')
+    info('Finally, if COMMIT_LAST_GOOD_MERGE is True (default), it will do a merge commit of the last good merge.')
+    sys.exit(0)
+
+
+if len(sys.argv) < 3 or '-h' in sys.argv or '--help' in sys.argv:
+    usage()
 
 
 args = sys.argv[1:]
