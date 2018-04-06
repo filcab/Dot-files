@@ -157,10 +157,12 @@ endif
 set nomodeline
 
 " completion (CTRL+N) options
-set completeopt+=longest
-
-" extend the $PATH variable with the vim scripts' dir
-"let $PATH .= "~/.vim/bin"
+if !exists( "g:loaded_youcompleteme" )
+  " If we set this variable and then reload vimrc, when YouCompleteMe is
+  " enabled, we end up with some weird behaviour where words which YCM tries
+  " to complete will get deleted whilst being written.
+  set completeopt+=longest
+endif
 
 " vim is the default editor for vim's subshells
 let $EDITOR = "vim"
