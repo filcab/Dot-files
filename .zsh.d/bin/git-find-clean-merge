@@ -4,14 +4,23 @@ import re
 import subprocess
 import sys
 
+# USAGE: Call with -h, --help, or fewer than two arguments
+
 
 # TODO: Hook up options to an argparse parser
+# TODO: Have an option to *also* do the conflicting merge (implies doing the clean merge)
+# TODO: Trim non-essential output
+# TODO: Phrasing?
+# TODO: Verbose output is not pretty
+# TODO: Be able to pick between warning or error for "repository is dirty"
+# TODO: Make it a good git citizen (configs, paths, etc) (no idea what's needed for it)
+# TODO: If we get a CTRL+C, clean up and abort in-process merges
+# TODO: Currently we might merge the last good commit twice
 
 
 VERBOSE = False
 #VERBOSE = True
 GIT_TRACE = '0'
-# Doesn't cover *all* exits yet (I want to test more)
 COMMIT_LAST_GOOD_MERGE = True
 
 
@@ -61,10 +70,13 @@ def run(cmd, **kwargs):
 
 
 def run_output(cmd, **kwargs):
+    can_fail = kwargs.pop('can_fail', False)
     env = env_for_kwargs(kwargs)
     vinfo('Running command for output: "{}"'.format('" "'.join(cmd)))
     p = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **kwargs)
     (out, err) = p.communicate()
+    if not can_fail and p.returncode != 0:
+        raise Exception('Program failed and can_fail == False')
     return (p.returncode, out.rstrip(), err.rstrip())
 
 
@@ -76,15 +88,11 @@ def git(*args, **kwargs):
         return run_output(['git'] + list(args), **kwargs)
 
 
-merge_base = None
 def get_merge_base(revA, revB):
-    global merge_base
-    if merge_base is None:
-        (ret, merge_base, err) = git('merge-base', revA, revB)
-        #vinfo(err)
-        assert ret == 0
+    (ret, merge_base, err) = git('merge-base', revA, revB)
+    #vinfo(err)
+    assert ret == 0
     merge_base = merge_base.rstrip()
-    info('Merge base: {}'.format(merge_base))
     assert re.match(r'^[0-9a-f]+$', merge_base)
     return merge_base
 
@@ -96,6 +104,25 @@ def get_revisions_between(revA, revB, files=[]):
     assert ret == 0
     return out.splitlines()
 
+def commit_last_good_revision(rev, bad=None, is_top=False):
+    if COMMIT_LAST_GOOD_MERGE:
+        info('Committing merge with {}'.format(rev))
+        # Make sure all our output has gone before we call into git
+        sys.stdout.flush()
+        sys.stderr.flush()
+        # FIXME: Allow a user to choose --log or not
+        git('merge', '--log', '--no-edit', rev, check_call=True)
+        if bad:
+          info('Done. Feel free to merge {} and fix the conflicts.'.format(bad))
+        if is_top:
+            info('No revisions left to merge. All done!')
+    else:
+        info('Last good merge: {}'.format(rev))
+        if bad:
+            info('First bad merge: {}'.format(bad))
+        elif is_top:
+            info('No revisions left after this merge')
+
 
 def usage():
     info('Usage: {} revA revB'.format(sys.argv[0]))
@@ -105,21 +132,9 @@ def usage():
     sys.exit(0)
 
 
-if len(sys.argv) < 3 or '-h' in sys.argv or '--help' in sys.argv:
-    usage()
-
-
-args = sys.argv[1:]
-
-revA = args[0]
-revB = args[1]
-
-revs = get_revisions_between(get_merge_base(revA, revB), revB)
-
-
 def try_merge(rev, report=False):
     succeeded = True
-    (ret, out, err) = git('merge', '--no-commit', rev)
+    (ret, out, err) = git('merge', '--no-commit', rev, can_fail=True)
     #vinfo(err)
 
     succeeded = ret == 0
@@ -129,79 +144,150 @@ def try_merge(rev, report=False):
         sys.exit(1)
 
     # Get everything back where it was.
-    git('merge', '--abort')
+    git('merge', '--abort', check_call=True)
     if report:
         info('{} => [{}]'.format(rev, '{}OK{}'.format(OK_COLOR, CLEAR) if succeeded else '{}NG{}'.format(NG_COLOR, CLEAR)), start='')
     return (succeeded, out, err)
 
 
-info('Trying to merge the next revision first: ', end='')
-if not try_merge(revs[0], report=True)[0]:
-    info('The next revision is not mergeable. Bailing out early.')
-    info('First bad revision: {}'.format(revs[0]))
-    sys.exit(0)
+# Returns (maybe_last_good, maybe_first_bad), as best as possible.
+#   maybe_first_bad might be None, if we didn't manage to find it (depends on the filtering and the revisions we test)
+#   maybe_last_good *MIGHT* not be a good revision. If we hit the edge of a revert with maybe_first_bad, $maybe_first_bad^ might conflict again
+def find_clean_merge(revs):
+    # We have to keep the set of conflicted files and never remove files from it,
+    # or we might filter out a revision which adds conflicts (on a file which a
+    # latter revision didn't add a conflict on).
+    conflicted_files = set()
+    while len(revs) > 1:
+        info('Filtering {} revisions'.format(len(revs)), end='')
+        sys.stdout.flush()
+        sys.stderr.flush()
 
-while len(revs) > 1:
-    info('Filtering {} revisions'.format(len(revs)), end='')
-    sys.stdout.flush()
-    sys.stderr.flush()
+        idx = len(revs) / 2
+        rev = revs[idx]
 
-    idx = len(revs) / 2
-    rev = revs[idx]
+        (succeeded, merge_output, _) = try_merge(rev, report=True)
 
-    (succeeded, merge_output, _) = try_merge(rev, report=True)
+        if succeeded:
+            revs = revs[idx + 1:]
+            vinfo('revs: {}'.format(revs))
+        else:
+            revs = revs[:idx]
 
-    if succeeded:
-        revs = revs[idx + 1:]
-    else:
-        revs = revs[:idx]
-        if len(revs) < 2:
-            break
+            # Bail out early so we don't do useless filtering
+            if len(revs) < 2:
+                break
 
-        # Update the list of interesting revisions
-        merge_output = merge_output.splitlines()
-        # Files with conflicts
-        merge_conflicts = [x[x.rfind(' ') + 1:] for x in merge_output if x.startswith('CONFLICT')]
+            # Update the list of interesting revisions
+            merge_output = merge_output.splitlines()
+            # Files with conflicts
+            merge_conflicts = [x[x.rfind(' ') + 1:] for x in merge_output if x.startswith('CONFLICT')]
 
-        # Trim out revision list taking into account files that conflict
-        vinfo('revs before filtering: {}'.format(revs))
-        vinfo('merge_conflicts: {}'.format(merge_conflicts))
-        # Start on the rev before our first one, because the rev we send isn't included
-        revs = get_revisions_between('{}^'.format(revs[0]), revs[-1], files=merge_conflicts)
-        vinfo('revs after filtering: {}'.format(revs))
+            # Trim out revision list taking into account files that conflict
+            vinfo('revs before filtering: {}'.format(revs))
+            vinfo('merge_conflicts: {}'.format(merge_conflicts))
+            # Start on the rev before our first one, because the rev we send isn't included
+            revs = get_revisions_between('{}^'.format(revs[0]), revs[-1], files=list(conflicted_files))
+            vinfo('revs after filtering: {}'.format(revs))
 
 
-vinfo('revs: {}'.format(revs))
-assert len(revs) == 1
+    vinfo('revs: {}'.format(revs))
+    assert not revs or len(revs) == 1
 
-if rev == revs[0]:
-    # revs has last tested rev only
-    if succeeded:
-        info('Last good revision: {}^'.format(rev))
-        info('First bad revision: {}'.format(rev))
-    else:
-        info('Last good revision: {}'.format(rev))
-else:
-    (last_rev, last_succeeded) = (rev, succeeded)
-    rev = revs[0]
-    # Just use the same phrasing
-    info('Filtering 1 revision:', end='')
-    succeeded = try_merge(rev, report=True)[0]
 
-    # revs has a revision just before or after the last tested one
-    if succeeded:
-        info('Last good revision: {}'.format(rev))
-        if not last_succeeded:
-            info('First bad revision: {}'.format(last_rev))
-    else:
-        info('First bad revision: {}'.format(rev))
-        if last_succeeded:
-            info('Last good revision: {}'.format(last_rev))
+    if not revs or rev == revs[0]:
+        # revs has last tested rev only
+        if succeeded:
+            return (rev, None)
         else:
             last_good = git('rev-parse', '{}^'.format(rev))[1]
-            info('Last good revision: {}'.format(last_good))
-            if COMMIT_LAST_GOOD_MERGE:
-                info('Committing {}'.format(last_good))
-                git('merge', last_good, check_call=True)
-                info('Done. Feel free to merge {} and fix the conflicts.'.format(rev))
+            return (last_good, rev)
+    else:
+        (last_rev, last_succeeded) = (rev, succeeded)
+        rev = revs[0]
+        # Just use the same phrasing
+        info('Filtering 1 revision:', end='')
+        succeeded = try_merge(rev, report=True)[0]
 
+        # revs has a revision just before or after the last tested one
+        if succeeded:
+            return (rev, last_rev if not last_succeeded else None)
+        else:
+            if last_succeeded:
+                return (last_rev, rev)
+            else:
+                last_good = git('rev-parse', '{}^'.format(rev))[1]
+                return (last_good, rev)
+
+
+def main():
+    import os
+    if len(sys.argv) != 3 or '-h' in sys.argv or '--help' in sys.argv:
+        usage()
+
+    if os.path.isfile(os.path.join('.git', 'MERGE_HEAD')):
+        error('Repository has a merge in progress. Please finish it or abort it')
+
+    (ret, out, err) = git('status', '--short', '--untracked-files=no')
+    if out:
+        # Not erroring for now.
+        warn('Repository is dirty')
+
+    args = sys.argv[1:]
+    revA = args[0]
+    revB = args[1]
+
+    # Get hashes for the revision names we got
+    merge_base = get_merge_base(revA, revB)
+    vinfo('Merge base: {}'.format(merge_base))
+    (ret, end_merge, err) = git('rev-parse', revB)
+    end_merge = end_merge.rstrip()
+    vinfo('End revision: {}'.format(end_merge))
+
+    if merge_base == end_merge:
+        info('No revisions to merge. All done!')
+        return 0
+
+    revs = get_revisions_between(merge_base, revB)
+
+    info('Trying to merge the first revision first:', end='')
+    if not try_merge(revs[0], report=True)[0]:
+        info('The first revision is not mergeable. Bailing out early.')
+        info('First bad revision: {}'.format(revs[0]))
+        sys.exit(0)
+
+    (maybe_last_good, maybe_first_bad) = find_clean_merge(revs)
+    idx = revs.index(maybe_last_good)
+    info('Revisions being merged: {}'.format(idx + 1))
+    # Get what should be the first bad revision: First rev after the current one.
+    # Watch out if we have the last one, though.
+    if not maybe_first_bad and idx < len(revs) - 1:
+        maybe_first_bad = revs[idx + 1]
+
+    try:
+        commit_last_good_revision(maybe_last_good, bad=maybe_first_bad, is_top=maybe_last_good == end_merge)
+    except Exception as e:
+        # We failed to commit the maybe_last_good rev. This probably means that
+        # the revision is a revert, which makes our merge succeed in an area
+        # where earlier and later revisions will fail.
+        # Let's try to merge again, but with a reduced range of revisions.
+        # If this fails, fully abort.
+        # Cleanup failed merge
+        git('merge', '--abort', check_call=True)
+        vinfo('Last "good" revision (which failed): {}'.format(maybe_last_good))
+
+        # index will succeed as we know whatever revision we got was a part of the initial list
+        revs = revs[:revs.index(maybe_last_good)]
+        vinfo('New revs: {}'.format(revs))
+        (maybe_last_good, maybe_first_bad) = find_clean_merge(revs)
+        idx = revs.index(maybe_last_good)
+        info('Revisions being merged: {}'.format(idx + 1))
+        if not maybe_first_bad and idx < len(revs):
+            maybe_first_bad = revs[idx + 1]
+        commit_last_good_revision(maybe_last_good, bad=maybe_first_bad, is_top=maybe_last_good == end_merge)
+
+    return 0
+
+
+if __name__ == '__main__':
+    main()
