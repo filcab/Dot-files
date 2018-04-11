@@ -21,6 +21,8 @@
 [merge]
 	conflictstyle = diff3
 	tool = vimdiff
+[mergetool "fugitive"]  # vim-fugitive mergetool from https://vi.stackexchange.com/questions/3985/git-mergetool-vimdiff-command
+	  cmd = vim "+Gdiff" $MERGED
 
 # Test diff-highlight, which should be a bit better than regular word highlight
 [pager]
