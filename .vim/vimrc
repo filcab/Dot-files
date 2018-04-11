@@ -321,10 +321,6 @@ if &t_Co > 2 || has("gui_running")
   endif
 endif
 
-" clang-format integration
-noremap <Leader><Tab> :pyf ~/.vim/clang-format.py<cr>
-inoremap <C-I> <C-o>:pyf ~/.vim/clang-format.py<cr><cr>
-
 " Format changed lines on save
 function! ClangFormatOnSave()
   let l:formatdiff = 1
@@ -475,6 +471,11 @@ if has("autocmd")
 
   " Add highlighting for function definition in C++
   autocmd Syntax cpp call EnhanceCppSyntax()
+
+  " clang-format integration
+  autocmd Filetype c,cpp nnoremap <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+  autocmd Filetype c,cpp vnoremap <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+  autocmd Filetype c,cpp inoremap <C-I> <C-o>:pyf ~/.vim/clang-format.py<cr><cr>
 
   " Always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside
