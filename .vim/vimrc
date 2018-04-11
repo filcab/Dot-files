@@ -10,6 +10,7 @@ if &compatible          " only if not set before:
   set nocompatible      " use vim-defaults instead of vi-defaults (easier, more user friendly)
 endif
 
+""""""""""""""""""""""""""""""""""""""""""
 " From tpope's sensible.vim (last checked on 2017-11-15):
 " https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
 " Changes are commented
@@ -104,7 +105,7 @@ endif
 inoremap <C-U> <C-G>u<C-U>
 
 " End of tpope's sensible.vim stuff
-
+""""""""""""""""""""""""""""""""""""""""""
 
 
 " Tell vim where to find ack
