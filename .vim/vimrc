@@ -341,6 +341,9 @@ function! ClangCheckImpl(cmd)
   let w:quickfix_title = a:cmd
   if v:shell_error != 0
     cc
+  else
+    redraw  " Force a redraw so we see the next message (hint from help :echo)
+    echo 'clang-check found no problems'
   endif
   let g:clang_check_last_cmd = a:cmd
 endfunction
