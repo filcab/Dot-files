@@ -236,8 +236,12 @@ autocmd Filetype ninja setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 " filcab: Add the lit.* files and set them to Python mode
 autocmd BufNewFile,BufRead **/*llvm*/**/lit* setlocal ft=python
 
-" Set the localleader (default for both leaders is backslash)
+" Map <LocalLeader> to , by default (was \, same as <Leader>)
 let maplocalleader=','
+
+" Help for leader related bindings:
+noremap <LocalLeader>? :map <LocalLeader><cr>
+noremap <Leader>? :map <Leader><cr>
 
 """ End of FilCab's stuff
 
