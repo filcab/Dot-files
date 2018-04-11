@@ -322,9 +322,12 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 " Format changed lines on save
+let g:filcab_no_clang_format_on_save = 0
 function! ClangFormatOnSave()
-  let l:formatdiff = 1
-  pyf ~/.vim/clang-format.py
+  if !g:filcab_no_clang_format_on_save
+    let l:formatdiff = 1
+    pyf ~/.vim/clang-format.py
+  endif
 endfunction
 autocmd BufWritePre *.h,*.c,*.cc,*.cpp call ClangFormatOnSave()
 
