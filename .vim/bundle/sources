@@ -16,7 +16,7 @@ ack-vim|git|https://github.com/mileszs/ack.vim.git
 vim-abolish|git|https://github.com/tpope/vim-abolish.git
 vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
 vim-commentary|git|https://github.com/tpope/vim-commentary.git
-vim-commentary|git|https://github.com/tpope/vim-commentary.git
+vim-dispatch|git|https://github.com/tpope/vim-dispatch.git
 vim-eunuch|git|https://github.com/tpope/vim-eunuch.git
 vim-flatfoot|git|https://github.com/tpope/vim-flatfoot.git
 vim-fugitive|git|https://github.com/tpope/vim-fugitive.git
