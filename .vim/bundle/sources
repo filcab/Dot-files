@@ -1,33 +1,33 @@
 # Color themes
-molokai|git|https://github.com/mrtazz/molokai.vim.git
 ir_black|git|https://github.com/wgibbs/vim-irblack
+molokai|git|https://github.com/mrtazz/molokai.vim.git
 #solarized|git|https://github.com/altercation/vim-colors-solarized.git
 
 # Language modes
-YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
-vim-markdown|git|https://github.com/tpope/vim-markdown.git
 #python-mode|git|https://github.com/klen/python-mode.git
+vim-markdown|git|https://github.com/tpope/vim-markdown.git
+YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 
 # Utilities (vcs, etc)
 ack-vim|git|https://github.com/mileszs/ack.vim.git
-vim-fugitive|git|https://github.com/tpope/vim-fugitive.git
-vim-git|git|https://github.com/tpope/vim-git.git
-yankring|git|https://github.com/vim-scripts/YankRing.vim.git
-vim-surround|git|https://github.com/tpope/vim-surround.git
-vim-eunuch|git|https://github.com/tpope/vim-eunuch.git
-vim-repeat|git|https://github.com/tpope/vim-repeat.git
-vim-speeddating|git|https://github.com/tpope/vim-speeddating.git
-vim-commentary|git|https://github.com/tpope/vim-commentary.git
-vim-sleuth|git|https://github.com/tpope/vim-sleuth.git
-vim-unimpaired|git|https://github.com/tpope/vim-unimpaired.git
-vim-abolish|git|https://github.com/tpope/vim-abolish.git
-vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
-vim-flatfoot|git|https://github.com/tpope/vim-flatfoot.git
-vim-vinegar|git|https://github.com/tpope/vim-vinegar.git
-vim-commentary|git|https://github.com/tpope/vim-commentary.git
 #command-t|git|https://git.wincent.com/command-t.git
 #nerdtree|git|https://github.com/scrooloose/nerdtree.git
 #nerdtree-git-plugin|git|https://github.com/Xuyuanp/nerdtree-git-plugin.git
+vim-abolish|git|https://github.com/tpope/vim-abolish.git
+vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
+vim-commentary|git|https://github.com/tpope/vim-commentary.git
+vim-commentary|git|https://github.com/tpope/vim-commentary.git
+vim-eunuch|git|https://github.com/tpope/vim-eunuch.git
+vim-flatfoot|git|https://github.com/tpope/vim-flatfoot.git
+vim-fugitive|git|https://github.com/tpope/vim-fugitive.git
+vim-git|git|https://github.com/tpope/vim-git.git
+vim-repeat|git|https://github.com/tpope/vim-repeat.git
+vim-sleuth|git|https://github.com/tpope/vim-sleuth.git
+vim-speeddating|git|https://github.com/tpope/vim-speeddating.git
+vim-surround|git|https://github.com/tpope/vim-surround.git
+vim-unimpaired|git|https://github.com/tpope/vim-unimpaired.git
+vim-vinegar|git|https://github.com/tpope/vim-vinegar.git
+yankring|git|https://github.com/vim-scripts/YankRing.vim.git
 
 # For gist-vim
 #gist-vim|git|https://github.com/mattn/gist-vim.git
