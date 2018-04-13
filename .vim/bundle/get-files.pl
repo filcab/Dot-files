@@ -7,6 +7,7 @@ use warnings;
 
 
 our @types = qw/cvs svn curl tgz zip bzr_tgz git/;
+our @support_update = qw/svn git bzr/;
 
 open SOURCES, "<sources" or die $!;
 
@@ -29,8 +30,10 @@ while (<SOURCES>) {
     }
 
     if ($#ARGV < 0 or grep(/$dir/, @ARGV)) {
-        print "not updating (yet)\n";
-        $not_update_message = 1;
+        if (not grep(/$type/, @support_update)) {
+            print "not updating (yet)\n";
+            $not_update_message = 1;
+        }
         # Hack. Use dispatch table
         &{\&$type}($dir, @arguments);
     } elsif ($update) {
@@ -83,23 +86,18 @@ sub svn ($$) {
     my ($dir, $repo);
     $dir = shift, $repo = shift;
 
-    if ($update) {
-        my $cmd = "svn $dir";
+    if (-e $dir or $update) {
+        my $cmd = "svn update $dir";
         open CMD, "$cmd|";
         print while (<CMD>);
 
         return;
     }
 
-    if (-e $dir) {
-        my $old_dir = getcwd;
-        # Maybe update
-
-    } else {
-        my $cmd = "svn co $repo $dir";
-        open CMD, "$cmd|";
-        print while (<CMD>);
-    }
+    # Doesn't exist yet, checkout repo
+    my $cmd = "svn checkout $repo $dir";
+    open CMD, "$cmd|";
+    print while (<CMD>);
 }
 
 sub curl($$) {
@@ -145,7 +143,7 @@ sub bzr_tgz ($$$$) {
     my ($dir, $bzr_url, $tgz_url, $res);
     $dir = shift, $bzr_url = shift, $tgz_url = shift, $res = shift;
 
-    if ($update) {
+    if (-e $dir or $update) {
         my $cmd = "bzr update $dir";
         open CMD, "$cmd|";
         print while (<CMD>);
@@ -153,8 +151,7 @@ sub bzr_tgz ($$$$) {
         return;
     }
 
-    return if (-e $dir);
-
+    # Doesn't exist yet, get repo
     open BZR, "bzr get $bzr_url $dir |";
     print while (<BZR>);
     close BZR;
@@ -168,7 +165,7 @@ sub git ($$$$) {
     my ($dir, $git_url);
     $dir = shift, $git_url = shift;
 
-    if ($update) {
+    if (-e $dir or $update) {
         open GIT, "git -C '$dir' pull |";
         print while (<GIT>);
         close GIT;
@@ -176,8 +173,7 @@ sub git ($$$$) {
         return;
     }
 
-    return if (-e $dir); # Update?
-
+    # Doesn't exist yet, clone repo
     open GIT, "git clone $git_url $dir |";
     print while (<GIT>);
     close GIT;
