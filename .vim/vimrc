@@ -239,10 +239,6 @@ autocmd BufNewFile,BufRead **/*llvm*/**/lit* setlocal ft=python
 " Map <LocalLeader> to , by default (was \, same as <Leader>)
 let maplocalleader=','
 
-" Help for some bindings:
-noremap <unique> <LocalLeader>? :map <LocalLeader><cr>
-noremap <unique> <Leader>? :map <Leader><cr>
-
 """ End of FilCab's stuff
 
 " display settings
@@ -527,6 +523,14 @@ match Error /\s\+\%#\@!$/
 " From: https://vimawesome.com/plugin/nerdtree-red
 "       Close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+
+" Help for some bindings:
+noremap <unique> <LocalLeader>? :map <LocalLeader><cr>
+noremap <unique> <Leader>? :map <Leader><cr>
+nnoremap <unique> <C-w>? :call <SID>FC_CTRL_W_Help()<cr>
+nnoremap <unique> [? :map [<cr>
+nnoremap <unique> ]? :map ]<cr>
 
 function! s:FC_CTRL_W_Help()
   echo 'Default CTRL-W key bindings. Also work as C-w C-<whatever>'
