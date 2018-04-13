@@ -528,7 +528,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " Help for some bindings:
 noremap <unique> <LocalLeader>? :map <LocalLeader><cr>
 noremap <unique> <Leader>? :map <Leader><cr>
-nnoremap <unique> <C-w>? :call <SID>FC_CTRL_W_Help()<cr>
 nnoremap <unique> [? :map [<cr>
 nnoremap <unique> ]? :map ]<cr>
 
