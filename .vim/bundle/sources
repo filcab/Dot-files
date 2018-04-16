@@ -1,7 +1,8 @@
-# Color themes
+# Color themes (please cleanup)
 ir_black|git|https://github.com/wgibbs/vim-irblack
 molokai|git|https://github.com/mrtazz/molokai.vim.git
-#solarized|git|https://github.com/altercation/vim-colors-solarized.git
+solarized|git|https://github.com/altercation/vim-colors-solarized.git
+jellybeans|git|https://github.com/nanotech/jellybeans.vim.git
 
 # Language modes
 #python-mode|git|https://github.com/klen/python-mode.git
