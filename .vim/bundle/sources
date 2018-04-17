@@ -6,11 +6,14 @@ jellybeans|git|https://github.com/nanotech/jellybeans.vim.git
 
 # Language modes
 #python-mode|git|https://github.com/klen/python-mode.git
+vim-lsp|git|https://github.com/prabirshrestha/vim-lsp.git
 vim-markdown|git|https://github.com/tpope/vim-markdown.git
 YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 
 # Utilities (vcs, etc)
 ack-vim|git|https://github.com/mileszs/ack.vim.git
+# Async.vim is required for vim-lsp
+async|git|https://github.com/prabirshrestha/async.vim.git
 #command-t|git|https://git.wincent.com/command-t.git
 #nerdtree|git|https://github.com/scrooloose/nerdtree.git
 #nerdtree-git-plugin|git|https://github.com/Xuyuanp/nerdtree-git-plugin.git
