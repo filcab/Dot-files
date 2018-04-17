@@ -19,6 +19,7 @@ async|git|https://github.com/prabirshrestha/async.vim.git
 #nerdtree-git-plugin|git|https://github.com/Xuyuanp/nerdtree-git-plugin.git
 vim-abolish|git|https://github.com/tpope/vim-abolish.git
 vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
+vim-characterize|git|https://github.com/tpope/vim-characterize.git
 vim-commentary|git|https://github.com/tpope/vim-commentary.git
 vim-dispatch|git|https://github.com/tpope/vim-dispatch.git
 vim-eunuch|git|https://github.com/tpope/vim-eunuch.git
