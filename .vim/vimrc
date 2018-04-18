@@ -65,17 +65,11 @@ if &listchars ==# 'eol:$'
   set listchars=tab:`\ ,trail:␣"⎕",eol:◺
 endif
 
-if v:version > 703 || v:version == 703 && has("patch541")
-  set formatoptions+=j " Delete comment character when joining commented lines
-endif
+set formatoptions+=j " Delete comment character when joining commented lines
 
 " huh?
 if has('path_extra')
   setglobal tags-=./tags tags-=./tags; tags^=./tags;
-endif
-
-if &shell =~# 'fish$' && (v:version < 704 || v:version == 704 && !has('patch276'))
-  set shell=/bin/bash
 endif
 
 " Automatically reload changed files
