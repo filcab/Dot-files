@@ -5,6 +5,7 @@ endif
 " Map <LocalLeader> to , by default (was \, same as <Leader>)
 let maplocalleader=','
 
+
 " Help for some bindings:
 noremap <unique> <LocalLeader>? :map <LocalLeader><cr>
 noremap <unique> <Leader>? :map <Leader><cr>
@@ -16,20 +17,28 @@ inoremap <unique> <C-w>? <C-o>:call CTRL_W_Help()<cr><cr>
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 nnoremap <unique> z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
-""""""""""""" C family mappings
-autocmd Filetype c,objc,cpp,objcpp nnoremap <buffer><silent><unique> <F5> :call ClangCheck()<CR><CR>
+" Multiple filetype transitions into one of these files will error due to my
+" usage of <unique>. Fixing this edge case probably needs a function + eval,
+" which I don't feel like writing for now.
 
-" clang-format integration
-autocmd Filetype c,objc,cpp,objcpp nnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
-autocmd Filetype c,objc,cpp,objcpp vnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
-autocmd Filetype c,objc,cpp,objcpp inoremap <buffer><unique> <C-S-Tab> <C-o>:pyf ~/.vim/clang-format.py<cr><cr>
+""""""""""""" C family mappings
+augroup filcab_clang_tools
+  autocmd!
+  autocmd Filetype c,objc,cpp,objcpp nnoremap <buffer><silent><unique> <F5> :call ClangCheck()<CR><CR>
+
+  " clang-format integration
+  autocmd Filetype c,objc,cpp,objcpp nnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+  autocmd Filetype c,objc,cpp,objcpp vnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+  autocmd Filetype c,objc,cpp,objcpp inoremap <buffer><unique> <C-S-Tab> <C-o>:pyf ~/.vim/clang-format.py<cr><cr>
+augroup END
 
 "YouCompleteMe mappings
 if !g:disable_youcompleteme
   let g:ycm_add_preview_to_completeopt = 1
   " This should be independent of language, but let's start with the C family only
   " Later maybe have a function/macro/whatever to setup for the different file types
-  augroup cpp
+  augroup filcab_cpp_mappings
+    autocmd!
     " General (refresh)
     au Filetype c,objc,cpp,objcpp nnoremap <buffer><unique> <LocalLeader><F5> :YcmForceCompileAndDiagnostics<cr>
 
@@ -83,7 +92,8 @@ if !g:disable_youcompleteme
   augroup END
 else
   " Really need to refactor this
-  augroup cpp
+  augroup filcab_cpp_mappings
+    autocmd!
     " General (refresh)
     au Filetype c,objc,cpp,objcpp nnoremap <buffer><unique> <LocalLeader><F5> :LspDocumentDiagnostics<cr>
 
