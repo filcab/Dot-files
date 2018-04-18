@@ -104,6 +104,9 @@ inoremap <C-U> <C-G>u<C-U>
 " End of tpope's sensible.vim stuff
 """"""""""""""""""""""""""""""""""""""""""
 
+" LSP setup is not ready yet (needs to come before mappings)
+let g:disable_youcompleteme = 0
+
 source $HOME/.vim/utilities.vim
 source $HOME/.vim/mappings.vim
 
@@ -148,9 +151,37 @@ endif
 " Per FreeBSD's security advice
 set nomodeline
 
+if g:disable_youcompleteme
+  " switching to clangd/lsp, so let's disable ycm for the most used filetypes
+  let g:ycm_filetype_blacklist = { 'c': 1 , 'cpp': 1, 'python': 1}
+
+  let g:lsp_signs_enabled = 1           " enable signs
+  let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+  "let g:lsp_log_verbose = 0
+  "let g:lsp_log_file = expand('~/vim-lsp.log')
+
+  if executable('pyls')
+      " pip install python-language-server
+      autocmd User lsp_setup call lsp#register_server({
+              \ 'name': 'pyls',
+              \ 'cmd': {server_info->['pyls']},
+              \ 'whitelist': ['python'],
+              \ })
+      autocmd FileType python setlocal omnifunc=lsp#complete
+  endif
+
+  let g:clangd_path = FindProgram('clangd', g:filcab_llvm_dirs_to_search)
+  if executable(g:clangd_path)
+      autocmd User lsp_setup call lsp#register_server({
+              \ 'name': 'clangd',
+              \ 'cmd': {server_info->[g:clangd_path]},
+              \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+              \ })
+      autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
+  endif
+endif
+
 " completion (CTRL+N) options
-" switching to clangd, so let's disable ycm
-let g:ycm_filetype_blacklist = { 'c': 1 , 'cpp': 1}
 if !exists( "g:loaded_youcompleteme" )
   " filcab:
   " If we set this variable and then reload vimrc, when YouCompleteMe is
