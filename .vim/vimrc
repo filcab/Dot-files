@@ -102,7 +102,6 @@ inoremap <C-U> <C-G>u<C-U>
 let g:disable_youcompleteme = 0
 
 source $HOME/.vim/utilities.vim
-source $HOME/.vim/mappings.vim
 
 """"""""""""" Find programs used by plugins
 let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build/bin', '~/work/llvm-cmake/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
