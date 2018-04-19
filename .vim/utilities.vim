@@ -5,6 +5,7 @@ endif
 " Find programs given search paths
 let g:filcab_exe_suffix = has('win32') ? '.exe' : ''
 function! FindProgram(prog_name, dirs)
+  " Search $PATH first (might want to do this at the end, occasionally)
   if executable(a:prog_name) == 1
     return a:prog_name
   endif
@@ -16,6 +17,8 @@ function! FindProgram(prog_name, dirs)
     endif
   endfor
 
+  " Signal we didn't find anything, which might trigger a search for a
+  " different program name
   return a:prog_name . '.NOTFOUND'
 endfunction
 
@@ -31,7 +34,9 @@ autocmd BufWritePre *.h,*.c,*.cc,*.cpp call ClangFormatOnSave()
 
 " clang-check functions
 function! ClangCheckImpl(cmd)
-  if &autowrite | wall | endif
+  " filcab: Original wrote all modified buffers (wall), but let's just write
+  " the current one.
+  if &autowrite | w | endif
   echo "Running " . a:cmd . " ..."
   let l:output = system(a:cmd)
   cexpr l:output
