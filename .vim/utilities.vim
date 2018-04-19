@@ -22,12 +22,15 @@ function! FindProgram(prog_name, dirs)
   return a:prog_name . '.NOTFOUND'
 endfunction
 
-" Format changed lines on save
-let g:filcab_no_clang_format_on_save = 0
+" clang-format changed lines on save
+let g:filcab_clang_format_on_save = 1
 function! ClangFormatOnSave()
-  if !g:filcab_no_clang_format_on_save
-    let l:formatdiff = 1
-    pyf ~/.vim/clang-format.py
+  if !g:filcab_clang_format_on_save
+    " Don't format fugitive buffers (like when doing :Gdiff)
+    if expand('%') =~# '^fugitive://'
+      let l:formatdiff = 1
+      pyf ~/.vim/clang-format.py
+    endif
   endif
 endfunction
 autocmd BufWritePre *.h,*.c,*.cc,*.cpp call ClangFormatOnSave()
