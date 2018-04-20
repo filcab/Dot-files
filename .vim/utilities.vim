@@ -24,16 +24,22 @@ endfunction
 
 " clang-format changed lines on save
 let g:filcab_clang_format_on_save = 1
-function! ClangFormatOnSave()
-  if !g:filcab_clang_format_on_save
-    " Don't format fugitive buffers (like when doing :Gdiff)
-    if expand('%') =~# '^fugitive://'
+" Have an escape hatch for fugitive buffers (usually a git diff), for now
+let g:clang_format_fugitive = 1
+function! s:ClangFormatOnSave()
+  if !filcab_clang_format_on_save
+    if expand('%') == ''
+      return
+    elseif expand('%') =~# '^fugitive://' && !clang_format_fugitive
+      return
+    elseif
+      " Don't format fugitive buffers (like when doing :Gdiff)
       let l:formatdiff = 1
       pyf ~/.vim/clang-format.py
     endif
   endif
 endfunction
-autocmd BufWritePre *.h,*.c,*.cc,*.cpp call ClangFormatOnSave()
+autocmd BufWritePre *.h,*.c,*.cc,*.cpp call s:ClangFormatOnSave()
 
 " clang-check functions
 function! ClangCheckImpl(cmd)
