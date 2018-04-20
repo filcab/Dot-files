@@ -3,7 +3,7 @@ if exists('g:loaded_utilities')
 endif
 
 " Find programs given search paths
-let g:filcab_exe_suffix = has('win32') ? '.exe' : ''
+let s:exe_suffix = has('win32') ? '.exe' : ''
 function! FindProgram(prog_name, dirs)
   " Search $PATH first (might want to do this at the end, occasionally)
   if executable(a:prog_name) == 1
@@ -11,7 +11,7 @@ function! FindProgram(prog_name, dirs)
   endif
 
   for dir in a:dirs
-    let l:maybe_prog = expand(dir . '/' . a:prog_name . g:filcab_exe_suffix)
+    let l:maybe_prog = expand(dir . '/' . a:prog_name . s:exe_suffix)
     if executable(l:maybe_prog) == 1
       return l:maybe_prog
     endif
@@ -51,14 +51,14 @@ function! ClangCheckImpl(cmd)
     redraw  " Force a redraw so we see the next message (hint from help :echo)
     echo 'clang-check found no problems'
   endif
-  let g:clang_check_last_cmd = a:cmd
+  let s:clang_check_last_cmd = a:cmd
 endfunction
 function! ClangCheck()
   let l:filename = expand('%')
   if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
     call ClangCheckImpl(g:clang_check_path . " " . l:filename)
-  elseif exists("g:clang_check_last_cmd")
-    call ClangCheckImpl(g:clang_check_last_cmd)
+  elseif exists("s:clang_check_last_cmd")
+    call ClangCheckImpl(s:clang_check_last_cmd)
   else
     echo "Can't detect file's compilation arguments and no previous clang-check invocation!"
   endif
