@@ -2,6 +2,13 @@ if exists('g:loaded_mappings')
   finish
 endif
 
+" All mappings should be unique so we know we're not clashing with built-in or
+" other plugin mappings. This requires a workaround for autocmd, which is to
+" go through a function to setup the mappings, and bailing out if they're
+" already setup.
+" Eventually this might be problematic if we keep switching filetype on the
+" same buffer. Let's only fix that if it becomes a problem.
+
 " Map <LocalLeader> to , by default (was \, same as <Leader>)
 let maplocalleader=','
 
@@ -17,19 +24,24 @@ inoremap <unique> <C-w>? <C-o>:call CTRL_W_Help()<cr><cr>
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 nnoremap <unique> z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
-" Multiple filetype transitions into one of these files will error due to my
-" usage of <unique>. Fixing this edge case probably needs a function + eval,
-" which I don't feel like writing for now.
-
 """"""""""""" C family mappings
-augroup filcab_clang_tools
-  autocmd!
-  autocmd Filetype c,objc,cpp,objcpp nnoremap <buffer><silent><unique> <F5> :call ClangCheck()<CR><CR>
+function s:ClangToolMappings()
+  " Bail out if the mappings have already been setup on this buffer
+  if exists('b:filcab_setup_clang_tool_mappings')
+    return
+  endif
+
+  nnoremap <buffer><silent><unique> <F5> :call ClangCheck()<CR><CR>
 
   " clang-format integration
-  autocmd Filetype c,objc,cpp,objcpp nnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
-  autocmd Filetype c,objc,cpp,objcpp vnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
-  autocmd Filetype c,objc,cpp,objcpp inoremap <buffer><unique> <C-S-Tab> <C-o>:pyf ~/.vim/clang-format.py<cr><cr>
+  nnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+  vnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+  inoremap <buffer><unique> <C-Tab><Tab> <C-o>:pyf ~/.vim/clang-format.py<cr><cr>
+  let b:filcab_setup_clang_tool_mappings=1
+endfunction
+augroup filcab_clang_tools
+  autocmd!
+  autocmd Filetype c,objc,cpp,objcpp call s:ClangToolMappings()
 augroup END
 
 "YouCompleteMe mappings
