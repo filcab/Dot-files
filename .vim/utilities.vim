@@ -28,6 +28,10 @@ let g:clang_format_on_save = 1  " Will query buffer-local variable of the same n
 let g:clang_format_fugitive = 1
 function! s:ClangFormatOnSave()
   if (exists('b:clang_format_on_save') && b:clang_format_on_save) || g:clang_format_on_save
+    if !has('python')
+      echo 'Could not clang-format. Python not available.'
+    endif
+
     if expand('%') == ''
       return
     elseif expand('%') =~# '^fugitive://' && !g:clang_format_fugitive
