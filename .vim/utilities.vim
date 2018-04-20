@@ -27,7 +27,7 @@ let g:clang_format_on_save = 1
 " Have an escape hatch for fugitive buffers (usually a git diff), for now
 let g:clang_format_fugitive = 1
 function! s:ClangFormatOnSave()
-  if !g:filcab_clang_format_on_save
+  if !g:clang_format_on_save
     if expand('%') == ''
       return
     elseif expand('%') =~# '^fugitive://' && !g:clang_format_fugitive
