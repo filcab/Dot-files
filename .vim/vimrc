@@ -148,7 +148,7 @@ if g:disable_youcompleteme
   " switching to clangd/lsp, so let's disable ycm for the most used filetypes
   let g:ycm_filetype_blacklist = { 'c': 1 , 'cpp': 1, 'python': 1}
 
-  let g:lsp_signs_enabled = 1           " enable signs
+  let g:lsp_signs_enabled = 1
   let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
   "let g:lsp_log_verbose = 0
   "let g:lsp_log_file = expand('~/vim-lsp.log')
