@@ -1,4 +1,5 @@
 # Loadable file to setup paths
+# First: General exports, then system-specific
 
 # Path for hunspell dictionaries
 export DICPATH=~/.hunspell
@@ -73,6 +74,15 @@ export PATH=$PATH:~/.zsh.d/bin
 export PATH=$HOME/dev/brew/bin:$PATH
 fpath+=$HOME/dev/brew/share/zsh/site-functions
 #export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$HOME/dev/brew/lib
+
+case $(uname -s) in
+  Darwin)
+    if command -v xcrun &>/dev/null; then
+      export SDKROOT=$(xcrun --show-sdk-path)
+    fi
+    ;;
+esac
+
 
 case `hostname -f` in
   [Kk]iff*)
