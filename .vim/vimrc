@@ -108,6 +108,8 @@ let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build/bin', '~/work/llvm-cmake/b
 let g:clang_check_path = FindProgram('clang-check', g:filcab_llvm_dirs_to_search)
 let g:clang_format_path = FindProgram('clang-format', g:filcab_llvm_dirs_to_search)
 
+let g:filcab_cquery_dirs_to_search = ['~/dev/cquery/build']
+
 " Tell vim where to find ack
 let g:filcab_homebrew_dirs_to_search = ['~/dev/brew/bin', '~/dev/homebrew/bin']
 let g:ackprg=FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocolor --nogroup --column'
@@ -145,8 +147,8 @@ endif
 set nomodeline
 
 if g:disable_youcompleteme
-  " switching to clangd/lsp, so let's disable ycm for the most used filetypes
-  let g:ycm_filetype_blacklist = { 'c': 1 , 'cpp': 1, 'python': 1}
+  " switching to clangd/lsp, so let's disable ycm for the ft we have an LSP for
+  let g:ycm_filetype_blacklist = {}
 
   let g:lsp_signs_enabled = 1
   let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
@@ -154,23 +156,42 @@ if g:disable_youcompleteme
   "let g:lsp_log_file = expand('~/vim-lsp.log')
 
   if executable('pyls')
-      " pip install python-language-server
-      autocmd User lsp_setup call lsp#register_server({
-              \ 'name': 'pyls',
-              \ 'cmd': {server_info->['pyls']},
-              \ 'whitelist': ['python'],
-              \ })
-      autocmd FileType python setlocal omnifunc=lsp#complete
+    let g:ycm_filetype_blacklist['python'] = 1
+    " pip install python-language-server
+    autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'pyls',
+            \ 'cmd': {server_info->['pyls']},
+            \ 'whitelist': ['python'],
+            \ })
+    autocmd FileType python setlocal omnifunc=lsp#complete
+  endif
+
+  let g:cquery_path = FindProgram('cquery', g:filcab_cquery_dirs_to_search)
+  if executable(g:cquery_path)
+    let g:ycm_filetype_blacklist['c'] = 1
+    let g:ycm_filetype_blacklist['cpp'] = 1
+    let g:ycm_filetype_blacklist['objc'] = 1
+    let g:ycm_filetype_blacklist['objcpp'] = 1
+    autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'cquery',
+            \ 'cmd': {server_info->[g:cquery_path]},
+            \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+            \ })
+    autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
   endif
 
   let g:clangd_path = FindProgram('clangd', g:filcab_llvm_dirs_to_search)
   if executable(g:clangd_path)
-      autocmd User lsp_setup call lsp#register_server({
-              \ 'name': 'clangd',
-              \ 'cmd': {server_info->[g:clangd_path]},
-              \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-              \ })
-      autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
+    let g:ycm_filetype_blacklist['c'] = 1
+    let g:ycm_filetype_blacklist['cpp'] = 1
+    let g:ycm_filetype_blacklist['objc'] = 1
+    let g:ycm_filetype_blacklist['objcpp'] = 1
+    autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'clangd',
+            \ 'cmd': {server_info->[g:clangd_path]},
+            \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+            \ })
+    autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
   endif
 endif
 
