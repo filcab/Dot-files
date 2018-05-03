@@ -75,7 +75,7 @@ endfunction
 
 function! CTRL_W_Help()
   echo 'Default CTRL-W key bindings. Also work as C-w C-<whatever>'
-  echo 'command		   action in Normal mode'
+  echo 'command		action in Normal mode'
   echo '----------------------------------------------------------'
   echo 'CTRL-W "	terminal window: paste register'
   echo 'CTRL-W +	increase current window height N lines'
@@ -127,6 +127,36 @@ function! CTRL_W_Help()
   echo 'CTRL-W }	show tag under cursor in preview window'
   echo ' '
   echo 'CTRL-W ?	filcab: Show help'
+endfunction
+
+function! CTRL_X_Help()
+  echo 'Default CTRL-X key bindings for completion.'
+  echo 'command		completion action'
+  echo '----------------------------------------------------------'
+  echo "CTRL-X CTRL-E	Cancel and go back to before autocomplete"
+  echo "CTRL-X CTRL-Y	Stop completion and accept the current selection"
+  echo " "
+  echo "CTRL-X CTRL-L	Whole lines"
+  echo "CTRL-X CTRL-N	keywords in the current file"
+  echo "CTRL-X CTRL-K	keywords in 'dictionary'"
+  echo "CTRL-X CTRL-T	keywords in 'thesaurus', thesaurus-style"
+  echo "CTRL-X CTRL-I	keywords in the current and included files"
+  echo "CTRL-X CTRL-]	tags"
+  echo "CTRL-X CTRL-F	file names"
+  echo "CTRL-X CTRL-D	definitions or macros"
+  echo "CTRL-X CTRL-V	Vim command-line"
+  echo "CTRL-X CTRL-U	User defined completion"
+  echo "CTRL-X CTRL-O	omni completion"
+  echo "CTRL-X s	Spelling suggestions"
+  echo "CTRL-N/CTRL-P	cycle keywords in 'complete'"
+  echo " "
+  echo "CTRL-X ?	filcab: show help"
+  echo " "
+  echo "All these, except CTRL-N and CTRL-P, are done in CTRL-X mode.  This is a"
+  echo "sub-mode of Insert and Replace modes.  You enter CTRL-X mode by typing CTRL-X"
+  echo "and one of the CTRL-X commands.  You exit CTRL-X mode by typing a key that is"
+  echo "not a valid CTRL-X mode command.  Valid keys are the CTRL-X command itself,"
+  echo "CTRL-N (next), and CTRL-P (previous)."
 endfunction
 
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle

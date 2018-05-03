@@ -19,7 +19,8 @@ noremap <unique> <Leader>? :map <Leader><cr>
 nnoremap <unique> [? :map [<cr>
 nnoremap <unique> ]? :map ]<cr>
 nnoremap <unique> <C-w>? :call CTRL_W_Help()<cr>
-inoremap <unique> <C-w>? <C-o>:call CTRL_W_Help()<cr><cr>
+inoremap <unique> <C-w>? <C-o>:call CTRL_W_Help()<cr>
+inoremap <unique> <C-x>? <C-o>:call CTRL_X_Help()<cr>
 
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 nnoremap <unique> z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
