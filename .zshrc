@@ -102,10 +102,6 @@ compinit -i -d "${ZSH_COMPDUMP}"
 
 # ^ From oh-my-zsh
 
-# Load and run compinit
-autoload -U compinit
-compinit -i -d "${ZSH_COMPDUMP}"
-
 for f in ~/.zsh.d/lib/*.zsh; do
   source $f
 done
