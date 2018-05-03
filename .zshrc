@@ -81,8 +81,6 @@ then
   export PAGER=vimpager
 fi
 
-# Load ninja autocomplete
-source ~/.zsh.d/functions/_ninja
 # Ninja status: [left/running/finished]
 export NINJA_STATUS="%e [%u/%r/%f] "
 
