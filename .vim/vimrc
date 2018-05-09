@@ -253,12 +253,6 @@ autocmd BufNewFile,BufRead **/*llvm*/**/*.h setlocal ft=cpp.doxygen
 " (along with .def)
 autocmd BufNewFile,BufRead *.inc,*.def setlocal ft=cpp
 
-" TODO: Is this needed?
-autocmd BufNewFile,BufRead *.ninja setlocal ft=ninja
-
-" filcab: Add the lit.* files and set them to Python mode
-autocmd BufNewFile,BufRead **/*llvm*/**/lit* setlocal ft=python
-
 """"""""""""" End of FilCab's stuff
 
 " display settings
@@ -369,7 +363,6 @@ augroup filetype
   " sO:" -,mO:"  ,eO:"",:"
   "au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=% comments=s0:\ -,m0:;,e0:;;,:;
   au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=@ iskeyword+=%
-  au! BufRead,BufNewFile *.td     set filetype=tablegen
   " SWIG
   au! BufRead,BufNewFile *.swig   set filetype=swig
 augroup END
