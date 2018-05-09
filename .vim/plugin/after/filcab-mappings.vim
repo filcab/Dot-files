@@ -106,7 +106,7 @@ if !g:disable_youcompleteme
     """""""" Miscellaneous
     nnoremap <buffer><unique> <LocalLeader>w :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
     nnoremap <buffer><unique> <LocalLeader>W :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
-    let b:filcab_setup_clang_tool_mappings=1
+    let b:filcab_setup_cpp_family_mappings=1
   endfunction
 
 else
@@ -164,7 +164,7 @@ else
     """""""" Miscellaneous
     nnoremap <buffer><unique> <LocalLeader>w :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
     nnoremap <buffer><unique> <LocalLeader>W :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
-    let b:filcab_setup_clang_tool_mappings=1
+    let b:filcab_setup_cpp_family_mappings=1
   endfunction
 endif
 
