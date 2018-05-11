@@ -2,7 +2,7 @@
 " Compiler:		clang (Apple c compiler)
 " Maintainer:   Vincent B. (twinside@free.fr)
 " Last Change:  2010 sep 28
-" Changed by Filipe C.
+" Changed by Filipe C. afterwards
 
 if exists("current_compiler")
   finish
@@ -13,6 +13,7 @@ let s:cpo_save = &cpo
 set cpo&vim
 
 " With some ninja ignores/information added
+CompilerSet errorformat+=%D%*\\a:\ Entering\ directory\ `%f'
 CompilerSet errorformat+=%E%f\\(%l\\,%c\\)\ :\ \ %trror:\ %m,%-C%s,%-Z%p^
 CompilerSet errorformat+=%W%f\\(%l\\,%c\\)\ :\ \ %tarning:\ %m,%-C%s,%-Z%p^
 CompilerSet errorformat+=%I%f\\(%l\\,%c\\)\ :\ \ note:\ %m,%-C%s,%-Z%p^
