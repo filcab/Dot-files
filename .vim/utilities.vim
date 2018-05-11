@@ -30,11 +30,15 @@ function! s:ClangFormatOnSave()
   if (exists('b:clang_format_on_save') && b:clang_format_on_save) || g:clang_format_on_save
     if !has('python')
       echo 'Could not clang-format. Python not available.'
+      return
     endif
 
-    if expand('%') == ''
+    let path = expand('%')
+    if !filereadable(path)
+      echom 'Not running clang-format: File is not readable: ' . path
       return
-    elseif expand('%') =~# '^fugitive://' && !g:clang_format_fugitive
+    elseif path =~# '^fugitive://' && !g:clang_format_fugitive
+      echo 'Skipping clang-format: File is a fugitive:// file (use g:clang_format_fugitive to change this)'
       return
     else
       let l:formatdiff = 1
