@@ -27,7 +27,7 @@ let g:clang_format_on_save = 1  " Will query buffer-local variable of the same n
 " Have an escape hatch for fugitive buffers (usually a git diff), for now
 let g:clang_format_fugitive = 1
 function! s:ClangFormatOnSave()
-  if (exists('b:clang_format_on_save') && b:clang_format_on_save) || g:clang_format_on_save
+  if get(b:, 'clang_format_on_save', g:clang_format_on_save)
     if !has('python')
       echo 'Could not clang-format. Python not available.'
       return
