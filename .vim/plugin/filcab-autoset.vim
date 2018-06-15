@@ -18,7 +18,7 @@ function! s:IsValidRule(rule) abort
 endfunction
 
 " Hide s:autoset_rules, so user code doesn't add invalid rules
-function! AutosetAddRule(a:rule) abort
+function! AutosetAddRule(rule) abort
   if type(a:rule) != v:t_dict
     echoerr 'Rule is invalid: Not a dictionary: ' . a:rule
     return
