@@ -19,7 +19,7 @@ function! FindProgram(prog_name, dirs)
 
   " Signal we didn't find anything, which might trigger a search for a
   " different program name
-  return a:prog_name . '.NOTFOUND'
+  return ''
 endfunction
 
 " clang-format changed lines on save
