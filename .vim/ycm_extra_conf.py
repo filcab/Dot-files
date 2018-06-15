@@ -11,9 +11,6 @@ import re
 BASE_FLAGS = [
         '-Wall',
         '-Wextra',
-        '-Wno-long-long',
-        '-Wno-variadic-macros',
-        '-fexceptions',
         '-ferror-limit=10000',
         '-DNDEBUG',
         '-std=c++1z',
