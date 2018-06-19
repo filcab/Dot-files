@@ -7,10 +7,41 @@ if exists('g:loaded_autoset')
 endif
 let g:loaded_autoset = 1
 
+" FIXME: Eventually remove some of these to an autoload file
+
 " List of rules that the user will add to
 let s:autoset_rules = []
 
 function! s:AutosetInstall() abort
+  augroup AutosetGroup
+    autocmd!
+    autocmd BufNewFile,BufEnter call s:AutosetApplyRules()
+  augroup END
+endfunction
+
+function! s:AutosetUninstall() abort
+  augroup AutosetGroup
+    autocmd!
+  augroup END
+endfunction
+
+function! s:AutosetApplyRules() abort
+  for rule in s:autoset_rules
+    if rule.filter("%")
+      s:AutosetApplyRule(rule)
+      " Stop after first match. Should we continue?
+      return
+    endif
+  endfor
+endfunction
+
+function! s:AutosetApplyRule(rule) abort
+  if has_key(rule, 'options')
+    for [option, value] in rule.options
+      let command = 'let &'.option.'='.escape(value, "'")
+      eval(command)
+    endfor
+  endif
 endfunction
 
 function! s:IsValidRule(rule) abort
