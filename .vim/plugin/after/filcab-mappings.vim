@@ -21,6 +21,8 @@ nnoremap <unique> ]? :map ]<cr>
 nnoremap <unique> <C-w>? :call CTRL_W_Help()<cr>
 inoremap <unique> <C-w>? <C-o>:call CTRL_W_Help()<cr>
 inoremap <unique> <C-x>? <C-o>:call CTRL_X_Help()<cr>
+" FIXME: Add one for netrw
+" FIXME: Maybe fugitive buffers?
 
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 nnoremap <unique> z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
@@ -50,6 +52,8 @@ function! s:ShowYCMNumberOfWarningsAndErrors()
   echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount() . ' Warnings: ' . youcompleteme#GetWarningCount()
 endfunction
 
+" TODO: Refactor this to just call a dictionary's values. Then set them to
+" whatever. The keybindings should just get a function from there and call it.
 if !g:disable_youcompleteme
   let g:ycm_add_preview_to_completeopt = 1
   " This should be independent of language, but let's start with the C family only
