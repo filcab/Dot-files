@@ -6,6 +6,10 @@ if exists('g:loaded_autoset')
   finish
 endif
 
+" TODO: Let autoset run hooks
+"       That way it's easy to do whatever we want with more convoluted
+"       patterns
+
 if !exists('g:autoset_verbose')
   let g:autoset_verbose = 0
 endif
