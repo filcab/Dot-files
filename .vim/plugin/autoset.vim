@@ -34,27 +34,39 @@ endfunction
 
 function! s:AutosetApplyRule(rule) abort
   if g:autoset_verbose
-    echom 'autoset: Applying rule'
+    echom 'autoset: Applying rule "' . a:rule.name . '"'
   endif
 
   if has_key(a:rule, 'cd')
-    exe 'chdir ' . a:rule.cd
+    let cmd = 'chdir ' . a:rule.cd
+    if g:autoset_verbose
+      echom 'autoset:   exe "' . cmd . '"'
+    endif
+    exe cmd
   endif
 
   if has_key(a:rule, 'options')
     for [option, value] in items(a:rule.options)
-      exe 'let &' . option . '="' . escape(value, '\"') . '"'
+      let cmd = 'let &' . option . '="' . escape(value, '\"') . '"'
+      if g:autoset_verbose
+        echom 'autoset:   exe "' . cmd . '"'
+      endif
+      exe 
     endfor
   endif
 endfunction
 
 function! AutosetApplyRules() abort
+  let path = expand('%:p')
+  if g:autoset_verbose
+    echom 'autoset: Using filename: "' . path . '"'
+  endif
   for [name, rule] in items(s:autoset_rules)
     if g:autoset_verbose
       echom 'autoset: Trying rule "' . name . '":'
       echom string(rule)
     endif
-    if rule.filter(rule, expand('%'))
+    if rule.filter(rule, path)
       call s:AutosetApplyRule(rule)
       " Stop after first match. Should we continue?
       return
