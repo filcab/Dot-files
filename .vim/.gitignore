@@ -1,3 +1,6 @@
 backups/*
 bundle/*
 swapfiles/*
+
+# Don't commit local autoset rules (non-shared amongst various computers)
+after/plugin/autoset-local.vim
