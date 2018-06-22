@@ -12,7 +12,6 @@ BASE_FLAGS = [
         '-Wall',
         '-Wextra',
         '-ferror-limit=10000',
-        '-DNDEBUG',
         '-std=c++1z',
         '-xc++',
         '-I/usr/lib/',
