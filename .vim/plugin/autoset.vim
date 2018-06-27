@@ -51,7 +51,7 @@ function! s:AutosetApplyRule(rule) abort
       if g:autoset_verbose
         echom 'autoset:   exe "' . cmd . '"'
       endif
-      exe 
+      exe cmd
     endfor
   endif
 endfunction
@@ -64,7 +64,7 @@ function! AutosetApplyRules() abort
   for [name, rule] in items(s:autoset_rules)
     if g:autoset_verbose
       echom 'autoset: Trying rule "' . name . '":'
-      echom string(rule)
+      "echom string(rule)
     endif
     if rule.filter(rule, path)
       call s:AutosetApplyRule(rule)
