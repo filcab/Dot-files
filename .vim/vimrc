@@ -101,10 +101,14 @@ inoremap <C-U> <C-G>u<C-U>
 " LSP setup is not ready yet (needs to come before mappings)
 let g:disable_youcompleteme = 0
 
-source $HOME/.vim/utilities.vim
+if has('win32')
+  source $HOME/vimfiles/utilities.vim
+else
+  source $HOME/.vim/utilities.vim
+endif
 
 """"""""""""" Find programs used by plugins
-let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build/bin', '~/work/llvm-cmake/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
+let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build/bin', '~/work/llvm-cmake/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
 let g:clang_check_path = FindProgram('clang-check', g:filcab_llvm_dirs_to_search)
 let g:clang_format_path = FindProgram('clang-format', g:filcab_llvm_dirs_to_search)
 
@@ -284,8 +288,14 @@ set ignorecase          " case insensitive searching
 set smartcase           " but become case sensitive if you type uppercase characters
 set smartindent         " smart auto indenting
 set magic               " change the way backslashes are used in search patterns
-set backupdir=$HOME/.vim/backups     " Hide backups in the .vim directory
-set directory=$HOME/.vim/swapfiles// " Hide swap files in the .vim directory
+if has('win32')
+  set backupdir=$HOME\vimfiles\backups     " Hide backups in the .vim directory
+  "set directory=$HOME\vimfiles\swapfiles\\ " Hide swap files in the .vim directory
+  "set directory+=$TMP "Fallback for weird platforms
+else
+  set backupdir=$HOME/.vim/backups     " Hide backups in the .vim directory
+  set directory=$HOME/.vim/swapfiles// " Hide swap files in the .vim directory
+endif
 
 set tabstop=4           " number of spaces a tab counts for
 set shiftwidth=2        " spaces for autoindents
