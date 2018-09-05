@@ -28,7 +28,7 @@ let g:clang_format_on_save = 1  " Will query buffer-local variable of the same n
 let g:clang_format_fugitive = 1
 function! s:ClangFormatOnSave()
   if get(b:, 'clang_format_on_save', g:clang_format_on_save)
-    if !has('python')
+    if !has('python') && !has('python3')
       echo 'Could not clang-format. Python not available.'
       return
     endif
@@ -41,8 +41,13 @@ function! s:ClangFormatOnSave()
       echo 'Skipping clang-format: File is a fugitive:// file (use g:clang_format_fugitive to change this)'
       return
     else
+      echom 'Running clang-format!'
       let l:formatdiff = 1
-      pyf ~/.vim/clang-format.py
+      if has('python')
+        pyf ~/.vim/clang-format.py
+      elseif has('python3')
+        py3f ~/.vim/clang-format.py
+      endif
     endif
   endif
 endfunction
