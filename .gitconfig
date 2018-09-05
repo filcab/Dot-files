@@ -13,8 +13,10 @@
 
 [credential]
 	# These are tried in succession
-	helper = osxkeychain
-	helper = wincred
+	helper = filcab
+	#helper = osxkeychain
+	#helper = wincred
+	#helper = cache
 
 [diff]
 	algorithm = histogram
