@@ -5,8 +5,8 @@
 	pushf = push --force-with-lease
 	fpush = push --force-with-lease
 	trymerge = "!f() { git merge --no-commit "$1" || echo FAILED, please choose an earlier commit; echo Undoing changes; git merge --abort; }; f"
-	stashed-update = "!f() { git stash && git pull && git stash pop; }; f"
-	stashed-svn-update = "!f() { git stash && git svn rebase && git stash pop; }; f"
+	stashed-update = "!f() { git stash && git pull && (git stash pop || :); }; f"
+	stashed-svn-update = "!f() { git stash && git svn rebase && (git stash pop || :); }; f"
 
 [core]
 	autocrlf = false
