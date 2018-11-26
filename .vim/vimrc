@@ -293,8 +293,8 @@ set smartcase           " but become case sensitive if you type uppercase charac
 set smartindent         " smart auto indenting
 set magic               " change the way backslashes are used in search patterns
 if has('win32')
-  set backupdir=$HOME\vimfiles\backups     " Hide backups in the .vim directory
-  set directory=$HOME\vimfiles\swapfiles   " Hide swap files in the .vim directory
+  set backupdir=$HOME/vimfiles/backups     " Hide backups in the .vim directory
+  set directory=$HOME/vimfiles/swapfiles// " Hide swap files in the .vim directory
   "set directory+=$TMP "Fallback for weird platforms
 else
   set backupdir=$HOME/.vim/backups     " Hide backups in the .vim directory
