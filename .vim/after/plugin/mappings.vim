@@ -66,9 +66,9 @@ if !g:disable_youcompleteme
   let g:ycm_add_preview_to_completeopt = 1
   " This should be independent of language, but let's start with the C family only
   " Later maybe have a function/macro/whatever to setup for the different file types
-  function s:CFamilyMappings()
+  function s:YCMAndLSPMappings()
     " bail out if the mappings have already been setup on this buffer
-    if exists('b:filcab_setup_cpp_family_mappings')
+    if exists('b:filcab_setup_ycm_and_lsp_mappings')
       return
     endif
     " General (refresh)
@@ -76,27 +76,28 @@ if !g:disable_youcompleteme
 
     """""""" GoTo commands
     " Default (lowercase) is to use the imprecise (faster) function
-    nnoremap <buffer><unique> <LocalLeader>g :YcmCompleter GoToImprecise<cr>
-    nnoremap <buffer><unique> <LocalLeader>G :YcmCompleter GoTo<cr>
+    nnoremap <buffer><unique> <LocalLeader>gg :YcmCompleter GoToImprecise<cr>
+    nnoremap <buffer><unique> <LocalLeader>gG :YcmCompleter GoTo<cr>
+    " Extra one to allow some slack on pressing shift
+    nnoremap <buffer><unique> <LocalLeader>GG :YcmCompleter GoTo<cr>
 
     " Default (lowercase) is to go to the definition, else declaration
-    nnoremap <buffer><unique> <LocalLeader>d :YcmCompleter GoToDefinition<cr>
-    nnoremap <buffer><unique> <LocalLeader>D :YcmCompleter GoToDeclaration<cr>
+    nnoremap <buffer><unique> <LocalLeader>gd :YcmCompleter GoToDefinition<cr>
+    nnoremap <buffer><unique> <LocalLeader>gD :YcmCompleter GoToDeclaration<cr>
 
     " Bind to both lower and uppercase
     " Not available in C/C++: (available in Python and JS, though)
-    "nnoremap <buffer><unique> <LocalLeader>r :YcmCompleter GoToReferences<cr>
-    "nnoremap <buffer><unique> <LocalLeader>R :YcmCompleter GoToReferences<cr>
+    nnoremap <buffer><unique> <LocalLeader>gr :YcmCompleter GoToReferences<cr>
+    nnoremap <buffer><unique> <LocalLeader>gR :YcmCompleter GoToReferences<cr>
 
     " unsure this is needed:
-    "nnoremap <buffer><unique> <LocalLeader>/ :YcmCompleter GoToDefinitionElseDeclaration<cr>
+    nnoremap <buffer><unique> <LocalLeader>gdd :YcmCompleter GoToDefinitionElseDeclaration<cr>
 
     """" C/C++ mode only, I guess
     " Bind to both lower and uppercase
     " FILCAB: Maybe override gf *if* we're sure there's a compilation database?
     " FILCAB: check https://github.com/martong/vim-compiledb-path
-    nnoremap <buffer><unique> <LocalLeader>i :YcmCompleter GoToInclude<cr>
-    nnoremap <buffer><unique> <LocalLeader>I :YcmCompleter GoToInclude<cr>
+    nnoremap <buffer><unique> <LocalLeader>gi :YcmCompleter GoToInclude<cr>
 
     """""""" Get commands (information)
     " Default (lowercase) is to use the imprecise (faster) function
@@ -118,14 +119,14 @@ if !g:disable_youcompleteme
     """""""" Miscellaneous
     nnoremap <buffer><unique> <LocalLeader>w :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
     nnoremap <buffer><unique> <LocalLeader>W :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
-    let b:filcab_setup_cpp_family_mappings=1
+    let b:filcab_setup_ycm_and_lsp_mappings=1
   endfunction
 
 else
   " Really need to refactor this
-  function s:CFamilyMappings()
+  function s:YCMAndLSPMappings()
     " bail out if the mappings have already been setup on this buffer
-    if exists('b:filcab_setup_cpp_family_mappings')
+    if exists('b:filcab_setup_ycm_and_lsp_mappings')
       return
     endif
 
@@ -134,27 +135,27 @@ else
 
     """""""" GoTo commands
     " Default (lowercase) is to use the imprecise (faster) function
-    nnoremap <buffer><unique> <LocalLeader>g :LspDefinition<cr>
-    nnoremap <buffer><unique> <LocalLeader>G :LspDefinition<cr>
+    nnoremap <buffer><unique> <LocalLeader>gg :LspDefinition<cr>
+    nnoremap <buffer><unique> <LocalLeader>gG :LspDefinition<cr>
+    nnoremap <buffer><unique> <LocalLeader>GG :LspDefinition<cr>
 
     " Default (lowercase) is to go to the definition, else declaration
-    nnoremap <buffer><unique> <LocalLeader>d :LspDefinition<cr>
-    nnoremap <buffer><unique> <LocalLeader>D :LspDefinition<cr>
+    nnoremap <buffer><unique> <LocalLeader>gd :LspDefinition<cr>
+    nnoremap <buffer><unique> <LocalLeader>gD :LspDefinition<cr>
 
     " Bind to both lower and uppercase
     " Not available in C/C++: (available in Python and JS, though)
-    "nnoremap <buffer><unique> <LocalLeader>r :YcmCompleter GoToReferences<cr>
-    "nnoremap <buffer><unique> <LocalLeader>R :YcmCompleter GoToReferences<cr>
+    nnoremap <buffer><unique> <LocalLeader>gr :YcmCompleter GoToReferences<cr>
+    nnoremap <buffer><unique> <LocalLeader>gR :YcmCompleter GoToReferences<cr>
 
     " unsure this is needed:
-    "nnoremap <buffer><unique> <LocalLeader>/ :YcmCompleter GoToDefinitionElseDeclaration<cr>
+    nnoremap <buffer><unique> <LocalLeader>gdd :YcmCompleter GoToDefinitionElseDeclaration<cr>
 
     """" C/C++ mode only, I guess
     " Bind to both lower and uppercase
     " FILCAB: Maybe override gf *if* we're sure there's a compilation database?
     " FILCAB: check https://github.com/martong/vim-compiledb-path
-    nnoremap <buffer><unique> <LocalLeader>i :YcmCompleter GoToInclude<cr>
-    nnoremap <buffer><unique> <LocalLeader>I :YcmCompleter GoToInclude<cr>
+    nnoremap <buffer><unique> <LocalLeader>gi :YcmCompleter GoToInclude<cr>
 
     """""""" Get commands (information)
     " Default (lowercase) is to use the imprecise (faster) function
@@ -176,13 +177,16 @@ else
     """""""" Miscellaneous
     nnoremap <buffer><unique> <LocalLeader>w :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
     nnoremap <buffer><unique> <LocalLeader>W :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
-    let b:filcab_setup_cpp_family_mappings=1
+    let b:filcab_setup_ycm_and_lsp_mappings=1
   endfunction
 endif
 
-augroup filcab_cpp_mappings
+augroup filcab_mappings
   autocmd!
-  autocmd Filetype c,objc,cpp,objcpp call s:CFamilyMappings()
+  " Filetypes supported by my usual YCM installs:
+  " C family, Python, Rust, JS
+  autocmd Filetype c,objc,cpp,objcpp call s:YCMAndLSPMappings()
+  autocmd Filetype python,rust,js call s:YCMAndLSPMappings()
 augroup END
 
 let g:loaded_mappings = 1
