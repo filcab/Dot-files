@@ -377,6 +377,8 @@ augroup filetype
   au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=@ iskeyword+=%
   " SWIG
   au! BufRead,BufNewFile *.swig   set filetype=swig
+  " Javascript proxy stuff. Use "default" names only
+  au! BufRead,BufNewFile proxy.pac,wpad.dat set filetype=javascript
 augroup END
 
 " Add highlighting for function definition in C++
