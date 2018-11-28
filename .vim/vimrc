@@ -292,13 +292,10 @@ set ignorecase          " case insensitive searching
 set smartcase           " but become case sensitive if you type uppercase characters
 set smartindent         " smart auto indenting
 set magic               " change the way backslashes are used in search patterns
+set backupdir=$HOME/.vim/backups     " Hide backups in the .vim directory
+set directory=$HOME/.vim/swapfiles// " Hide swap files in the .vim directory
 if has('win32')
-  set backupdir=$HOME/vimfiles/backups     " Hide backups in the .vim directory
-  set directory=$HOME/vimfiles/swapfiles// " Hide swap files in the .vim directory
-  "set directory+=$TMP "Fallback for weird platforms
-else
-  set backupdir=$HOME/.vim/backups     " Hide backups in the .vim directory
-  set directory=$HOME/.vim/swapfiles// " Hide swap files in the .vim directory
+  set directory+=$TMP   "Fallback for weird platforms
 endif
 
 set tabstop=4           " number of spaces a tab counts for
