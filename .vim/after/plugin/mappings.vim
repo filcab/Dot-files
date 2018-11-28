@@ -28,13 +28,12 @@ inoremap <unique> <C-x>? <C-o>:call CTRL_X_Help()<cr>
 nnoremap <unique> z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
 """"""""""""" C family mappings
-function s:ClangToolMappings()
+" Pass v:true if you just want clang-format mappings
+function s:ClangToolMappings(...)
   " Bail out if the mappings have already been setup on this buffer
   if exists('b:filcab_setup_clang_tool_mappings')
     return
   endif
-
-  nnoremap <buffer><silent><unique> <F5> :call ClangCheck()<CR><CR>
 
   " clang-format integration
   if has('python')
@@ -48,11 +47,21 @@ function s:ClangToolMappings()
   else
     echom 'Python/Python3 not available, skipping clang-format mappings'
   endif
+
+  let clang_format_only = get(a:, 0, v:false)
+  if clang_format_only
+    return
+  endif
+
+  nnoremap <buffer><silent><unique> <F5> :call ClangCheck()<CR><CR>
+
   let b:filcab_setup_clang_tool_mappings=1
 endfunction
 augroup filcab_clang_tools
   autocmd!
   autocmd Filetype c,objc,cpp,objcpp call s:ClangToolMappings()
+  " Just do the clang-format mapping
+  autocmd Filetype javascript call s:ClangToolMappings(v:true)
 augroup END
 
 "YouCompleteMe mappings
@@ -75,11 +84,9 @@ if !g:disable_youcompleteme
     nnoremap <buffer><unique> <LocalLeader><F5> :YcmForceCompileAndDiagnostics<cr>
 
     """""""" GoTo commands
-    " Default (lowercase) is to use the imprecise (faster) function
-    nnoremap <buffer><unique> <LocalLeader>gg :YcmCompleter GoToImprecise<cr>
-    nnoremap <buffer><unique> <LocalLeader>gG :YcmCompleter GoTo<cr>
-    " Extra one to allow some slack on pressing shift
-    nnoremap <buffer><unique> <LocalLeader>GG :YcmCompleter GoTo<cr>
+    " First keybinding has a delay to serve as a default for "go" commands
+    nnoremap <buffer><unique> <LocalLeader>g :YcmCompleter GoTo<cr>
+    nnoremap <buffer><unique> <LocalLeader>gg :YcmCompleter GoTo<cr>
 
     " Default (lowercase) is to go to the definition, else declaration
     nnoremap <buffer><unique> <LocalLeader>gd :YcmCompleter GoToDefinition<cr>
@@ -186,7 +193,7 @@ augroup filcab_mappings
   " Filetypes supported by my usual YCM installs:
   " C family, Python, Rust, JS
   autocmd Filetype c,objc,cpp,objcpp call s:YCMAndLSPMappings()
-  autocmd Filetype python,rust,js call s:YCMAndLSPMappings()
+  autocmd Filetype python,rust,javascript call s:YCMAndLSPMappings()
 augroup END
 
 let g:loaded_mappings = 1
