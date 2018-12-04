@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+import os
+import sys
+import subprocess
+
+
+RETRIES = 1
+# Number of revisions to get per git svn fetch call
+BATCH_REVS = 1000
+DEBUG = True
+
+
+# Utilities for easily calling the vcs programs
+def git(*args):
+    if DEBUG:
+        print('git({})'.format(', '.join(args)))
+    subprocess.check_call(['git'] + list(args))
+def git_output(*args):
+    if DEBUG:
+        print('git_output({})'.format(', '.join(args)))
+    # Always rstrip() to remove the last newline. Change if needed
+    return subprocess.check_output(['git'] + list(args), stderr=subprocess.STDOUT).rstrip()
+def git_svn(*args):
+    git('svn', *args)
+def git_svn_output(*args):
+    return git_output('svn', *args)
+def svn(*args):
+    if DEBUG:
+        print('svn({})'.format(', '.join(args)))
+    subprocess.check_call(['svn'] + list(args))
+def svn_output(*args):
+    if DEBUG:
+        print('svn_output({})'.format(', '.join(args)))
+    # Always rstrip() to remove the last newline. Change if needed
+    return subprocess.check_output(['svn'] + list(args), stderr=subprocess.STDOUT).rstrip()
+
+
+def svn_revision_for(name):
+    return git_svn_output('find-rev', name)
+
+
+svn_repo = git_output('config', 'svn-remote.svn.url')
+print('svn repo: {}'.format(svn_repo))
+
+
+import timeit
+def fetch_revisions():
+    def git_svn_fetch_revs(start, end):
+        git_svn('fetch', '-q', '-r{}:{}'.format(start, end))
+
+    head_rev = int(svn_revision_for('HEAD'))
+    svn_top_rev = int(svn_output('info', '--show-item', 'revision', svn_repo))
+    print('Filling in revisions from HEAD (r{}) to svn-HEAD (r{})'.format(head_rev, svn_top_rev))
+
+    def fetch_revision_batches(start, end):
+        time_start = timeit.default_timer()
+        if start + BATCH_REVS >= end:
+            end = 'HEAD'
+            print('Fetching a batch: r{}:{}'.format(start, end))
+            git_svn_fetch_revs(start, end)
+        else:
+            batch_top = min(start + BATCH_REVS, end)
+            print('Fetching a batch: r{}:{}'.format(start, batch_top))
+            git_svn_fetch_revs(head_rev, batch_top)
+            elapsed = timeit.default_timer() - time_start
+            print('Time elapsed: {}s'.format(elapsed))
+            fetch_revision_batches(start + BATCH_REVS, end)
+    fetch_revision_batches(head_rev, svn_top_rev)
+
+for retry in range(0, RETRIES):
+    try:
+        fetch_revisions()
+        # If we got here without a failure, we have everything.
+        break
+    except e as subprocess.CalledProcessError:
+        print('last line: {}'.format(e.output[-1]))
+        # Maybe run `git fsck` here
+
+print("All done. Hopefully it's ok. Please remember to run `git svn rebase -l` to make sure you're up to date")
