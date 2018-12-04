@@ -101,11 +101,7 @@ inoremap <C-U> <C-G>u<C-U>
 " LSP setup is not ready yet (needs to come before mappings)
 let g:disable_youcompleteme = 0
 
-if has('win32')
-  source $HOME/vimfiles/utilities.vim
-else
-  source $HOME/.vim/utilities.vim
-endif
+source $HOME/.vim/utilities.vim
 
 """"""""""""" Find programs used by plugins
 let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build/bin', '~/work/llvm-cmake/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
@@ -131,11 +127,7 @@ if has('win32') && &shell =~? '.*sh.exe'
 endif
 
 "Auto-reload vimrc
-if has('win32')
-  autocmd! BufWritePost vimrc source ~/vimfiles/vimrc
-else
-  autocmd! BufWritePost vimrc source ~/.vim/vimrc
-endif
+autocmd! BufWritePost vimrc source ~/.vim/vimrc
 
 
 " Allow some commands with the first letter(s) capitalized
