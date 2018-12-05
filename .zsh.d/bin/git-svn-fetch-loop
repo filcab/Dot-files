@@ -63,7 +63,7 @@ def fetch_revisions():
         else:
             batch_top = min(start + BATCH_REVS, end)
             print('Fetching a batch: r{}:{}'.format(start, batch_top))
-            git_svn_fetch_revs(head_rev, batch_top)
+            git_svn_fetch_revs(start, batch_top)
             elapsed = timeit.default_timer() - time_start
             print('Time elapsed: {}s'.format(elapsed))
             fetch_revision_batches(start + BATCH_REVS, end)
