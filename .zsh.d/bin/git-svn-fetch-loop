@@ -6,7 +6,7 @@ import sys
 import subprocess
 
 
-RETRIES = 1
+RETRIES = 100
 # Number of revisions to get per git svn fetch call
 BATCH_REVS = 1000
 DEBUG = True
@@ -74,8 +74,12 @@ for retry in range(0, RETRIES):
         fetch_revisions()
         # If we got here without a failure, we have everything.
         break
-    except e as subprocess.CalledProcessError:
-        print('last line: {}'.format(e.output[-1]))
+    except subprocess.CalledProcessError as e:
+        print('output: {}'.format(e.output))
+        lines = e.output.splitlines()
+        print('last lines:')
+        print(lines[-2])
+        print(lines[-1])
         # Maybe run `git fsck` here
 
 print("All done. Hopefully it's ok. Please remember to run `git svn rebase -l` to make sure you're up to date")
