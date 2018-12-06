@@ -132,7 +132,13 @@ else:
 
 
 if UPDATE_REFS:
+    head_rev = int(svn_revision_for('HEAD'))
     git(*update_cmd)
+    new_head_rev = int(svn_revision_for('HEAD'))
+    additional_msg = ''
+    if head_rev == new_head_rev:
+        additional_msg = ' (There are no new revisions which touch the files in this tree)'
+    print('Updated from r{} to r{}{}'.format(head_rev, new_head_rev, additional_msg))
     print("[*] All done. Hopefully it's ok.")
 else:
     update_cmd_str = 'git {}'.format(' '.join(update_cmd))
