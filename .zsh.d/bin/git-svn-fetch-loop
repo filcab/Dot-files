@@ -105,7 +105,6 @@ for retry in range(0, RETRIES):
 
 
 is_bare = git_output('config', 'core.bare')
-print('is_bare: {}'.format(is_bare))
 if is_bare:
     # On a bare repo, update the master ref to trunk (other refs haven't been created. We'll eventually want a loop over tracked branches)
     update_cmd = ['update-ref', '-m', 'git-svn-update', 'refs/heads/master', 'origin/trunk']
