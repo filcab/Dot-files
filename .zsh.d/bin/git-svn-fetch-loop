@@ -5,6 +5,12 @@ import os
 import sys
 import subprocess
 
+try:
+    from subprocess import DEVNULL
+except ImportError:
+    import os
+    # Just keep it open throughout
+    DEVNULL = open(os.devnull, 'wb')
 
 RETRIES = 100
 # Number of revisions to get per git svn fetch call
@@ -20,31 +26,36 @@ def check_for_and_remove(thing, l):
     return False
 
 
+# Poor person's command line handling
 if check_for_and_remove('-v', sys.argv) or check_for_and_remove('--verbose', sys.argv) :
     VERBOSE = True
 if check_for_and_remove('-u', sys.argv) or check_for_and_remove('--update-refs', sys.argv) :
     UPDATE_REFS = True
+if check_for_and_remove('-q', sys.argv) or check_for_and_remove('--quiet', sys.argv) :
+    QUIET = True
 
 
 # Utilities for easily calling the vcs programs
-def git(*args):
+def git(*args, **kwargs):
+    stdout = DEVNULL if QUIET else None
     if VERBOSE:
         print('git({})'.format(', '.join(args)))
-    subprocess.check_call(['git'] + list(args), stderr=subprocess.STDOUT)
-def git_output(*args):
+    subprocess.check_call(['git'] + list(args), stdout=stdout, stderr=subprocess.STDOUT)
+def git_output(*args, **kwargs):
     if VERBOSE:
         print('git_output({})'.format(', '.join(args)))
     # Always rstrip() to remove the last newline. Change if needed
     return subprocess.check_output(['git'] + list(args), stderr=subprocess.STDOUT).rstrip()
-def git_svn(*args):
+def git_svn(*args, **kwargs):
     git('svn', *args)
-def git_svn_output(*args):
+def git_svn_output(*args, **kwargs):
     return git_output('svn', *args)
-def svn(*args):
+def svn(*args, **kwargs):
+    stdout = DEVNULL if QUIET else None
     if VERBOSE:
         print('svn({})'.format(', '.join(args)))
-    subprocess.check_call(['svn'] + list(args))
-def svn_output(*args):
+    subprocess.check_call(['svn'] + list(args), stdout=stdout)
+def svn_output(*args, **kwargs):
     if VERBOSE:
         print('svn_output({})'.format(', '.join(args)))
     # Always rstrip() to remove the last newline. Change if needed
@@ -54,7 +65,9 @@ def svn_revision_for(name):
 
 
 svn_repo = git_output('config', 'svn-remote.svn.url')
-print('[*] svn repo: {}'.format(svn_repo))
+print('[*] SVN repo: {}'.format(svn_repo))
+branch_name = git_output('rev-parse', '--abbrev-ref', 'HEAD')
+print('[*] Current git branch: {}'.format(branch_name))
 
 
 import timeit
@@ -69,7 +82,7 @@ def fetch_revisions():
         print('[*] We already have everything. Nothing to do.')
         return True
 
-    print('[*] Filling in revisions from HEAD (r{}) to svn-HEAD (r{})'.format(head_rev, svn_top_rev))
+    print('[*] Filling in revisions from git-HEAD (r{}) to svn-HEAD (r{})'.format(head_rev, svn_top_rev))
 
     def fetch_revision_batches(start, end):
         time_start = timeit.default_timer()
@@ -108,7 +121,7 @@ for retry in range(0, RETRIES):
 is_bare = git_output('config', 'core.bare')
 if is_bare:
     # On a bare repo, update the master ref to trunk (other refs haven't been created. We'll eventually want a loop over tracked branches)
-    update_cmd = ['update-ref', '-m', 'git-svn-update', 'refs/heads/master', 'origin/trunk']
+    update_cmd = ['update-ref', '-m', 'git-svn-update', 'refs/heads/{}'.format(branch_name), 'origin/trunk']
 else:
     update_cmd = ['svn', 'rebase', '-l']
 
