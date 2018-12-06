@@ -1,14 +1,14 @@
 #!/usr/bin/env zsh
 
+if [ -z "$EDITOR" ] && hash vim &> /dev/null; then
+  export EDITOR=vim
+fi
+
 if [[ x`uname -s` == 'xDarwin' ]]; then
   # Have we brewed a new vim?
   if [ -f ~/dev/brew/bin/vim -a -x ~/dev/brew/bin/vim ]; then
     export EDITOR=~/dev/brew/bin/vim
   fi
-fi
-
-if [ -z "$EDITOR" ] && hash vim &> /dev/null; then
-  export EDITOR=vim
 fi
 
 # gg alias plus v alias to do the previous line with vgg (script in
