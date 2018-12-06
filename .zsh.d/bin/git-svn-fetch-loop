@@ -54,7 +54,7 @@ def svn_revision_for(name):
 
 
 svn_repo = git_output('config', 'svn-remote.svn.url')
-print('svn repo: {}'.format(svn_repo))
+print('[*] svn repo: {}'.format(svn_repo))
 
 
 import timeit
@@ -66,23 +66,23 @@ def fetch_revisions():
     head_rev = int(svn_revision_for('HEAD'))
     svn_top_rev = int(svn_output('info', '--show-item', 'revision', svn_repo))
     if head_rev == svn_top_rev:
-        print('We already have everything. Nothing to do.')
+        print('[*] We already have everything. Nothing to do.')
         return True
 
-    print('Filling in revisions from HEAD (r{}) to svn-HEAD (r{})'.format(head_rev, svn_top_rev))
+    print('[*] Filling in revisions from HEAD (r{}) to svn-HEAD (r{})'.format(head_rev, svn_top_rev))
 
     def fetch_revision_batches(start, end):
         time_start = timeit.default_timer()
         if start + BATCH_REVS >= end:
             end = 'HEAD'
-            print('Fetching a batch: r{}:{}'.format(start, end))
+            print('[*] Fetching a batch: r{}:{}'.format(start, end))
             git_svn_fetch_revs(start, end)
         else:
             batch_top = min(start + BATCH_REVS, end)
-            print('Fetching a batch: r{}:{}'.format(start, batch_top))
+            print('[*] Fetching a batch: r{}:{}'.format(start, batch_top))
             git_svn_fetch_revs(start, batch_top)
             elapsed = timeit.default_timer() - time_start
-            print('Time elapsed: {}s'.format(elapsed))
+            print('[*] Time elapsed: {}s'.format(elapsed))
             # Loop until finished
             fetch_revision_batches(start + BATCH_REVS, end)
     fetch_revision_batches(head_rev, svn_top_rev)
@@ -96,9 +96,9 @@ for retry in range(0, RETRIES):
         # If we got here without a failure, we have everything.
         break
     except subprocess.CalledProcessError as e:
-        print('output: {}'.format(e.output))
+        print('[+] output: {}'.format(e.output))
         lines = e.output.splitlines()
-        print('last lines:')
+        print('[+] last lines:')
         print(lines[-2])
         print(lines[-1])
         # Maybe run `git fsck` here
@@ -114,9 +114,9 @@ else:
 
 if UPDATE_REFS:
     git(*update_cmd)
-    print("All done. Hopefully it's ok.")
+    print("[*] All done. Hopefully it's ok.")
 else:
     update_cmd_str = 'git {}'.format(' '.join(update_cmd))
-    print("All done. Hopefully it's ok. Please remember to run `{}` (hopefully that's right) to make sure you're up to date".format(update_cmd_str))
+    print("[*] All done. Hopefully it's ok. Please remember to run `{}` (hopefully that's right) to make sure you're up to date".format(update_cmd_str))
     sys.exit(0)
 
