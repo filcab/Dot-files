@@ -54,6 +54,16 @@ function! s:AutosetApplyRule(rule) abort
       exe cmd
     endfor
   endif
+
+  if has_key(a:rule, 'let')
+    for [option, value] in items(a:rule.options)
+      let cmd = 'let ' . option . '="' . escape(value, '\"') . '"'
+      if g:autoset_verbose
+        echom 'autoset:   exe "' . cmd . '"'
+      endif
+      exe cmd
+    endfor
+  endif
 endfunction
 
 function! AutosetApplyRules() abort
