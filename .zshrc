@@ -1,21 +1,11 @@
 #!/usr/bin/env zsh
 
-if [ -z "$EDITOR" ] && hash vim &> /dev/null; then
-  export EDITOR=vim
-fi
+for rc in ~/.rc.*; do
+  source "$rc"
+done
 
-if [[ x`uname -s` == 'xDarwin' ]]; then
-  # Have we brewed a new vim?
-  if [ -f ~/dev/brew/bin/vim -a -x ~/dev/brew/bin/vim ]; then
-    export EDITOR=~/dev/brew/bin/vim
-  fi
-fi
-
-# gg alias plus v alias to do the previous line with vgg (script in
-# ~/.zsh.d/bin), which opens the output of git grep in vim, as a location
-# list.
-alias gg='git grep'
-alias v='eval "v$(fc -l -n -1)"'
+# Emacs keybindings for the shell
+bindkey -e
 
 # completion
 autoload -U compinit
@@ -36,21 +26,12 @@ setopt prompt_subst
 # If a pattern doesn't glob, use it verbatim in the command
 unsetopt nomatch
 
-
 # Print the exit value if failure.
 setopt print_exit_value
-
-# Emacs keybindings
-bindkey -e
 
 # set zsh function directory and autoload them:
 [[ $fpath = */.zsh.d/* ]] || fpath=( ~/.zsh.d/functions $fpath )
 autoload ${fpath[1]}/*(:t) 2>/dev/null
-
-# Always build from source
-export HOMEBREW_BUILD_FROM_SOURCE=1
-# No analytics
-export HOMEBREW_NO_ANALYTICS=1
 
 # For oh-my-zsh
 #export ZSH=$HOME/.zsh.d/oh-my-zsh
@@ -72,24 +53,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:
 # verbose completion
 zstyle ':completion:*' verbose yes
 
-source ~/.paths
-
-# Restrict to a directory we control
-if type ~/dev/brew/bin/vimpager &>/dev/null;
-then
-  #export PAGER="less -R"
-  export PAGER=vimpager
-fi
-
-# Ninja status: [left/running/finished]
-export NINJA_STATUS="%e [%u/%r/%f] "
-
-# Disable the creepy, unacceptable, stats requests by CocoaPods
-export COCOAPODS_DISABLE_STATS=1
-
-# ls: Use -F with an alias
-alias ls="ls -F"
-
 # v From oh-my-zsh
 # Save the location of the current completion dump file.
 ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
@@ -108,10 +71,4 @@ done
 for f in ~/.zsh.d/rc.*; do
   source $f
 done
-
-# Load additional stuff
-for f in ~/.rc.*; do
-  source $f
-done
-
 
