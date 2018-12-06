@@ -58,12 +58,17 @@ print('svn repo: {}'.format(svn_repo))
 
 
 import timeit
+# Returns True if no work has been done
 def fetch_revisions():
     def git_svn_fetch_revs(start, end):
         git_svn('fetch', '-q', '-r{}:{}'.format(start, end))
 
     head_rev = int(svn_revision_for('HEAD'))
     svn_top_rev = int(svn_output('info', '--show-item', 'revision', svn_repo))
+    if head_rev == svn_top_rev:
+        print('We already have everything. Nothing to do.')
+        return True
+
     print('Filling in revisions from HEAD (r{}) to svn-HEAD (r{})'.format(head_rev, svn_top_rev))
 
     def fetch_revision_batches(start, end):
@@ -78,12 +83,16 @@ def fetch_revisions():
             git_svn_fetch_revs(start, batch_top)
             elapsed = timeit.default_timer() - time_start
             print('Time elapsed: {}s'.format(elapsed))
+            # Loop until finished
             fetch_revision_batches(start + BATCH_REVS, end)
     fetch_revision_batches(head_rev, svn_top_rev)
 
+
 for retry in range(0, RETRIES):
     try:
-        fetch_revisions()
+        if fetch_revisions():
+            # no-op, just exit
+            sys.exit(0)
         # If we got here without a failure, we have everything.
         break
     except subprocess.CalledProcessError as e:
