@@ -30,7 +30,7 @@ if check_for_and_remove('-u', sys.argv) or check_for_and_remove('--update-refs',
 def git(*args):
     if VERBOSE:
         print('git({})'.format(', '.join(args)))
-    subprocess.check_call(['git'] + list(args))
+    subprocess.check_call(['git'] + list(args), stderr=subprocess.STDOUT)
 def git_output(*args):
     if VERBOSE:
         print('git_output({})'.format(', '.join(args)))
@@ -97,11 +97,12 @@ for retry in range(0, RETRIES):
         break
     except subprocess.CalledProcessError as e:
         print('[+] output: {}'.format(e.output))
-        lines = e.output.splitlines()
-        print('[+] last lines:')
-        print(lines[-2])
-        print(lines[-1])
-        # Maybe run `git fsck` here
+        if e.output:
+            lines = e.output.splitlines()
+            print('[+] last lines:')
+            print(lines[-2])
+            print(lines[-1])
+            # Maybe run `git fsck` here
 
 
 is_bare = git_output('config', 'core.bare')
