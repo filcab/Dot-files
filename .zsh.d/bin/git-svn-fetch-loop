@@ -9,16 +9,30 @@ import subprocess
 RETRIES = 100
 # Number of revisions to get per git svn fetch call
 BATCH_REVS = 1000
-DEBUG = True
+VERBOSE = False
+UPDATE_REFS = False
+
+
+def check_for_and_remove(thing, l):
+    if thing in l:
+        l.remove(thing)
+        return True
+    return False
+
+
+if check_for_and_remove('-v', sys.argv) or check_for_and_remove('--verbose', sys.argv) :
+    VERBOSE = True
+if check_for_and_remove('-u', sys.argv) or check_for_and_remove('--update-refs', sys.argv) :
+    UPDATE_REFS = True
 
 
 # Utilities for easily calling the vcs programs
 def git(*args):
-    if DEBUG:
+    if VERBOSE:
         print('git({})'.format(', '.join(args)))
     subprocess.check_call(['git'] + list(args))
 def git_output(*args):
-    if DEBUG:
+    if VERBOSE:
         print('git_output({})'.format(', '.join(args)))
     # Always rstrip() to remove the last newline. Change if needed
     return subprocess.check_output(['git'] + list(args), stderr=subprocess.STDOUT).rstrip()
@@ -27,16 +41,14 @@ def git_svn(*args):
 def git_svn_output(*args):
     return git_output('svn', *args)
 def svn(*args):
-    if DEBUG:
+    if VERBOSE:
         print('svn({})'.format(', '.join(args)))
     subprocess.check_call(['svn'] + list(args))
 def svn_output(*args):
-    if DEBUG:
+    if VERBOSE:
         print('svn_output({})'.format(', '.join(args)))
     # Always rstrip() to remove the last newline. Change if needed
     return subprocess.check_output(['svn'] + list(args), stderr=subprocess.STDOUT).rstrip()
-
-
 def svn_revision_for(name):
     return git_svn_output('find-rev', name)
 
@@ -82,4 +94,21 @@ for retry in range(0, RETRIES):
         print(lines[-1])
         # Maybe run `git fsck` here
 
-print("All done. Hopefully it's ok. Please remember to run `git svn rebase -l` to make sure you're up to date")
+
+is_bare = git_output('config', 'core.bare')
+print('is_bare: {}'.format(is_bare))
+if is_bare:
+    # On a bare repo, update the master ref to trunk (other refs haven't been created. We'll eventually want a loop over tracked branches)
+    update_cmd = ['update-ref', '-m', 'git-svn-update', 'refs/heads/master', 'origin/trunk']
+else:
+    update_cmd = ['svn', 'rebase', '-l']
+
+
+if UPDATE_REFS:
+    git(*update_cmd)
+    print("All done. Hopefully it's ok.")
+else:
+    update_cmd_str = 'git {}'.format(' '.join(update_cmd))
+    print("All done. Hopefully it's ok. Please remember to run `{}` (hopefully that's right) to make sure you're up to date".format(update_cmd_str))
+    sys.exit(0)
+
