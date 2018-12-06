@@ -12,10 +12,15 @@ except ImportError:
     # Just keep it open throughout
     DEVNULL = open(os.devnull, 'wb')
 
+
 RETRIES = 100
 # Number of revisions to get per git svn fetch call
 BATCH_REVS = 1000
+# Hide the git() commands' output by default
+QUIET = False
+# Don't show vcs commands being executed
 VERBOSE = False
+# Update the refs after the fetch (if no error occurred)
 UPDATE_REFS = False
 
 
