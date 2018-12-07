@@ -22,6 +22,7 @@ QUIET = False
 VERBOSE = False
 # Update the refs after the fetch (if no error occurred)
 UPDATE_REFS = False
+START_REV = None
 
 
 def check_for_and_remove(thing, l):
@@ -38,6 +39,9 @@ if check_for_and_remove('-u', sys.argv) or check_for_and_remove('--update-refs',
     UPDATE_REFS = True
 if check_for_and_remove('-q', sys.argv) or check_for_and_remove('--quiet', sys.argv) :
     QUIET = True
+if len(sys.argv) >= 2:
+    START_REV = sys.argv.pop()
+assert len(sys.argv) == 1
 
 
 # Utilities for easily calling the vcs programs
@@ -81,7 +85,12 @@ def fetch_revisions():
     def git_svn_fetch_revs(start, end):
         git_svn('fetch', '-q', '-r{}:{}'.format(start, end))
 
-    head_rev = int(svn_revision_for('HEAD'))
+    if not START_REV:
+        head_rev = int(svn_revision_for('HEAD'))
+    else:
+        assert START_REV.startswith('r')
+        head_rev = int(START_REV[1:])
+
     svn_top_rev = int(svn_output('info', '--show-item', 'revision', svn_repo))
     if head_rev == svn_top_rev:
         print('[*] We already have everything. Nothing to do.')
@@ -132,7 +141,12 @@ else:
 
 
 if UPDATE_REFS:
-    head_rev = int(svn_revision_for('HEAD'))
+    if not start_rev:
+        head_rev = int(svn_revision_for('HEAD'))
+    else:
+        assert START_REV.startswith('r')
+        head_rev = int(START_REV[1:])
+
     git(*update_cmd)
     new_head_rev = int(svn_revision_for('HEAD'))
     additional_msg = ''
