@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 import os
+import re
 import sys
 import subprocess
 
@@ -44,15 +45,40 @@ if len(sys.argv) >= 2:
 assert len(sys.argv) == 1
 
 
+# This object wraps a file-like and implements a simple file-like object which will:
+#  - Buffer full lines (only dumps to the nested file-like if we have reached the end of a line)
+#  - Replace a newline with a \r if the line *matches* a regex (therefore only showing the last line)
+# FIXME: I don't care about str() vs bytes() for now
+class SingleLineOutputIfRegex(object):
+    def __init__(self, f, regex, flags=0):
+        self.file = f
+        self.re = re.compile(regex, flags)
+        self.buffer = ''
+
+    # We don't use backing files
+    def fileno(self):
+        return self.file.fileno()
+
+    def read(self, n):
+        pass
+    def readline(self, limit):
+        pass
+    def write(self, thing):
+        CLEAR_TO_END_OF_LINE = '\033[2K'
+        if self.re.match(thing):
+            return self.file.write('{}{}\r'.format(CLEAR_TO_END_OF_LINE, thing.rstrip('\r\n')))
+        else:
+            return self.file.write(thing)
+
+
 # Utilities for easily calling the vcs programs
 def out_err_for_subprocess():
     if QUIET:
-        return (DEVNULL, sys.stderr)
+        return (DEVNULL, SingleLineOutputIfRegex(sys.stderr,  '^(W: -empty_dir)'))
     else:
         return (None, subprocess.STDOUT)
 def git(*args, **kwargs):
     (stdout, stderr) = out_err_for_subprocess()
-
     if VERBOSE:
         print('git({})'.format(', '.join(args)))
     subprocess.check_call(['git'] + list(args), stdout=stdout, stderr=stderr)
