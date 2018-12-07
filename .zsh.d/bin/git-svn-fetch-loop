@@ -173,7 +173,7 @@ else:
 
 
 if UPDATE_REFS:
-    if not start_rev:
+    if not START_REV:
         head_rev = int(svn_revision_for('HEAD'))
     else:
         assert START_REV.startswith('r')
