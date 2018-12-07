@@ -45,11 +45,17 @@ assert len(sys.argv) == 1
 
 
 # Utilities for easily calling the vcs programs
+def out_err_for_subprocess():
+    if QUIET:
+        return (DEVNULL, sys.stderr)
+    else:
+        return (None, subprocess.STDOUT)
 def git(*args, **kwargs):
-    stdout = DEVNULL if QUIET else None
+    (stdout, stderr) = out_err_for_subprocess()
+
     if VERBOSE:
         print('git({})'.format(', '.join(args)))
-    subprocess.check_call(['git'] + list(args), stdout=stdout, stderr=subprocess.STDOUT)
+    subprocess.check_call(['git'] + list(args), stdout=stdout, stderr=stderr)
 def git_output(*args, **kwargs):
     if VERBOSE:
         print('git_output({})'.format(', '.join(args)))
@@ -60,10 +66,10 @@ def git_svn(*args, **kwargs):
 def git_svn_output(*args, **kwargs):
     return git_output('svn', *args)
 def svn(*args, **kwargs):
-    stdout = DEVNULL if QUIET else None
+    (stdout, stderr) = out_err_for_subprocess()
     if VERBOSE:
         print('svn({})'.format(', '.join(args)))
-    subprocess.check_call(['svn'] + list(args), stdout=stdout)
+    subprocess.check_call(['svn'] + list(args), stdout=stdout, stderr=stderr)
 def svn_output(*args, **kwargs):
     if VERBOSE:
         print('svn_output({})'.format(', '.join(args)))
