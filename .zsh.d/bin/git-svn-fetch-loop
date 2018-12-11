@@ -203,6 +203,9 @@ if UPDATE_REFS:
         print('Updated from r{} to r{}'.format(head_rev, new_head_rev))
     print("[*] All done. Hopefully it's ok.")
 else:
+    if not os.path.isdir('refs/remotes'):
+        print("[*] All done! No refs/remotes so I think that's it.")
+        sys.exit(0)
     update_cmd_str = 'git {}'.format(' '.join(update_cmd))
     print("[*] All done. Hopefully it's ok. Please remember to run `{}` (hopefully that's right) to make sure you're up to date".format(update_cmd_str))
     sys.exit(0)
