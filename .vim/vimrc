@@ -149,6 +149,7 @@ set nomodeline
 " Set this wether or not we're disabling ycm, since we might not find the LSP
 " programs
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+let g:ycm_rust_src_path = $RUST_SRC_PATH
 if g:disable_youcompleteme
   " switching to clangd/lsp, so let's disable ycm for the ft we have an LSP for
   let g:ycm_filetype_blacklist = {}

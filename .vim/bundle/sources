@@ -9,6 +9,7 @@ jellybeans|git|https://github.com/nanotech/jellybeans.vim.git
 vim-lsp|git|https://github.com/prabirshrestha/vim-lsp.git
 vim-markdown|git|https://github.com/tpope/vim-markdown.git
 YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
+vim-rust|git|https://github.com/rust-lang/rust.vim.git
 
 # Utilities (vcs, etc)
 ack-vim|git|https://github.com/mileszs/ack.vim.git
