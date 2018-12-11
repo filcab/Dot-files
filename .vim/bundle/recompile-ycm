@@ -20,7 +20,7 @@ if os.path.isdir('YouCompleteMe'):
 
 tentative_llvm_paths = ['~/dev/llvm/build', '~/work/llvm-cmake', 'C:/code/llvm/install', 'C:/code/llvm/build']
 for d in tentative_llvm_paths:
-    d = os.path.realpath(d)
+    d = os.path.realpath(os.path.expanduser(d))
     if os.path.isdir(d):
         llvm_root = d.translate(string.maketrans('\\', '/'))
         break
