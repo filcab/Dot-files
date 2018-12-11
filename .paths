@@ -53,3 +53,6 @@ if [ -d $HOME/dev/homebrew ]; then
   export NODE_PATH="$HOME/dev/homebrew/lib/node_modules"
   #export MANPATH="$MANPATH:/opt/local/share/man"
 fi
+
+# Rust src, when installed
+export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
