@@ -25,7 +25,7 @@ _bash_history_sync() {
   builtin history -r
 }
 
-### FIXME: Maybe remove these
+### FIXME: Maybe move these to a common place
 for i in ~/.zsh.d/functions/[a-z]*; do
   . $i
 done
