@@ -161,6 +161,12 @@ sub bzr_tgz ($$$$) {
     }
 }
 
+sub handle_git_submodules {
+  open GIT, "git submodule update --init --recursive |";
+  print while (<GIT>);
+  close GIT;
+}
+
 sub git ($$$$) {
     my ($dir, $git_url);
     $dir = shift, $git_url = shift;
@@ -169,6 +175,7 @@ sub git ($$$$) {
         open GIT, "git -C '$dir' pull |";
         print while (<GIT>);
         close GIT;
+        handle_git_submodules $dir;
 
         return;
     }
@@ -177,6 +184,7 @@ sub git ($$$$) {
     open GIT, "git clone $git_url $dir |";
     print while (<GIT>);
     close GIT;
+    handle_git_submodules $dir;
 }
 
 print "\n";
