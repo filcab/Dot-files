@@ -185,6 +185,9 @@ else:
 
 
 if UPDATE_REFS:
+    if not os.path.isdir('refs/remotes'):
+        print("[W] Not updating, as I don't know what to do and I think I don't need to update")
+        sys.exit(0)
     if not START_REV:
         head_rev = int(svn_revision_for('HEAD'))
     else:
