@@ -77,7 +77,7 @@ function s:RustToolMappings(...)
   let b:filcab_setup_rust_tool_mappings=1
 endfunction
 augroup filcab_rust
-  autocmd Filetype rust call s:RustMappings()
+  autocmd Filetype rust call s:RustToolMappings()
 augroup END
 
 "YouCompleteMe mappings
