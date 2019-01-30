@@ -56,7 +56,7 @@ function! s:AutosetApplyRule(rule) abort
   endif
 
   if has_key(a:rule, 'let')
-    for [option, value] in items(a:rule.options)
+    for [option, value] in items(a:rule.let)
       let cmd = 'let ' . option . '="' . escape(value, '\"') . '"'
       if g:autoset_verbose
         echom 'autoset:   exe "' . cmd . '"'
