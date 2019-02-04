@@ -117,7 +117,7 @@ function! AutosetAddRule(rule) abort
 
   let rulename = a:rule.name
   if has_key(s:autoset_rules, rulename)
-    echoerr 'Rule "' . rulename . '" already exists: ' . s:autoset_rules[rulename]
+    echoerr 'Rule "' . rulename . '" already exists: ' . string(s:autoset_rules[rulename])
     return
   endif
 
