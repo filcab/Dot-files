@@ -114,8 +114,8 @@ else
   export PAGER="less -R"
 fi
 
-### Ninja status: [left/running/finished]
-export NINJA_STATUS="%e [%u/%r/%f] "
+### Ninja status: "time [left/running/finished]"
+export NINJA_STATUS="$(tput bold)%e$(tput sgr0) [$(tput bold)$(tput setaf 1)%u$(tput sgr0)/$(tput bold)$(tput setaf 3)%r$(tput sgr0)/$(tput bold)$(tput setaf 2)%f$(tput sgr0)] "
 
 ### Homebrew settings
 # Always build from source

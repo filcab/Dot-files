@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+# Load general files (used for bash and zsh)
 for rc in ~/.rc.*; do
   source "$rc"
 done
