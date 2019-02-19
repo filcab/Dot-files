@@ -123,8 +123,24 @@ compiler! clang
 set makeprg=ninja
 
 " Always use proper slashes on Windows if our shell looks like a *NIX one.
-if has('win32') && &shell =~? '.*sh.exe'
-  set shellslash
+" Windows shell settings require special care so they always work on:
+"   - Regular Windows (gvim.exe)
+"   - With and without winpty:
+"     - git-bash running installed (up-to-date) vim (same installation as previous gvim.exe)
+"     - git-bash running an older vim.exe (distributed with it)
+if has('win32')
+  if &winptydll != ''
+    " We're on Windows-land, make sure we're using the regular Windows shell,
+    " if the one we have is invalid.
+    if executable(&shell) != 1
+      " Our 'shell' option is invalid. Possibly due to / vs \ and dirs with
+      " spaces. Revert to the Windows default.
+      set shell=C:\\WINDOWS\\system32\\cmd.exe
+      set shellxquote=(
+      set shellcmdflag=/c
+      " Other shell options seem the same between Windows and git-bash vim
+    endif
+  endif
 endif
 
 "Auto-reload vimrc
