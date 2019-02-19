@@ -47,4 +47,4 @@ if platform.system() == 'Windows':
 
 
 print('Calling install script')
-subprocess.check_call(['python', 'install.py', '--clang-completer', '--rust-completer', '--js-completer'], env=os.environ)
+subprocess.check_call(['python', 'install.py', '--clang-completer', '--rust-completer', '--ts-completer'], env=os.environ)
