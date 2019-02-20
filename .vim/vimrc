@@ -107,6 +107,11 @@ source $HOME/.vim/utilities.vim
 let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build/bin', '~/work/llvm-cmake/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
 let g:clang_check_path = FindProgram('clang-check', g:filcab_llvm_dirs_to_search)
 let g:clang_format_path = FindProgram('clang-format', g:filcab_llvm_dirs_to_search)
+if !executable(g:clang_format_path)
+  " The clang-format.py script we use doesn't validate and spews stuff to
+  " stderr. Just unset the variable if we didn't find the program.
+  unlet g:clang_format_path
+endif
 let g:clangd_path = FindProgram('clangd', g:filcab_llvm_dirs_to_search)
 
 let g:filcab_cquery_dirs_to_search = ['~/dev/cquery/build']
