@@ -55,4 +55,6 @@ if [ -d $HOME/dev/homebrew ]; then
 fi
 
 # Rust src, when installed
-export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+if hash rustc 2>/dev/null; then
+  export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+fi
