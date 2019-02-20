@@ -9,6 +9,8 @@
 	stashed-svn-update = "!f() { if git diff-index --quiet HEAD; then should_stash=No; else should_stash=Yes; fi; ( test $should_stash = Yes && git stash ); git svn rebase && ( test $should_stash = Yes && git stash pop || : ) }; f"
 	uplog = log @{upstream}..
 
+[commit]
+	verbose = true
 [core]
 	autocrlf = false
 
