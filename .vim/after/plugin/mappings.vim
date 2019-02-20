@@ -71,8 +71,8 @@ function s:RustToolMappings(...)
   endif
 
   nnoremap <buffer><unique> <LocalLeader><Tab> :RustFmt<cr>
-  vnoremap <buffer><unique> <LocalLeader><Tab> :RustFmt<cr>
-  inoremap <buffer><unique> <C-Tab><Tab> <C-o>:RustFmt<cr><cr>
+  vnoremap <buffer><unique> <LocalLeader><Tab> :RustFmtRange<cr>
+  inoremap <buffer><unique> <C-Tab><Tab> <C-o>:RustFmtRange<cr><cr>
 
   let b:filcab_setup_rust_tool_mappings=1
 endfunction
