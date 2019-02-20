@@ -124,7 +124,7 @@ let g:ackprg=FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocol
 set grepprg=grep\ -nH\ $*\ /dev/null
 
 " Make ninja the default makeprg and make clang the default compiler (for errorformat)
-compiler! clang
+"compiler! clang
 set makeprg=ninja
 
 " Always use proper slashes on Windows if our shell looks like a *NIX one.
