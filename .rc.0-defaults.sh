@@ -126,3 +126,10 @@ export HOMEBREW_NO_ANALYTICS=1
 ### Disable the creepy, unacceptable, stats requests by CocoaPods
 export COCOAPODS_DISABLE_STATS=1
 
+case "$SHELL" in
+  *bash|*bash.exe)
+    # Special-case this script, for now, as it works on both
+    source ~/.zsh.d/lib/git-prompt.zsh
+    ;;
+esac
+
