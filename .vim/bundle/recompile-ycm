@@ -20,11 +20,17 @@ if os.path.isdir('YouCompleteMe'):
     os.chdir('YouCompleteMe')
 
 
+def maketrans(*args):
+    if sys.version_info[0] > 2:
+        return str.maketrans(*args)
+    return string.maketrans(*args)
+
+
 tentative_llvm_paths = ['~/dev/llvm/build', '~/work/llvm-cmake', 'C:/code/llvm/install', 'C:/code/llvm/build']
 for d in tentative_llvm_paths:
     d = os.path.realpath(os.path.expanduser(d))
     if os.path.isdir(d):
-        llvm_root = d.translate(string.maketrans('\\', '/'))
+        llvm_root = d.translate(maketrans('\\', '/'))
         break
 # We'll actually get an exception if we didn't find it
 assert llvm_root
