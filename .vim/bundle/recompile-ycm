@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+
+from distutils.spawn import find_executable
 import os
 import platform
 import string
@@ -33,6 +35,11 @@ if platform.system() == 'Darwin':
     lib_suffix = 'dylib'
 elif platform.system() == 'Windows':
     lib_suffix = 'lib'
+elif platform.system() == 'Linux':
+    lib_suffix = '.so'
+else:
+    print('Unknown platform: {}. Please edit this script and add it.'.format(platform.system()), file=sys.stderr)
+    sys.exit(1)
 # We'll actually get an exception if we didn't find it
 assert lib_suffix
 print('Library file suffix: {}'.format(lib_suffix))
@@ -46,5 +53,48 @@ if platform.system() == 'Windows':
     os.environ['EXTRA_CMAKE_ARGS'] += ' -DPATH_TO_LLVM_ROOT:PATH={}'.format(llvm_root)
 
 
-print('Calling install script')
-subprocess.check_call(['python', 'install.py', '--clang-completer', '--rust-completer', '--ts-completer'], env=os.environ)
+# Default to enabling clang, assuming the code above is ok
+# FIXME: Improve the above detection, and fail gracefully + disable clang
+
+class Completers(object):
+    def __init__(self):
+        self.enabled = ['clang']
+        self.skipped = []
+
+    def ok(self, completer):
+        self.enabled.append(completer)
+
+    def skip(self, completer):
+        self.skipped.append(completer)
+
+    def cli_args(self):
+        return ['--{}-completer'.format(c) for c in self.enabled]
+
+    def warn_skipped(self):
+        if not self.skipped:
+            return
+
+        print('Skipped completers:')
+        for c in self.skipped:
+            print('  {}'.format(c))
+
+
+completers = Completers()
+def find_executable_enable_completer(exe, comp):
+    if find_executable(exe):
+        completers.ok(comp)
+    else:
+        completers.skip(comp)
+
+find_executable_enable_completer('rustc', 'rust')
+find_executable_enable_completer('node', 'ts')
+
+
+# Warn before building so users can cancel if they want
+completers.warn_skipped()
+
+subprocess.check_call(['python', 'install.py'] + completers.cli_args(), env=os.environ)
+
+# Also warn at the end, as we might have a big backlog
+completers.warn_skipped()
+
