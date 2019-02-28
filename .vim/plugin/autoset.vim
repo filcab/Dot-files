@@ -95,6 +95,9 @@ function! s:AutosetPathFilter(rule, path) abort
   if get(a:rule, 'pattern_expand', 0)
     let pattern = expand(pattern)
   endif
+  if g:autoset_verbose
+    echom 'autoset: matching pattern: "'.pattern.'", with path: "'.a:path.'"'
+  endif
   return a:path =~ pattern
 endfunction
 
