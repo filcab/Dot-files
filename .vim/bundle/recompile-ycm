@@ -26,7 +26,7 @@ def maketrans(*args):
     return string.maketrans(*args)
 
 
-tentative_llvm_paths = ['~/dev/llvm/build', '~/work/llvm-cmake', 'C:/code/llvm/install', 'C:/code/llvm/build']
+tentative_llvm_paths = ['~/dev/llvm/install', '~/dev/llvm/build', '~/work/llvm-cmake', 'C:/code/llvm/install', 'C:/code/llvm/build']
 for d in tentative_llvm_paths:
     d = os.path.realpath(os.path.expanduser(d))
     if os.path.isdir(d):
@@ -42,7 +42,7 @@ if platform.system() == 'Darwin':
 elif platform.system() == 'Windows':
     lib_suffix = 'lib'
 elif platform.system() == 'Linux':
-    lib_suffix = '.so'
+    lib_suffix = 'so'
 else:
     print('Unknown platform: {}. Please edit this script and add it.'.format(platform.system()), file=sys.stderr)
     sys.exit(1)
@@ -99,6 +99,8 @@ find_executable_enable_completer('node', 'ts')
 # Warn before building so users can cancel if they want
 completers.warn_skipped()
 
+# , '--build-dir={}'.format(os.path.join(os.getcwd(), platform.system()))
+print('Executing: {}'.format(' '.join(['python', 'install.py'] + completers.cli_args()), env=os.environ))
 subprocess.check_call(['python', 'install.py'] + completers.cli_args(), env=os.environ)
 
 # Also warn at the end, as we might have a big backlog
