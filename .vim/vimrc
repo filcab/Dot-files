@@ -104,7 +104,7 @@ let g:disable_youcompleteme = 0
 source $HOME/.vim/utilities.vim
 
 """"""""""""" Find programs used by plugins
-let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/build/bin', '~/work/llvm-cmake/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
+let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/install/bin', '~/dev/llvm/build/bin', '~/work/llvm-cmake/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
 let g:clang_check_path = FindProgram('clang-check', g:filcab_llvm_dirs_to_search)
 let g:clang_format_path = FindProgram('clang-format', g:filcab_llvm_dirs_to_search)
 if !executable(g:clang_format_path)
