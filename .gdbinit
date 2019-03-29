@@ -104,4 +104,23 @@ end
 # Advice from homebrew, on macOS with SIP
 set startup-with-shell off
 
+# Utilities for quitting/killing debuggees without confirmation
+define kkill
+  set confirm off
+  kill
+end
+document kkill
+  Kill without asking for confirmation.
+end
+define qquit
+  set confirm off
+  quit
+end
+document qquit
+  Quit without asking for confirmation.
+end
+
+# Pretty print structures by default
+set print pretty
+
 source /Users/filcab/Library/Python/2.7/lib/python/site-packages/voltron/entry.py
