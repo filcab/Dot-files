@@ -1,3 +1,6 @@
 /.subversion/*
 !/.subversion/config
 /.vim/.netrwhist
+
+# Local configurations
+/.vim/after/plugin/autoset-rules-local.vim
