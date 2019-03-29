@@ -48,9 +48,10 @@ function! s:AutosetApplyRule(rule) abort
     exe cmd
   endif
 
+  " TODO: Decide on this. Right now I'm trying 'set only local options'
   if has_key(a:rule, 'options')
     for [option, value] in items(a:rule.options)
-      let cmd = 'let &' . option . '="' . escape(value, '\"') . '"'
+      let cmd = 'let &l:' . option . '="' . escape(value, '\"') . '"'
       if g:autoset_verbose
         echom 'autoset:   exe "' . cmd . '"'
       endif
@@ -95,6 +96,7 @@ function! AutosetApplyRules() abort
     endif
     if rule.filter(rule, path)
       call s:AutosetApplyRule(rule)
+      let b:autoset_rule = rule.name
       " Stop after first match. Should we continue?
       return
     endif
