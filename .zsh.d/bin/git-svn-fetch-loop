@@ -17,6 +17,8 @@ except ImportError:
 
 # This can be useful when initially downloading a repo with some huge revisions which might timeout more than once
 RETRIES = 1
+# Number of retries for each batch
+BATCH_RETRIES = 3
 # Number of revisions to get per git svn fetch call
 BATCH_REVS = 1000
 # Hide the git() commands' output by default
@@ -57,7 +59,7 @@ def check_call_and_hide_lines(cmd, hide_re):
             return '{}{}'.format(CLEAR_TO_END_OF_LINE, line)
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     for line in p.stdout:
-        print(xform(line), end='')
+        print(xform(line.decode('utf-8')), end='')
     return p.wait()
 
 
@@ -72,7 +74,7 @@ def check_output_and_hide_lines(cmd, hide_re):
     acc = ''
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     for line in p.stdout:
-        line = xform(line)
+        line = xform(line.decode('utf-8'))
         acc += line
     ret = p.wait()
     if ret:
@@ -124,11 +126,27 @@ import timeit
 # Returns True if no work has been done
 def fetch_revisions():
     def git_svn_fetch_revs(start, end):
-        svn_cmd = ['fetch']
-        if QUIET:
-            svn_cmd.append('-q')
-        svn_cmd.append('-r{}:{}'.format(start, end))
-        git_svn(*svn_cmd)
+        retries = 0
+        quiet = QUIET
+        while retries < BATCH_RETRIES:
+            try:
+                svn_cmd = ['fetch']
+                if QUIET:
+                    svn_cmd.append('-q')
+                svn_cmd.append('-r{}:{}'.format(start, end))
+                git_svn(*svn_cmd)
+                break
+            except:
+                retries += 1
+                if retries == BATCH_RETRIES:
+                    # Re-raise the exception
+                    t, v, tb = sys.exc_info()
+                    # Get ready for python 3:
+                    raise t(v).with_traceback(tb)
+                    #raise t, v, tb
+            if retries == 1 and quiet:
+                print('[W] Hit an exception fetching. Turning off quiet mode for this batch!')
+                quiet = False
 
     if not START_REV:
         head_rev = int(svn_revision_for('HEAD'))
@@ -160,12 +178,14 @@ def fetch_revisions():
     fetch_revision_batches(head_rev, svn_top_rev)
 
 
+last_one_failed = True
 for retry in range(0, RETRIES):
     try:
         if fetch_revisions():
             # no-op, just exit
             sys.exit(0)
         # If we got here without a failure, we have everything.
+        last_one_failed = False
         break
     except subprocess.CalledProcessError as e:
         print('[+] output: {}'.format(e.output))
@@ -176,6 +196,10 @@ for retry in range(0, RETRIES):
             print(lines[-1])
             # Maybe run `git fsck` here
 
+
+if last_one_failed:
+    # Failure when fetching revisions. Bailing out!
+    sys.exit(1)
 
 is_bare = git_output('config', 'core.bare')
 if is_bare:
