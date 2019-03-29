@@ -1,0 +1,142 @@
+#!/usr/bin/env python
+from __future__ import print_function
+import argparse
+import os
+import sys
+
+
+DEFAULT_COMMAND = 'validate'
+# TODO: Do we want to possibly install elsewhere?
+HOME = os.path.expanduser('~')
+non_installable = ['.git', 'install']
+
+exceptions = {}
+non_installable += exceptions.keys()
+
+
+def info(*args, **kwargs):
+    print('[*]', *args, **kwargs)
+def error(*args, **kwargs):
+    print('[E]', *args, **kwargs)
+
+
+if sys.platform == "win32":
+    __CSL = None
+    def symlink(source, link_name):
+        '''symlink(source, link_name)
+           Creates a symbolic link pointing to source named link_name'''
+        global __CSL
+        if __CSL is None:
+            import ctypes
+            csl = ctypes.windll.kernel32.CreateSymbolicLinkW
+            csl.argtypes = (ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint32)
+            csl.restype = ctypes.c_ubyte
+            __CSL = csl
+        flags = 0
+        if source is not None and os.path.isdir(source):
+            flags = 1
+        if __CSL(link_name, source, flags) == 0:
+            raise ctypes.WinError()
+else:
+    def symlink(source, link_name):
+        return os.symlink(source, link_name)
+
+
+def validate_link(lnk, dst, config):
+    if not os.path.exists(lnk):
+        error('symlink to {} is not installed at {}'.format(dst, lnk))
+        had_error = True
+        return
+    if not os.path.islink(lnk):
+        error('{} exists but is not a symlink'.format(lnk))
+        had_error = True
+        return
+    link = os.readlink(lnk)
+    if link != dst:
+        error('{} exists but is not a symlink to {}, it points to {}'.format(lnk, dst, link))
+        had_error = True
+        return
+    if config.verbose:
+        info('OK: {} -> {}'.format(lnk, dst))
+
+
+def validate(d, config):
+    had_error = False
+    for f in os.listdir(d):
+        if f in non_installable:
+            if config.verbose and f not in exceptions:
+                print('Non-installable file: {}'.format(f))
+            continue
+
+        abs_f = os.path.realpath(os.path.join(d, f))
+        HOME_f = os.path.join(HOME, f)
+        validate_link(HOME_f, abs_f, config)
+
+    for dst, lnk in exceptions.items():
+        lnk = os.path.realpath(os.path.expanduser(lnk))
+        dst = os.path.realpath(dst)
+        validate_link(lnk, dst, config)
+
+    info('All seems to be ok!')
+
+
+def symlink_is_ok(lnk, dst):
+    return os.path.exists(lnk) and os.path.islink(lnk) and os.readlink(lnk) == dst
+
+
+def install(d, config):
+    def symlink_file(lnk, dst):
+        # TODO: Maybe install + validate in the same run?
+        if config.dry_run:
+            if symlink_is_ok(lnk, dst):
+                if config.verbose:
+                    print('  Already ok: {} -> {}'.format(lnk, dst))
+            else:
+                print('  Would install: {} -> {}'.format(lnk, dst))
+        else:
+            if symlink_is_ok(lnk, dst):
+                if config.verbose:
+                    print('  Already ok: {} -> {}'.format(lnk, dst))
+            else:
+                print('  Creating symlink: {} -> {}'.format(lnk, dst))
+                symlink(dst, lnk)
+
+    had_error = False
+    for f in os.listdir(d):
+        if f in non_installable:
+            continue
+        abs_f = os.path.realpath(os.path.join(d, f))
+        HOME_f = os.path.join(HOME, f)
+        symlink_file(HOME_f, abs_f)
+
+    for dst, lnk in exceptions.items():
+        lnk = os.path.realpath(os.path.expanduser(lnk))
+        dst = os.path.realpath(dst)
+        symlink_file(lnk, dst)
+
+
+command_functions = {
+    'install': install,
+    'validate': validate,
+}
+def function_for_command(command, parser):
+    if command not in command_functions:
+        print('The only available command is "validate"')
+        return lambda *args: parser.print_usage()
+    return command_functions[command]
+
+
+def main():
+    dot_files_dir = os.path.dirname(os.path.realpath(__file__))
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--verbose', '-v', action='store_true')
+    parser.add_argument('--dry_run', '-n', action='store_true')
+    parser.add_argument('command', nargs='?', default='validate')
+    args = parser.parse_args()
+
+    function_for_command(args.command, parser)(dot_files_dir, args)
+
+
+if __name__ == '__main__':
+    main()
