@@ -12,6 +12,12 @@ endif
 " Map <LocalLeader> to , by default (was \, same as <Leader>)
 let maplocalleader=','
 
+" Have <LocalLeader>d! do a missing :Dispatch binding
+noremap <unique> <LocalLeader>d! :Dispatch!<cr>
+" Also have one which needs no shift
+noremap <unique> <LocalLeader>d1 :Dispatch!<cr>
+" Also add regular <cr> terminated, for consistency (no benefit vs d<cr>)
+noremap <unique> <LocalLeader>d<cr> :Dispatch<cr>
 
 " Help for some bindings:
 noremap <unique> <LocalLeader>? :map <LocalLeader><cr>
