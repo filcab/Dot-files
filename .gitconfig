@@ -38,6 +38,9 @@
 	show = ~/.zsh.d/bin/diff-highlight | less -R
 	diff = ~/.zsh.d/bin/diff-highlight | less -R
 
+[rebase]
+	autoSquash = true
+	autoStash = true
 [pull]
 	rebase = true
 [push]
