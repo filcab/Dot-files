@@ -92,6 +92,7 @@ def find_executable_enable_completer(exe, comp):
     else:
         completers.skip(comp)
 
+find_executable_enable_completer('clangd', 'clangd')
 find_executable_enable_completer('rustc', 'rust')
 find_executable_enable_completer('node', 'ts')
 
