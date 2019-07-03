@@ -161,8 +161,9 @@ sub bzr_tgz ($$$$) {
     }
 }
 
-sub handle_git_submodules {
-  open GIT, "git submodule update --init --recursive |";
+sub handle_git_submodules ($){
+  my $dir = shift;
+  open GIT, "git -C '$dir' submodule update --init --recursive |";
   print while (<GIT>);
   close GIT;
 }
