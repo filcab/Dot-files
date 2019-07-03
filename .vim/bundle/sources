@@ -1,12 +1,8 @@
-# Color themes (please cleanup)
-ir_black|git|https://github.com/wgibbs/vim-irblack
+# Color themes: I prefer molokai in GUI mode
 molokai|git|https://github.com/mrtazz/molokai.vim.git
-solarized|git|https://github.com/altercation/vim-colors-solarized.git
-jellybeans|git|https://github.com/nanotech/jellybeans.vim.git
 
 # Language modes
-#python-mode|git|https://github.com/klen/python-mode.git
-vim-lsp|git|https://github.com/prabirshrestha/vim-lsp.git
+python-mode|git|https://github.com/klen/python-mode.git
 vim-markdown|git|https://github.com/tpope/vim-markdown.git
 YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 vim-rust|git|https://github.com/rust-lang/rust.vim.git
@@ -27,6 +23,7 @@ vim-eunuch|git|https://github.com/tpope/vim-eunuch.git
 vim-flatfoot|git|https://github.com/tpope/vim-flatfoot.git
 vim-fugitive|git|https://github.com/tpope/vim-fugitive.git
 vim-git|git|https://github.com/tpope/vim-git.git
+vim-lsp|git|https://github.com/prabirshrestha/vim-lsp.git
 vim-repeat|git|https://github.com/tpope/vim-repeat.git
 vim-sleuth|git|https://github.com/tpope/vim-sleuth.git
 vim-speeddating|git|https://github.com/tpope/vim-speeddating.git
