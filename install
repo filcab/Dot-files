@@ -98,7 +98,11 @@ def install(d, config):
                 if config.verbose:
                     print('  Already ok: {} -> {}'.format(lnk, dst))
             else:
-                print('  Creating symlink: {} -> {}'.format(lnk, dst))
+                if os.path.islink(lnk):
+                    print('  Changing {} from {} to {}'.format(lnk, os.readlink(lnk), dst))
+                    os.remove(lnk)
+                else:
+                    print('  Creating symlink: {} -> {}'.format(lnk, dst))
                 symlink(dst, lnk)
 
     had_error = False
