@@ -116,12 +116,17 @@ let g:clangd_path = FindProgram('clangd', g:filcab_llvm_dirs_to_search)
 
 let g:filcab_cquery_dirs_to_search = ['~/dev/cquery/build']
 
-" Tell vim where to find ack
-let g:filcab_homebrew_dirs_to_search = ['~/dev/brew/bin', '~/dev/homebrew/bin']
-let g:ackprg=FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocolor --nogroup --column'
-
-" make grep always print the filename (default: without the -H)
-set grepprg=grep\ -nH\ $*\ /dev/null
+" Try finding ripgrep to use with vim's grep functionality and ack plugin
+if executable('rg')
+  " Assume ripgrep is in cargo directory, and that's in PATH
+  let g:ackprg = "rg --vimgrep --smart-case"
+  let &grepprg = "rg --vimgrep --smart-case"
+else
+  " Tell vim where to find ack as a fallback
+  let g:filcab_homebrew_dirs_to_search = ['~/dev/brew/bin', '~/dev/homebrew/bin']
+  let g:ackprg = FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocolor --nogroup --column --smart-case'
+  let &grepprg = FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocolor --nogroup --column --smart-case'
+endif
 
 " Make ninja the default makeprg and make clang the default compiler (for errorformat)
 "compiler! clang
