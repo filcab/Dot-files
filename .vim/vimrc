@@ -320,9 +320,9 @@ if has('win32')
   set directory+=$TMP   "Fallback for weird platforms
 endif
 
-set tabstop=4           " number of spaces a tab counts for
-set shiftwidth=2        " spaces for autoindents
-set expandtab           " turn a tabs into spaces
+"set tabstop=8           " number of spaces a tab counts for
+"set shiftwidth=2        " spaces for autoindents
+"set expandtab           " turn a tabs into spaces
 
 " splitting settings
 set splitbelow          " When splitting open the new file below or to the right
