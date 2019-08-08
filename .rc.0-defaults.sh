@@ -36,8 +36,10 @@ case $(uname -s) in
     if [ -f /c/Program\ Files/Vim/vim81/vim.exe ]; then
       # Also alias vim/gvim so we get the updated version in most places
       alias vim="winpty /c/Program\ Files/Vim/vim81/vim.exe"
+      alias view="winpty /c/Program\ Files/Vim/vim81/view.exe"
       alias vimdiff="vim -d"
       alias gvim="/c/Program\ Files/Vim/vim81/gvim.exe"
+      alias gview="winpty /c/Program\ Files/Vim/vim81/gview.exe"
       alias gvimdiff="gvim -d"
       export EDITOR="winpty /c/Program\ Files/Vim/vim81/vim.exe"
     fi
