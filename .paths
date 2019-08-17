@@ -54,6 +54,8 @@ if [ -d $HOME/dev/homebrew ]; then
   #export MANPATH="$MANPATH:/opt/local/share/man"
 fi
 
+export PATH="$HOME/.cargo/bin:$PATH"
+
 # Rust src, when installed
 if hash rustc 2>/dev/null; then
   export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
