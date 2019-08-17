@@ -8,7 +8,7 @@ import sys
 DEFAULT_COMMAND = 'validate'
 # TODO: Do we want to possibly install elsewhere?
 HOME = os.path.expanduser('~')
-non_installable = ['.git', 'install']
+non_installable = ['.git', '.gitignore', 'install']
 
 exceptions = {}
 non_installable += exceptions.keys()
