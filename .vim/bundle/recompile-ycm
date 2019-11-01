@@ -95,7 +95,8 @@ def find_executable_enable_completer(exe, comp):
 # filcab: Remove clangd for now, as there's no option other than installing it
 # with YCM's download...
 #find_executable_enable_completer('clangd', 'clangd')
-find_executable_enable_completer('rustc', 'rust')
+# Same for rust-completer. Just edit it to search anywhere for rls
+#find_executable_enable_completer('rustc', 'rust')
 find_executable_enable_completer('node', 'ts')
 
 
