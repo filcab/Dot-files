@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
+#!/usr/bin/env python3
 
 from distutils.spawn import find_executable
 import os
@@ -96,7 +94,7 @@ def find_executable_enable_completer(exe, comp):
 # with YCM's download...
 #find_executable_enable_completer('clangd', 'clangd')
 # Same for rust-completer. Just edit it to search anywhere for rls
-#find_executable_enable_completer('rustc', 'rust')
+find_executable_enable_completer('rustc', 'rust')
 find_executable_enable_completer('node', 'ts')
 
 
@@ -104,8 +102,8 @@ find_executable_enable_completer('node', 'ts')
 completers.warn_skipped()
 
 # , '--build-dir={}'.format(os.path.join(os.getcwd(), platform.system()))
-print('Executing: {}'.format(' '.join(['python', 'install.py'] + completers.cli_args()), env=os.environ))
-subprocess.check_call(['python', 'install.py'] + completers.cli_args(), env=os.environ)
+print('Executing: {}'.format(' '.join(['python3', 'install.py'] + completers.cli_args()), env=os.environ))
+subprocess.check_call(['python3', 'install.py'] + completers.cli_args(), env=os.environ)
 
 # Also warn at the end, as we might have a big backlog
 completers.warn_skipped()
