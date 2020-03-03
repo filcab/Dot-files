@@ -1,6 +1,7 @@
 /.subversion/*
 !/.subversion/config
 /.vim/black
+/.vim/view
 /.vim/.netrwhist
 
 # Local configurations
