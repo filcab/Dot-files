@@ -33,6 +33,10 @@ inoremap <unique> <C-x>? <C-o>:call CTRL_X_Help()<cr>
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 nnoremap <unique> z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
+" FIXME: These mappings should be in ftplugins, probably using functions
+" defined in utilities.vim or similar
+
+
 """"""""""""" C family mappings
 " Pass v:true if you just want clang-format mappings
 function s:ClangToolMappings(...)
@@ -83,6 +87,13 @@ function s:RustToolMappings(...)
 endfunction
 augroup filcab_rust
   autocmd Filetype rust call s:RustToolMappings()
+augroup END
+
+function s:PythonToolMappings(...)
+  nnoremap <buffer><unique> <LocalLeader><Tab> :Black<cr>
+endfunction
+augroup filcab_python
+  autocmd Filetype python call s:PythonToolMappings()
 augroup END
 
 "YouCompleteMe mappings
