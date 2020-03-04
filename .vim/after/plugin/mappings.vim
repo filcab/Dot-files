@@ -40,6 +40,7 @@ function s:ClangToolMappings(...)
   if exists('b:filcab_setup_clang_tool_mappings')
     return
   endif
+  let b:filcab_setup_clang_tool_mappings=1
 
   " clang-format integration
   if has('python')
@@ -60,8 +61,6 @@ function s:ClangToolMappings(...)
   endif
 
   nnoremap <buffer><silent><unique> <F5> :call ClangCheck()<CR><CR>
-
-  let b:filcab_setup_clang_tool_mappings=1
 endfunction
 augroup filcab_clang_tools
   autocmd!
