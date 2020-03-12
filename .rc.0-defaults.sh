@@ -94,10 +94,22 @@ function maybe_start_ssh_agent {
 
   if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
       agent_start
-      ssh-add -A
+      case $(uname -s) in
+        Linux)
+          ;;
+        *)
+          ssh-add -A
+          ;;
+      esac
       ssh-add
   elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-      ssh-add -A
+      case $(uname -s) in
+        Linux)
+          ;;
+        *)
+          ssh-add -A
+          ;;
+      esac
       ssh-add
   fi
 }
