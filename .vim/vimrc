@@ -363,47 +363,16 @@ endif
 " For debugging
 "set verbose=9
 
-" Put these in an autocmd group, so that we can delete them easily.
-augroup perl
-  " reset (disable previous 'augroup perl' settings)
-  au!
-
-  au BufReadPre,BufNewFile
-  \ *.pl,*.pm
-  \ setlocal cindent cinkeys='0{,0},!^F,o,O,e'
-  " formatoption:
-  "   t - wrap text using textwidth
-  "   c - wrap comments using textwidth (and auto insert comment leader)
-  "   r - auto insert comment leader when pressing <return> in insert mode
-  "   o - auto insert comment leader when pressing 'o' or 'O'.
-  "   q - allow formatting of comments with "gq"
-  "   a - auto formatting for paragraphs
-  "   n - auto wrap numbered lists
-  "
-augroup END
-
-" Set python mode to python3 if available
-if has('python3') || has('python3/dyn')
-  let g:pymode_python = 'python3'
-endif
-
 augroup filetype
   " LLVM stuff
   " sO:" -,mO:"  ,eO:"",:"
   "au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=% comments=s0:\ -,m0:;,e0:;;,:;
-  au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=@ iskeyword+=%
+  au! BufRead,BufNewFile *.ll     set iskeyword+=@ iskeyword+=%
   " SWIG
   au! BufRead,BufNewFile *.swig   set filetype=swig
   " Javascript proxy stuff. Use "default" names only
   au! BufRead,BufNewFile proxy.pac,wpad.dat set filetype=javascript
 augroup END
-
-" Add highlighting for function definition in C++
-function! EnhanceCppSyntax()
-  syntax match cppFuncDef "::\~\?\zs\h\w*\ze([^)]*\()\s*\(const\)\?\)\?$"
-  hi def link cppFuncDef Special
-endfunction
-autocmd Syntax cpp call EnhanceCppSyntax()
 
 " Always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside
