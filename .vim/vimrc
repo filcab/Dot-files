@@ -1,3 +1,7 @@
+" Windows hack for git-for-windows' vim to know about system python
+set pythonthreedll=C:/Program\ Files/Python37/python37.dll
+
+
 """"""""""""" Start of FilCab's stuff
 " Setup up pathogen and only turn on filetype stuff afterwards
 filetype off
@@ -36,7 +40,7 @@ endif
 
 " Use <C-L> to clear the highlighting of :set hlsearch.
 if maparg('<C-L>', 'n') ==# ''
-  nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+  noremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
 
 " Always show the status bar
@@ -67,7 +71,7 @@ endif
 
 set formatoptions+=j " Delete comment character when joining commented lines
 
-" huh?
+" FIXME: huh?
 if has('path_extra')
   setglobal tags-=./tags tags-=./tags; tags^=./tags;
 endif
@@ -86,6 +90,7 @@ if !empty(&viminfo)
 endif
 set sessionoptions-=options
 
+" FIXME: Probably should remove this
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
@@ -100,6 +105,9 @@ inoremap <C-U> <C-G>u<C-U>
 
 " LSP setup is not ready yet (needs to come before mappings)
 let g:disable_youcompleteme = 0
+
+" Map <LocalLeader> to , by default (was '\', same as <Leader>)
+let maplocalleader=','
 
 source $HOME/.vim/utilities.vim
 
@@ -118,14 +126,18 @@ let g:filcab_cquery_dirs_to_search = ['~/dev/cquery/build']
 
 " Try finding ripgrep to use with vim's grep functionality and ack plugin
 if executable('rg')
-  " Assume ripgrep is in cargo directory, and that's in PATH
+  " Assume ripgrep is in cargo directory (if available), and that's in PATH
   let g:ackprg = "rg --vimgrep --smart-case"
   let &grepprg = "rg --vimgrep --smart-case"
 else
-  " Tell vim where to find ack as a fallback
-  let g:filcab_homebrew_dirs_to_search = ['~/dev/brew/bin', '~/dev/homebrew/bin']
-  let g:ackprg = FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocolor --nogroup --column --smart-case'
-  let &grepprg = FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocolor --nogroup --column --smart-case'
+  " Try ack if rg is not available
+  if executable('ack')
+    let g:ackprg = 'ack -H --nocolor --nogroup --column --smart-case'
+  else
+    let g:filcab_homebrew_dirs_to_search = ['~/dev/brew/bin', '~/dev/homebrew/bin']
+    let g:ackprg = FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocolor --nogroup --column --smart-case'
+  endif
+  let &grepprg = g:ackprg
 endif
 
 " Make ninja the default makeprg and make clang the default compiler (for errorformat)
@@ -156,8 +168,7 @@ endif
 "Auto-reload vimrc
 autocmd! BufWritePost vimrc source ~/.vim/vimrc
 
-
-" Allow some commands with the first letter(s) capitalized
+" Allow some common commands with the first letter(s) capitalized
 if has('user_commands')
     command! -bang -nargs=? -complete=file E e<bang> <args>
     command! -bang -nargs=? -complete=file W w<bang> <args>
@@ -184,12 +195,10 @@ if g:disable_youcompleteme
   " switching to clangd/lsp, so let's disable ycm for the ft we have an LSP for
   let g:ycm_filetype_blacklist = {}
 
-  let g:lsp_signs_enabled = 1
-  let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-  "let g:lsp_log_verbose = 0
-  "let g:lsp_log_file = expand('~/vim-lsp.log')
+  let g:filcab_found_any_lsp = 0
 
   if executable('pyls')
+    let g:filcab_found_any_lsp = 1
     let g:ycm_filetype_blacklist['python'] = 1
     " pip install python-language-server
     autocmd User lsp_setup call lsp#register_server({
@@ -202,6 +211,7 @@ if g:disable_youcompleteme
 
   let g:cquery_path = FindProgram('cquery', g:filcab_cquery_dirs_to_search)
   if executable(g:cquery_path)
+    let g:filcab_found_any_lsp = 1
     let g:ycm_filetype_blacklist['c'] = 1
     let g:ycm_filetype_blacklist['cpp'] = 1
     let g:ycm_filetype_blacklist['objc'] = 1
@@ -215,6 +225,7 @@ if g:disable_youcompleteme
   endif
 
   if executable(g:clangd_path)
+    let g:filcab_found_any_lsp = 1
     let g:ycm_filetype_blacklist['c'] = 1
     let g:ycm_filetype_blacklist['cpp'] = 1
     let g:ycm_filetype_blacklist['objc'] = 1
@@ -225,6 +236,13 @@ if g:disable_youcompleteme
             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
             \ })
     autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
+  endif
+
+  if g:filcab_found_any_lsp
+    let g:lsp_signs_enabled = 1
+    let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+    "let g:lsp_log_verbose = 0
+    "let g:lsp_log_file = expand('~/vim-lsp.log')
   endif
 endif
 

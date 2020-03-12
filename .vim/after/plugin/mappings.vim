@@ -9,9 +9,6 @@ endif
 " Eventually this might be problematic if we keep switching filetype on the
 " same buffer. Let's only fix that if it becomes a problem.
 
-" Map <LocalLeader> to , by default (was \, same as <Leader>)
-let maplocalleader=','
-
 " Have <LocalLeader>d! do a missing :Dispatch binding
 noremap <unique> <LocalLeader>d! :Dispatch!<cr>
 " Also have one which needs no shift
