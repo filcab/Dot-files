@@ -48,7 +48,6 @@ augroup filcab_mappings
   " Filetypes supported by my usual YCM installs:
   " C family, Python, Rust, JS
   autocmd Filetype c,objc,cpp,objcpp call FilCabYCMAndLSPMappings()
-  autocmd BufWritePre *.h,*.c,*.cc,*.cpp call FilcabClangFormatOnSave()
   autocmd Filetype python,rust,javascript call FilCabYCMAndLSPMappings()
 augroup END
 
