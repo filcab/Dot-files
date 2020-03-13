@@ -4,7 +4,6 @@ endif
 let b:did_filcab_python = 1
 
 " black's default text width is 88
-echomsg 'Running filcab python stuff'
 setlocal textwidth=88
 
 " Set python mode to python3 if available
