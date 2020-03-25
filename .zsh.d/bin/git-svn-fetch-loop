@@ -155,21 +155,20 @@ def fetch_revisions():
 
     print('[*] Filling in revisions from git-HEAD (r{}) to svn-HEAD (r{})'.format(head_rev, svn_top_rev))
 
-    def fetch_revision_batches(start, end):
-        time_start = timeit.default_timer()
+    start = head_rev
+    end = svn_top_rev
+    while start != 'HEAD' and start < end:
         if start + BATCH_REVS >= end:
-            end = 'HEAD'
-            print('[*] Fetching a batch: r{}:{}'.format(start, end))
-            git_svn_fetch_revs(start, end)
+            batch_end = 'HEAD'
         else:
-            batch_top = min(start + BATCH_REVS, end)
-            print('[*] Fetching a batch: r{}:{}'.format(start, batch_top))
-            git_svn_fetch_revs(start, batch_top)
-            elapsed = timeit.default_timer() - time_start
-            print('[*] Time elapsed: {}s'.format(elapsed))
-            # Loop until finished
-            fetch_revision_batches(start + BATCH_REVS, end)
-    fetch_revision_batches(head_rev, svn_top_rev)
+            batch_end = min(start + BATCH_REVS, end)
+        print('[*] Fetching a batch: r{}:{}'.format(start, batch_end))
+        time_start = timeit.default_timer()
+        git_svn_fetch_revs(start, batch_end)
+        elapsed = timeit.default_timer() - time_start
+        print('[*] Time elapsed: {}s'.format(elapsed))
+        start = batch_end
+
 
 
 last_one_failed = True
