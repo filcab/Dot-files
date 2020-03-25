@@ -70,7 +70,8 @@ def check_call_and_hide_lines(cmd, hide_re):
     return ret
 
 
-# Problem: This mixes up stdout and stderr. I don't think we have a problem with that for any of our check_output calls
+# Problem: This mixes up stdout and stderr. I don't think we have a problem with that
+# for any of our check_output calls
 def check_output_and_hide_lines(cmd, hide_re):
     regexp = re.compile(hide_re)
 
@@ -162,7 +163,7 @@ def fetch_revisions():
                 svn_cmd.append("-r{}:{}".format(start, end))
                 git_svn(*svn_cmd)
                 break
-            except:
+            except Exception:
                 retries += 1
                 if retries == BATCH_RETRIES:
                     # t, v, tb = sys.exc_info()
@@ -231,7 +232,8 @@ if last_one_failed:
 
 is_bare = git_output("config", "core.bare")
 if is_bare:
-    # On a bare repo, update the master ref to trunk (other refs haven't been created. We'll eventually want a loop over tracked branches)
+    # On a bare repo, update the master ref to trunk (other refs haven't been created.
+    # We'll eventually want a loop over tracked branches)
     update_cmd = [
         "update-ref",
         "-m",
