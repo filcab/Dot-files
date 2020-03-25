@@ -9,7 +9,8 @@ import subprocess
 import timeit
 
 
-# This can be useful when initially downloading a repo with some huge revisions which might timeout more than once
+# This can be useful when initially downloading a repo with some huge revisions which
+# might timeout more than once
 RETRIES = 1
 # Number of retries for each batch
 BATCH_RETRIES = 3
@@ -51,13 +52,11 @@ def check_call_and_hide_lines(cmd, hide_re):
 
     def xform(line):
         if regexp.match(line):
-            return "{}{}{}\r".format(
-                CLEAR_TO_END_OF_LINE,
-                datetime.datetime.now().isoformat(" ")[:16],
-                line.rstrip("\r\n"),
-            )
+            line = line.rstrip("\r\n")
+            date = datetime.datetime.now().isoformat(" ")[:16]
+            return f"{CLEAR_TO_END_OF_LINE}{date}{line}\r"
         else:
-            return "{}{}".format(CLEAR_TO_END_OF_LINE, line)
+            return f"{CLEAR_TO_END_OF_LINE}{line}"
 
     p = subprocess.Popen(
         cmd, encoding="utf-8", stdout=subprocess.PIPE, stderr=subprocess.STDOUT
@@ -100,14 +99,16 @@ hide_re_for_stdout_err = r"^(W: .empty_dir|\s+[MAD]).*"
 
 def git(*args, **kwargs):
     if VERBOSE:
-        print("git({})".format(", ".join(args)))
+        cmd_str = ", ".join(args)
+        print(f"git({cmd_str})")
     cmd = ["git"] + list(args)
     check_call_and_hide_lines(cmd, hide_re_for_stdout_err)
 
 
 def git_output(*args, **kwargs):
     if VERBOSE:
-        print("git_output({})".format(", ".join(args)))
+        cmd_str = ", ".join(args)
+        print(f"git_output({cmd_str})")
     # Always rstrip() to remove the last newline. Change if needed
     cmd = ["git"] + list(args)
     return check_output_and_hide_lines(cmd, hide_re_for_stdout_err).rstrip()
@@ -125,7 +126,8 @@ def svn(*args, **kwargs):
     # FIXME: Use what git uses
     (stdout, stderr) = (sys.stdout, sys.stderr)
     if VERBOSE:
-        print("svn({})".format(", ".join(args)))
+        cmd_str = ", ".join(args)
+        print(f"svn({cmd_str})")
     subprocess.check_call(
         ["svn"] + list(args), encoding="utf-8", stdout=stdout, stderr=stderr
     )
@@ -133,7 +135,8 @@ def svn(*args, **kwargs):
 
 def svn_output(*args, **kwargs):
     if VERBOSE:
-        print("svn_output({})".format(", ".join(args)))
+        cmd_str = ", ".join(args)
+        print(f"svn_output({cmd_str})")
     # Always rstrip() to remove the last newline. Change if needed
     cmd = ["svn"] + list(args)
     return check_output_and_hide_lines(cmd, hide_re_for_stdout_err).rstrip()
@@ -144,9 +147,9 @@ def svn_revision_for(name):
 
 
 svn_repo = git_output("config", "svn-remote.svn.url")
-print("[*] SVN repo: {}".format(svn_repo))
+print(f"[*] SVN repo: {svn_repo}")
 branch_name = git_output("rev-parse", "--abbrev-ref", "HEAD")
-print("[*] Current git branch: {}".format(branch_name))
+print(f"[*] Current git branch: {branch_name}")
 assert " " not in branch_name
 
 
@@ -160,7 +163,7 @@ def fetch_revisions():
                 svn_cmd = ["fetch"]
                 if QUIET:
                     svn_cmd.append("-q")
-                svn_cmd.append("-r{}:{}".format(start, end))
+                svn_cmd.append(f"-r{start}:{end}")
                 git_svn(*svn_cmd)
                 break
             except Exception:
@@ -171,7 +174,8 @@ def fetch_revisions():
                     raise
             if retries == 1 and quiet:
                 print(
-                    "[W] Hit an exception fetching. Turning off quiet mode for this batch!"
+                    "[W] Got an exception fetching."
+                    "Turning off quiet mode for this batch!"
                 )
                 quiet = False
 
@@ -187,9 +191,8 @@ def fetch_revisions():
         return True
 
     print(
-        "[*] Filling in revisions from git-HEAD (r{}) to svn-HEAD (r{})".format(
-            head_rev, svn_top_rev
-        )
+        f"[*] Filling in revisions from git-HEAD (r{head_rev}) "
+        f"to svn-HEAD (r{svn_top_rev})"
     )
 
     start = head_rev
@@ -199,11 +202,11 @@ def fetch_revisions():
             batch_end = "HEAD"
         else:
             batch_end = min(start + BATCH_REVS, end)
-        print("[*] Fetching a batch: r{}:{}".format(start, batch_end))
+        print(f"[*] Fetching a batch: r{start}:{batch_end}")
         time_start = timeit.default_timer()
         git_svn_fetch_revs(start, batch_end)
         elapsed = timeit.default_timer() - time_start
-        print("[*] Time elapsed: {}s".format(elapsed))
+        print(f"[*] Time elapsed: {elapsed}s")
         start = batch_end
 
 
@@ -217,7 +220,7 @@ for retry in range(0, RETRIES):
         last_one_failed = False
         break
     except subprocess.CalledProcessError as e:
-        print("[+] output: {}".format(e.output))
+        print(f"[+] output: {e.output}")
         if e.output:
             lines = e.output.splitlines()
             print("[+] last lines:")
@@ -238,7 +241,7 @@ if is_bare:
         "update-ref",
         "-m",
         "git-svn-update",
-        "refs/heads/{}".format(branch_name),
+        f"refs/heads/{branch_name}",
         "origin/trunk",
     ]
 else:
@@ -248,7 +251,7 @@ else:
 if UPDATE_REFS:
     if not os.path.isdir("refs/remotes"):
         print(
-            "[W] Not updating, as I don't know what to do and I think I don't need to update"
+            "[W] Not updating: don't know what to do and I think I don't need to update"
         )
         sys.exit(0)
     if not START_REV:
@@ -261,22 +264,17 @@ if UPDATE_REFS:
     new_head_rev = int(svn_revision_for("HEAD"))
     additional_msg = ""
     if head_rev == new_head_rev:
-        print(
-            "Not updated, still at r{} (There are no new revisions which touch the files in this tree)".format(
-                head_rev
-            )
-        )
+        print(f"Not updated: r{head_rev} (no new revisions for files in this tree)")
     else:
-        print("Updated from r{} to r{}".format(head_rev, new_head_rev))
+        print(f"Updated from r{head_rev} to r{new_head_rev}")
     print("[*] All done. Hopefully it's ok.")
 else:
     if not os.path.isdir("refs/remotes"):
         print("[*] All done! No refs/remotes so I think that's it.")
         sys.exit(0)
-    update_cmd_str = "git {}".format(" ".join(update_cmd))
+    update_cmd_str = " ".join(update_cmd)
     print(
-        "[*] All done. Hopefully it's ok. Please remember to run `{}` (hopefully that's right) to make sure you're up to date".format(
-            update_cmd_str
-        )
+        "[*] All done. Hopefully it's ok. Please remember to run "
+        f"`git {update_cmd_str}` to make sure you're up to date"
     )
     sys.exit(0)
