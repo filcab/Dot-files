@@ -166,6 +166,9 @@ sub handle_git_submodules ($){
   open GIT, "git -C '$dir' submodule update --init --recursive |";
   print while (<GIT>);
   close GIT;
+  open GIT, "git -C '$dir' submodule sync --recursive |";
+  print while (<GIT>);
+  close GIT;
 }
 
 sub git ($$$$) {
@@ -182,10 +185,9 @@ sub git ($$$$) {
     }
 
     # Doesn't exist yet, clone repo
-    open GIT, "git clone $git_url $dir |";
+    open GIT, "git clone --recurse-submodules $git_url $dir |";
     print while (<GIT>);
     close GIT;
-    handle_git_submodules $dir;
 }
 
 print "\n";
