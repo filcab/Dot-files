@@ -79,6 +79,9 @@ export LESS_TERMCAP_ue=$'\E[0m'
 
 ### Load ssh-agent settings or start it and export its settings
 function maybe_start_ssh_agent {
+  # Bail out if we're using ssh-agent forwarding
+  [ ! -z ${SSH_CONNECTION} ] && return
+
   local env=~/.ssh/agent.env
 
   agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
