@@ -2,6 +2,17 @@ if exists('g:loaded_mappings')
   finish
 endif
 
+" Use <C-L> to clear the highlighting of :set hlsearch.
+if maparg('<C-L>', 'n') ==# ''
+  noremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
+
+" From TPope's sensible.vim
+" When doing "delete to beginning of line" in insert mode, "break" undo first
+" so we can easily recover from mistakes.
+inoremap <C-U> <C-G>u<C-U>
+
+""" Filcab
 " All mappings should be unique so we know we're not clashing with built-in or
 " other plugin mappings. This requires a workaround for autocmd, which is to
 " go through a function to setup the mappings, and bailing out if they're
