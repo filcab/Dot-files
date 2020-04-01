@@ -1,5 +1,6 @@
 backups/*
-bundle/*
+pack/filcab/opt/*
+pack/filcab/start/*
 swapfiles/*
 
 # Don't commit local autoset rules (non-shared amongst various computers)

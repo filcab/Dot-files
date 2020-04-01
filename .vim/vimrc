@@ -3,12 +3,6 @@ set pythonthreedll=C:/Program\ Files/Python37/python37.dll
 
 
 """"""""""""" Start of FilCab's stuff
-" Setup up pathogen and only turn on filetype stuff afterwards
-filetype off
-
-call pathogen#infect()
-call pathogen#helptags()
-
 " reset to vim-defaults
 if &compatible          " only if not set before:
   set nocompatible      " use vim-defaults instead of vi-defaults (easier, more user friendly)

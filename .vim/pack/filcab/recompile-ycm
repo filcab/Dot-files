@@ -14,8 +14,8 @@ if platform.system() == 'Windows' and 'VisualStudioVersion' not in os.environ:
 
 
 # We might be called on the bundle directory or on the YCM directory
-if os.path.isdir('YouCompleteMe'):
-    os.chdir('YouCompleteMe')
+if os.path.isdir('opt/YouCompleteMe'):
+    os.chdir('opt/YouCompleteMe')
 
 
 def maketrans(*args):
