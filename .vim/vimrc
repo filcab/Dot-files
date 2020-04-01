@@ -36,27 +36,21 @@ endif
 set laststatus=2
 set ruler               " show cursor position in status bar
 
-if !&scrolloff
-  set scrolloff=2         " 2 lines above/below cursor when scrolling
-endif
-if !&sidescrolloff
-  set sidescrolloff=5
-endif
+set scrolloff=2         " 2 lines above/below cursor when scrolling
+set sidescrolloff=5
 set display+=lastline
 
 scriptencoding utf-8  " filcab: In sensible, this is conditional
 set encoding=utf-8    " filcab: Not in sensible
 
-if &listchars ==# 'eol:$'
-  "filcab: sensible.vim version:
-  " set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
-  "
-  " From silvas' vimrc:
-  " Use Knuth-y underspace for trailing space
-  " I once had a problem with › where it would show up wrong. Use ` instead
-  " (I've actually come to prefer it, since it is smaller).
-  set listchars=tab:`\ ,trail:␣"⎕",eol:◺
-endif
+"filcab: sensible.vim version:
+" set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+"
+" From silvas' vimrc:
+" Use Knuth-y underspace for trailing space
+" I once had a problem with › where it would show up wrong. Use ` instead
+" (I've actually come to prefer it, since it is smaller).
+set listchars=tab:`\ ,trail:⎕ ",eol:$
 
 set formatoptions+=j " Delete comment character when joining commented lines
 
@@ -68,15 +62,10 @@ endif
 " Automatically reload changed files
 set autoread
 
-if &history < 1000
-  set history=1000
-endif
-if &tabpagemax < 50
-  set tabpagemax=50
-endif
-if !empty(&viminfo)
-  set viminfo^=!
-endif
+set history=1000
+set tabpagemax=50
+" Don't save as much info nor options
+set viminfo^=!
 set sessionoptions-=options
 
 " FIXME: Probably should remove this
@@ -154,17 +143,15 @@ endif
 autocmd! BufWritePost vimrc source ~/.vim/vimrc
 
 " Allow some common commands with the first letter(s) capitalized
-if has('user_commands')
-    command! -bang -nargs=? -complete=file E e<bang> <args>
-    command! -bang -nargs=? -complete=file W w<bang> <args>
-    command! -bang -nargs=? -complete=file Wq wq<bang> <args>
-    command! -bang -nargs=? -complete=file WQ wq<bang> <args>
-    command! -bang Wa wa<bang>
-    command! -bang WA wa<bang>
-    command! -bang Q q<bang>
-    command! -bang QA qa<bang>
-    command! -bang Qa qa<bang>
-endif
+command! -bang -nargs=? -complete=file E e<bang> <args>
+command! -bang -nargs=? -complete=file W w<bang> <args>
+command! -bang -nargs=? -complete=file Wq wq<bang> <args>
+command! -bang -nargs=? -complete=file WQ wq<bang> <args>
+command! -bang Wa wa<bang>
+command! -bang WA wa<bang>
+command! -bang Q q<bang>
+command! -bang QA qa<bang>
+command! -bang Qa qa<bang>
 
 " Per FreeBSD's security advice
 set nomodeline
