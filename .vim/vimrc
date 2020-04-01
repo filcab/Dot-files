@@ -252,9 +252,6 @@ autocmd BufNewFile,BufRead *.inc,*.def setlocal ft=cpp
 """"""""""""" End of FilCab's stuff
 
 " display settings
-" FILCAB: Turn off textwidth in general. It's getting to be annoying.
-"set textwidth=74
-"set wrapmargin=4        " When wrapping, set up a margin
 set nonumber            " do not show line numbers
 set showmatch           " show matching bracket (briefly jump)
 set showmode            " show mode in status bar (insert/replace/...)
