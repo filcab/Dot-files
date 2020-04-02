@@ -5,4 +5,10 @@ endif
 let b:did_filcab_c_ftplugin = 1
 
 " Setup clang-format on save functionality only in C/C++ files
-autocmd BufWritePre <buffer> call filcab#ClangFormat()
+autocmd BufWritePre <buffer>
+  \ if get(b:, 'clang_format_on_save', g:clang_format_on_save) |
+  \   call filcab#c#ClangFormat() |
+  \ endif
+
+" Tell ycm about clangd:
+let g:ycm_clangd_binary_path = filcab#c#clangd_path

@@ -2,40 +2,6 @@ if exists('g:loaded_utilities')
   finish
 endif
 
-" clang-format changed lines on save
-let g:clang_format_on_save = 1  " Will query buffer-local variable of the same name first
-" Have an escape hatch for fugitive buffers (usually a git diff), for now
-let g:clang_format_fugitive = 1
-
-" clang-check functions
-function! ClangCheckImpl(cmd)
-  " filcab: Original wrote all modified buffers (wall), but let's just write
-  " the current one.
-  if &autowrite | w | endif
-  echo "Running " . a:cmd . " ..."
-  let l:output = system(a:cmd)
-  cexpr l:output
-  cwindow
-  let w:quickfix_title = a:cmd
-  if v:shell_error != 0
-    cc
-  else
-    redraw  " Force a redraw so we see the next message (hint from help :echo)
-    echo 'clang-check found no problems'
-  endif
-  let s:clang_check_last_cmd = a:cmd
-endfunction
-function! ClangCheck()
-  let l:filename = expand('%')
-  if l:filename =~ '\.\(cpp\|cxx\|cc\|c\)$'
-    call ClangCheckImpl(shellescape(g:clang_check_path) . " " . l:filename)
-  elseif exists("s:clang_check_last_cmd")
-    call ClangCheckImpl(s:clang_check_last_cmd)
-  else
-    echo "Can't detect file's compilation arguments and no previous clang-check invocation!"
-  endif
-endfunction
-
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 " Highlight all instances of word under cursor, when idle.
 " Useful when studying strange source code.
@@ -86,7 +52,7 @@ function FilCabClangToolMappings(...)
     return
   endif
 
-  nnoremap <buffer><silent><unique> <F5> :call ClangCheck()<CR><CR>
+  nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
 endfunction
 
 function FilCabRustToolMappings(...)
