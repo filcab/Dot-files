@@ -14,12 +14,18 @@ export PATH="$HOME/.zsh.d/bin:$PATH"
 # git
 export PATH="/usr/local/gitprefix/bin:$PATH"
 
-# macOS Python user-installed files
-export PATH="$PATH:$HOME/Library/Python/3.7/bin:$HOME/Library/Python/2.7/bin"
+# Python user-installed files
+case $(uname -s) in
+  Darwin)
+    export PATH="$PATH:$HOME/Library/Python/3.7/bin:$HOME/Library/Python/2.7/bin"
+    ;;
+  Linux)
+    export PATH="$PATH:$HOME/.local/bin"
+    ;;
+esac
 
 # MacTeX
 export PATH="/usr/texbin/bin/x86_64-darwin:$PATH"
-
 
 # Miscelaneous programs
 export PATH="$PATH:$HOME/zsh.d/bin"
