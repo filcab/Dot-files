@@ -86,7 +86,6 @@ function maybe_start_ssh_agent {
   # Bail out if we're using ssh-agent forwarding
   if [ ! -z "${SSH_CONNECTION}" ] && [ -S "${SSH_AUTH_SOCK}" ]; then
       echo detected SSH_AUTH_SOCK from forwarded agent
-      ssh-add
       return
   fi
 
