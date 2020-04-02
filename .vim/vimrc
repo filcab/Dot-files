@@ -339,8 +339,6 @@ augroup filetype
   au! BufRead,BufNewFile *.ll     set iskeyword+=@ iskeyword+=%
   " SWIG
   au! BufRead,BufNewFile *.swig   set filetype=swig
-  " Javascript proxy stuff. Use "default" names only
-  au! BufRead,BufNewFile proxy.pac,wpad.dat set filetype=javascript
 augroup END
 
 " Always jump to the last known cursor position.
