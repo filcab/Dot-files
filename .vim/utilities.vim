@@ -51,7 +51,6 @@ function! s:FilCabClangFormatOnSave()
     endif
   endif
 endfunction
-autocmd BufWritePre *.h,*.c,*.cc,*.cpp call s:FilCabClangFormatOnSave()
 
 " clang-check functions
 function! ClangCheckImpl(cmd)
