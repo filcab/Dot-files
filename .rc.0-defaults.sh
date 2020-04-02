@@ -80,15 +80,21 @@ export LESS_TERMCAP_ue=$'\E[0m'
 ### Load ssh-agent settings or start it and export its settings
 function maybe_start_ssh_agent {
   # Bail out if we're using ssh-agent forwarding
-  [ ! -z ${SSH_CONNECTION} ] && return
+  if [ ! -z "${SSH_CONNECTION}" ] && [ -S "${SSH_AUTH_SOCK}" ]; then
+      echo detected SSH_AUTH_SOCK from forwarded agent
+      ssh-add
+      return
+  fi
 
-  local env=~/.ssh/agent.env
+  local env="$HOME/.ssh/agent.env.$(uname -s)"
 
   agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
 
   agent_start () {
+      echo Starting a new ssh-agent
       (umask 077; ssh-agent >| "$env")
-      . "$env" >| /dev/null ; }
+      source "$env" >| /dev/null ;
+  }
 
   agent_load_env
 
@@ -97,22 +103,10 @@ function maybe_start_ssh_agent {
 
   if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
       agent_start
-      case $(uname -s) in
-        Linux)
-          ;;
-        *)
-          ssh-add -A
-          ;;
-      esac
-      ssh-add
-  elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-      case $(uname -s) in
-        Linux)
-          ;;
-        *)
-          ssh-add -A
-          ;;
-      esac
+  fi
+
+  if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ] || [ $agent_run_state = 1 ]; then
+      [ "$(uname -s)" = "Darwin" ] && ssh-add -A
       ssh-add
   fi
 }
