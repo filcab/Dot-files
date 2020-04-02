@@ -87,14 +87,14 @@ source $HOME/.vim/utilities.vim
 
 """"""""""""" Find programs used by plugins
 let g:filcab_llvm_dirs_to_search = ['~/dev/llvm/install/bin', '~/dev/llvm/build/bin', '~/dev/cquery/build', '~/dev/cquery/build/release/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
-let g:clang_check_path = FindProgram('clang-check', g:filcab_llvm_dirs_to_search)
-let g:clang_format_path = FindProgram('clang-format', g:filcab_llvm_dirs_to_search)
+let g:clang_check_path = filcab#FindProgram('clang-check', g:filcab_llvm_dirs_to_search)
+let g:clang_format_path = filcab#FindProgram('clang-format', g:filcab_llvm_dirs_to_search)
 if !executable(g:clang_format_path)
   " The clang-format.py script we use doesn't validate and spews stuff to
   " stderr. Just unset the variable if we didn't find the program.
   unlet g:clang_format_path
 endif
-let g:clangd_path = FindProgram('clangd', g:filcab_llvm_dirs_to_search)
+let g:clangd_path = filcab#FindProgram('clangd', g:filcab_llvm_dirs_to_search)
 
 let g:filcab_cquery_dirs_to_search = ['~/dev/cquery/build']
 
@@ -109,7 +109,7 @@ else
     let g:ackprg = 'ack -H --nocolor --nogroup --column --smart-case'
   else
     let g:filcab_homebrew_dirs_to_search = ['~/dev/brew/bin', '~/dev/homebrew/bin']
-    let g:ackprg = FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocolor --nogroup --column --smart-case'
+    let g:ackprg = filcab#FindProgram('ack', g:filcab_homebrew_dirs_to_search) . ' -H --nocolor --nogroup --column --smart-case'
   endif
   let &grepprg = g:ackprg
 endif
@@ -181,7 +181,7 @@ if g:disable_youcompleteme
     autocmd FileType python setlocal omnifunc=lsp#complete
   endif
 
-  let g:cquery_path = FindProgram('cquery', g:filcab_cquery_dirs_to_search)
+  let g:cquery_path = filcab#FindProgram('cquery', g:filcab_cquery_dirs_to_search)
   if executable(g:cquery_path)
     let g:filcab_found_any_lsp = 1
     let g:ycm_filetype_blacklist['c'] = 1

@@ -83,3 +83,23 @@ function filcab#CTRL_X_Help()
   echo "not a valid CTRL-X mode command.  Valid keys are the CTRL-X command itself,"
   echo "CTRL-N (next), and CTRL-P (previous)."
 endfunction
+
+" Find programs given search paths
+let s:exe_suffix = has('win32') ? '.exe' : ''
+function filcab#FindProgram(prog_name, dirs)
+  " Search $PATH first (might want to do this at the end, occasionally)
+  if executable(a:prog_name) == 1
+    return a:prog_name
+  endif
+
+  for dir in a:dirs
+    let l:maybe_prog = expand(dir . '/' . a:prog_name . s:exe_suffix)
+    if executable(l:maybe_prog) == 1
+      return l:maybe_prog
+    endif
+  endfor
+
+  " Signal we didn't find anything, which might trigger a search for a
+  " different program name
+  return ''
+endfunction
