@@ -84,6 +84,32 @@ function filcab#CTRL_X_Help()
   echo "CTRL-N (next), and CTRL-P (previous)."
 endfunction
 
+function filcab#ClangFormat()
+  if get(b:, 'clang_format_on_save', g:clang_format_on_save)
+    if !has('python') && !has('python3')
+      echo 'Could not clang-format. Python not available.'
+      return
+    endif
+
+    let path = expand('%')
+    if !filereadable(path)
+      echom 'Not running clang-format: File is not readable: ' . path
+      return
+    elseif path =~# '^fugitive://' && !g:clang_format_fugitive
+      echo 'Skipping clang-format: File is a fugitive:// file (use g:clang_format_fugitive to change this)'
+      return
+    else
+      echom 'Running clang-format!'
+      let l:formatdiff = 1
+      if has('python')
+        pyf ~/.vim/clang-format.py
+      elseif has('python3')
+        py3f ~/.vim/clang-format.py
+      endif
+    endif
+  endif
+endfunction
+
 " Find programs given search paths
 let s:exe_suffix = has('win32') ? '.exe' : ''
 function filcab#FindProgram(prog_name, dirs)

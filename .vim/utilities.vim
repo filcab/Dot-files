@@ -6,31 +6,6 @@ endif
 let g:clang_format_on_save = 1  " Will query buffer-local variable of the same name first
 " Have an escape hatch for fugitive buffers (usually a git diff), for now
 let g:clang_format_fugitive = 1
-function! s:FilCabClangFormatOnSave()
-  if get(b:, 'clang_format_on_save', g:clang_format_on_save)
-    if !has('python') && !has('python3')
-      echo 'Could not clang-format. Python not available.'
-      return
-    endif
-
-    let path = expand('%')
-    if !filereadable(path)
-      echom 'Not running clang-format: File is not readable: ' . path
-      return
-    elseif path =~# '^fugitive://' && !g:clang_format_fugitive
-      echo 'Skipping clang-format: File is a fugitive:// file (use g:clang_format_fugitive to change this)'
-      return
-    else
-      echom 'Running clang-format!'
-      let l:formatdiff = 1
-      if has('python')
-        pyf ~/.vim/clang-format.py
-      elseif has('python3')
-        py3f ~/.vim/clang-format.py
-      endif
-    endif
-  endif
-endfunction
 
 " clang-check functions
 function! ClangCheckImpl(cmd)
