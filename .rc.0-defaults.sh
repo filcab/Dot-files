@@ -10,11 +10,6 @@ if [ -z "$EDITOR" ] && hash vim &> /dev/null; then
   export EDITOR=vim
 fi
 
-## old EDITOR
-# Use emacsclient as an EDITOR. Spawn a new emacs --daemon if it isn't running
-#export EDITOR="emacsclient -t"
-#export ALTERNATE_EDITOR=""
-
 case $(uname -s) in
   Darwin)
     alias ls='ls -FG'
