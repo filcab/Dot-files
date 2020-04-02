@@ -236,12 +236,6 @@ let &statusline = '%{fugitive#statusline()} ' . &statusline
 " Showing invisible characters {{{
 set list
 
-" Some nice default for *.h files in llvm
-autocmd BufNewFile,BufRead **/*llvm*/**/*.h setlocal ft=cpp.doxygen
-" clang uses these for defining node types, so it will be cpp for now
-" (along with .def)
-autocmd BufNewFile,BufRead *.inc,*.def setlocal ft=cpp
-
 """"""""""""" End of FilCab's stuff
 
 " display settings
@@ -325,15 +319,6 @@ endif
 " For debugging
 "set verbose=9
 
-augroup filetype
-  " LLVM stuff
-  " sO:" -,mO:"  ,eO:"",:"
-  "au! BufRead,BufNewFile *.ll     set filetype=llvm iskeyword+=% comments=s0:\ -,m0:;,e0:;;,:;
-  au! BufRead,BufNewFile *.ll     set iskeyword+=@ iskeyword+=%
-  " SWIG
-  au! BufRead,BufNewFile *.swig   set filetype=swig
-augroup END
-
 " Always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside
 " an event handler (happens when dropping a file on gvim).
@@ -341,7 +326,6 @@ autocmd BufReadPost *
   \ if line("'\"") > 0 && line("'\"") <= line("$") |
   \   exe "normal g`\"" |
   \ endif
-
 
 " silvas:
 " experimental. note that \%# is used to match the cursor position, so that
