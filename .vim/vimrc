@@ -26,12 +26,6 @@ set smarttab
 
 "set nrformats-=octal  "filcab: haven't yet had problems with this
 
-" filcab: Set some default. I don't care much
-if !has('nvim') && &ttimeoutlen == -1
-  set ttimeout
-  set ttimeoutlen=100
-endif
-
 " Always show the status bar
 set laststatus=2
 set ruler               " show cursor position in status bar
