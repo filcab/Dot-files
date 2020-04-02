@@ -32,9 +32,9 @@ noremap <unique> <LocalLeader>? :map <LocalLeader><cr>
 noremap <unique> <Leader>? :map <Leader><cr>
 nnoremap <unique> [? :map [<cr>
 nnoremap <unique> ]? :map ]<cr>
-nnoremap <unique> <C-w>? :call CTRL_W_Help()<cr>
-inoremap <unique> <C-w>? <C-o>:call CTRL_W_Help()<cr>
-inoremap <unique> <C-x>? <C-o>:call CTRL_X_Help()<cr>
+nnoremap <unique> <C-w>? :call filcab#CTRL_W_Help()<cr>
+inoremap <unique> <C-w>? <C-o>:call filcab#CTRL_W_Help()<cr>
+inoremap <unique> <C-x>? <C-o>:call filcab#CTRL_X_Help()<cr>
 " FIXME: Add one for netrw
 " FIXME: Maybe fugitive buffers?
 
