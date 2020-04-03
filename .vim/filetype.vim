@@ -13,3 +13,7 @@ autocmd BufRead,BufNewFile proxy.pac,wpad.dat set filetype=javascript
 
 " SWIG to generate cross-language bindings
 autocmd BufRead,BufNewFile *.swig   set filetype=swig
+
+" Not technically filetype, but import vim-afterimage if we're editing one of
+" the supported files
+autocmd BufReadPre,FileReadPre    *.png,*.gif,*.bmp,*.ico,*.pdf,*.doc,*.plist  packadd vim-afterimage
