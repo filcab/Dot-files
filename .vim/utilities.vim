@@ -75,15 +75,16 @@ endfunction
 
 " TODO: Refactor this to just call a dictionary's values. Then set them to
 " whatever. The keybindings should just get a function from there and call it.
-if !g:disable_youcompleteme
-  let g:ycm_add_preview_to_completeopt = 1
+function FilCabYCMAndLSPMappings()
+  " bail out if the mappings have already been setup on this buffer
+  if exists('b:filcab_setup_ycm_and_lsp_mappings')
+    return
+  endif
+
   " This should be independent of language, but let's start with the C family only
   " Later maybe have a function/macro/whatever to setup for the different file types
-  function FilCabYCMAndLSPMappings()
-    " bail out if the mappings have already been setup on this buffer
-    if exists('b:filcab_setup_ycm_and_lsp_mappings')
-      return
-    endif
+  if !g:disable_youcompleteme
+    let g:ycm_add_preview_to_completeopt = 1
     " General (refresh)
     nnoremap <buffer><unique> <LocalLeader><F5> :YcmForceCompileAndDiagnostics<cr>
 
@@ -130,17 +131,7 @@ if !g:disable_youcompleteme
     """""""" Miscellaneous
     nnoremap <buffer><unique> <LocalLeader>w :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
     nnoremap <buffer><unique> <LocalLeader>W :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
-    let b:filcab_setup_ycm_and_lsp_mappings=1
-  endfunction
-
-else
-  " Really need to refactor this
-  function FilCabYCMAndLSPMappings()
-    " bail out if the mappings have already been setup on this buffer
-    if exists('b:filcab_setup_ycm_and_lsp_mappings')
-      return
-    endif
-
+  else
     " General (refresh)
     nnoremap <buffer><unique> <LocalLeader><F5> :LspDocumentDiagnostics<cr>
 
@@ -188,8 +179,8 @@ else
     """""""" Miscellaneous
     nnoremap <buffer><unique> <LocalLeader>w :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
     nnoremap <buffer><unique> <LocalLeader>W :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
-    let b:filcab_setup_ycm_and_lsp_mappings=1
-  endfunction
-endif
+  endif
+  let b:filcab_setup_ycm_and_lsp_mappings=1
+endfunction
 
 let g:loaded_utilities = 1
