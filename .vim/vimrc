@@ -84,9 +84,9 @@ let g:clang_format_fugitive = 1
 
 source $HOME/.vim/utilities.vim
 
-""""""""""""" Dirs to search for programs used by plugins
-let filcab#clang_tools_search_paths = ['~/dev/llvm/install/bin', '~/dev/llvm/build/bin', '~/dev/cquery/build', '~/dev/cquery/build/release/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
-let filcab#binary_search_paths = ['~/dev/brew/bin', '~/dev/homebrew/bin']
+" Dirs to search for programs used by plugins
+let g:clang_tools_search_paths = ['~/dev/llvm/install/bin', '~/dev/llvm/build/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
+let g:binary_search_paths = ['~/dev/brew/bin', '~/dev/homebrew/bin']
 
 " Try finding ripgrep to use with vim's grep functionality and ack plugin
 if executable('rg')
@@ -98,7 +98,7 @@ else
   if executable('ack')
     let g:ackprg = 'ack -H --nocolor --nogroup --column --smart-case'
   else
-    let g:ackprg = filcab#FindProgram('ack', filcab#binary_search_paths) . ' -H --nocolor --nogroup --column --smart-case'
+    let g:ackprg = filcab#FindProgram('ack', g:binary_search_paths) . ' -H --nocolor --nogroup --column --smart-case'
   endif
   let &grepprg = g:ackprg
 endif

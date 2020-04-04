@@ -10,5 +10,7 @@ autocmd BufWritePre <buffer>
   \   call filcab#c#ClangFormat() |
   \ endif
 
-" Tell ycm about clangd:
-let g:ycm_clangd_binary_path = filcab#c#clangd_path
+call filcab#c#ensure_loaded()
+
+" Tell ycm about clangd (must be after we've ensured the autoload)
+let g:ycm_clangd_binary_path = g:clangd_path
