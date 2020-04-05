@@ -78,6 +78,30 @@ function filcab#c#ClangCheck()
   endif
 endfunction
 
+if g:disable_youcompleteme
+  let filcab#c#found_lsp = 1
+  " If another language plugin uses YouCompleteMe, let's blacklist this type
+  let g:ycm_filetype_blacklist['c'] = 1
+  let g:ycm_filetype_blacklist['cpp'] = 1
+  let g:ycm_filetype_blacklist['objc'] = 1
+  let g:ycm_filetype_blacklist['objcpp'] = 1
+  packadd async
+  packadd vim-lsp
+  call lsp#register_server({
+          \ 'name': 'clangd',
+          \ 'cmd': {server_info->[g:clangd_path]},
+          \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+          \ })
+  " FIXME: Move this to ftplugin
+  autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
+else
+  let filcab#c#found_lsp = 0
+endif
+
+if !filcab#c#found_lsp && !g:disable_youcompleteme
+  packadd YouCompleteMe
+endif
+
 " Pass v:true if you just want clang-format mappings
 function filcab#c#ClangToolMappings(...)
   " Bail out if the mappings have already been setup on this buffer
