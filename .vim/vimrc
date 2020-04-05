@@ -74,8 +74,6 @@ endif
 " Map <LocalLeader> to , by default (was '\', same as <Leader>)
 let maplocalleader=','
 
-source $HOME/.vim/utilities.vim
-
 " Dirs to search for programs used by plugins
 let g:clang_tools_search_paths = ['~/dev/llvm/install/bin', '~/dev/llvm/build/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
 let g:binary_search_paths = ['~/dev/brew/bin', '~/dev/homebrew/bin']
