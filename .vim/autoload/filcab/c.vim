@@ -78,28 +78,6 @@ function filcab#c#ClangCheck()
   endif
 endfunction
 
-let filcab#c#completer_flavour = 'none'
-if g:disable_youcompleteme
-  let filcab#c#completer_flavour = 'lsp'
-  " If another language plugin uses YouCompleteMe, let's blacklist this type
-  let g:ycm_filetype_blacklist['c'] = 1
-  let g:ycm_filetype_blacklist['cpp'] = 1
-  let g:ycm_filetype_blacklist['objc'] = 1
-  let g:ycm_filetype_blacklist['objcpp'] = 1
-  packadd async
-  packadd vim-lsp
-  call lsp#register_server({
-          \ 'name': 'clangd',
-          \ 'cmd': {server_info->[g:clangd_path]},
-          \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-          \ })
-  " FIXME: Move this to ftplugin
-  autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
-elseif !g:disable_youcompleteme
-  let filcab#c#completer_flavour = 'ycm'
-  packadd YouCompleteMe
-endif
-
 " Pass v:true if you just want clang-format mappings
 function filcab#c#ClangToolMappings(...)
   " Bail out if the mappings have already been setup on this buffer
@@ -129,6 +107,33 @@ function filcab#c#ClangToolMappings(...)
   nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
 endfunction
 
-" Dummy function to ensure this file is loaded
-function filcab#c#ensure_loaded()
+let filcab#rust#initted = v:false
+function filcab#rust#init() abort
+  if g:filcab#rust#initted
+    return
+  endif
+
+  let filcab#c#completer_flavour = 'none'
+  if g:disable_youcompleteme
+    let filcab#c#completer_flavour = 'lsp'
+    " If another language plugin uses YouCompleteMe, let's blacklist this type
+    let g:ycm_filetype_blacklist['c'] = 1
+    let g:ycm_filetype_blacklist['cpp'] = 1
+    let g:ycm_filetype_blacklist['objc'] = 1
+    let g:ycm_filetype_blacklist['objcpp'] = 1
+    packadd async
+    packadd vim-lsp
+    call lsp#register_server({
+            \ 'name': 'clangd',
+            \ 'cmd': {server_info->[g:clangd_path]},
+            \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+            \ })
+    " FIXME: Move this to ftplugin
+    autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
+  elseif !g:disable_youcompleteme
+    let filcab#c#completer_flavour = 'ycm'
+    packadd YouCompleteMe
+  endif
+
+  let g:filcab#rust#initted = v:true
 endfunction

@@ -1,3 +1,2 @@
-packadd python-mode
-
-call filcab#python#ensure_loaded()
+call filcab#python#init()
+call filcab#completers#setup_mappings()

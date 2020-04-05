@@ -1,6 +1,6 @@
-packadd vim-rust
-
-breakadd here
-" Call filcab#rust before setting up the mappings as that sets up the LSP/YCM
-call filcab#rust#ToolMappings()
+call filcab#rust#init()
 call filcab#completers#setup_mappings()
+
+nnoremap <buffer><unique> <LocalLeader><Tab> :RustFmt<cr>
+vnoremap <buffer><unique> <LocalLeader><Tab> :RustFmtRange<cr>
+inoremap <buffer><unique> <C-Tab><Tab> <C-o>:RustFmtRange<cr><cr>
