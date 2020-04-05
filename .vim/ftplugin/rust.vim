@@ -1,3 +1,3 @@
 packadd vim-rust
 
-call filcab#rust#ensure_loaded()
+call filcab#rust#ToolMappings()

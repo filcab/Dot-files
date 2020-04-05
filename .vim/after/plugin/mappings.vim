@@ -50,10 +50,6 @@ augroup filcab_clang_tools
   autocmd Filetype javascript call filcab#c#ClangToolMappings(v:true)
 augroup END
 
-augroup filcab_rust
-  autocmd Filetype rust call FilCabRustToolMappings()
-augroup END
-
 augroup filcab_mappings
   autocmd!
   " Filetypes supported by my usual YCM installs:

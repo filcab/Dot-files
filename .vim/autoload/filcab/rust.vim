@@ -19,6 +19,15 @@ if !filcab#rust#found_lsp && !g:disable_youcompleteme
   packadd YouCompleteMe
 endif
 
-" Dummy function to ensure this file is loaded
-function filcab#rust#ensure_loaded()
+function filcab#rust#ToolMappings(...)
+  " Bail out if the mappings have already been setup on this buffer
+  if exists('b:filcab_setup_rust_tool_mappings')
+    return
+  endif
+
+  nnoremap <buffer><unique> <LocalLeader><Tab> :RustFmt<cr>
+  vnoremap <buffer><unique> <LocalLeader><Tab> :RustFmtRange<cr>
+  inoremap <buffer><unique> <C-Tab><Tab> <C-o>:RustFmtRange<cr><cr>
+
+  let b:filcab_setup_rust_tool_mappings=1
 endfunction
