@@ -26,11 +26,6 @@ function! AutoHighlightToggle()
 endfunction
 
 """"""""""""" C family mappings
-"YouCompleteMe mappings
-function! s:ShowYCMNumberOfWarningsAndErrors()
-  echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount() . ' Warnings: ' . youcompleteme#GetWarningCount()
-endfunction
-
 " TODO: Refactor this to just call a dictionary's values. Then set them to
 " whatever. The keybindings should just get a function from there and call it.
 function FilCabYCMAndLSPMappings()
@@ -87,8 +82,8 @@ function FilCabYCMAndLSPMappings()
     nnoremap <buffer><unique> <LocalLeader>f :YcmCompleter FixIt<cr>
 
     """""""" Miscellaneous
-    nnoremap <buffer><unique> <LocalLeader>w :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
-    nnoremap <buffer><unique> <LocalLeader>W :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
+    nnoremap <buffer><unique> <LocalLeader>w :call filcab#ShowYCMNumberOfWarningsAndErrors()<cr>
+    nnoremap <buffer><unique> <LocalLeader>W :call filcab#ShowYCMNumberOfWarningsAndErrors()<cr>
   else
     " General (refresh)
     nnoremap <buffer><unique> <LocalLeader><F5> :LspDocumentDiagnostics<cr>
@@ -135,8 +130,8 @@ function FilCabYCMAndLSPMappings()
     nnoremap <buffer><unique> <LocalLeader>f :YcmCompleter FixIt<cr>
 
     """""""" Miscellaneous
-    nnoremap <buffer><unique> <LocalLeader>w :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
-    nnoremap <buffer><unique> <LocalLeader>W :call <SID>ShowYCMNumberOfWarningsAndErrors()<cr>
+    nnoremap <buffer><unique> <LocalLeader>w :call filcab#ShowYCMNumberOfWarningsAndErrors()<cr>
+    nnoremap <buffer><unique> <LocalLeader>W :call filcab#ShowYCMNumberOfWarningsAndErrors()<cr>
   endif
   let b:filcab_setup_ycm_and_lsp_mappings=1
 endfunction

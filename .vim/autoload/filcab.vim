@@ -104,3 +104,11 @@ function filcab#FindProgram(prog_name, dirs)
   " different program name
   return ''
 endfunction
+
+function filcab#ShowYCMNumberOfWarningsAndErrors()
+  if !g:disable_youcompleteme && get(g:, 'loaded_youcompleteme', v:false)
+    echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount()
+        \ . ' Warnings: ' . youcompleteme#GetWarningCount()
+  endif
+endfunction
+
