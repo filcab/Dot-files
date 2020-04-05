@@ -94,7 +94,7 @@ def find_executable_enable_completer(exe, comp):
 # with YCM's download...
 #find_executable_enable_completer('clangd', 'clangd')
 # Same for rust-completer. Just edit it to search anywhere for rls
-find_executable_enable_completer('rustc', 'rust')
+find_executable_enable_completer('rls', 'rust')
 find_executable_enable_completer('node', 'ts')
 
 
