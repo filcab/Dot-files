@@ -137,15 +137,6 @@ command! -bang Qa qa<bang>
 " Per FreeBSD's security advice
 set nomodeline
 
-" completion (CTRL+N) options
-if !exists( "g:loaded_youcompleteme" )
-  " filcab:
-  " If we set this variable and then reload vimrc, when YouCompleteMe is
-  " enabled, we end up with some weird behaviour where words which YCM tries
-  " to complete will get deleted whilst being written.
-  set completeopt+=longest
-endif
-
 " vim is the default editor for vim's subshells
 let $EDITOR = "vim"
 
@@ -239,11 +230,6 @@ if &t_Co > 2 || has('gui_running')
     set lines=80 columns=280
   endif
 endif
-
-
-" file type specific settings
-" For debugging
-"set verbose=9
 
 " Always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside
