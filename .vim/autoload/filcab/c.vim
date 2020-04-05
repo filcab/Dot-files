@@ -78,6 +78,35 @@ function filcab#c#ClangCheck()
   endif
 endfunction
 
+" Pass v:true if you just want clang-format mappings
+function filcab#c#ClangToolMappings(...)
+  " Bail out if the mappings have already been setup on this buffer
+  if exists('b:filcab_setup_clang_tool_mappings')
+    return
+  endif
+  let b:filcab_setup_clang_tool_mappings=1
+
+  " clang-format integration
+  if has('python3')
+    nnoremap <buffer><unique> <LocalLeader><Tab> :py3f ~/.vim/clang-format.py<cr>
+    vnoremap <buffer><unique> <LocalLeader><Tab> :py3f ~/.vim/clang-format.py<cr>
+    inoremap <buffer><unique> <C-Tab><Tab> <C-o>:py3f ~/.vim/clang-format.py<cr><cr>
+  elseif has('python')
+    nnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+    vnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+    inoremap <buffer><unique> <C-Tab><Tab> <C-o>:pyf ~/.vim/clang-format.py<cr><cr>
+  else
+    echom 'Python3/Python not available, skipping clang-format mappings'
+  endif
+
+  let clang_format_only = get(a:, 0, v:false)
+  if clang_format_only
+    return
+  endif
+
+  nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
+endfunction
+
 " Dummy function to ensure this file is loaded
 function filcab#c#ensure_loaded()
 endfunction

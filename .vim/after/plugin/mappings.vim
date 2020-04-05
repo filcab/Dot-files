@@ -45,9 +45,9 @@ nnoremap <unique> z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 " defined in utilities.vim or similar
 augroup filcab_clang_tools
   autocmd!
-  autocmd Filetype c,objc,cpp,objcpp call FilCabClangToolMappings()
+  autocmd Filetype c,objc,cpp,objcpp call filcab#c#ClangToolMappings()
   " Just do the clang-format mapping
-  autocmd Filetype javascript call FilCabClangToolMappings(v:true)
+  autocmd Filetype javascript call filcab#c#ClangToolMappings(v:true)
 augroup END
 
 augroup filcab_rust
