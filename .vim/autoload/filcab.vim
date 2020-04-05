@@ -111,4 +111,3 @@ function filcab#ShowYCMNumberOfWarningsAndErrors()
         \ . ' Warnings: ' . youcompleteme#GetWarningCount()
   endif
 endfunction
-
