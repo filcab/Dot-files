@@ -1,5 +1,5 @@
 call filcab#rust#init()
-call filcab#completers#setup_mappings()
+call filcab#completers#setup_mappings('rust')
 
 nnoremap <buffer><unique> <LocalLeader><Tab> :RustFmt<cr>
 vnoremap <buffer><unique> <LocalLeader><Tab> :RustFmtRange<cr>

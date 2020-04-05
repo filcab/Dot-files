@@ -1,2 +1,2 @@
 call filcab#python#init()
-call filcab#completers#setup_mappings()
+call filcab#completers#setup_mappings('python')

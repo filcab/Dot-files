@@ -1,4 +1,5 @@
 let filcab#rust#initted = v:false
+let filcab#rust#completer_flavour = 'none'
 function filcab#rust#init() abort
   if g:filcab#rust#initted
     return
@@ -6,10 +7,9 @@ function filcab#rust#init() abort
 
   packadd vim-rust
 
-  let filcab#rust#completer_flavour = 'none'
   if v:false && executable('rls')
     echo "Setting up vim-lsp for Rust"
-    let filcab#rust#completer_flavour = 'lsp'
+    let g:filcab#rust#completer_flavour = 'lsp'
     " If another language plugin uses YouCompleteMe, let's blacklist this type
     let g:ycm_filetype_blacklist['rust'] = 1
     packadd async
@@ -23,7 +23,7 @@ function filcab#rust#init() abort
     autocmd FileType rust setlocal omnifunc=lsp#complete
   elseif !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for Rust"
-    let filcab#rust#completer_flavour = 'ycm'
+    let g:filcab#rust#completer_flavour = 'ycm'
     packadd YouCompleteMe
   endif
 

@@ -41,21 +41,4 @@ inoremap <unique> <C-x>? <C-o>:call filcab#CTRL_X_Help()<cr>
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 nnoremap <unique> z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
-" FIXME: These mappings should be set in ftplugins, probably using functions
-" defined in utilities.vim or similar
-augroup filcab_clang_tools
-  autocmd!
-  autocmd Filetype c,objc,cpp,objcpp call filcab#c#ClangToolMappings()
-  " Just do the clang-format mapping
-  autocmd Filetype javascript call filcab#c#ClangToolMappings(v:true)
-augroup END
-
-augroup filcab_mappings
-  autocmd!
-  " Filetypes supported by my usual YCM installs:
-  " C family, Python, Rust, JS
-  autocmd Filetype c,objc,cpp,objcpp call filcab#completers#setup_mappings()
-  autocmd Filetype python,rust,javascript call filcab#completers#setup_mappings()
-augroup END
-
 let g:loaded_mappings = 1

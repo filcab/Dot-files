@@ -1,5 +1,5 @@
 " Set the variable to an empty list if it wasn't set
-let g:clang_tools_search_paths = get(g:, clang_tools_search_paths, [])
+let g:clang_tools_search_paths = get(g:, 'clang_tools_search_paths', [])
 
 " Set the global var as clang-format.py queries it
 let g:clang_format_path = get(g:, 'clang_format_path',
@@ -107,15 +107,16 @@ function filcab#c#ClangToolMappings(...)
   nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
 endfunction
 
-let filcab#rust#initted = v:false
-function filcab#rust#init() abort
-  if g:filcab#rust#initted
+let filcab#c#initted = v:false
+let filcab#c#completer_flavour = 'none'
+function filcab#c#init() abort
+  if g:filcab#c#initted
     return
   endif
 
-  let filcab#c#completer_flavour = 'none'
-  if g:disable_youcompleteme
-    let filcab#c#completer_flavour = 'lsp'
+  if v:false && executable(g:clangd_path)
+    echo "Setting up vim-lsp for C/C++"
+    let g:filcab#c#completer_flavour = 'lsp'
     " If another language plugin uses YouCompleteMe, let's blacklist this type
     let g:ycm_filetype_blacklist['c'] = 1
     let g:ycm_filetype_blacklist['cpp'] = 1
@@ -131,9 +132,10 @@ function filcab#rust#init() abort
     " FIXME: Move this to ftplugin
     autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
   elseif !g:disable_youcompleteme
-    let filcab#c#completer_flavour = 'ycm'
+    echo "Setting up YouCompleteMe for C/C++"
+    let g:filcab#c#completer_flavour = 'ycm'
     packadd YouCompleteMe
   endif
 
-  let g:filcab#rust#initted = v:true
+  let g:filcab#c#initted = v:true
 endfunction

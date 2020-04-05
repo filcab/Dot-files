@@ -43,34 +43,35 @@ function s:call_completer_function(flavour, name)
   return l:Func()
 endfunction
 
-function s:set_mapping(map, keys, name) abort
+function s:set_mapping(map, lang_name, keys, name) abort
   exe a:map."noremap" "<buffer><unique>" "<LocalLeader>".a:keys ":call"
-    \ "<SID>call_completer_function(filcab#rust#completer_flavour, '".a:name."')<cr>"
+    \ "<SID>call_completer_function(g:filcab#".a:lang_name."#completer_flavour, '".a:name."')<cr>"
 endfunction
 
-function filcab#completers#setup_mappings() abort
+function filcab#completers#setup_mappings(lang_name) abort
   if exists("b:filcab_setup_ycm_and_lsp_mappings")
     return
   endif
-  call s:set_mapping("n", "<f5>", "refresh")
-  call s:set_mapping("n", "g", "goto")
-  call s:set_mapping("n", "gg", "goto")
-  call s:set_mapping("n", "gd", "goto-def")
-  call s:set_mapping("n", "gD", "goto-decl")
-  call s:set_mapping("n", "gr", "goto-refs")
-  call s:set_mapping("n", "gR", "goto-refs")
-  call s:set_mapping("n", "gdd", "goto-smart")
+
+  call s:set_mapping("n", a:lang_name, "<f5>", "refresh")
+  call s:set_mapping("n", a:lang_name, "g", "goto")
+  call s:set_mapping("n", a:lang_name, "gg", "goto")
+  call s:set_mapping("n", a:lang_name, "gd", "goto-def")
+  call s:set_mapping("n", a:lang_name, "gD", "goto-decl")
+  call s:set_mapping("n", a:lang_name, "gr", "goto-refs")
+  call s:set_mapping("n", a:lang_name, "gR", "goto-refs")
+  call s:set_mapping("n", a:lang_name, "gdd", "goto-smart")
   """" C/C++ mode only, I guess
   " Bind to both lower and uppercase
   " FILCAB: Maybe override gf *if* we're sure there's a compilation database?
   " FILCAB: check https://github.com/martong/vim-compiledb-path
-  call s:set_mapping("n", "gi", "goto-inc")
-  call s:set_mapping("n", "t", "get-type-fast")
-  call s:set_mapping("n", "T", "get-type")
-  call s:set_mapping("n", "p", "get-parent")
-  call s:set_mapping("n", "P", "get-parent")
-  call s:set_mapping("n", "f", "fixit")
-  call s:set_mapping("n", "w", "stats")
-  call s:set_mapping("n", "W", "stats")
+  call s:set_mapping("n", a:lang_name, "gi", "goto-inc")
+  call s:set_mapping("n", a:lang_name, "t", "get-type-fast")
+  call s:set_mapping("n", a:lang_name, "T", "get-type")
+  call s:set_mapping("n", a:lang_name, "p", "get-parent")
+  call s:set_mapping("n", a:lang_name, "P", "get-parent")
+  call s:set_mapping("n", a:lang_name, "f", "fixit")
+  call s:set_mapping("n", a:lang_name, "w", "stats")
+  call s:set_mapping("n", a:lang_name, "W", "stats")
   let b:filcab_setup_ycm_and_lsp_mappings=1
 endfunction
