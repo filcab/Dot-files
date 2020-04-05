@@ -54,8 +54,8 @@ augroup filcab_mappings
   autocmd!
   " Filetypes supported by my usual YCM installs:
   " C family, Python, Rust, JS
-  autocmd Filetype c,objc,cpp,objcpp call FilCabYCMAndLSPMappings()
-  autocmd Filetype python,rust,javascript call FilCabYCMAndLSPMappings()
+  autocmd Filetype c,objc,cpp,objcpp call filcab#completers#setup_mappings()
+  autocmd Filetype python,rust,javascript call filcab#completers#setup_mappings()
 augroup END
 
 let g:loaded_mappings = 1

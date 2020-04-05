@@ -1,5 +1,6 @@
+let filcab#python#completer_flavour = 'none'
 if executable('pyls')
-  let filcab#python#found_lsp = 1
+  let filcab#python#completer_flavour = 'lsp'
   " If another language plugin uses YouCompleteMe, let's blacklist this type
   let g:ycm_filetype_blacklist['python'] = 1
   packadd async
@@ -11,12 +12,9 @@ if executable('pyls')
           \ 'whitelist': ['python'],
           \ })
   autocmd FileType python setlocal omnifunc=lsp#complete
-else
-  let filcab#python#found_lsp = 0
-endif
-
-if !filcab#python#found_lsp && !g:disable_youcompleteme
+elseif !g:disable_youcompleteme
   packadd YouCompleteMe
+  let filcab#python#completer_flavour = 'ycm'
 endif
 
 " Dummy function to ensure this file is loaded

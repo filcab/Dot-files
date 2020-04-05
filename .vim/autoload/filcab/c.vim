@@ -78,8 +78,9 @@ function filcab#c#ClangCheck()
   endif
 endfunction
 
+let filcab#c#completer_flavour = 'none'
 if g:disable_youcompleteme
-  let filcab#c#found_lsp = 1
+  let filcab#c#completer_flavour = 'lsp'
   " If another language plugin uses YouCompleteMe, let's blacklist this type
   let g:ycm_filetype_blacklist['c'] = 1
   let g:ycm_filetype_blacklist['cpp'] = 1
@@ -94,11 +95,8 @@ if g:disable_youcompleteme
           \ })
   " FIXME: Move this to ftplugin
   autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
-else
-  let filcab#c#found_lsp = 0
-endif
-
-if !filcab#c#found_lsp && !g:disable_youcompleteme
+elseif !g:disable_youcompleteme
+  let filcab#c#completer_flavour = 'ycm'
   packadd YouCompleteMe
 endif
 

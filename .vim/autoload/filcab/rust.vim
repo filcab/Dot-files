@@ -1,21 +1,21 @@
+let filcab#rust#completer_flavour = 'none'
 if executable('rls')
-  let filcab#rust#found_lsp = 1
+  echom "Installing RLS support via LSP"
+  let filcab#rust#completer_flavour = 'lsp'
   " If another language plugin uses YouCompleteMe, let's blacklist this type
   let g:ycm_filetype_blacklist['rust'] = 1
   packadd async
   packadd vim-lsp
   " cargo install rls
   call lsp#register_server({
-          \ 'name': 'rls',
-          \ 'cmd': {server_info->['rls']},
-          \ 'whitelist': ['rust'],
-          \ })
-  autocmd FileType rust setlocal omnifunc=lsp#complete
-else
-  let filcab#rust#found_lsp = 0
-endif
+    \ 'name': 'rls',
+    \ 'cmd': {server_info->['rls']},
+    \ 'whitelist': ['rust'],
+    \ })
 
-if !filcab#rust#found_lsp && !g:disable_youcompleteme
+  autocmd FileType rust setlocal omnifunc=lsp#complete
+elseif !g:disable_youcompleteme
+  let filcab#rust#completer_flavour = 'ycm'
   packadd YouCompleteMe
 endif
 
