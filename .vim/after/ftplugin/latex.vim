@@ -1,5 +1,5 @@
 " Enable spelling in LaTeX files
-autocmd BufRead,BufNewFile *.tex,*.bib  setlocal spell spelllang=en_us iskeyword+=: " So fig:figure gets completion support
+setlocal spell spelllang=en_us iskeyword+=: " So fig:figure gets completion support
 
 let g:tex_flavor = 'latex'    " LaTeX is the default flavor (not plain TeX)
 let g:tex_mapleader = ','     " Leader character for LaTeX plugin

@@ -1,4 +1,11 @@
-call filcab#javascript#init()
+" This file will also be sourced by the cpp ftplugin
+if exists("b:did_filcab_c_ftplugin")
+  finish
+endif
+let b:did_filcab_c_ftplugin = 1
+
+call filcab#c#init()
+call filcab#completers#setup_mappings('c')
 
 " clang-format integration
 if has('python3')
@@ -13,4 +20,14 @@ else
   echom 'Python3/Python not available, skipping clang-format mappings'
 endif
 
-call filcab#completers#setup_mappings('javascript')
+nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
+
+" Setup clang-format on save functionality only in C/C++ files
+autocmd BufWritePre <buffer>
+  \ if get(b:, 'clang_format_on_save', g:clang_format_on_save) |
+  \   call filcab#ClangFormat() |
+  \ endif
+
+if g:filcab#c#completer_flavour == 'lsp'
+  setlocal omnifunc=lsp#complete
+endif

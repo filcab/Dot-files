@@ -3,6 +3,13 @@ if exists("b:did_filcab_python")
 endif
 let b:did_filcab_python = 1
 
+call filcab#python#init()
+call filcab#completers#setup_mappings('python')
+
+if g:filcab#python#completer_flavour == 'lsp'
+  setlocal omnifunc=lsp#complete
+endif
+
 " black's default text width is 88
 setlocal textwidth=88
 let g:pymode_options_max_line_length=88
