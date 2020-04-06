@@ -5,7 +5,7 @@ endif
 let b:did_filcab_c_ftplugin = 1
 
 call filcab#c#init()
-call filcab#c#ClangToolMappings()
+call filcab#ClangToolMappings()
 call filcab#completers#setup_mappings('c')
 
 " Setup clang-format on save functionality only in C/C++ files

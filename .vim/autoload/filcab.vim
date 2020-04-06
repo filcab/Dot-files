@@ -105,6 +105,62 @@ function filcab#FindProgram(prog_name, dirs)
   return ''
 endfunction
 
+" Shared between C/C++ and Javascript
+function filcab#ClangFormat()
+  " Doesn't do any verification. We've warned before.
+  if !has('python') && !has('python3')
+    echo 'Could not clang-format. Python not available.'
+    return
+  endif
+
+  let path = expand('%')
+  if !filereadable(path)
+    echom 'Not running clang-format: File is not readable: ' . path
+    return
+  elseif path =~# '^fugitive://' && !get(g:, 'clang_format_fugitive', v:false)
+    echo 'Skipping clang-format: File is a fugitive:// file (use g:clang_format_fugitive to change this)'
+    return
+  else
+    echom 'Running clang-format!'
+    let l:formatdiff = 1
+    if has('python')
+      pyf ~/.vim/clang-format.py
+    elseif has('python3')
+      py3f ~/.vim/clang-format.py
+    endif
+  endif
+endfunction
+
+" Pass v:true if you just want clang-format mappings
+function filcab#ClangToolMappings(...)
+  " Bail out if the mappings have already been setup on this buffer
+  if exists('b:filcab_setup_clang_tool_mappings')
+    return
+  endif
+  let b:filcab_setup_clang_tool_mappings=1
+
+  " clang-format integration
+  if has('python3')
+    nnoremap <buffer><unique> <LocalLeader><Tab> :py3f ~/.vim/clang-format.py<cr>
+    vnoremap <buffer><unique> <LocalLeader><Tab> :py3f ~/.vim/clang-format.py<cr>
+    inoremap <buffer><unique> <C-Tab><Tab> <C-o>:py3f ~/.vim/clang-format.py<cr><cr>
+  elseif has('python')
+    nnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+    vnoremap <buffer><unique> <LocalLeader><Tab> :pyf ~/.vim/clang-format.py<cr>
+    inoremap <buffer><unique> <C-Tab><Tab> <C-o>:pyf ~/.vim/clang-format.py<cr><cr>
+  else
+    echom 'Python3/Python not available, skipping clang-format mappings'
+  endif
+
+  let clang_format_only = get(a:, 0, v:false)
+  if clang_format_only
+    return
+  endif
+
+  nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
+endfunction
+
+" Shared amongst all YCM-using languages
 function filcab#ShowYCMNumberOfWarningsAndErrors()
   if !g:disable_youcompleteme && get(g:, 'loaded_youcompleteme', v:false)
     echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount()
