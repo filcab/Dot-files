@@ -60,7 +60,7 @@ function filcab#c#init() abort
     return
   endif
 
-  if v:false && executable(g:clangd_path)
+  if executable(g:clangd_path)
     echo "Setting up vim-lsp for C/C++"
     let g:filcab#c#completer_flavour = 'lsp'
     " If another language plugin uses YouCompleteMe, let's blacklist this type
@@ -75,7 +75,9 @@ function filcab#c#init() abort
             \ 'cmd': {server_info->[g:clangd_path]},
             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
             \ })
-  elseif !g:disable_youcompleteme
+  endif
+
+  if !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for C/C++"
     let g:filcab#c#completer_flavour = 'ycm'
     let g:ycm_clangd_binary_path = g:clangd_path

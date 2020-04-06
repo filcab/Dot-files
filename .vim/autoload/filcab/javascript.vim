@@ -5,7 +5,7 @@ function filcab#javascript#init() abort
     return
   endif
 
-  if v:false && executable('javascript-language-server')
+  if executable('javascript-language-server')
     echo "Setting up vim-lsp for Javascript"
     let g:filcab#javascript#completer_flavour = 'lsp'
     " If another language plugin uses YouCompleteMe, let's blacklist this type
@@ -16,7 +16,9 @@ function filcab#javascript#init() abort
       \ 'cmd': {server_info->['tern']},
       \ 'whitelist': ['javascript'],
       \ })
-  elseif !g:disable_youcompleteme
+  endif
+
+  if !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for Javascript"
     packadd YouCompleteMe
     let g:filcab#javascript#completer_flavour = 'ycm'
