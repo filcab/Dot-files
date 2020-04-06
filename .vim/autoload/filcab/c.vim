@@ -75,8 +75,6 @@ function filcab#c#init() abort
             \ 'cmd': {server_info->[g:clangd_path]},
             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
             \ })
-    " FIXME: Move this to ftplugin
-    autocmd FileType c,objc,cpp,objcpp setlocal omnifunc=lsp#complete
   elseif !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for C/C++"
     let g:filcab#c#completer_flavour = 'ycm'

@@ -20,7 +20,6 @@ function filcab#rust#init() abort
       \ 'cmd': {server_info->['rls']},
       \ 'whitelist': ['rust'],
       \ })
-    autocmd FileType rust setlocal omnifunc=lsp#complete
   elseif !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for Rust"
     let g:filcab#rust#completer_flavour = 'ycm'

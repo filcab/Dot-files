@@ -16,7 +16,6 @@ function filcab#javascript#init() abort
       \ 'cmd': {server_info->['tern']},
       \ 'whitelist': ['javascript'],
       \ })
-    autocmd FileType javascript setlocal omnifunc=lsp#complete
   elseif !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for Javascript"
     packadd YouCompleteMe

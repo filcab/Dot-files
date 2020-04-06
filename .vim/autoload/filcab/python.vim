@@ -20,7 +20,6 @@ function filcab#python#init() abort
       \ 'cmd': {server_info->['pyls']},
       \ 'whitelist': ['python'],
       \ })
-    autocmd FileType python setlocal omnifunc=lsp#complete
   elseif !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for Python"
     packadd YouCompleteMe
