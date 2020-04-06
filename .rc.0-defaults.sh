@@ -135,4 +135,3 @@ case "$SHELL" in
     source ~/.zsh.d/lib/git-prompt.zsh
     ;;
 esac
-
