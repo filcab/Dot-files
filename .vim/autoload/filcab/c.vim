@@ -78,6 +78,7 @@ function filcab#c#init() abort
   elseif !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for C/C++"
     let g:filcab#c#completer_flavour = 'ycm'
+    let g:ycm_clangd_binary_path = g:clangd_path
     packadd YouCompleteMe
   endif
 
