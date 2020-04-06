@@ -5,6 +5,12 @@ done
 # fix spelling errors for cd, only in interactive shell
 shopt -s cdspell
 
+# Make sure we check the window size before every command
+shopt -s checkwinsize
+
+# Special-case this script, for now, as it works on both
+source ~/.zsh.d/lib/git-prompt.zsh
+
 # Combine multiline commands into one in historty
 shopt -s cmdhist
 # Ignore duplicates, ls without options and builtin commands, as well as lines starting with space
