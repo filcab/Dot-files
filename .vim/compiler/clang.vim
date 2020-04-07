@@ -17,7 +17,7 @@ CompilerSet errorformat+=%D%*\\a:\ Entering\ directory\ `%f'
 CompilerSet errorformat+=%E%f\\(%l\\,%c\\)\ :\ \ %trror:\ %m,%-C%s,%-Z%p^
 CompilerSet errorformat+=%W%f\\(%l\\,%c\\)\ :\ \ %tarning:\ %m,%-C%s,%-Z%p^
 CompilerSet errorformat+=%I%f\\(%l\\,%c\\)\ :\ \ note:\ %m,%-C%s,%-Z%p^
-CompilerSet errorformat+=%IIn file included from %f:%l
+CompilerSet errorformat+=%IIn\ file\ included\ from\ %f:%l
 CompilerSet errorformat+=%-I%.%#[%*[/0-9]]\ %m,%IFAILED:\ ,%Z
 ",%-C%m,%-Z%p^,%-C%p^,%-Z%p%s
 "      \%f\\(%l\\,%c\\)\ :\ \ %t%s:\ %m,%C%m,%Z%p^,%C%p^,%Z%p%s,
