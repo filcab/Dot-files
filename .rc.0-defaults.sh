@@ -35,7 +35,8 @@ case $(uname -s) in
     ;;
   MINGW*)
     alias ls="ls -F --color"
-    # Have we installed a more current vim? (We're assuming we have msys git, which has an old vim)
+    # Have we installed a more current vim? (We're assuming we have msys git,
+    # which has an old vim)
     if [ -f /c/Program\ Files/Vim/vim82/vim.exe ]; then
       # Also alias vim/gvim so we get the updated version in most places
       alias vim="winpty /c/Program\ Files/Vim/vim82/vim.exe"
@@ -47,7 +48,8 @@ case $(uname -s) in
       export EDITOR="winpty /c/Program\ Files/Vim/vim82/vim.exe"
     fi
 
-    # Use native symlinks on Windows by default. Assumes we have perms for that, which needs to be done once per machine
+    # Use native symlinks on Windows by default. Assumes we have perms for
+    # that, which needs to be done once per machine
     export MSYS=winsymlinks:nativestrict
     ;;
 esac
@@ -79,9 +81,13 @@ export LESS_TERMCAP_ue=$'\E[0m'
 ### Load ssh-agent settings or start it and export its settings
 function maybe_start_ssh_agent {
   # Bail out if we're using ssh-agent forwarding
-  if [ ! -z "${SSH_CONNECTION}" ] && [ -S "${SSH_AUTH_SOCK}" ]; then
+  if [ ! -z "${SSH_CONNECTION}" -a -S "${SSH_AUTH_SOCK}" ]; then
+    # Don't print anything if we're under tmux (we've probably already
+    # reported)
+    if [ -z "$TMUX" -o \( ! -S "$(echo $TMUX | cut -d, -f 1)" \) ]; then
       echo detected SSH_AUTH_SOCK from forwarded agent
-      return
+    fi
+    return
   fi
 
   local uname_s="$(uname -s)"
@@ -100,11 +106,11 @@ function maybe_start_ssh_agent {
   # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
   agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
 
-  if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
+  if [ ! "$SSH_AUTH_SOCK" -o "$agent_run_state" = 2 ]; then
       agent_start
   fi
 
-  if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ] || [ $agent_run_state = 1 ]; then
+  if [ ! "$SSH_AUTH_SOCK" -o "$agent_run_state" = 2 -o "$agent_run_state" = 1 ]; then
       [ "${uname_s}" = "Darwin" ] && ssh-add -A
       ssh-add
   fi
