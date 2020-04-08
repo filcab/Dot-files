@@ -83,6 +83,9 @@ if executable('rg')
   " Assume ripgrep is in cargo directory (if available), and that's in PATH
   let g:ackprg = "rg --vimgrep --smart-case"
   let &grepprg = "rg --vimgrep --smart-case"
+elseif executable("/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe")
+  let g:ackprg = "/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe --vimgrep --smart-case"
+  let &grepprg = "/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe  --vimgrep --smart-case"
 else
   " Try ack if rg is not available
   if executable('ack')
