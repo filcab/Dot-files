@@ -24,7 +24,8 @@ def maketrans(*args):
     return string.maketrans(*args)
 
 
-tentative_llvm_paths = ['~/dev/llvm/install', '~/dev/llvm/build', '~/work/llvm-cmake', 'C:/code/llvm/install', 'C:/code/llvm/build']
+tentative_llvm_paths = ['~/dev/llvm/install', '~/dev/llvm/build', '~/work/llvm-cmake',
+                        'C:/code/llvm/install', 'C:/code/llvm/build', '/usr/lib/llvm-9']
 for d in tentative_llvm_paths:
     d = os.path.realpath(os.path.expanduser(d))
     if os.path.isdir(d):
