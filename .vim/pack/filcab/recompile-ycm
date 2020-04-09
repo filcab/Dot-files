@@ -103,8 +103,9 @@ find_executable_enable_completer('node', 'ts')
 completers.warn_skipped()
 
 # , '--build-dir={}'.format(os.path.join(os.getcwd(), platform.system()))
-print('Executing: {}'.format(' '.join(['python3', 'install.py'] + completers.cli_args()), env=os.environ))
-subprocess.check_call(['python3', 'install.py'] + completers.cli_args(), env=os.environ)
+cmd = ['python3', 'install.py'] + completers.cli_args()
+print('Executing: {}'.format(' '.join(cmd)))
+subprocess.check_call(cmd, env=os.environ)
 
 # Also warn at the end, as we might have a big backlog
 completers.warn_skipped()
