@@ -1,7 +1,0 @@
-#!/usr/bin/env zsh
-
-# Try checking for pipes and, if not, use pbpaste
-
-# Remove 0x prefixes first, then filter 0-9a-f, split two by two, and add
-# 0x prefixes
-sed -e 's/0x//g' | tr -cd '[0-9a-fA-F]' | sed -e 's/\(..\)/0x\1 /g'
