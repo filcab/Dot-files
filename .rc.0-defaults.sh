@@ -127,10 +127,3 @@ fi
 
 ### Ninja status: "time [left/running/finished]"
 export NINJA_STATUS="$(tput bold)%e$(tput sgr0) [$(tput bold)$(tput setaf 1)%u$(tput sgr0)/$(tput bold)$(tput setaf 3)%r$(tput sgr0)/$(tput bold)$(tput setaf 2)%f$(tput sgr0)] "
-
-case "$SHELL" in
-  *bash|*bash.exe)
-    # Special-case this script, for now, as it works on both
-    source ~/.zsh.d/lib/git-prompt.zsh
-    ;;
-esac

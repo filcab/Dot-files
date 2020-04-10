@@ -76,11 +76,11 @@ compinit -i -d "${ZSH_COMPDUMP}"
 
 # ^ From oh-my-zsh
 
-for f in ~/.zsh.d/lib/*.zsh; do
+for f in "$SHELL_RESOURCES"/zsh/lib/*.zsh; do
   source $f
 done
 
 # Load additional zsh stuff
-for f in ~/.zsh.d/rc.*; do
+for f in "$SHELL_RESOURCES"/zsh/rc.*; do
   source $f
 done

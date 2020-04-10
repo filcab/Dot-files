@@ -1,4 +1,4 @@
 refcard() {
-  open ~/.zsh.d/refcard.pdf
+  open "$SHELL_RESOURCES"/zsh/refcard.pdf
 }
 

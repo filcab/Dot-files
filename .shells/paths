@@ -9,7 +9,6 @@
 # Put /usr/local/bin before /usr/bin
 path-prepend-dirs "/usr/local/bin"
 
-# Most of my scripts are in .zsh.d
 path-prepend-dirs "$SHELL_RESOURCES/bin"
 
 # git

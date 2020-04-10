@@ -67,4 +67,3 @@ function rprompt {
 
 lprompt '[]' $BR_BRIGHT_BLACK $PR_WHITE
 rprompt '()' $BR_BRIGHT_BLACK $PR_WHITE
-

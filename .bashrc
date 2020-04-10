@@ -43,7 +43,7 @@ shopt -s cdspell
 shopt -s checkwinsize
 
 # Special-case this script, for now, as it works on both
-source ~/.zsh.d/lib/git-prompt.zsh
+source "$SHELL_RESOURCES"/zsh/lib/git-prompt.zsh
 
 # Combine multiline commands into one in historty
 shopt -s cmdhist
