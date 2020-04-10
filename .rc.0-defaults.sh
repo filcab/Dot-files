@@ -1,7 +1,6 @@
 source ~/.shells/paths
 
 ### Setup basic aliases
-alias cd..='cd ..'
 alias less='less -r'
 alias grep='grep --color=auto'
 
@@ -54,7 +53,7 @@ esac
 
 ### Git
 # gg alias plus v alias to do the previous line with vgg (script in
-# ~/.zsh.d/bin), which opens the output of git grep in vim, as a location
+# ~/.shells/bin), which opens the output of git grep in vim, as a location
 # list.
 alias gg='git grep'
 alias v='eval "v$(fc -l -n -1)"'
