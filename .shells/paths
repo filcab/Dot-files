@@ -10,7 +10,7 @@
 path-prepend-dirs "/usr/local/bin"
 
 # Most of my scripts are in .zsh.d
-path-prepend-dirs "$HOME/.zsh.d/bin"
+path-prepend-dirs "$SHELL_RESOURCES/bin"
 
 # git
 path-prepend-dirs "/usr/local/gitprefix/bin"

@@ -34,9 +34,9 @@
 
 # Test diff-highlight, which should be a bit better than regular word highlight
 [pager]
-	log = ~/.zsh.d/bin/diff-highlight | less -R
-	show = ~/.zsh.d/bin/diff-highlight | less -R
-	diff = ~/.zsh.d/bin/diff-highlight | less -R
+	log = diff-highlight | less -R
+	show = diff-highlight | less -R
+	diff = diff-highlight | less -R
 
 [rebase]
 	autoSquash = true

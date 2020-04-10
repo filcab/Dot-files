@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SHELL_RESOURCES=~/.shells
+
 # Functions lazily found at
 # https://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
 # directories are only added if they're not there.
