@@ -1,8 +1,0 @@
-mostly_ports()
-{
-  export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-  #export PKG_CONFIG_PATH=/opt/local/lib/pkgconfig:$PKG_CONFIG_PATH
-  #export PKG_CONFIG_PATH=/opt/local/share/pkgconfig:$PKG_CONFIG_PATH
-  #export DYLD_LIBRARY_PATH=/opt/local/lib:$DYLD_LIBRARY_PATH
-  #export CPATH=/opt/local/include:$CPATH
-}
