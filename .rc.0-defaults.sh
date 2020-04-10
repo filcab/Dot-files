@@ -1,4 +1,4 @@
-source ~/.paths
+source ~/.shells/paths
 
 ### Setup basic aliases
 alias cd..='cd ..'

@@ -1,0 +1,66 @@
+# Loadable file to setup paths
+# First: General exports, then system-specific
+
+# Path for hunspell dictionaries
+# FIXME: Check if we still want to use dictionaries, otherwise remove
+# export DICPATH=~/.hunspell
+
+###### PATHs ######
+# Put /usr/local/bin before /usr/bin
+path-prepend-dirs "/usr/local/bin"
+
+# Most of my scripts are in .zsh.d
+path-prepend-dirs "$HOME/.zsh.d/bin"
+
+# git
+path-prepend-dirs "/usr/local/gitprefix/bin"
+
+# Python user-installed files (prepend so any user-installed pip/etc overrides the system one)
+case $(uname -s) in
+  Darwin)
+    path-prepend-dirs "$HOME/Library/Python/3.7/bin" "$HOME/Library/Python/2.7/bin"
+    ;;
+  Linux)
+    path-prepend-dirs "$HOME/.local/bin"
+    ;;
+esac
+
+# MacTeX
+path-append-dirs "/usr/texbin/bin/x86_64-darwin"
+
+### Add homebrew paths
+# prepend, as we want homebrew versions to override system executables
+path-prepend-dirs "$HOME/dev/brew/bin"
+#export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:$HOME/dev/brew/lib"
+#export CPATH="$HOME/dev/homebrew/include:$CPATH"
+#export NODE_PATH="$HOME/dev/homebrew/lib/node_modules"
+#export MANPATH="$MANPATH:/opt/local/share/man"
+case $SHELL in
+  # FIXME: add bash
+  *zsh)
+    fpath+="$HOME/dev/brew/share/zsh/site-functions"
+    ;;
+esac
+
+### Export SDKROOT to the current SDK on Xcode (TODO: Make this the generic symlink)
+case $(uname -s) in
+  Darwin)
+    if command -v xcrun &>/dev/null; then
+      export SDKROOT="$(xcrun --show-sdk-path)"
+    fi
+    ;;
+esac
+
+### Add some weirdly-placed programs to PATH
+if [ -d $HOME/dev/phabricator/arcanist/bin ]; then
+  path-append-dirs "$HOME/dev/phabricator/arcanist/bin"
+fi
+
+path-prepend-dirs "$HOME/.cargo/bin"
+
+# Rust src, when installed
+if hash rustc 2>/dev/null; then
+  export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+fi
+
+export GOPATH="$HOME/dev/go"

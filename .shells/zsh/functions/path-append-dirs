@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+
+# We're not caring about uniq-ing entries, as we're assuming the following
+# command was executed earlier in the shell's history:
+#   typeset -gU path
+for dir in $argv; do
+  if [ -d "$dir" ]; then
+    path=( $path $dir )
+  fi
+done
+
+# for debugging
+#print -R $path

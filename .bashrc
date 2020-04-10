@@ -1,3 +1,30 @@
+#!/bin/bash
+
+# Functions lazily found at
+# https://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
+# directories are only added if they're not there.
+# *not exactly* the same semantics as zsh version (which prepends/appends, removing duplicates)
+function path-append-dirs() {
+  for ARG in "$@"
+  do
+    set -x
+    if [ -d "$ARG" ] && [[ ":$PATH:" != *":$ARG:"* ]]; then
+      PATH="${PATH:+"$PATH:"}$ARG"
+    fi
+    set +x
+  done
+}
+
+function path-prepend-dirs() {
+  for ((i=$#; i>0; i--))
+  do
+    ARG=${!i}
+    if [ -d "$ARG" ] && [[ ":$PATH:" != *":$ARG:"* ]]; then
+        PATH="$ARG${PATH:+":$PATH"}"
+    fi
+  done
+}
+
 for rc in ~/.rc.*; do
   source "$rc"
 done

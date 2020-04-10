@@ -1,5 +1,14 @@
 #!/usr/bin/env zsh
 
+# Make PATH entries unique
+typeset -gU path
+
+# Add our autoloaded zsh functions
+_function_dir=~/.shells/zsh/functions
+fpath=( "$_function_dir" $fpath )
+list=($(cd $_function_dir && ls))
+autoload $_function_dir/*(:t) 2>/dev/null
+
 # Load general files (used for bash and zsh)
 for rc in ~/.rc.*; do
   source "$rc"
