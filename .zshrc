@@ -1,18 +1,25 @@
 #!/usr/bin/env zsh
 
-# Make PATH entries unique
-typeset -gU path
+SHELL_RESOURCES=~/.shells
 
-# Add our autoloaded zsh functions
-_function_dir=~/.shells/zsh/functions
-fpath=( "$_function_dir" $fpath )
-list=($(cd $_function_dir && ls))
-autoload $_function_dir/*(:t) 2>/dev/null
+# Make path and fpath entries unique
+typeset -gU path
+typeset -gU fpath
+
+# add our autoloaded zsh-specific functions
+__function_dir="$SHELL_RESOURCES/zsh/functions"
+fpath=( "$__function_dir" $fpath )
+autoload "$__function_dir"/*(:t) 2>/dev/null
 
 # Load general files (used for bash and zsh)
 for rc in ~/.rc.*; do
   source "$rc"
 done
+
+# autoload common functions:
+__function_dir="$SHELL_RESOURCES/functions"
+fpath=( "$__function_dir" $fpath )
+autoload "$__function_dir"/*(:t) 2>/dev/null
 
 # Emacs keybindings for the shell
 bindkey -e
@@ -38,10 +45,6 @@ unsetopt nomatch
 
 # Print the exit value if failure.
 setopt print_exit_value
-
-# set zsh function directory and autoload them:
-[[ $fpath = */.zsh.d/* ]] || fpath=( ~/.zsh.d/functions $fpath )
-autoload ${fpath[1]}/*(:t) 2>/dev/null
 
 # For oh-my-zsh
 #export ZSH=$HOME/.zsh.d/oh-my-zsh
@@ -81,4 +84,3 @@ done
 for f in ~/.zsh.d/rc.*; do
   source $f
 done
-

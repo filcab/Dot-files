@@ -31,6 +31,11 @@ for rc in ~/.rc.*; do
   source "$rc"
 done
 
+# load common functions
+for i in "$SHELL_RESOURCES/functions"/[a-z]*; do
+  . $i
+done
+
 # fix spelling errors for cd, only in interactive shell
 shopt -s cdspell
 
@@ -59,9 +64,3 @@ _bash_history_sync() {
   builtin history -c
   builtin history -r
 }
-
-### FIXME: Maybe move these to a common place
-for i in ~/.zsh.d/functions/[a-z]*; do
-  . $i
-done
-
