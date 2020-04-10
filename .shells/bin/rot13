@@ -3,5 +3,5 @@
 if [ $# -eq 0 ]; then
   tr '[n-za-mN-ZA-M]' '[a-zA-Z]'
 else
-  echo $* | tr '[n-za-mN-ZA-M]' '[a-zA-Z]'
+  echo "$@" | tr '[n-za-mN-ZA-M]' '[a-zA-Z]'
 fi
