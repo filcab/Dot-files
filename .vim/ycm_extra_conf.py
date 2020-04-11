@@ -13,9 +13,9 @@ BASE_FLAGS = [
         '-Wextra',
         '-ferror-limit=10000',
         '-std=c++1z',
-        '-xc++',
-        '-I/usr/lib/',
-        '-I/usr/include/'
+        '-xc++'#,
+        #'-I/usr/lib/',
+        #'-I/usr/include/'
         ]
 
 SOURCE_EXTENSIONS = [

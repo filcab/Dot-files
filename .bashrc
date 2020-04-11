@@ -27,7 +27,7 @@ function path-prepend-dirs() {
   done
 }
 
-for rc in ~/.rc.*; do
+for rc in "$SHELL_RESOURCES"/rc.*; do
   source "$rc"
 done
 

@@ -12,7 +12,7 @@ fpath=( "$__function_dir" $fpath )
 autoload "$__function_dir"/*(:t) 2>/dev/null
 
 # Load general files (used for bash and zsh)
-for rc in ~/.rc.*; do
+for rc in "$SHELL_RESOURCES"/rc.*; do
   source "$rc"
 done
 
