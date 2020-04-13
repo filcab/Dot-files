@@ -5,6 +5,7 @@ if [ -z "$ZSH_VERSION" ]; then
   return 0
 fi
 
+
 # autoload common functions
 __function_dir="$SHELL_RESOURCES/functions"
 fpath=( "$__function_dir" $fpath )
@@ -17,6 +18,11 @@ done
 for f in "$SHELL_RESOURCES"/zsh/rc.*; do
   source $f
 done
+
+## git stuff
+# autoload completion by having it in fpath
+fpath=( "$SHELL_RESOURCES/lib" $fpath )
+source "$SHELL_RESOURCES"/lib/git-prompt.sh
 
 # Emacs keybindings for the shell
 bindkey -e

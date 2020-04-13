@@ -6,8 +6,8 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 
 
-# Special-case this zsh script, for now, as it works on both
-source "$SHELL_RESOURCES"/zsh/lib/git-prompt.zsh
+source "$SHELL_RESOURCES"/lib/git-completion.zsh
+source "$SHELL_RESOURCES"/lib/git-prompt.sh
 
 # fix spelling errors for cd, only in interactive shell
 shopt -s cdspell
