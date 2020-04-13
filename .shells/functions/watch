@@ -1,3 +1,10 @@
+#!/bin/sh
+
+# If this command exists, don't define the function
+if hash watch 2>/dev/null; then
+  return 0
+fi
+
 function watch () {
   function usage() {
     echo "Usage: $0 [ -i interval ] command ..."

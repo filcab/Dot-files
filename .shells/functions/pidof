@@ -1,3 +1,10 @@
+#!/bin/sh
+
+# If this command exists, don't define the function
+if hash pidof 2>/dev/null; then
+  return 0
+fi
+
 function pidof() {
   if type pidof | grep "is a shell function" &>/dev/null; then
     for i in "$@"; do
