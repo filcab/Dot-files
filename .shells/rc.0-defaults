@@ -1,17 +1,19 @@
+#!/bin/sh
+
 source ~/.shells/paths
 
-### Setup basic aliases
-alias less='less -r'
-alias grep='grep --color=auto'
 
-### Vim and $EDITOR
+### Set $EDITOR to be whatever vim we find. We might override it later
+# FIXME: Just loop over the possible paths and set EDITOR once, accordingly
 if [ -z "$EDITOR" ] && hash vim &> /dev/null; then
   export EDITOR=vim
 fi
 
-case $(uname -s) in
+
+### OS defaults
+uname_s=$(uname -s)
+case ${uname_s} in
   Darwin)
-    alias ls='ls -FG'
     alias ldd='otool -L'
 
     # Have we brewed a vim?
@@ -19,21 +21,17 @@ case $(uname -s) in
       export EDITOR=~/dev/brew/bin/vim
     fi
 
-    ### Homebrew settings
+    ## Homebrew settings
     # Always build from source
     export HOMEBREW_BUILD_FROM_SOURCE=1
     # No analytics
     export HOMEBREW_NO_ANALYTICS=1
 
-    ### Disable the creepy, unacceptable, stats requests by CocoaPods
+    ## Disable the creepy, unacceptable, stats requests by CocoaPods
     export COCOAPODS_DISABLE_STATS=1
     ;;
 
-  linux)
-    alias ls="ls -F --color"
-    ;;
   MINGW*)
-    alias ls="ls -F --color"
     # Have we installed a more current vim? (We're assuming we have msys git, which has an old vim)
     if [ -f /c/Program\ Files/Vim/vim82/vim.exe ]; then
       # Also alias vim/gvim so we get the updated version in most places
@@ -51,28 +49,52 @@ case $(uname -s) in
     ;;
 esac
 
-### Git
+## multi-os defaults
+case ${uname_s} in
+  Darwin|FreeBSD)
+    # Colorize 'ls' command output
+    export CLICOLOR=1
+    alias ls='ls -FG'
+    ;;
+  linux|MINGW*)
+    alias ls="ls -F --color"
+    ;;
+esac
+
+
+### aliases
+alias less='less -r'
+alias grep='grep --color=auto'
+
+## Git
 # gg alias plus v alias to do the previous line with vgg (script in
 # ~/.shells/bin), which opens the output of git grep in vim, as a location
 # list.
 alias gg='git grep'
 alias v='eval "v$(fc -l -n -1)"'
 
-### Set better defaults for miscellaneous environment variables
-# Colorize 'ls' command output
-export CLICOLOR=1
 
+### Set better defaults for miscellaneous environment variables
+## use vimpager if available
+if type vimpager &>/dev/null;
+then
+  export PAGER=vimpager
+else
+  export PAGER="less -R"
+fi
+
+## cmake
 # So ctest shows us the output if a test failed
 export CTEST_OUTPUT_ON_FAILURE=1
 
-# Color for manpages:
+## color for manpages:
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
 export LESS_TERMCAP_me=$'\E[0m'
 export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_us=$'\E[01;32m'
-# Use a reset code as the last definition
+# use a reset code as the last definition
 export LESS_TERMCAP_ue=$'\E[0m'
 
 ### Load ssh-agent settings or start it and export its settings
@@ -83,6 +105,9 @@ function maybe_start_ssh_agent {
       return
   fi
 
+  # Avoid clashing between MINGW and Linux on the same machine, otherwise we
+  # end up with several ssh-agents running because the environments can't
+  # interoperate
   local uname_s="$(uname -s)"
   local env="$HOME/.ssh/agent.env.${uname_s}"
 
@@ -108,21 +133,13 @@ function maybe_start_ssh_agent {
       ssh-add
   fi
 }
-
 maybe_start_ssh_agent
+
 
 ### Setup PS1
 # Don't setup a colourful PS1 if we're on a shell within emacs
 if [ -z "$EMACSPATH"]; then
   export PS1='[\[\033[01;32m\]\u\[\033[00m\]@\[\033[01;31m\]\h\[\033[01;34m\] \w\[\033[00m\]] \$ '
-fi
-
-### Use vimpager if available
-if type vimpager &>/dev/null;
-then
-  export PAGER=vimpager
-else
-  export PAGER="less -R"
 fi
 
 ### Ninja status: "time [left/running/finished]"

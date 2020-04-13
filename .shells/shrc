@@ -1,0 +1,31 @@
+#!/bin/sh
+
+SHELL_RESOURCES=~/.shells
+
+# All code here should be POSIX-compliant. We can switch on $0 to use other
+# features, though.
+
+# Define basic functions for each shell
+if [ ! -z "$ZSH_VERSION" ]; then
+  # echo "zsh funcs!"
+  # For now, no need to include compat.sh
+  source ${SHELL_RESOURCES}/compat.zsh
+else
+  case ${0} in
+    -sh|sh|-ash|ash|-dash|dash|-bash|bash)
+      # echo "(ba)sh funcs!"
+      source ${SHELL_RESOURCES}/compat.sh
+      ;;
+    *)
+      echo uh oh... Don\'t know about this shell: ${0}
+      echo this is not going to go well...
+      env
+      ;;
+  esac
+fi
+
+
+# load general files (used for sh, bash, and zsh)
+for rc in ${SHELL_RESOURCES}/rc.*; do
+  source ${rc}
+done

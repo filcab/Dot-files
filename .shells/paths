@@ -7,34 +7,34 @@
 
 ###### PATHs ######
 # Put /usr/local/bin before /usr/bin
-path-prepend-dirs "/usr/local/bin"
+path_prepend_dirs "/usr/local/bin"
 
-path-prepend-dirs "$SHELL_RESOURCES/bin"
+path_prepend_dirs "$SHELL_RESOURCES/bin"
 
 # git
-path-prepend-dirs "/usr/local/gitprefix/bin"
+path_prepend_dirs "/usr/local/gitprefix/bin"
 
 # Python user-installed files (prepend so any user-installed pip/etc overrides the system one)
 case $(uname -s) in
   Darwin)
-    path-prepend-dirs "$HOME/Library/Python/3.7/bin" "$HOME/Library/Python/2.7/bin"
+    path_prepend_dirs "$HOME/Library/Python/3.7/bin" "$HOME/Library/Python/2.7/bin"
     ;;
   Linux)
-    path-prepend-dirs "$HOME/.local/bin"
+    path_prepend_dirs "$HOME/.local/bin"
     ;;
 esac
 
 # MacTeX
-path-append-dirs "/usr/texbin/bin/x86_64-darwin"
+path_append_dirs "/usr/texbin/bin/x86_64-darwin"
 
 ### Add homebrew paths
 # prepend, as we want homebrew versions to override system executables
-path-prepend-dirs "$HOME/dev/brew/bin"
+path_prepend_dirs "$HOME/dev/brew/bin"
 #export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:$HOME/dev/brew/lib"
 #export CPATH="$HOME/dev/homebrew/include:$CPATH"
 #export NODE_PATH="$HOME/dev/homebrew/lib/node_modules"
 #export MANPATH="$MANPATH:/opt/local/share/man"
-case $SHELL in
+case $0 in
   # FIXME: add bash
   *zsh)
     fpath+="$HOME/dev/brew/share/zsh/site-functions"
@@ -52,10 +52,10 @@ esac
 
 ### Add some weirdly-placed programs to PATH
 if [ -d $HOME/dev/phabricator/arcanist/bin ]; then
-  path-append-dirs "$HOME/dev/phabricator/arcanist/bin"
+  path_append_dirs "$HOME/dev/phabricator/arcanist/bin"
 fi
 
-path-prepend-dirs "$HOME/.cargo/bin"
+path_prepend_dirs "$HOME/.cargo/bin"
 
 # Rust src, when installed
 if hash rustc 2>/dev/null; then
