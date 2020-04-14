@@ -6,6 +6,7 @@ opt/YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 opt/python-mode|git|https://github.com/klen/python-mode.git
 opt/vim-markdown|git|https://github.com/tpope/vim-markdown.git
 opt/vim-rust|git|https://github.com/rust-lang/rust.vim.git
+opt/vim-toml|git|https://github.com/cespare/vim-toml.git
 
 # Async.vim is required for vim-lsp
 opt/async|git|https://github.com/prabirshrestha/async.vim.git
@@ -22,13 +23,14 @@ start/vim-eunuch|git|https://github.com/tpope/vim-eunuch.git
 start/vim-flatfoot|git|https://github.com/tpope/vim-flatfoot.git
 start/vim-fugitive|git|https://github.com/tpope/vim-fugitive.git
 start/vim-git|git|https://github.com/tpope/vim-git.git
+start/vim-highlightedyank|git|https://github.com/machakann/vim-highlightedyank
 start/vim-repeat|git|https://github.com/tpope/vim-repeat.git
 start/vim-sleuth|git|https://github.com/tpope/vim-sleuth.git
 start/vim-speeddating|git|https://github.com/tpope/vim-speeddating.git
 start/vim-surround|git|https://github.com/tpope/vim-surround.git
 start/vim-unimpaired|git|https://github.com/tpope/vim-unimpaired.git
 start/vim-vinegar|git|https://github.com/tpope/vim-vinegar.git
-start/yankring|git|https://github.com/vim-scripts/YankRing.vim.git
+start/yankring|zip|https://www.vim.org/scripts/download_script.php?src_id=26344
 
 #command-t|git|https://git.wincent.com/command-t.git
 #nerdtree|git|https://github.com/scrooloose/nerdtree.git

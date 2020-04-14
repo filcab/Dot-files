@@ -1,6 +1,6 @@
 call filcab#javascript#init()
 
-if g:filcab#javascript#completer_flavour == 'lsp'
+if index(g:filcab#javascript#completer_flavours, 'lsp') != -1
   setlocal omnifunc=lsp#complete
 endif
 

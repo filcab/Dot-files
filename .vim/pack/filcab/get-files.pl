@@ -118,14 +118,16 @@ sub tgz ($$$) {
     return if (-e $dir);
 
     print "Downloading from: $url\n";
+    # FIXME: nononono. Make sure we get the full download before we extract
+    # (not used for now, so...)
     open CURL, "curl '$url' | tar xvzf -|";
     print while (<CURL>);
     `mv "$res" "$dir"` unless ($res eq "");
 }
 
 sub zip ($$$) {
-    my ($dir, $url, $res);
-    $dir = shift, $url = shift, $res = shift;
+    my ($dir, $url);
+    $dir = shift, $url = shift;
 
     return if (-e $dir);
 
@@ -133,10 +135,9 @@ sub zip ($$$) {
     print "Downloading from: $url\n";
     open CURL, "curl '$url' -o $tmpf|";
     print while (<CURL>);
-    open UNZIP, "unzip $tmpf|";
+    open UNZIP, "unzip -d '$dir' $tmpf|";
     print while (<UNZIP>);
     `rm $tmpf`;
-    `mv "$res" "$dir"` unless ($res eq "");
 }
 
 sub bzr_tgz ($$$$) {

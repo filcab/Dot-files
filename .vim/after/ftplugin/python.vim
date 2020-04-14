@@ -6,7 +6,7 @@ let b:did_filcab_python = 1
 call filcab#python#init()
 call filcab#completers#setup_mappings('python')
 
-if g:filcab#python#completer_flavour == 'lsp'
+if index(g:filcab#python#completer_flavours, 'lsp') != -1
   setlocal omnifunc=lsp#complete
 endif
 

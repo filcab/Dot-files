@@ -54,7 +54,7 @@ function filcab#c#ClangCheck()
 endfunction
 
 let filcab#c#initted = v:false
-let filcab#c#completer_flavour = 'none'
+let filcab#c#completer_flavours = []
 function filcab#c#init() abort
   if g:filcab#c#initted
     return
@@ -62,7 +62,7 @@ function filcab#c#init() abort
 
   if executable(g:clangd_path)
     echo "Setting up vim-lsp for C/C++"
-    let g:filcab#c#completer_flavour = 'lsp'
+    call add(g:filcab#c#completer_flavours, 'lsp')
     " If another language plugin uses YouCompleteMe, let's blacklist this type
     let g:ycm_filetype_blacklist['c'] = 1
     let g:ycm_filetype_blacklist['cpp'] = 1
@@ -79,7 +79,7 @@ function filcab#c#init() abort
 
   if !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for C/C++"
-    let g:filcab#c#completer_flavour = 'ycm'
+    call add(g:filcab#c#completer_flavours, 'ycm')
     let g:ycm_clangd_binary_path = g:clangd_path
     packadd YouCompleteMe
   endif

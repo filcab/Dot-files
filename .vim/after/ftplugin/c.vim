@@ -28,6 +28,8 @@ autocmd BufWritePre <buffer>
   \   call filcab#ClangFormat() |
   \ endif
 
-if g:filcab#c#completer_flavour == 'lsp'
+if index(g:filcab#c#completer_flavours, 'lsp') != -1
+  " YCM doesn't use omnifunc, so this allows us to have YCM and LSP at the
+  " same time
   setlocal omnifunc=lsp#complete
 endif

@@ -103,7 +103,7 @@ find_executable_enable_completer('node', 'ts')
 completers.warn_skipped()
 
 # , '--build-dir={}'.format(os.path.join(os.getcwd(), platform.system()))
-cmd = ['python3', 'install.py'] + completers.cli_args()
+cmd = [sys.executable, 'install.py'] + completers.cli_args()
 print('Executing: {}'.format(' '.join(cmd)))
 subprocess.check_call(cmd, env=os.environ)
 

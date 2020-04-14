@@ -1,5 +1,7 @@
-let s:completer_functions = {}
+" Possible completers we have
+let s:completer_flavours = ["ycm", "lsp"]
 
+let s:completer_functions = {}
 let s:completer_functions["lsp"] = {
   \ "fixit": {-> execute(":LspCodeAction")},
   \ "get-type": {-> execute(":LspTypeDefinition")},
@@ -33,10 +35,16 @@ let s:completer_functions["ycm"] = {
   \ "stats": function('filcab#ShowYCMNumberOfWarningsAndErrors'),
   \ }
 
-function s:call_completer_function(flavour, name)
-  let l:Func = get(s:completer_functions[a:flavour], a:name, v:false)
+function s:call_completer_function(flavours, name)
+  let l:Func = v:false
+  for flavour in s:completer_flavours
+    if index(flavour, a:flavours) != -1
+      let l:Func = get(s:completer_functions[flavour], a:name)
+    endif
+  endfor
+
   if l:Func == v:false
-    echoerr "Completer ".a:flavour." has no function for ".a:name
+    echoerr "Completer ".a:flavours." has no function for ".a:name
     return
   endif
   redraw
@@ -45,7 +53,7 @@ endfunction
 
 function s:set_mapping(map, lang_name, keys, name) abort
   exe a:map."noremap" "<buffer><unique>" "<LocalLeader>".a:keys ":call"
-    \ "<SID>call_completer_function(g:filcab#".a:lang_name."#completer_flavour, '".a:name."')<cr>"
+    \ "<SID>call_completer_function(g:filcab#".a:lang_name."#completer_flavours, '".a:name."')<cr>"
 endfunction
 
 function filcab#completers#setup_mappings(lang_name) abort
