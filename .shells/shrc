@@ -14,7 +14,7 @@ else
   case ${0} in
     -sh|sh|-ash|ash|-dash|dash|-bash|bash)
       # echo "(ba)sh funcs!"
-      source ${SHELL_RESOURCES}/compat.sh
+      . ${SHELL_RESOURCES}/compat.sh
       ;;
     *)
       echo uh oh... Don\'t know about this shell: ${0}
@@ -27,5 +27,5 @@ fi
 
 # load general files (used for sh, bash, and zsh)
 for rc in ${SHELL_RESOURCES}/rc.*; do
-  source ${rc}
+  . ${rc}
 done

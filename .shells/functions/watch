@@ -5,8 +5,9 @@ if hash watch 2>/dev/null; then
   return 0
 fi
 
-function watch () {
-  function usage() {
+watch () {
+  local usage
+  usage() {
     echo "Usage: $0 [ -i interval ] command ..."
     echo "  interval: interval between executions, in seconds"
     return 1
@@ -35,15 +36,11 @@ function watch () {
 
   shift $((OPTIND-1))
 
-  if type watch | grep "is a shell function" &>/dev/null; then
-    while true; do
-      clear
-      echo "Watching ($interval secs.) command: " "$@"
-      eval "$@"
-      sleep $interval
-    done
-  else
-    `whereis watch` $*
-  fi
+  while true; do
+    clear
+    echo "Watching ($interval secs.) command: " "$@"
+    eval "$@"
+    sleep $interval
+  done
 }
 

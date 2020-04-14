@@ -1,11 +1,11 @@
 #!/bin/sh
 
-source ~/.shells/paths
+. ~/.shells/paths
 
 
 ### Set $EDITOR to be whatever vim we find. We might override it later
 # FIXME: Just loop over the possible paths and set EDITOR once, accordingly
-if [ -z "$EDITOR" ] && hash vim &> /dev/null; then
+if [ -z "$EDITOR" ] && hash vim > /dev/null 2>&1; then
   export EDITOR=vim
 fi
 
@@ -76,7 +76,7 @@ alias v='eval "v$(fc -l -n -1)"'
 
 ### Set better defaults for miscellaneous environment variables
 ## use vimpager if available
-if type vimpager &>/dev/null;
+if hash vimpager 2>/dev/null;
 then
   export PAGER=vimpager
 else
@@ -88,17 +88,17 @@ fi
 export CTEST_OUTPUT_ON_FAILURE=1
 
 ## color for manpages:
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_us=$'\E[01;32m'
+export LESS_TERMCAP_mb=$'\e[01;31m'
+export LESS_TERMCAP_md=$'\e[01;31m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[01;44;33m'
+export LESS_TERMCAP_us=$'\e[01;32m'
 # use a reset code as the last definition
-export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_ue=$'\e[0m'
 
 ### Load ssh-agent settings or start it and export its settings
-function maybe_start_ssh_agent {
+maybe_start_ssh_agent() {
   # Bail out if we're using ssh-agent forwarding
   if [ ! -z "${SSH_CONNECTION}" ] && [ -S "${SSH_AUTH_SOCK}" ]; then
       echo detected SSH_AUTH_SOCK from forwarded agent
@@ -116,7 +116,7 @@ function maybe_start_ssh_agent {
   agent_start () {
       echo Starting a new ssh-agent
       (umask 077; ssh-agent >| "$env")
-      source "$env" >| /dev/null ;
+      . "$env" >| /dev/null ;
   }
 
   agent_load_env

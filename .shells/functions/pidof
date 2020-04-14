@@ -5,12 +5,8 @@ if hash pidof 2>/dev/null; then
   return 0
 fi
 
-function pidof() {
-  if type pidof | grep "is a shell function" &>/dev/null; then
-    for i in "$@"; do
-      procs | awk "{ if (\$2 ~ \"^-?$1\$\" || \$2 ~ \".*/$1\$\") print \$1 }"
-    done
-  else
-    `whereis pidof` $*
-  fi
+pidof() {
+  for i in "$@"; do
+    procs | awk "{ if (\$2 ~ \"^-?$1\$\" || \$2 ~ \".*/$1\$\") print \$1 }"
+  done
 }
