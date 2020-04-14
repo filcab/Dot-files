@@ -14,18 +14,23 @@ path_prepend_dirs "$SHELL_RESOURCES/bin"
 # git
 path_prepend_dirs "/usr/local/gitprefix/bin"
 
-# Python user-installed files (prepend so any user-installed pip/etc overrides the system one)
 case $(uname -s) in
   Darwin)
+    # Export SDKROOT to the current SDK on Xcode (TODO: Make this the generic symlink)
+    if command -v xcrun &>/dev/null; then
+      export SDKROOT="$(xcrun --show-sdk-path)"
+    fi
+
+    # MacTeX
+    path_append_dirs "/usr/texbin/bin/x86_64-darwin"
+
+    # Python user-installed files (prepend so any user-installed pip/etc overrides the system one)
     path_prepend_dirs "$HOME/Library/Python/3.7/bin" "$HOME/Library/Python/2.7/bin"
     ;;
   Linux)
     path_prepend_dirs "$HOME/.local/bin"
     ;;
 esac
-
-# MacTeX
-path_append_dirs "/usr/texbin/bin/x86_64-darwin"
 
 ### Add homebrew paths
 # prepend, as we want homebrew versions to override system executables
@@ -38,15 +43,6 @@ case $0 in
   # FIXME: add bash
   *zsh)
     fpath+="$HOME/dev/brew/share/zsh/site-functions"
-    ;;
-esac
-
-### Export SDKROOT to the current SDK on Xcode (TODO: Make this the generic symlink)
-case $(uname -s) in
-  Darwin)
-    if command -v xcrun &>/dev/null; then
-      export SDKROOT="$(xcrun --show-sdk-path)"
-    fi
     ;;
 esac
 
