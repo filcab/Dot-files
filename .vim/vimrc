@@ -148,7 +148,10 @@ cabbr <expr> %% expand('%:p:h:gs?\\?/?')
 set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 
 " When in a git repo, tell us the current branch
-let &statusline = '%{fugitive#statusline()} ' . &statusline
+" Only set it if we have fugitive available. Check with a variable it defines
+if get(g:, 'fugitive_git_executable', v:false)
+  let &statusline = '%{fugitive#statusline()} ' . &statusline
+endif
 
 " From silvas' vimrc:
 " Showing invisible characters {{{
