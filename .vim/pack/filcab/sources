@@ -6,6 +6,7 @@ opt/YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 opt/python-mode|git|https://github.com/klen/python-mode.git
 opt/vim-markdown|git|https://github.com/tpope/vim-markdown.git
 opt/vim-rust|git|https://github.com/rust-lang/rust.vim.git
+opt/vim-toml|git|https://github.com/cespare/vim-toml.git
 
 # Async.vim is required for vim-lsp
 opt/async|git|https://github.com/prabirshrestha/async.vim.git
