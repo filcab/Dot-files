@@ -1,5 +1,5 @@
 let filcab#javascript#initted = v:false
-let filcab#javascript#completer_flavour = 'none'
+let filcab#javascript#completer_flavours = []
 function filcab#javascript#init() abort
   if g:filcab#javascript#initted
     return
@@ -7,7 +7,7 @@ function filcab#javascript#init() abort
 
   if executable('javascript-language-server')
     echo "Setting up vim-lsp for Javascript"
-    let g:filcab#javascript#completer_flavour = 'lsp'
+    call add(g:filcab#javascript#completer_flavours, 'lsp')
     " If another language plugin uses YouCompleteMe, let's blacklist this type
     let g:ycm_filetype_blacklist['javascript'] = 1
     " pip install python-language-server
@@ -20,8 +20,8 @@ function filcab#javascript#init() abort
 
   if !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for Javascript"
+    call add(g:filcab#javascript#completer_flavours, 'ycm')
     packadd YouCompleteMe
-    let g:filcab#javascript#completer_flavour = 'ycm'
   endif
 
   let g:filcab#javascript#initted = v:true

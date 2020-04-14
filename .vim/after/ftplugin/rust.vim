@@ -1,7 +1,7 @@
 call filcab#rust#init()
 call filcab#completers#setup_mappings('rust')
 
-if g:filcab#rust#completer_flavour == 'lsp'
+if index(g:filcab#rust#completer_flavours, 'lsp') != -1
   setlocal omnifunc=lsp#complete
 endif
 

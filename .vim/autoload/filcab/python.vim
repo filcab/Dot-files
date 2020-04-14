@@ -1,5 +1,5 @@
 let filcab#python#initted = v:false
-let filcab#python#completer_flavour = 'none'
+let filcab#python#completer_flavours = []
 function filcab#python#init() abort
   if g:filcab#python#initted
     return
@@ -9,7 +9,7 @@ function filcab#python#init() abort
 
   if executable('pyls')
     echo "Setting up vim-lsp for Python"
-    let g:filcab#python#completer_flavour = 'lsp'
+    call add(g:filcab#python#completer_flavours, 'lsp')
     " If another language plugin uses YouCompleteMe, let's blacklist this type
     let g:ycm_filetype_blacklist['python'] = 1
     packadd async
@@ -24,8 +24,8 @@ function filcab#python#init() abort
 
   if !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for Python"
+    call add(g:filcab#python#completer_flavours, 'ycm')
     packadd YouCompleteMe
-    let g:filcab#python#completer_flavour = 'ycm'
   endif
 
   let g:filcab#python#initted = v:true
