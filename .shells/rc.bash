@@ -6,7 +6,9 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 
 
-source "$SHELL_RESOURCES"/lib/git-completion.bash
+for f in "$SHELL_RESOURCES"/lib/*.bash; do
+  source "$f"
+done
 source "$SHELL_RESOURCES"/lib/git-prompt.sh
 
 # fix spelling errors for cd, only in interactive shell
