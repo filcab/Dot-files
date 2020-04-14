@@ -23,6 +23,7 @@ start/vim-eunuch|git|https://github.com/tpope/vim-eunuch.git
 start/vim-flatfoot|git|https://github.com/tpope/vim-flatfoot.git
 start/vim-fugitive|git|https://github.com/tpope/vim-fugitive.git
 start/vim-git|git|https://github.com/tpope/vim-git.git
+start/vim-highlightedyank|git|https://github.com/machakann/vim-highlightedyank
 start/vim-repeat|git|https://github.com/tpope/vim-repeat.git
 start/vim-sleuth|git|https://github.com/tpope/vim-sleuth.git
 start/vim-speeddating|git|https://github.com/tpope/vim-speeddating.git
