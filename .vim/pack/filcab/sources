@@ -29,7 +29,7 @@ start/vim-speeddating|git|https://github.com/tpope/vim-speeddating.git
 start/vim-surround|git|https://github.com/tpope/vim-surround.git
 start/vim-unimpaired|git|https://github.com/tpope/vim-unimpaired.git
 start/vim-vinegar|git|https://github.com/tpope/vim-vinegar.git
-start/yankring|git|https://github.com/vim-scripts/YankRing.vim.git
+start/yankring|zip|https://www.vim.org/scripts/download_script.php?src_id=26344
 
 #command-t|git|https://git.wincent.com/command-t.git
 #nerdtree|git|https://github.com/scrooloose/nerdtree.git
