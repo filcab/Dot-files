@@ -24,6 +24,8 @@ function filcab#rust#init() abort
 
   if !g:disable_youcompleteme
     echo "Setting up YouCompleteMe for Rust"
+    let g:ycm_rls_binary_path='rls'
+    let g:ycm_rustc_binary_path='rustc'
     call add(g:filcab#rust#completer_flavours, 'ycm')
     packadd YouCompleteMe
   endif

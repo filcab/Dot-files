@@ -91,11 +91,8 @@ def find_executable_enable_completer(exe, comp):
     else:
         completers.skip(comp)
 
-# filcab: Remove clangd for now, as there's no option other than installing it
-# with YCM's download...
-#find_executable_enable_completer('clangd', 'clangd')
-# Same for rust-completer. Just edit it to search anywhere for rls
-find_executable_enable_completer('rls', 'rust')
+# We're now able to tell YCM where to find the language servers, so let's not enable any
+# completer which we will install in another way (clangd, rls).
 find_executable_enable_completer('node', 'ts')
 
 
@@ -109,4 +106,3 @@ subprocess.check_call(cmd, env=os.environ)
 
 # Also warn at the end, as we might have a big backlog
 completers.warn_skipped()
-
