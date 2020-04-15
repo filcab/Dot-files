@@ -11,14 +11,19 @@ if !executable(g:clang_format_path)
   unlet g:clang_format_path
 endif
 
-let g:clang_check_path = get(g:, 'clang_check_path',
-    \ filcab#FindProgram('clang-check', g:clang_tools_search_paths))
+" Only search for a clang-check and set the var if it doesn't have a value yet
+if !get(g:, 'clang_check_path', v:false)
+  let g:clang_check_path = filcab#FindProgram('clang-check', g:clang_tools_search_paths)
+endif
 if !executable(g:clang_check_path)
   echom "Can't find clang-check binary. Please set g:clang_tools_search_paths or g:clang_check_path"
 endif
 
-let g:clangd_path = get(g:, 'clangd_path',
-    \ filcab#FindProgram('clangd', g:clang_tools_search_paths))
+" Only search for a clangd and set the var if it doesn't have a value yet
+if !get(g:, 'clangd_path', v:false)
+  let g:clangd_path = filcab#FindProgram('clangd', g:clang_tools_search_paths)
+endif
+
 if !executable(g:clangd_path)
   echom "Can't find clangd binary. Please set g:clang_tools_search_paths or g:clangd_path"
 else

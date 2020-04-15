@@ -26,4 +26,3 @@ function filcab#javascript#init() abort
 
   let g:filcab#javascript#initted = v:true
 endfunction
-
