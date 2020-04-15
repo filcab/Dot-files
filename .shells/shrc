@@ -12,7 +12,8 @@ if [ ! -z "$ZSH_VERSION" ]; then
   source ${SHELL_RESOURCES}/compat.zsh
 else
   case ${0} in
-    -sh|sh|-ash|ash|-dash|dash|-bash|bash)
+    # git-bash will have $0 as /usr/bin/bash
+    -sh|sh|-ash|ash|-dash|dash|-bash|bash|*/bash)
       # echo "(ba)sh funcs!"
       . ${SHELL_RESOURCES}/compat.sh
       ;;
