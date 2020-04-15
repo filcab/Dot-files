@@ -9,7 +9,7 @@ function filcab#javascript#init() abort
     echo "Setting up vim-lsp for Javascript"
     call add(g:filcab#javascript#completer_flavours, 'lsp')
     " If another language plugin uses YouCompleteMe, let's blacklist this type
-    let g:ycm_filetype_blacklist['javascript'] = 1
+    "let g:ycm_filetype_blacklist['javascript'] = 1
     " pip install python-language-server
     call lsp#register_server({
       \ 'name': 'tern',

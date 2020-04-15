@@ -11,7 +11,7 @@ function filcab#python#init() abort
     echo "Setting up vim-lsp for Python"
     call add(g:filcab#python#completer_flavours, 'lsp')
     " If another language plugin uses YouCompleteMe, let's blacklist this type
-    let g:ycm_filetype_blacklist['python'] = 1
+    "let g:ycm_filetype_blacklist['python'] = 1
     packadd async
     packadd vim-lsp
     " pip install python-language-server
