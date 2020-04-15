@@ -50,6 +50,11 @@
 [user]
 	name = Filipe Cabecinhas
 
+# Some corporate firewalls don't let git:// protocols go through. Let's try
+# assuming that we have an equivalent https:// access to any repos we need
+[url "https://"]
+	insteadOf = git://
+
 # From: https://groups.google.com/forum/#!topic/binary-transparency/f-BI4o8HZW0
 # for $deity's sake, check that anything we're getting is complete and sane on
 # a regular basis
