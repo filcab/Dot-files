@@ -7,7 +7,7 @@ function filcab#rust#init() abort
 
   packadd vim-rust
 
-  if executable('rls')
+  if !get(g:, 'disable_lsp', v:false) && executable('rls')
     echo "Setting up vim-lsp for Rust"
     call add(g:filcab#rust#completer_flavours, 'lsp')
     " If another language plugin uses YouCompleteMe, let's blacklist this type
@@ -22,7 +22,7 @@ function filcab#rust#init() abort
       \ })
   endif
 
-  if !g:disable_youcompleteme
+  if !get(g:, 'disable_youcompleteme', v:false)
     echo "Setting up YouCompleteMe for Rust"
     let g:ycm_rls_binary_path='rls'
     let g:ycm_rustc_binary_path='rustc'

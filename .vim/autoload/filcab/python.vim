@@ -7,7 +7,7 @@ function filcab#python#init() abort
 
   packadd python-mode
 
-  if executable('pyls')
+  if !get(g:, 'disable_lsp', v:false) && executable('pyls')
     echo "Setting up vim-lsp for Python"
     call add(g:filcab#python#completer_flavours, 'lsp')
     " If another language plugin uses YouCompleteMe, let's blacklist this type
@@ -22,7 +22,7 @@ function filcab#python#init() abort
       \ })
   endif
 
-  if !g:disable_youcompleteme
+  if !get(g:, 'disable_youcompleteme', v:false)
     echo "Setting up YouCompleteMe for Python"
     call add(g:filcab#python#completer_flavours, 'ycm')
     packadd YouCompleteMe

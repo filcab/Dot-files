@@ -6,7 +6,9 @@ let g:clang_format_on_save = 1  " Will query buffer-local variable of the same n
 let g:clang_format_fugitive = 1
 
 " LSP setup is not ready yet
-let g:disable_youcompleteme = 0
+"let g:disable_youcompleteme = 0
+"let g:disable_lsp = 0
+
 " Set this wether or not we're disabling ycm, since we might not find the LSP
 " programs
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'

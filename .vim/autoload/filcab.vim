@@ -133,7 +133,7 @@ endfunction
 
 " Shared amongst all YCM-using languages
 function filcab#ShowYCMNumberOfWarningsAndErrors()
-  if !g:disable_youcompleteme && get(g:, 'loaded_youcompleteme', v:false)
+  if !get(g:, 'disable_youcompleteme', v:false) && get(g:, 'loaded_youcompleteme', v:false)
     echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount()
         \ . ' Warnings: ' . youcompleteme#GetWarningCount()
   endif

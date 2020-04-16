@@ -65,7 +65,10 @@ function filcab#c#init() abort
     return
   endif
 
-  if executable(g:clangd_path)
+  " Latch onto the YCM var and use those args for lsp too
+  let g:ycm_clangd_args = get(g:, 'ycm_clangd_args', [])
+
+  if !get(g:, 'disable_lsp', v:false) && executable(g:clangd_path)
     echo "Setting up vim-lsp for C/C++"
     call add(g:filcab#c#completer_flavours, 'lsp')
     " If another language plugin uses YouCompleteMe, let's blacklist this type
@@ -77,15 +80,17 @@ function filcab#c#init() abort
     packadd vim-lsp
     call lsp#register_server({
             \ 'name': 'clangd',
-            \ 'cmd': {server_info->[g:clangd_path]},
+            \ 'cmd': {server_info->[g:clangd_path] + g:ycm_clangd_args},
             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
             \ })
   endif
 
-  if !g:disable_youcompleteme
+  if !get(g:, 'disable_youcompleteme', v:false)
     echo "Setting up YouCompleteMe for C/C++"
     call add(g:filcab#c#completer_flavours, 'ycm')
-    let g:ycm_clangd_binary_path = g:clangd_path
+    if executable(g:clangd_path)
+      let g:ycm_clangd_binary_path = g:clangd_path
+    endif
     packadd YouCompleteMe
   endif
 
