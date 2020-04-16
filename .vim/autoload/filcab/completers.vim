@@ -38,8 +38,9 @@ let s:completer_functions["ycm"] = {
 function s:call_completer_function(flavours, name)
   let l:Func = v:false
   for flavour in s:completer_flavours
-    if index(flavour, a:flavours) != -1
+    if index(a:flavours, flavour) != -1
       let l:Func = get(s:completer_functions[flavour], a:name)
+      break
     endif
   endfor
 
@@ -52,7 +53,7 @@ function s:call_completer_function(flavours, name)
 endfunction
 
 function s:set_mapping(map, lang_name, keys, name) abort
-  exe a:map."noremap" "<buffer><unique>" "<LocalLeader>".a:keys ":call"
+  exe a:map."noremap" "<buffer><unique>" "<LocalLeader>".a:keys ":silent call"
     \ "<SID>call_completer_function(g:filcab#".a:lang_name."#completer_flavours, '".a:name."')<cr>"
 endfunction
 
