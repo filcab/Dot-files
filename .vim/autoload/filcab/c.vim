@@ -66,7 +66,7 @@ function filcab#c#init() abort
   endif
 
   " Latch onto the YCM var and use those args for lsp too
-  let g:ycm_clangd_args = get(g:, 'ycm_clangd_args', [])
+  let g:ycm_clangd_args = get(g:, 'clangd_args', [])
 
   if !get(g:, 'disable_lsp', v:false) && executable(g:clangd_path)
     echo "Setting up vim-lsp for C/C++"
