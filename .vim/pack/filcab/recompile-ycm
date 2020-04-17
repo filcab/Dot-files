@@ -69,11 +69,11 @@ class Completers(object):
     def cli_args(self):
         return ['--{}-completer'.format(c) for c in self.enabled]
 
-    def warn_skipped(self):
+    def warn_skipped(self, prefix='\n'):
         if not self.skipped:
             return
 
-        print('Skipped completers:')
+        print(f'{prefix}Skipped completers:')
         for c in self.skipped:
             print('  {}'.format(c))
 
