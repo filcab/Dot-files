@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
+# TODO: Use vswhere to locate and use vcvarsall
+
 from distutils.spawn import find_executable
+from pathlib import Path
+
 import os
 import platform
 import string
@@ -13,6 +17,8 @@ if platform.system() == 'Windows' and 'VisualStudioVersion' not in os.environ:
     sys.exit(1)
 
 
+basedir = Path(__file__).parent
+os.chdir(basedir)
 # We might be called on the bundle directory or on the YCM directory
 if os.path.isdir('opt/YouCompleteMe'):
     os.chdir('opt/YouCompleteMe')

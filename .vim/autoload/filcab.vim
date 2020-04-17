@@ -161,3 +161,7 @@ function filcab#ShowYCMNumberOfWarningsAndErrors()
         \ . ' Warnings: ' . youcompleteme#GetWarningCount()
   endif
 endfunction
+
+function filcab#recompileYCM()
+  execute  ":terminal python3 \"".expand('~/.vim/pack/filcab/recompile-ycm')."\""
+endfunction
