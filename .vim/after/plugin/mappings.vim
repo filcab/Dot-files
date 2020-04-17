@@ -39,6 +39,6 @@ inoremap <unique> <C-x>? <C-o>:call filcab#CTRL_X_Help()<cr>
 " FIXME: Maybe fugitive buffers?
 
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
-nnoremap <unique> z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+nnoremap <unique> z/ :if filcab#AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
 let g:loaded_mappings = 1
