@@ -81,16 +81,21 @@ def _initialize_black_env(upgrade=False):
   if not virtualenv_path.is_dir():
     print('Please wait, one time setup for Black.')
     _executable = sys.executable
-    _base_executable = sys._base_executable
+    if '_base_executable' in sys:
+      _base_executable = sys._base_executable
+    else:
+      _base_executable = None
     try:
       sys.executable = str(_get_python_binary(Path(sys.exec_prefix)))
-      sys._base_executable = str(_get_python_binary(Path(sys.exec_prefix)))
+      if _base_executable:
+        sys._base_executable = str(_get_python_binary(Path(sys.exec_prefix)))
       print(f'Creating a virtualenv in {virtualenv_path}...')
       print('(this path can be customized in .vimrc by setting g:black_virtualenv)')
       venv.create(virtualenv_path, with_pip=True)
     finally:
       sys.executable = _executable
-      sys._base_executable = _base_executable
+      if _base_executable:
+        sys._base_executable = _base_executable
     first_install = True
   if first_install:
     print('Installing Black with pip...')
