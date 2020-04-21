@@ -7,14 +7,27 @@ from pathlib import Path
 
 import os
 import platform
-import string
 import subprocess
 import sys
 
 
 if platform.system() == 'Windows' and 'VisualStudioVersion' not in os.environ:
-    print('%VisualStudioVersion% is not defined. Did you source vcvarsall.bat or are running on the tools shell?')
-    sys.exit(1)
+    # json is only needed if we need to use vswhere
+    import json
+    print('%VisualStudioVersion% is not defined. Re-executing script under MS dev tools for x64')
+
+    vswhere = Path(os.environ["ProgramFiles(x86)"]) / "Microsoft Visual Studio" / "Installer" / "vswhere.exe"
+    proc = subprocess.run([vswhere, "-latest", "-format", "json", "-utf8"],
+                          stdout=subprocess.PIPE, encoding="utf-8")
+    # We're asking for the latest, so expect a single result and use it
+    props = json.loads(proc.stdout.strip())[0]
+    cat = props['catalog']
+    print(f"Using {cat['productName']} {cat['productLineVersion']} {cat['productDisplayVersion']}")
+    devcmd = Path(props["installationPath"]) / "Common7" / "Tools" / "vsdevcmd.bat"
+    # Quoty McQuote Face, but assume file names aren't malicious
+    cmd = f"cmd /s /c \"\"{str(devcmd)}\" -arch=x64 & \"{sys.executable}\" \"{__file__}\"\""
+    # re-exec, with VS env vars
+    sys.exit(subprocess.run(cmd).returncode)
 
 
 basedir = Path(__file__).parent
