@@ -81,7 +81,7 @@ def _initialize_black_env(upgrade=False):
   if not virtualenv_path.is_dir():
     print('Please wait, one time setup for Black.')
     _executable = sys.executable
-    if '_base_executable' in sys:
+    if hasattr(sys, '_base_executable'):
       _base_executable = sys._base_executable
     else:
       _base_executable = None
