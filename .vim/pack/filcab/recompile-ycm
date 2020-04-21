@@ -11,21 +11,36 @@ import subprocess
 import sys
 
 
-if platform.system() == 'Windows' and 'VisualStudioVersion' not in os.environ:
+if platform.system() == "Windows" and "VisualStudioVersion" not in os.environ:
     # json is only needed if we need to use vswhere
     import json
-    print('%VisualStudioVersion% is not defined. Re-executing script under MS dev tools for x64')
 
-    vswhere = Path(os.environ["ProgramFiles(x86)"]) / "Microsoft Visual Studio" / "Installer" / "vswhere.exe"
-    proc = subprocess.run([vswhere, "-latest", "-format", "json", "-utf8"],
-                          stdout=subprocess.PIPE, encoding="utf-8")
+    print(
+        "%VisualStudioVersion% is not defined. "
+        "Re-executing script under MS dev tools for x64"
+    )
+
+    vswhere = (
+        Path(os.environ["ProgramFiles(x86)"])
+        / "Microsoft Visual Studio"
+        / "Installer"
+        / "vswhere.exe"
+    )
+    proc = subprocess.run(
+        [vswhere, "-latest", "-format", "json", "-utf8"],
+        stdout=subprocess.PIPE,
+        encoding="utf-8",
+    )
     # We're asking for the latest, so expect a single result and use it
     props = json.loads(proc.stdout.strip())[0]
-    cat = props['catalog']
-    print(f"Using {cat['productName']} {cat['productLineVersion']} {cat['productDisplayVersion']}")
+    cat = props["catalog"]
+    print(
+        f"Using {cat['productName']} {cat['productLineVersion']}"
+        f"{cat['productDisplayVersion']}"
+    )
     devcmd = Path(props["installationPath"]) / "Common7" / "Tools" / "vsdevcmd.bat"
     # Quoty McQuote Face, but assume file names aren't malicious
-    cmd = f"cmd /s /c \"\"{str(devcmd)}\" -arch=x64 & \"{sys.executable}\" \"{__file__}\"\""
+    cmd = f'cmd /s /c ""{str(devcmd)}" -arch=x64 & "{sys.executable}" "{__file__}""'
     # re-exec, with VS env vars
     sys.exit(subprocess.run(cmd).returncode)
 
@@ -33,50 +48,65 @@ if platform.system() == 'Windows' and 'VisualStudioVersion' not in os.environ:
 basedir = Path(__file__).parent
 os.chdir(basedir)
 # We might be called on the bundle directory or on the YCM directory
-if os.path.isdir('opt/YouCompleteMe'):
-    os.chdir('opt/YouCompleteMe')
+if os.path.isdir("opt/YouCompleteMe"):
+    os.chdir("opt/YouCompleteMe")
 
 
-tentative_llvm_paths = ['~/dev/llvm/install', '~/dev/llvm/build', '~/work/llvm-cmake',
-                        'C:/code/llvm/install', 'C:/code/llvm/build', '/usr/lib/llvm-9']
+tentative_llvm_paths = [
+    "~/dev/llvm/install",
+    "~/dev/llvm/build",
+    "~/work/llvm-cmake",
+    "C:/code/llvm/install",
+    "C:/code/llvm/build",
+    "/usr/lib/llvm-9",
+]
+
 for d in tentative_llvm_paths:
     d = os.path.realpath(os.path.expanduser(d))
     if os.path.isdir(d):
-        llvm_root = d.translate(str.maketrans('\\', '/'))
+        llvm_root = d.translate(str.maketrans("\\", "/"))
         break
 # We'll actually get an exception if we didn't find it
 assert llvm_root
-print('LLVM root: {}'.format(llvm_root))
+print("LLVM root: {}".format(llvm_root))
 
 
-if platform.system() == 'Darwin':
-    lib_suffix = 'dylib'
-elif platform.system() == 'Windows':
-    lib_suffix = 'lib'
-elif platform.system() == 'Linux':
-    lib_suffix = 'so'
+if platform.system() == "Darwin":
+    lib_suffix = "dylib"
+elif platform.system() == "Windows":
+    lib_suffix = "lib"
+elif platform.system() == "Linux":
+    lib_suffix = "so"
 else:
-    print('Unknown platform: {}. Please edit this script and add it.'.format(platform.system()), file=sys.stderr)
+    print(
+        "Unknown platform: {}. Please edit this script and add it.".format(
+            platform.system()
+        ),
+        file=sys.stderr,
+    )
     sys.exit(1)
 # We'll actually get an exception if we didn't find it
 assert lib_suffix
-print('Library file suffix: {}'.format(lib_suffix))
+print("Library file suffix: {}".format(lib_suffix))
 
 
-os.environ['EXTRA_CMAKE_ARGS'] = '-DEXTERNAL_LIBCLANG_PATH:FILEPATH={}/lib/libclang.{}'.format(llvm_root, lib_suffix)
+os.environ[
+    "EXTRA_CMAKE_ARGS"
+] = "-DEXTERNAL_LIBCLANG_PATH:FILEPATH={}/lib/libclang.{}".format(llvm_root, lib_suffix)
 
 
 # For some reason we need this on Windows
-if platform.system() == 'Windows':
-    os.environ['EXTRA_CMAKE_ARGS'] += ' -DPATH_TO_LLVM_ROOT:PATH={}'.format(llvm_root)
+if platform.system() == "Windows":
+    os.environ["EXTRA_CMAKE_ARGS"] += " -DPATH_TO_LLVM_ROOT:PATH={}".format(llvm_root)
 
 
 # Default to enabling clang, assuming the code above is ok
 # FIXME: Improve the above detection, and fail gracefully + disable clang
 
+
 class Completers(object):
     def __init__(self):
-        self.enabled = ['clang']
+        self.enabled = ["clang"]
         self.skipped = []
 
     def ok(self, completer):
@@ -86,35 +116,38 @@ class Completers(object):
         self.skipped.append(completer)
 
     def cli_args(self):
-        return ['--{}-completer'.format(c) for c in self.enabled]
+        return ["--{}-completer".format(c) for c in self.enabled]
 
-    def warn_skipped(self, prefix='\n'):
+    def warn_skipped(self, prefix="\n"):
         if not self.skipped:
             return
 
-        print(f'{prefix}Skipped completers:')
+        print(f"{prefix}Skipped completers:")
         for c in self.skipped:
-            print('  {}'.format(c))
+            print("  {}".format(c))
 
 
 completers = Completers()
+
+
 def find_executable_enable_completer(exe, comp):
     if find_executable(exe):
         completers.ok(comp)
     else:
         completers.skip(comp)
 
+
 # We're now able to tell YCM where to find the language servers, so let's not enable any
 # completer which we will install in another way (clangd, rls).
-find_executable_enable_completer('node', 'ts')
+find_executable_enable_completer("node", "ts")
 
 
 # Warn before building so users can cancel if they want
 completers.warn_skipped()
 
 # , '--build-dir={}'.format(os.path.join(os.getcwd(), platform.system()))
-cmd = [sys.executable, 'install.py'] + completers.cli_args()
-print('Executing: {}'.format(' '.join(cmd)))
+cmd = [sys.executable, "install.py"] + completers.cli_args()
+print("Executing: {}".format(" ".join(cmd)))
 subprocess.check_call(cmd, env=os.environ)
 
 # Also warn at the end, as we might have a big backlog
