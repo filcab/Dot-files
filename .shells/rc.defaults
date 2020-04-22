@@ -31,19 +31,7 @@ case ${uname_s} in
     export COCOAPODS_DISABLE_STATS=1
     ;;
 
-  MINGW*)
-    # Have we installed a more current vim? (We're assuming we have msys git, which has an old vim)
-    if [ -f /c/Program\ Files/Vim/vim82/vim.exe ]; then
-      # Also alias vim/gvim so we get the updated version in most places
-      alias vim="winpty /c/Program\ Files/Vim/vim82/vim.exe"
-      alias view="winpty /c/Program\ Files/Vim/vim82/view.exe"
-      alias vimdiff="vim -d"
-      alias gvim="/c/Program\ Files/Vim/vim82/gvim.exe"
-      alias gview="winpty /c/Program\ Files/Vim/vim82/gview.exe"
-      alias gvimdiff="gvim -d"
-      export EDITOR="winpty /c/Program\ Files/Vim/vim82/vim.exe"
-    fi
-
+  MINGW*|Linux)
     # Use native symlinks on Windows by default. Assumes we have perms for
     # that, which needs to be done once per machine
     export MSYS=winsymlinks:nativestrict
@@ -57,8 +45,43 @@ case ${uname_s} in
     export CLICOLOR=1
     alias ls='ls -FG'
     ;;
-  linux|MINGW*)
+  linux|Linux|MINGW*)
     alias ls="ls -F --color"
+
+    # The following only applies on Windows (WSL or MINGW)
+    # Outside of Windows, we just won't find the pathcmd and directory
+    if [ ${uname_s} = Linux ]; then
+      local pathcmd=wslpath
+      # No winpty in WSL
+      local winpty=
+    else
+      local pathcmd=cygpath
+      # Include the space to use as prefix
+      local winpty_prefix="winpty "
+    fi
+
+    if type "$pathcmd" >/dev/null 2>&1; then
+      # MINGW/WSL path for a vim installation (works on both)
+      vim_install=$($pathcmd "C:/Program Files/Vim/vim82")
+
+      # Alias gvim on both, as WSL opening a Windows gvim makes sense
+      if [ -f "$vim_install"/gvim.exe ]; then
+        alias gvim="\"$vim_install/gvim.exe\""
+        alias gvimdiff="gvim -d"
+      fi
+
+      # FIXME: This is probably not needed anymore, as git-bash now ships an
+      # pdated (8.2 or later) vim binary
+      # alias vim only on MINGW, as it ships with an old vim
+      # if [ -f "$vim_install"/vim.exe ]; then
+      #   # Also alias vim/gvim so we get the updated version in most places
+      #   alias vim="$winpty_prefix\"$vim_install/vim.exe\""
+      #   # alias view="$winpty_prefix\"$vim_install/view.exe\""
+      #   alias vimdiff="vim -d"
+      #   export EDITOR="$winpty_prefix\"$vim_install/vim.exe\""
+      # fi
+    fi
+
     ;;
 esac
 
