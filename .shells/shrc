@@ -5,6 +5,9 @@ SHELL_RESOURCES=~/.shells
 # All code here should be POSIX-compliant. We can switch on $0 to use other
 # features, though.
 
+# Global vars to be used during init, and undeffed at the end of this file
+uname_s=$(uname -s)
+
 # Define basic functions for each shell
 if [ ! -z "$ZSH_VERSION" ]; then
   # echo "zsh funcs!"
@@ -30,3 +33,5 @@ fi
 for rc in ${SHELL_RESOURCES}/rc.*; do
   . ${rc}
 done
+
+unset uname_s

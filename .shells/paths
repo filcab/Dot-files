@@ -14,7 +14,7 @@ path_prepend_dirs "$SHELL_RESOURCES/bin"
 # git
 path_prepend_dirs "/usr/local/gitprefix/bin"
 
-case $(uname -s) in
+case "${uname_s}" in
   Darwin)
     # Export SDKROOT to the current SDK on Xcode (TODO: Make this the generic symlink)
     if command -v xcrun &>/dev/null; then

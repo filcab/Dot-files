@@ -11,7 +11,6 @@ fi
 
 
 ### OS defaults
-uname_s=$(uname -s)
 case ${uname_s} in
   Darwin)
     alias ldd='otool -L'
