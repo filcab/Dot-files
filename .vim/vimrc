@@ -161,6 +161,12 @@ set list
 " as I want an error if I use any vim which doesn't support it.
 set termguicolors
 
+" From https://vimways.org/2018/the-power-of-diff/
+" Use the patience diff algorithm, to usually get more readable diffs
+set diffopt+=algorithm:patience
+" Use indentation as a heuristic. Might be better as an on-demand thing?
+set diffopt+=indent-heuristic
+
 """"""""""""" End of FilCab's stuff
 
 " display settings
