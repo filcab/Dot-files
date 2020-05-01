@@ -88,7 +88,7 @@ case ${uname_s} in
     ;;
 esac
 
-case (uname -r) in
+case $(uname -r) in
   *Microsoft*)
     # WSL only, not used in MINGW, as that'll be git-bash already
     alias git-bash="cmd.exe /c \"$(wslpath -w /mnt/c/Program\ Files/Git/bin/bash.exe)\""
