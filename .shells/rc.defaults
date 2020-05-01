@@ -31,7 +31,7 @@ case ${uname_s} in
     export COCOAPODS_DISABLE_STATS=1
     ;;
 
-  MINGW*|Linux)
+  MINGW*)
     # Use native symlinks on Windows by default. Assumes we have perms for
     # that, which needs to be done once per machine
     export MSYS=winsymlinks:nativestrict
