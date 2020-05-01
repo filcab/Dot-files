@@ -51,13 +51,13 @@ case ${uname_s} in
     # The following only applies on Windows (WSL or MINGW)
     # Outside of Windows, we just won't find the pathcmd and directory
     if [ ${uname_s} = Linux ]; then
-      local pathcmd=wslpath
+      pathcmd=wslpath
       # No winpty in WSL
-      local winpty=
+      winpty=
     else
-      local pathcmd=cygpath
+      pathcmd=cygpath
       # Include the space to use as prefix
-      local winpty_prefix="winpty "
+      winpty_prefix="winpty "
     fi
 
     if type "$pathcmd" >/dev/null 2>&1; then
@@ -81,6 +81,9 @@ case ${uname_s} in
       #   export EDITOR="$winpty_prefix\"$vim_install/vim.exe\""
       # fi
     fi
+
+    unset pathcmd
+    unset winpty
 
     ;;
 esac
