@@ -53,7 +53,7 @@ function s:call_completer_function(flavours, name)
 endfunction
 
 function s:set_mapping(map, lang_name, keys, name) abort
-  exe a:map."noremap" "<buffer><unique>" "<LocalLeader>".a:keys ":silent call"
+  exe a:map."noremap" "<buffer><unique><silent>" "<LocalLeader>".a:keys ":silent call"
     \ "<SID>call_completer_function(g:filcab#".a:lang_name."#completer_flavours, '".a:name."')<cr>"
 endfunction
 
