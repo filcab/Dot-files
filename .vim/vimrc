@@ -157,6 +157,10 @@ endif
 " Showing invisible characters {{{
 set list
 
+" Pretty sure most terminals I use support this. Not adding a has(...) check
+" as I want an error if I use any vim which doesn't support it.
+set termguicolors
+
 """"""""""""" End of FilCab's stuff
 
 " display settings
