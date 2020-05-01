@@ -210,9 +210,7 @@ set splitbelow          " When splitting open the new file below or to the right
 set splitright
 
 " misc settings
-set nospell             " Don't spell-check
-"set fileformat=unix     " file mode is unix
-set fileformats=unix,dos    " only detect unix file format, displays that ^M with dos files
+set fileformats=unix,dos " only detect unix file format, displays that ^M with dos files
 
 set viminfo+='20,<500   " remember copy registers after quitting in the .viminfo file -- 20 jump links, regs up to 500 lines'
 set hidden              " remember undo after quitting
