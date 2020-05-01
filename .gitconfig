@@ -1,7 +1,6 @@
 [alias]
 	pretty = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	pretty2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
-	fmdiff = difftool -y -t FileMerge
 	pushf = push --force-with-lease
 	fpush = push --force-with-lease
 	# Use the null command as a hint to git-completion.bash
@@ -24,8 +23,6 @@
 
 [diff]
 	algorithm = histogram
-[difftool "FileMerge"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 [merge]
 	conflictstyle = diff3
 	tool = vimdiff
