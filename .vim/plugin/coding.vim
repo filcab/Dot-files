@@ -14,7 +14,9 @@ let g:clang_format_fugitive = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
 let g:ycm_rust_src_path = $RUST_SRC_PATH
 " Initialize so we can add to it later per filetype
-let g:ycm_filetype_blacklist = {}
+let g:ycm_filetype_blacklist = {
+  \ 'fugitive': 1,
+  \ }
 
 " completion (CTRL+N) options
 if !exists( "g:loaded_youcompleteme" )
