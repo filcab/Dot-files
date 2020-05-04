@@ -165,3 +165,19 @@ endfunction
 function filcab#recompileYCM()
   execute  ":terminal python3 \"".expand('~/.vim/pack/filcab/recompile-ycm')."\""
 endfunction
+
+" Function to run helptags on all the opt packages. Regular packages are
+" already in |rtp|, so will have their helptags done with :helptags ALL
+function filcab#packOptHelpTags() abort
+  for d in split(&packpath, ',')
+    " pack/$any/opt/$name/doc
+    let dir = d.'/pack/*/opt/*/doc'
+    for doc in glob(dir, v:true, v:true)
+      " skip any global plugins
+      if stridx(doc, $VIMRUNTIME) == 0
+        continue
+      endif
+      exe 'helptags '.fnameescape(doc).''
+    endfor
+  endfor
+endfunction
