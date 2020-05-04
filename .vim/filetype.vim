@@ -23,7 +23,7 @@ augroup filetypedetect
 
   " From vim-toml:
   " Go dep and Rust use several TOML config files that are not named with .toml.
-  autocmd BufNewFile,BufRead *.toml,Gopkg.lock,Cargo.lock,*/.cargo/config,*/.cargo/credentials,Pipfile setf toml
+  autocmd BufNewFile,BufRead *.toml,Gopkg.lock,Cargo.lock,*/.cargo/config,*/.cargo/credentials,Pipfile packadd vim-toml | setf toml
 
   " Set the compiler and makeprg to cargo when editing Cargo.toml, Cargo.lock files
   autocmd BufNewFile,BufRead Cargo.toml,Cargo.lock compiler cargo | set makeprg=cargo\ build
