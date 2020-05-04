@@ -235,7 +235,9 @@ if &t_Co > 2 || has('gui_running')
   " it's acceptable
   "set background=dark
   if has('gui_running')    " Only in a GUI
-    colorscheme molokai
+    "colorscheme molokai
+    " Let's try this one a bit
+    colorscheme material
   endif
 
   if has('macunix') && has('gui_running') && has('vim_starting')
