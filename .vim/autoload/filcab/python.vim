@@ -5,6 +5,8 @@ function filcab#python#init() abort
     return
   endif
 
+  " no need to manually run python-mode/ftplugin/python/*.vim, as the files in
+  " FILETYPE directory are sourced after the FILETYPE.vim ones
   packadd python-mode
 
   if !get(g:, 'disable_lsp', v:false) && executable('pyls')

@@ -1,11 +1,8 @@
-if exists("b:did_filcab_python")
+if exists("b:did_filcab_after_python")
   finish
 endif
-let b:did_filcab_python = 1
 
-call filcab#python#init()
 call filcab#completers#setup_mappings('python')
-
 if index(g:filcab#python#completer_flavours, 'lsp') != -1
   setlocal omnifunc=lsp#complete
 endif
@@ -15,9 +12,7 @@ setlocal textwidth=88
 let g:pymode_options_max_line_length=88
 let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_length}
 
-" Set python mode to python3 if available
-if has('python3') || has('python3/dyn')
-  let g:pymode_python = 'python3'
-endif
-
 noremap <buffer><unique> <LocalLeader><Tab> :Black<cr>
+
+let b:undo_ftplugin .= '|setlocal omnifunc< textwidth< | nunmap <buffer> <LocalLeader><Tab>'
+let b:did_filcab_after_python = 1
