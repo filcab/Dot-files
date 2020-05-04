@@ -189,6 +189,13 @@ if has('wildmenu')
   set wildignorecase
 endif
 
+" Use popups instead of preview windows for completion, where available
+if has('popupwin')
+  set completeopt-=preview
+  set completeopt+=popup
+  set completepopup=border:off
+endif
+
 " editor settings
 set esckeys             " map missed escape sequences (enables keypad keys)
 set ignorecase          " case insensitive searching
