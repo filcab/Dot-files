@@ -1,0 +1,1 @@
+call filcab#rust#init()
