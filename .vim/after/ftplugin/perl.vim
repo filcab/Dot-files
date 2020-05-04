@@ -7,3 +7,5 @@ setlocal cindent cinkeys='0{,0},!^F,o,O,e'
 "   q - allow formatting of comments with "gq"
 "   a - auto formatting for paragraphs
 "   n - auto wrap numbered lists
+
+let b:undo_ftplugin .= '|setlocal cindent< cinkeys<'
