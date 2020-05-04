@@ -157,9 +157,19 @@ endif
 " Showing invisible characters {{{
 set list
 
-" Pretty sure most terminals I use support this. Not adding a has(...) check
-" as I want an error if I use any vim which doesn't support it.
-set termguicolors
+  " macOS' Terminal.app doesn't support 24-bit colours :-(
+if !has('macunix') || has('gui_running')
+  " Pretty sure most terminals I use support this. Not adding a has(...) check
+  " as I want an error if I use any vim which doesn't support it.
+  set termguicolors
+  " Adjust the t_8[bf] options for {screen,tmux}-256color term (just use what
+  " the vim help page for |xterm-color| says)
+  if index(["screen-256color", "tmux-256color"], $TERM) != -1
+    let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+    let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+  endif
+endif
+
 
 " From https://vimways.org/2018/the-power-of-diff/
 " Use the patience diff algorithm, to usually get more readable diffs
@@ -234,10 +244,13 @@ if &t_Co > 2 || has('gui_running')
   " FIXME: this should be autodetected. Check our usual places, and remove if
   " it's acceptable
   "set background=dark
-  if has('gui_running')    " Only in a GUI
-    "colorscheme molokai
+
+  " macOS' Terminal.app doesn't support 24-bit colours :-(
+  if !has('macunix') || has('gui_running')
     " Let's try this one a bit
     colorscheme material
+  else
+    colorscheme molokai
   endif
 
   if has('macunix') && has('gui_running') && has('vim_starting')
