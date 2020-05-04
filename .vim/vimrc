@@ -231,13 +231,14 @@ let g:yankring_history_file = '.vim.yankring_history'
 if &t_Co > 2 || has('gui_running')
   set hlsearch             " highlight search (very useful!)
   set guioptions-=T        " Don't show toolbar
-  set background=dark
+  " FIXME: this should be autodetected. Check our usual places, and remove if
+  " it's acceptable
+  "set background=dark
   if has('gui_running')    " Only in a GUI
-    "colorscheme ir_black  " A nice colorscheme I found online
     colorscheme molokai
   endif
 
-  if has('macunix')
+  if has('macunix') && has('gui_running') && has('vim_starting')
     set guifont=Monaco:h14
   endif
 
