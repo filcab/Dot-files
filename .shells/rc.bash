@@ -11,6 +11,12 @@ for f in "$SHELL_RESOURCES"/lib/*.bash; do
 done
 source "$SHELL_RESOURCES"/lib/git-prompt.sh
 
+if [ -d ~/dev/brew/etc/bash_completion.d ]; then
+  for f in ~/dev/brew/etc/bash_completion.d; do
+    source "$f"
+  done
+fi
+
 # fix spelling errors for cd, only in interactive shell
 shopt -s cdspell
 

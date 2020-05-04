@@ -24,6 +24,10 @@ done
 fpath=( "$SHELL_RESOURCES/lib" $fpath )
 source "$SHELL_RESOURCES"/lib/git-prompt.sh
 
+if [ -d ~/dev/brew/share/zsh/site-functions ]; then
+  fpath=( ~/dev/brew/share/zsh/site-functions $fpath )
+fi
+
 # Emacs keybindings for the shell
 bindkey -e
 
