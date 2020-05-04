@@ -1,5 +1,10 @@
 # Color themes: I prefer molokai in GUI mode
-opt/molokai|git|https://github.com/mrtazz/molokai.vim.git
+opt/molokai|git|https://github.com/tomasr/molokai.git
+
+# Pick one of these (maybe replace molokai?)
+opt/vim-equinusocio-material|git|https://github.com/chuling/vim-equinusocio-material.git
+opt/material.vim|git|https://github.com/kaicataldo/material.vim.git
+opt/vim-material|git|https://github.com/hzchirs/vim-material.git
 
 # Language modes
 opt/YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
