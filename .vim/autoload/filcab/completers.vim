@@ -57,30 +57,44 @@ function s:set_mapping(map, lang_name, keys, name) abort
     \ "<SID>call_completer_function(g:filcab#".a:lang_name."#completer_flavours, '".a:name."')<cr>"
 endfunction
 
+function s:unset_mapping(map, lang_name, keys, name) abort
+  set verbose=9
+  exe a:map."nunmap" "<buffer>" "<LocalLeader>".a:keys
+  set verbose=0
+endfunction
+
 function filcab#completers#setup_mappings(lang_name) abort
   if exists("b:filcab_setup_ycm_and_lsp_mappings")
     return
   endif
 
-  call s:set_mapping("n", a:lang_name, "<f5>", "refresh")
-  call s:set_mapping("n", a:lang_name, "g", "goto")
-  call s:set_mapping("n", a:lang_name, "gg", "goto")
-  call s:set_mapping("n", a:lang_name, "gd", "goto-def")
-  call s:set_mapping("n", a:lang_name, "gD", "goto-decl")
-  call s:set_mapping("n", a:lang_name, "gr", "goto-refs")
-  call s:set_mapping("n", a:lang_name, "gR", "goto-refs")
-  call s:set_mapping("n", a:lang_name, "gdd", "goto-smart")
+  " FIXME: Make this an explicit argument
+  let undo = get(a:, 2, v:false)
+  if undo
+    let DoMapping = function('s:unset_mapping')
+  else
+    let DoMapping = function('s:set_mapping')
+  endif
+
+  call DoMapping("n", a:lang_name, "<f5>", "refresh")
+  call DoMapping("n", a:lang_name, "g", "goto")
+  call DoMapping("n", a:lang_name, "gg", "goto")
+  call DoMapping("n", a:lang_name, "gd", "goto-def")
+  call DoMapping("n", a:lang_name, "gD", "goto-decl")
+  call DoMapping("n", a:lang_name, "gr", "goto-refs")
+  call DoMapping("n", a:lang_name, "gR", "goto-refs")
+  call DoMapping("n", a:lang_name, "gdd", "goto-smart")
   """" C/C++ mode only, I guess
   " Bind to both lower and uppercase
   " FILCAB: Maybe override gf *if* we're sure there's a compilation database?
   " FILCAB: check https://github.com/martong/vim-compiledb-path
-  call s:set_mapping("n", a:lang_name, "gi", "goto-inc")
-  call s:set_mapping("n", a:lang_name, "t", "get-type-fast")
-  call s:set_mapping("n", a:lang_name, "T", "get-type")
-  call s:set_mapping("n", a:lang_name, "p", "get-parent")
-  call s:set_mapping("n", a:lang_name, "P", "get-parent")
-  call s:set_mapping("n", a:lang_name, "f", "fixit")
-  call s:set_mapping("n", a:lang_name, "w", "stats")
-  call s:set_mapping("n", a:lang_name, "W", "stats")
+  call DoMapping("n", a:lang_name, "gi", "goto-inc")
+  call DoMapping("n", a:lang_name, "t", "get-type-fast")
+  call DoMapping("n", a:lang_name, "T", "get-type")
+  call DoMapping("n", a:lang_name, "p", "get-parent")
+  call DoMapping("n", a:lang_name, "P", "get-parent")
+  call DoMapping("n", a:lang_name, "f", "fixit")
+  call DoMapping("n", a:lang_name, "w", "stats")
+  call DoMapping("n", a:lang_name, "W", "stats")
   let b:filcab_setup_ycm_and_lsp_mappings=1
 endfunction
