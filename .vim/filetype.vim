@@ -1,4 +1,4 @@
-if exists("s:this_file") | finish | endif
+if exists("did_load_filetypes") | finish | endif
 
 augroup filetypedetect
   autocmd BufRead,BufNewFile *.ll set filetype=llvm
@@ -28,5 +28,3 @@ augroup filetypedetect
   " Set the compiler and makeprg to cargo when editing Cargo.toml, Cargo.lock files
   autocmd BufNewFile,BufRead Cargo.toml,Cargo.lock compiler cargo | set makeprg=cargo\ build
 augroup END
-
-let s:this_file = v:true
