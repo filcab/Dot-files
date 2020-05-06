@@ -26,8 +26,10 @@ if platform.system() == "Windows" and "VisualStudioVersion" not in os.environ:
         / "Installer"
         / "vswhere.exe"
     )
+    # For some reason, subprocess.run() doesn't like a Path object as the first element
+    # of the sequence...
     proc = subprocess.run(
-        [vswhere, "-latest", "-format", "json", "-utf8"],
+        [str(vswhere), "-latest", "-format", "json", "-utf8"],
         stdout=subprocess.PIPE,
         encoding="utf-8",
     )
