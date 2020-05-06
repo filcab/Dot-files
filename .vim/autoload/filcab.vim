@@ -163,7 +163,9 @@ function filcab#ShowYCMNumberOfWarningsAndErrors()
 endfunction
 
 function filcab#recompileYCM()
-  execute  ":terminal python3 \"".expand('~/.vim/pack/filcab/recompile-ycm')."\""
+  let myVimfiles = fnamemodify($MYVIMRC, ":p:h")
+  let recompileScript = myVimfiles.'/pack/filcab/recompile-ycm'
+  execute  ":terminal python3 ".shellescape(recompileScript)
 endfunction
 
 " Function to run helptags on all the opt packages. Regular packages are
