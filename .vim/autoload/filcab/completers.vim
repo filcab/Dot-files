@@ -63,13 +63,13 @@ function s:unset_mapping(map, lang_name, keys, name) abort
   set verbose=0
 endfunction
 
-function filcab#completers#setup_mappings(lang_name) abort
+function filcab#completers#setup_mappings(lang_name, ...) abort
   if exists("b:filcab_setup_ycm_and_lsp_mappings")
     return
   endif
 
   " FIXME: Make this an explicit argument
-  let undo = get(a:, 2, v:false)
+  let undo = get(a:, 1, v:false)
   if undo
     let DoMapping = function('s:unset_mapping')
   else
