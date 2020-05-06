@@ -28,10 +28,10 @@ noremap <unique> <LocalLeader>d1 :Dispatch!<cr>
 noremap <unique> <LocalLeader>d<cr> :Dispatch<cr>
 
 " Help for some bindings:
-noremap <unique> <LocalLeader>? :map <LocalLeader><cr>
-noremap <unique> <Leader>? :map <Leader><cr>
-nnoremap <unique> [? :map [<cr>
-nnoremap <unique> ]? :map ]<cr>
+noremap <unique><expr> <Leader>? ':<C-u>WhichKey "'.g:mapleader.'"<cr>'
+noremap <unique><expr> <LocalLeader>? ':<C-u>EWhichKey "'.g:maplocalleader.'"<cr>'
+nnoremap <unique> [? :<C-u>WhichKey '['<cr>
+nnoremap <unique> ]? :<C-u>WhichKey ']'<cr>
 nnoremap <unique> <C-w>? :call filcab#CTRL_W_Help()<cr>
 inoremap <unique> <C-w>? <C-o>:call filcab#CTRL_W_Help()<cr>
 inoremap <unique> <C-x>? <C-o>:call filcab#CTRL_X_Help()<cr>

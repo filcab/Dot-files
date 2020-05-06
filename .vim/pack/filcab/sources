@@ -4,7 +4,6 @@ opt/material.vim|git|https://github.com/kaicataldo/material.vim.git
 
 # tests
 opt/vim-matchup|git|https://github.com/andymass/vim-matchup.git
-opt/vim-which-key|git|https://github.com/liuchengxu/vim-which-key.git
 
 # Language tools (to be packadd-ed by me)
 opt/YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
@@ -21,6 +20,7 @@ opt/vim-lsp|git|https://github.com/prabirshrestha/vim-lsp.git
 opt/vim-abolish|git|https://github.com/tpope/vim-abolish.git
 opt/vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
 ## remaining general utilities
+opt/vim-which-key|git|https://github.com/liuchengxu/vim-which-key.git
 start/ack-vim|git|https://github.com/mileszs/ack.vim.git
 start/vim-characterize|git|https://github.com/tpope/vim-characterize.git
 start/vim-commentary|git|https://github.com/tpope/vim-commentary.git
