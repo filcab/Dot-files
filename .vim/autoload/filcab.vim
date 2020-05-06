@@ -52,6 +52,8 @@ function filcab#CTRL_W_Help()
   echo 'CTRL-W }	show tag under cursor in preview window'
   echo ' '
   echo 'CTRL-W ?	filcab: Show help'
+  " show any extra maps
+  map <C-w>
 endfunction
 
 function filcab#CTRL_X_Help()
@@ -71,7 +73,7 @@ function filcab#CTRL_X_Help()
   echo "CTRL-X CTRL-D	definitions or macros"
   echo "CTRL-X CTRL-V	Vim command-line"
   echo "CTRL-X CTRL-U	User defined completion"
-  echo "CTRL-X CTRL-O	omni completion"
+  echo "CTRL-X CTRL-O	omni completion (current: ".&omnifunc.")"
   echo "CTRL-X s	Spelling suggestions"
   echo "CTRL-N/CTRL-P	cycle keywords in 'complete'"
   echo " "
@@ -82,6 +84,8 @@ function filcab#CTRL_X_Help()
   echo "and one of the CTRL-X commands.  You exit CTRL-X mode by typing a key that is"
   echo "not a valid CTRL-X mode command.  Valid keys are the CTRL-X command itself,"
   echo "CTRL-N (next), and CTRL-P (previous)."
+  " show any extra maps
+  map <C-x>
 endfunction
 
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
