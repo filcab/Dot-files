@@ -1,7 +1,3 @@
-" Windows hack for git-for-windows' vim to know about system python
-set pythonthreedll=C:/Program\ Files/Python38/python38.dll
-
-
 """"""""""""" Start of FilCab's stuff
 " reset to vim-defaults
 if &compatible          " only if not set before:
