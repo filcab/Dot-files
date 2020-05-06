@@ -2,20 +2,25 @@
 opt/molokai|git|https://github.com/tomasr/molokai.git
 opt/material.vim|git|https://github.com/kaicataldo/material.vim.git
 
-# Language modes
+# tests
+opt/vim-matchup|git|https://github.com/andymass/vim-matchup.git
+opt/vim-which-key|git|https://github.com/liuchengxu/vim-which-key.git
+
+# Language tools (to be packadd-ed by me)
 opt/YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 opt/python-mode|git|https://github.com/klen/python-mode.git
 opt/vim-markdown|git|https://github.com/tpope/vim-markdown.git
 opt/vim-rust|git|https://github.com/rust-lang/rust.vim.git
 opt/vim-toml|git|https://github.com/cespare/vim-toml.git
-
 # Async.vim is required for vim-lsp
 opt/async|git|https://github.com/prabirshrestha/async.vim.git
 opt/vim-lsp|git|https://github.com/prabirshrestha/vim-lsp.git
 
 # Utilities (vcs, etc)
+## filetype specific, packadd will be called by us
 opt/vim-abolish|git|https://github.com/tpope/vim-abolish.git
 opt/vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
+## remaining general utilities
 start/ack-vim|git|https://github.com/mileszs/ack.vim.git
 start/vim-characterize|git|https://github.com/tpope/vim-characterize.git
 start/vim-commentary|git|https://github.com/tpope/vim-commentary.git
@@ -32,10 +37,3 @@ start/vim-surround|git|https://github.com/tpope/vim-surround.git
 start/vim-unimpaired|git|https://github.com/tpope/vim-unimpaired.git
 start/vim-vinegar|git|https://github.com/tpope/vim-vinegar.git
 start/yankring|zip|https://www.vim.org/scripts/download_script.php?src_id=26344
-
-#command-t|git|https://git.wincent.com/command-t.git
-#nerdtree|git|https://github.com/scrooloose/nerdtree.git
-#nerdtree-git-plugin|git|https://github.com/Xuyuanp/nerdtree-git-plugin.git
-# For gist-vim
-#gist-vim|git|https://github.com/mattn/gist-vim.git
-#webapi-vim|git|https://github.com/mattn/webapi-vim.git
