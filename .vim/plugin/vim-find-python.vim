@@ -1,7 +1,7 @@
 " search for a system-wide python3 and set pythonthreedll
 " This is needed so git-for-windows' vim can find the system installed python3 dll
 " Only set it if it's not already set to something readable
-if has('win32') && !filereadable(&pythonthreedll)
+if (has('win32') || has('win32unix')) && !filereadable(&pythonthreedll)
   let whereOutput = trim(system('where '.shellescape(&pythonthreedll)))
   " if `where` can find the dll, just leave it be, as the option will work
   if !filereadable(whereOutput)

@@ -167,14 +167,12 @@ function filcab#ShowYCMNumberOfWarningsAndErrors()
 endfunction
 
 function filcab#recompileYCM()
-  let myVimfiles = fnamemodify($MYVIMRC, ":p:h")
-  let recompileScript = myVimfiles.'/pack/filcab/recompile-ycm'
+  let recompileScript = $MYDOTVIM.'/pack/filcab/recompile-ycm'
   execute  ":terminal python3" shellescape(recompileScript)
 endfunction
 
 function filcab#updatePackages()
-  let myVimfiles = fnamemodify($MYVIMRC, ":p:h")
-  let myPackDir = myVimfiles.'/pack/filcab'
+  let myPackDir = $MYDOTVIM.'/pack/filcab'
   if executable('perl')
     let perlCmd = 'perl'
   else

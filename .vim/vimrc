@@ -102,7 +102,7 @@ set makeprg=ninja
 "   - With and without winpty:
 "     - git-bash running installed (up-to-date) vim (same installation as previous gvim.exe)
 "     - git-bash running an older vim.exe (distributed with it)
-if has('win32')
+if has('win32unix') " only enter if we're on mingw/cygwin
   if &winptydll != ''
     " We're on Windows-land, make sure we're using the regular Windows shell,
     " if the one we have is invalid.
@@ -117,8 +117,15 @@ if has('win32')
   endif
 endif
 
+" Set $MYDOTVIM from $MYVIMRC so we can use it in many other places
+let $MYDOTVIM = fnamemodify($MYVIMRC, ":p:h")
+if has('win32unix')
+  " we're on cygwin/mingw, so switch /X to X:
+  let $MYDOTVIM = substitute($MYDOTVIM, '^/\(.\)\(.*\)$', '\1:\2', '')
+endif
+
 "Auto-reload vimrc
-autocmd! BufWritePost vimrc source ~/.vim/vimrc
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC
 
 " Allow some common commands with the first letter(s) capitalized
 command! -bang -nargs=? -complete=file E e<bang> <args>
@@ -208,11 +215,8 @@ set ignorecase          " case insensitive searching
 set smartcase           " but become case sensitive if you type uppercase characters
 set smartindent         " smart auto indenting
 set magic               " change the way backslashes are used in search patterns
-set backupdir=$HOME/.vim/backups     " Hide backups in the .vim directory
-set directory=$HOME/.vim/swapfiles// " Hide swap files in the .vim directory
-if has('win32')
-  set directory+=$TMP   "Fallback for weird platforms
-endif
+set backupdir=$MYDOTVIM/backups     " Hide backups in the .vim directory
+set directory=$MYDOTVIM/swapfiles// " Hide swap files in the .vim directory
 
 set tabstop=4           " number of spaces a tab counts for
 set shiftwidth=2        " spaces for autoindents
@@ -230,7 +234,7 @@ set hidden              " remember undo after quitting
 
 set mouse=v             " use mouse in visual mode (not normal,insert,command,help mode
 
-let g:yankring_history_file = '.vim.yankring_history'
+let g:yankring_history_dir = $MYDOTVIM
 
 
 " color settings (if terminal/gui supports it)
