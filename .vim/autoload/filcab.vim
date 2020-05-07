@@ -169,7 +169,32 @@ endfunction
 function filcab#recompileYCM()
   let myVimfiles = fnamemodify($MYVIMRC, ":p:h")
   let recompileScript = myVimfiles.'/pack/filcab/recompile-ycm'
-  execute  ":terminal python3 ".shellescape(recompileScript)
+  execute  ":terminal python3" shellescape(recompileScript)
+endfunction
+
+function filcab#updatePackages()
+  let myVimfiles = fnamemodify($MYVIMRC, ":p:h")
+  let myPackDir = myVimfiles.'/pack/filcab'
+  if executable('perl')
+    let perlCmd = 'perl'
+  else
+    " win32: let's check the git install directory for its included perl and use that
+    " no need to check has('win32') as we're adding .exe at the end of the git
+    " executable
+    let gitInstallDir = fnamemodify(exepath('git.exe'), ":p:h")
+    let maybePerl = gitInstallDir.'/../usr/bin/perl.exe'
+    if filereadable(maybePerl)
+      let perlCmd = maybePerl
+    else
+      echoerr "Couldn't find perl executable."
+      return
+    endif
+  endif
+
+  let cwd = getcwd()
+  call chdir(myPackDir)
+  execute ":terminal ++open" shellescape(perlCmd) "get-files.pl"
+  call chdir(cwd)
 endfunction
 
 " Function to run helptags on all the opt packages. Regular packages are
