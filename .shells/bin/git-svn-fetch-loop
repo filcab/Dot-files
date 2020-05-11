@@ -71,7 +71,7 @@ def check_call_and_hide_lines(cmd, hide_re):
 
 # Problem: This mixes up stdout and stderr. I don't think we have a problem with that
 # for any of our check_output calls
-def check_output_and_hide_lines(cmd, hide_re):
+def check_output_and_hide_lines(cmd, hide_re, stderr=sys.stderr):
     regexp = re.compile(hide_re)
 
     def xform(line):
@@ -81,9 +81,7 @@ def check_output_and_hide_lines(cmd, hide_re):
             return line
 
     acc = ""
-    p = subprocess.Popen(
-        cmd, encoding="utf-8", stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-    )
+    p = subprocess.Popen(cmd, encoding="utf-8", stdout=subprocess.PIPE, stderr=stderr)
     for line in p.stdout:
         line = xform(line)
         acc += line
