@@ -168,7 +168,7 @@ endfunction
 
 function filcab#recompileYCM()
   let recompileScript = $MYDOTVIM.'/pack/filcab/recompile-ycm'
-  execute  ":terminal python3" shellescape(recompileScript)
+  execute  ":terminal python3" recompileScript
 endfunction
 
 function filcab#updatePackages()
