@@ -182,7 +182,7 @@ function filcab#updatePackages()
     let gitInstallDir = fnamemodify(exepath('git.exe'), ":p:h")
     let maybePerl = gitInstallDir.'/../usr/bin/perl.exe'
     if filereadable(maybePerl)
-      let perlCmd = maybePerl
+      let perlCmd = shellescape(maybePerl)
     else
       echoerr "Couldn't find perl executable."
       return
@@ -191,7 +191,7 @@ function filcab#updatePackages()
 
   let cwd = getcwd()
   call chdir(myPackDir)
-  execute ":terminal ++open" shellescape(perlCmd) "get-files.pl"
+  execute ":terminal ++open" perlCmd "get-files.pl"
   call chdir(cwd)
 endfunction
 
