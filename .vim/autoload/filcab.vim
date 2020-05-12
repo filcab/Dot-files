@@ -198,9 +198,11 @@ function filcab#updatePackages()
   endif
 
   let cwd = getcwd()
-  call chdir(myPackDir)
+  " FIXME: This will lose any lcd on the current window... But works on the
+  " oldest Debian I want to support
+  exe ":chdir" myPackDir
   execute ":terminal ++open" perlCmd "get-files.pl"
-  call chdir(cwd)
+  exe ":chdir" cwd
 endfunction
 
 " Function to run helptags on all the opt packages. Regular packages are
