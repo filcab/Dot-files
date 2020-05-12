@@ -1,9 +1,15 @@
 # Color themes (should really just have one... :P )
 opt/molokai|git|https://github.com/tomasr/molokai.git
+# testing
 opt/material.vim|git|https://github.com/kaicataldo/material.vim.git
+opt/ayu-vim|git|https://github.com/ayu-theme/ayu-vim.git
+opt/vim-aurora|git|https://github.com/rafalbromirski/vim-aurora.git
+opt/neodark.vim|git|https://github.com/KeitaNakamura/neodark.vim.git
 
 # tests
 opt/vim-matchup|git|https://github.com/andymass/vim-matchup.git
+# display colors (has two versions: v1 (older, sync), v2 (needs go executable, async)
+opt/hexokinase|git|https://github.com/RRethy/vim-hexokinase.git
 
 # Language tools (to be packadd-ed by me)
 opt/YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
