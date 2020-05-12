@@ -71,11 +71,6 @@ function filcab#c#init() abort
   if !get(g:, 'disable_lsp', v:false) && executable(g:clangd_path)
     echo "Setting up vim-lsp for C/C++"
     call add(g:filcab#c#completer_flavours, 'lsp')
-    " If another language plugin uses YouCompleteMe, let's blacklist this type
-    "let g:ycm_filetype_blacklist['c'] = 1
-    "let g:ycm_filetype_blacklist['cpp'] = 1
-    "let g:ycm_filetype_blacklist['objc'] = 1
-    "let g:ycm_filetype_blacklist['objcpp'] = 1
     packadd async
     packadd vim-lsp
     call lsp#register_server({
@@ -91,7 +86,7 @@ function filcab#c#init() abort
     if executable(g:clangd_path)
       let g:ycm_clangd_binary_path = g:clangd_path
     endif
-    packadd YouCompleteMe
+    call filcab#packaddYCM()
   endif
 
   let g:filcab#c#initted = v:true

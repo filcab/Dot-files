@@ -12,11 +12,9 @@ let g:clang_format_fugitive = 1
 " Set this wether or not we're disabling ycm, since we might not find the LSP
 " programs
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+" Set in all our shells (Maybe set it if it wasn't set? (e.g: GUI vim in some
+" platforms))
 let g:ycm_rust_src_path = $RUST_SRC_PATH
-" Initialize so we can add to it later per filetype
-let g:ycm_filetype_blacklist = {
-  \ 'fugitive': 1,
-  \ }
 
 " completion (CTRL+N) options
 if !exists( "g:loaded_youcompleteme" )

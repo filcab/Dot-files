@@ -159,6 +159,14 @@ function filcab#ClangFormat()
 endfunction
 
 " Shared amongst all YCM-using languages
+function filcab#packaddYCM()
+  packadd YouCompleteMe
+  " FIXME: submit a PR for YCM. It always complains about fugitive files in
+  " big repos anyway.
+  " Would be "nice" to be able to goto definition, but do we care?
+  let g:ycm_filetype_blacklist['fugitive'] = 1
+endfunction
+
 function filcab#ShowYCMNumberOfWarningsAndErrors()
   if !get(g:, 'disable_youcompleteme', v:false) && get(g:, 'loaded_youcompleteme', v:false)
     echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount()
