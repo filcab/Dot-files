@@ -176,7 +176,7 @@ endfunction
 
 function filcab#recompileYCM()
   let recompileScript = $MYDOTVIM.'/pack/filcab/recompile-ycm'
-  execute  ":terminal python3" recompileScript
+  execute  ":terminal" "python3" recompileScript
 endfunction
 
 function filcab#updatePackages()
@@ -201,7 +201,7 @@ function filcab#updatePackages()
   " FIXME: This will lose any lcd on the current window... But works on the
   " oldest Debian I want to support
   exe ":chdir" myPackDir
-  execute ":terminal ++open" perlCmd "get-files.pl"
+  execute ":terminal" "++open" perlCmd "get-files.pl"
   exe ":chdir" cwd
 endfunction
 

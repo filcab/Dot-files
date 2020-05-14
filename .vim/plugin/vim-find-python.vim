@@ -2,7 +2,8 @@
 " This is needed so git-for-windows' vim can find the system installed python3 dll
 " Only set it if it's not already set to something readable
 if (has('win32') || has('win32unix')) && !filereadable(&pythonthreedll)
-  let whereOutput = trim(system('where '.shellescape(&pythonthreedll)))
+  let whereCmd = 'where '.shellescape(&pythonthreedll)
+  let whereOutput = trim(system(whereCmd))
   " if `where` can find the dll, just leave it be, as the option will work
   if !filereadable(whereOutput)
     let pythonexe = exepath('python')
