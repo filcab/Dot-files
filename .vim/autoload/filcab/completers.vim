@@ -3,34 +3,34 @@ let s:completer_flavours = ["ycm", "lsp"]
 
 let s:completer_functions = {}
 let s:completer_functions["lsp"] = {
-  \ "fixit": {-> execute(":LspCodeAction")},
-  \ "get-type": {-> execute(":LspTypeDefinition")},
-  \ "get-type-fast": {-> execute(":LspTypeDefinition")},
-  \ "goto": {-> execute(":LspDefinition")},
-  \ "goto-def": {-> execute(":LspDefinition")},
-  \ "goto-decl": {-> execute(":LspDeclaration")},
-  \ "refresh": {-> execute(":LspDocumentDiagnostics")},
-  \ "get-doc": {-> execute(":YcmCompleter GetDoc")},
-  \ "get-doc-fast": {-> execute(":YcmCompleter GetDocImprecise")},
-  \ "get-parent": {-> execute(":YcmCompleter GetParent")},
-  \ "goto-inc": {-> execute(":YcmCompleter GoToInclude")},
-  \ "goto-refs": {-> execute(":YcmCompleter GoToReferences")},
-  \ "goto-smart": {-> execute(":YcmCompleter GoToDefinitionElseDeclaration")},
+  \ "fixit": {-> execute(":LspCodeAction", "")},
+  \ "get-type": {-> execute(":LspTypeDefinition", "")},
+  \ "get-type-fast": {-> execute(":LspTypeDefinition", "")},
+  \ "goto": {-> execute(":LspDefinition", "")},
+  \ "goto-def": {-> execute(":LspDefinition", "")},
+  \ "goto-decl": {-> execute(":LspDeclaration", "")},
+  \ "refresh": {-> execute(":LspDocumentDiagnostics", "")},
+  \ "get-doc": {-> execute(":YcmCompleter GetDoc", "")},
+  \ "get-doc-fast": {-> execute(":YcmCompleter GetDocImprecise", "")},
+  \ "get-parent": {-> execute(":YcmCompleter GetParent", "")},
+  \ "goto-inc": {-> execute(":YcmCompleter GoToInclude", "")},
+  \ "goto-refs": {-> execute(":YcmCompleter GoToReferences", "")},
+  \ "goto-smart": {-> execute(":YcmCompleter GoToDefinitionElseDeclaration", "")},
   \ "stats": function('filcab#ShowYCMNumberOfWarningsAndErrors'),
   \ }
 let s:completer_functions["ycm"] = {
-  \ "refresh": {-> execute(":YcmForceCompileAndDiagnostics")},
-  \ "goto": {-> execute(":YcmCompleter GoTo")},
-  \ "goto-def": {-> execute(":YcmCompleter GoToDefinition")},
-  \ "goto-decl": {-> execute(":YcmCompleter GoToDeclaration")},
-  \ "goto-refs": {-> execute(":YcmCompleter GoToReferences")},
-  \ "goto-smart": {-> execute(":YcmCompleter GoToDefinitionElseDeclaration")},
-  \ "goto-inc": {-> execute(":YcmCompleter GoToInclude")},
-  \ "get-type": {-> execute(":YcmCompleter GetType")},
-  \ "get-type-fast": {-> execute(":YcmCompleter GetTypeImprecise")},
-  \ "get-parent": {-> execute(":YcmCompleter GetParent")},
-  \ "get-doc": {-> execute(":YcmCompleter GetDoc")},
-  \ "get-doc-fast": {-> execute(":YcmCompleter GetDocImprecise")},
+  \ "refresh": {-> execute(":YcmForceCompileAndDiagnostics", "")},
+  \ "goto": {-> execute(":YcmCompleter GoTo", "")},
+  \ "goto-def": {-> execute(":YcmCompleter GoToDefinition", "")},
+  \ "goto-decl": {-> execute(":YcmCompleter GoToDeclaration", "")},
+  \ "goto-refs": {-> execute(":YcmCompleter GoToReferences", "")},
+  \ "goto-smart": {-> execute(":YcmCompleter GoToDefinitionElseDeclaration", "")},
+  \ "goto-inc": {-> execute(":YcmCompleter GoToInclude", "")},
+  \ "get-type": {-> execute(":YcmCompleter GetType", "")},
+  \ "get-type-fast": {-> execute(":YcmCompleter GetTypeImprecise", "")},
+  \ "get-parent": {-> execute(":YcmCompleter GetParent", "")},
+  \ "get-doc": {-> execute(":YcmCompleter GetDoc", "")},
+  \ "get-doc-fast": {-> execute(":YcmCompleter GetDocImprecise", "")},
   \ "fixit": {-> execute(":YcmCompleter FixIt")},
   \ "stats": function('filcab#ShowYCMNumberOfWarningsAndErrors'),
   \ }
@@ -53,7 +53,7 @@ function s:call_completer_function(flavours, name)
 endfunction
 
 function s:set_mapping(map, lang_name, keys, name) abort
-  exe a:map."noremap" "<buffer><unique><silent>" "<LocalLeader>".a:keys ":silent call"
+  exe a:map."noremap" "<buffer><unique><silent>" "<LocalLeader>".a:keys ":call"
     \ "<SID>call_completer_function(g:filcab#".a:lang_name."#completer_flavours, '".a:name."')<cr>"
 endfunction
 
