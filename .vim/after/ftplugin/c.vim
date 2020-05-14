@@ -14,13 +14,13 @@ nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
 
 " clang-format integration
 if has('python3')
-  nnoremap <buffer><unique> <LocalLeader><Tab> :py3f $MYDOTVIM/clang-format.py<cr>
-  vnoremap <buffer><unique> <LocalLeader><Tab> :py3f $MYDOTVIM/clang-format.py<cr>
-  inoremap <buffer><unique> <C-Tab><Tab> <C-o>:py3f $MYDOTVIM/clang-format.py<cr><cr>
+  nnoremap <buffer><unique> <LocalLeader><Tab> :py3f $MYVIMRUNTIME/clang-format.py<cr>
+  vnoremap <buffer><unique> <LocalLeader><Tab> :py3f $MYVIMRUNTIME/clang-format.py<cr>
+  inoremap <buffer><unique> <C-Tab><Tab> <C-o>:py3f $MYVIMRUNTIME/clang-format.py<cr><cr>
 elseif has('python')
-  nnoremap <buffer><unique> <LocalLeader><Tab> :pyf $MYDOTVIM/clang-format.py<cr>
-  vnoremap <buffer><unique> <LocalLeader><Tab> :pyf $MYDOTVIM/clang-format.py<cr>
-  inoremap <buffer><unique> <C-Tab><Tab> <C-o>:pyf $MYDOTVIM/clang-format.py<cr><cr>
+  nnoremap <buffer><unique> <LocalLeader><Tab> :pyf $MYVIMRUNTIME/clang-format.py<cr>
+  vnoremap <buffer><unique> <LocalLeader><Tab> :pyf $MYVIMRUNTIME/clang-format.py<cr>
+  inoremap <buffer><unique> <C-Tab><Tab> <C-o>:pyf $MYVIMRUNTIME/clang-format.py<cr><cr>
 else
   echom 'Python3/Python not available, skipping clang-format mappings'
 endif
