@@ -3,6 +3,9 @@ if exists("b:did_filcab_after_c_ftplugin")
   finish
 endif
 
+" Always default to the clang compiler
+compiler clang
+
 call filcab#completers#setup_mappings('c')
 if index(g:filcab#c#completer_flavours, 'lsp') != -1
   " YCM doesn't use omnifunc, so this allows us to have YCM and LSP at the
