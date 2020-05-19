@@ -1,13 +1,3 @@
-" Lazy load WhichKey on first use (just has two commands anyway), and have the
-function s:InstallWhichKey() abort
-  delcommand WhichKey
-  delcommand WhichKeyVisual
-  packadd vim-which-key
-endfunction
-command -bang -nargs=1 WhichKey call s:InstallWhichKey() | WhichKey<bang> <args>
-" no need to forward the range
-command -bang -nargs=1 -range WhichKeyVisual call s:InstallWhichKey() | WhichKeyVisual<bang> <args>
-
 " misc debugging/updating commands
 command -nargs=0 -bar DebugSyntaxHighlights call filcab#debug#syntax()
 command -nargs=0 -bar RebuildHelptags helptags ALL | call filcab#packOptHelpTags()
