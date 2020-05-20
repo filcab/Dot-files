@@ -14,5 +14,10 @@ let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_l
 
 noremap <buffer><unique> <LocalLeader><Tab> :Black<cr>
 
-let b:undo_ftplugin .= '|setlocal omnifunc< textwidth< | nunmap <buffer> <LocalLeader><Tab>'
+let s:undo_ftplugin = 'setlocal omnifunc< textwidth< | nunmap <buffer> <LocalLeader><Tab>'
+if exists('b:undo_ftplugin')
+  let b:undo_ftplugin .= '|'.s:undo_ftplugin
+else
+  let b:undo_ftplugin = s:undo_ftplugin
+endif
 let b:did_filcab_after_python = 1
