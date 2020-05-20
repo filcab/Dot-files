@@ -19,13 +19,12 @@ endif
 " List of rules that the user will add to
 let s:autoset_rules = {}
 " Blacklist of filetypes we don't want to hook into
-let s:blacklist = ['help', 'qf']
+let s:blacklist_ft = ['help', 'qf']
 
 function! AutosetInstall() abort
   augroup AutosetGroup
     autocmd!
-    " TODO: Check if we want to switch these autocmd hooks
-    autocmd BufNewFile,BufEnter * call AutosetApplyRules()
+    autocmd BufNewFile,BufRead * call AutosetApplyRules()
   augroup END
 endfunction
 
@@ -71,9 +70,9 @@ function! s:AutosetApplyRule(rule) abort
 endfunction
 
 function! AutosetApplyRules() abort
-  if index(s:blacklist, &ft) != -1
+  if index(s:blacklist_ft, &ft) != -1
     if g:autoset_verbose
-      echom 'autoset: filetype is in blacklist: ' . &ft
+      echom 'autoset: filetype is in blacklist_ft: ' . &ft
     endif
     return
   endif
