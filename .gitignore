@@ -3,6 +3,7 @@
 /.vim/black
 /.vim/view
 /.vim/.netrwhist
+/.vim/yankring_history_v2.txt
 
 # Local configurations
 /.vim/after/plugin/autoset-rules-local.vim
