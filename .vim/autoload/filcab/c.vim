@@ -71,13 +71,12 @@ function filcab#c#init() abort
   if !get(g:, 'disable_lsp', v:false) && executable(g:clangd_path)
     echo "Setting up vim-lsp for C/C++"
     call add(g:filcab#c#completer_flavours, 'lsp')
-    packadd async
-    packadd vim-lsp
     call lsp#register_server({
             \ 'name': 'clangd',
             \ 'cmd': {server_info->[g:clangd_path] + g:ycm_clangd_args},
             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
             \ })
+    call lsp#enable()
   endif
 
   if !get(g:, 'disable_youcompleteme', v:false)

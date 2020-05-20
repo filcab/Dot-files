@@ -17,14 +17,13 @@ function filcab#rust#init() abort
   if !get(g:, 'disable_lsp', v:false) && executable('rls')
     echo "Setting up vim-lsp for Rust"
     call add(g:filcab#rust#completer_flavours, 'lsp')
-    packadd async
-    packadd vim-lsp
     " cargo install rls
     call lsp#register_server({
       \ 'name': 'rls',
       \ 'cmd': {server_info->['rls']},
       \ 'whitelist': ['rust'],
       \ })
+    call lsp#enable()
   endif
 
   if !get(g:, 'disable_youcompleteme', v:false)

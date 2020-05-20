@@ -25,6 +25,9 @@ if !exists( "g:loaded_youcompleteme" )
   set completeopt+=longest
 endif
 
+" don't immediately load vim-lsp. Let's just do it as needed
+let g:lsp_auto_enable = 0
+
 let g:lsp_signs_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
 "let g:lsp_log_verbose = 0
