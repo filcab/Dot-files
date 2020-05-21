@@ -23,17 +23,20 @@
   CHECK-LABEL:
  */
 
-
 // CHECK-:
 // CaHECK:
-// CHECK:
-// CHECK-COUNT-0:
-// CHECK-COUNT-1:
-// CHECK-COUNT-12:
-// CHECK-COUNT-123:
-// CHECK-COUNT-1234:
-// CHECK-COUNT-12345:
-// CHECK-NEXT:
+// CHECK: [[@LINE]] [[@LINE+32]] [[@LINE-19]]
+// no: [[@LINE]] [[@LINE+32]] [[@LINE-19]]
+// CHECK-COUNT-0:   dsadasd sad sadas dasdas das asd
+// CHECK-COUNT-1:   dsadasd sad sadas dasdas das asd
+// CHECK-COUNT-12:   dsadasd sad sadas dasdas das asd
+// CHECK-COUNT-123:   dsadasd sad sadas dasdas das asd
+// CHECK-COUNT-1234:   dsadasd sad sadas dasdas das asd
+// CHECK-COUNT-12345:   dsadasd sad sadas dasdas das asd
+// CHECK-COUNT-12: asdf kjas [[NAME]]  [[lol#lol:E]] [[regexp:HELLO]] [[#%x,HELLO:]] [[#%x,HELLO+3]] {{...@LINE...}} [[#@LINE+4]] aaa
+// CHECK-NEXT: [[THING]] ]] #%x [[regexp#%x,:LOL]] [[#]] [[#%x,VARNAME:VARNAME+3]]
+// no: asdf kjas [[NAME]]  [[lol#lol:E]] [[regexp:HELLO]] [[#%x,HELLO:]] [[#%x,HELLO+3]] {{...@LINE...}} [[#@LINE+4]] aaa
+// no: [[THING]] ]] #%x [[regexp#%x,:LOL]] [[#]] [[#%x,VARNAME:VARNAME+3]]
 // CHECK-NOT-NEXT:
 // CHECK-NEXT-NOT:
 // CHECK-SAME:
@@ -46,7 +49,10 @@
 // CHECK-NOT-EMPTY:
 // CHECK-EMPTY-NOT:
 // CHECK-LABEL:
+// this is probably acceptable by FileCheck:
+// -CHECK:
 
+; -CHECK:
 ; CHECK-:
 ; CaHECK:
 ; CHECK:
@@ -56,6 +62,7 @@
 ; CHECK-COUNT-123:
 ; CHECK-COUNT-1234:
 ; CHECK-COUNT-12345:
+; CHECK-COUNT-12: asdf kjas [[NAME]]  {{...}} [[#HELLO+world+lol]] [[#%x,HELLO:]] [[#%x,HELLO]] {{... VARNAME ... @LINE ...}} [[#@LINE+4]]
 ; CHECK-NEXT:
 ; CHECK-NOT-NEXT:
 ; CHECK-NEXT-NOT:
