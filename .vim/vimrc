@@ -262,8 +262,9 @@ if &t_Co > 2 || has('gui_running')
   endif
 
   if has('win32') && has('gui_running') && has('vim_starting')
-    " Good, default Windows font (after Win7)
-    set guifont=Consolas:h13
+    " Consolas: Good, default Windows fonts (after Win7)
+    " Cascadia: Seems a bit nicer
+    set guifont=Cascadia\ Code:h13,Cascadia\ Mono:h13,Consolas:h13
     " Make the window larger by default. This should fit 3 side-by-side panes
     " very easily.
     set lines=80 columns=280
