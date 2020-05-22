@@ -147,14 +147,16 @@ let $EDITOR = "vim"
 " Make %% in the command line expand to the directory of the current file
 cabbr <expr> %% expand('%:p:h:gs?\\?/?')
 
-" Default statusline:
+" statusline:
+"   close to the default one but with the following changes:
+"   * no space between file and 'changed' marker
+"   * shows decimal and hex value of current char
 set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 
 " When in a git repo, tell us the current branch
-" Only set it if we have fugitive available. Check with a variable it defines
-if get(g:, 'fugitive_git_executable', v:false)
-  let &statusline = '%{fugitive#statusline()} ' . &statusline
-endif
+" FIXME: Disable this if we haven't cloned the repos (as in: fugitive isn't in
+" packpath)
+let &statusline = '%{fugitive#statusline()} ' . &statusline
 
 " From silvas' vimrc:
 " Showing invisible characters {{{
