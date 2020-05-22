@@ -1,5 +1,8 @@
 command -nargs=0 -bar EnableMatchUp packadd vim-matchup
 
+" Remove line numbers in :terminal buffers (when in normal mode)
+autocmd TerminalOpen * setlocal nonumber
+
 " make it easier to know which line we're on
 set cursorline
 " add bold attribute to current line number when 'number' and 'cursorline' are
