@@ -4,7 +4,10 @@ command -nargs=0 -bar EnableMatchUp packadd vim-matchup
 autocmd TerminalOpen * setlocal nonumber
 
 " make it easier to know which line we're on
-set cursorline
+" cursorline ends up behaving in funky ways in some colorthemes.
+" Maybe think about bringing it back after we think about how to fix it.
+" Anyway, backgrounds are likely to disappear for the cursorline line
+"set cursorline
 " add bold attribute to current line number when 'number' and 'cursorline' are
 " set
 set highlight+=Nb
