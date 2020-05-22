@@ -1,3 +1,9 @@
+" editing commands to make like easier
+" abbreviate :vert sf ... and :vert sv ...
+" completion is substandard. Ideally we'd complete any ++ to a ++opt
+command -nargs=+ -bar -complete=file_in_path Vsf vert sfind <args>
+command -nargs=+ -bar -complete=file_in_path Vsv vert sview <args>
+
 " misc debugging/updating commands
 command -nargs=0 -bar DebugSyntaxHighlights call filcab#debug#syntax()
 command -nargs=0 -bar RebuildHelptags helptags ALL | call filcab#packOptHelpTags()
