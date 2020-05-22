@@ -6,6 +6,7 @@ opt/ayu-vim|git|https://github.com/ayu-theme/ayu-vim.git
 opt/vim-aurora|git|https://github.com/rafalbromirski/vim-aurora.git
 opt/neodark.vim|git|https://github.com/KeitaNakamura/neodark.vim.git
 opt/vim-one|git|https://github.com/rakr/vim-one.git
+opt/challenger-deep-theme|git|https://github.com/challenger-deep-theme/vim.git
 
 # tests
 opt/vim-matchup|git|https://github.com/andymass/vim-matchup.git
