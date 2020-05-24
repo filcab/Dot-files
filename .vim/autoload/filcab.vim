@@ -179,7 +179,7 @@ function filcab#recompileYCM()
   execute  ":terminal" "python3" recompileScript
 endfunction
 
-function filcab#updatePackages()
+function filcab#updatePackagesOld()
   let myPackDir = $MYVIMRUNTIME.'/pack/filcab'
   if executable('perl')
     let perlCmd = 'perl'
@@ -203,6 +203,21 @@ function filcab#updatePackages()
   exe ":chdir" myPackDir
   execute ":terminal" "++open" perlCmd "get-files.pl"
   exe ":chdir" cwd
+endfunction
+
+function filcab#updatePackages()
+  let myPackDir = $MYVIMRUNTIME.'/pack/filcab'
+  if executable('python3')
+    let pythonCmd = 'python3'
+  elseif executable('python')
+    let pythonCmd = 'python'
+  else
+    echoerr "Couldn't find python3 or python"
+  endif
+
+  " FIXME: Maybe in the future try and use :py3f in vim, but still have it be
+  " async...
+  execute ":terminal" "++open" pythonCmd "get-files"
 endfunction
 
 " Function to run helptags on all the opt packages. Regular packages are

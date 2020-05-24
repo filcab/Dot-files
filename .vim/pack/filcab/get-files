@@ -1,0 +1,248 @@
+#!/usr/bin/env python3
+
+from zipfile import ZipFile
+from urllib.request import urlopen
+
+import argparse
+import concurrent.futures as futures
+import io
+import logging
+import os
+import re
+import subprocess
+import sys
+
+
+class Updater(object):
+    def __init__(self, ui, dst, args):
+        assert (
+            self.__class__.__name__ != "Updater"
+        ), "Please don't directly create updater objects"
+        self.ui = ui
+        self.dst = dst
+
+    @classmethod
+    def can_update(klass, type, args):
+        assert False, "Updater subclasses must override the can_update() class method"
+
+    def update(self):
+        assert False, "Updater subclasses must override the update()"
+
+
+class GitUpdater(Updater):
+    def __init__(self, ui, type, dst, args):
+        super().__init__(ui, dst, args)
+        self.name = f"{type}:{os.path.basename(self.dst)}"
+        # FIXME: eh... probably remove this
+        self.logger = logging.getLogger(self.name)
+        assert type == "git"
+        self.logger.debug(f"Creating GitUpdater for {dst} (type={type}, args={args})")
+        assert "|" not in args, "Expecting a single argument: remote URL"
+        self.remote = args
+
+    @classmethod
+    def can_update(klass, type, args):
+        return type.lower() == "git"
+
+    def update(self):
+        with self.ui.job(self.name) as job:
+            if os.path.isdir(self.dst):
+                job.state("updating")
+                return job.run(
+                    [
+                        "git",
+                        "-C",
+                        self.dst,
+                        "pull",
+                        "--recurse-submodules",
+                        "--autostash",
+                    ]
+                )
+            else:
+                job.state("cloning")
+                return job.run(
+                    [
+                        "git",
+                        "-C",
+                        os.path.dirname(self.dst),
+                        "clone",
+                        "--recurse-submodules",
+                        self.remote,
+                        os.path.basename(self.dst),
+                    ],
+                )
+
+
+class ZipUpdater(Updater):
+    def __init__(self, ui, type, dst, args):
+        super().__init__(ui, dst, args)
+        self.name = f"{type}:{os.path.basename(self.dst)}"
+        # FIXME: eh... probably remove this
+        self.logger = logging.getLogger(self.name)
+        assert type == "zip"
+        self.logger.debug(f"Creating GitUpdater for {dst} (type={type}, args={args})")
+        assert "|" not in args, "Expecting a single argument: zip URL"
+        self.url = args
+
+    @classmethod
+    def can_update(klass, type, args):
+        return type.lower() == "zip"
+
+    def download_data(self):
+        return urlopen(self.url).read()
+
+    def update(self):
+        with self.ui.job(self.name) as job:
+            job.state("downloading")
+            data = self.download_data()
+            job.state("extracting")
+            zipfile = ZipFile(io.BytesIO(data))
+            zipfile.extractall(self.dst)
+
+
+def find_updater(dst, type, rest):
+    UPDATERS = [GitUpdater, ZipUpdater]
+    for up in UPDATERS:
+        if up.can_update(type, rest):
+            return up
+    return None
+
+
+def get_files(ui, args):
+    with open(args.sources) as f:
+        content = filter(
+            bool, [re.sub("#.*", "", line).strip() for line in f.readlines()]
+        )
+
+    basedir = args.output_directory
+    no_updater = []
+    updaters = []
+    for line in content:
+        dst, type, rest = line.split("|", 2)
+        updater_class = find_updater(dst, type, rest)
+        if updater_class is None:
+            no_updater.append((type, dst))
+            continue
+
+        dst = os.path.join(basedir, dst)
+        # don't create the actual directory, just the containing one
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        updaters.append(updater_class(ui, type, dst, rest))
+
+    with futures.ThreadPoolExecutor(max_workers=6) as executor:
+
+        def call_update(updater, timeout):
+            return updater.update()
+
+        future_to_updater = {
+            executor.submit(call_update, updater, 60): updater for updater in updaters
+        }
+        for future in futures.as_completed(future_to_updater):
+            future.result()
+            future_to_updater[future].logger.info("finished!")
+
+    if no_updater:
+        print()
+        ui.error("Couldn't find an updater for:")
+        for type, dst in no_updater:
+            ui.print(f"    {type} at {dst}")
+
+
+class UI(object):
+    """Simple UI which writes lines to the provided file, prepended with the job name"""
+
+    class SimpleJob(object):
+        def __init__(self, ui, name):
+            self.ui = ui
+            self.name = name
+            self.logger = logging.getLogger(name)
+
+        def __enter__(self):
+            # self.logger.info(f"{self.name}: starting")
+            return self
+
+        def __exit__(self, type, value, tb):
+            # self.logger.info(f"{self.name}: ended")
+            pass
+
+        def run(self, args, **kwargs):
+            self.logger.debug(f"$ subprocess.Popen({args}, {kwargs})")
+            proc = subprocess.Popen(
+                args,
+                encoding="utf-8",
+                text=True,
+                bufsize=1,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                **kwargs,
+            )
+            return self.communicate(proc)
+
+        def communicate(self, proc):
+            for line in iter(proc.stdout.readline, ""):
+                line = line.strip()
+                if line:
+                    self.logger.info(line)
+            return proc.wait()
+
+        def state(self, state):
+            self.logger.info(state)
+
+    def __init__(self, progname, file):
+        logging.basicConfig(level=logging.INFO)
+        self.file = file
+        self.progname = progname
+        self.logger = logging.getLogger(progname)
+
+    def job(self, name):
+        return self.SimpleJob(self, name)
+
+    # plain forward to print. use sparingly
+    def print(self, *args, **kwargs):
+        return print(*args, **kwargs)
+
+    # forwarding methods to the logger
+    def error(self, *args, **kwargs):
+        return self.logger.error(*args, **kwargs)
+
+    def warning(self, *args, **kwargs):
+        return self.logger.warning(*args, **kwargs)
+
+    def info(self, *args, **kwargs):
+        return self.logger.info(*args, **kwargs)
+
+    def debug(self, *args, **kwargs):
+        return self.logger.debug(*args, **kwargs)
+
+
+def main(progname, argv):
+    parser = argparse.ArgumentParser(
+        usage="Program to fetch all modules from the sources file"
+    )
+    parser.add_argument(
+        "sources",
+        nargs="?",
+        default="sources",
+        help="Path to sources file. If it's a relative path, "
+        "it'll be searched in the current directory, "
+        "and then in the script directory",
+    )
+    parser.add_argument(
+        "-o",
+        "--output-directory",
+        help="Directory to clone the files into, according to the sources file",
+    )
+    args = parser.parse_args(argv)
+
+    if not os.path.isfile(args.sources):
+        args.sources = os.path.join(os.path.dirname(__file__), "sources")
+
+    if args.output_directory is None:
+        args.output_directory = os.path.dirname(args.sources)
+
+    ui = UI(progname, sys.stdout)
+    get_files(ui, args)
+
+
+if __name__ == "__main__":
+    main(os.path.basename(sys.argv[0]), sys.argv[1:])

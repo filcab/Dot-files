@@ -8,6 +8,7 @@ command -nargs=+ -bar -complete=file_in_path Vsv vert sview <args>
 command -nargs=0 -bar DebugSyntaxHighlights call filcab#debug#syntax()
 command -nargs=0 -bar RebuildHelptags helptags ALL | call filcab#packOptHelpTags()
 command -nargs=0 -bar RecompileYCM call filcab#recompileYCM()
+command -nargs=0 -bar UpdatePackagesOld call filcab#updatePackagesOld()
 command -nargs=0 -bar UpdatePackages call filcab#updatePackages()
 
 function s:ColorSchemeCommand(packname, schemename)
