@@ -250,9 +250,11 @@ if &t_Co > 2 || has('gui_running')
   " macOS' Terminal.app doesn't support 24-bit colours :-(
   if !has('macunix') || has('gui_running')
     " Let's try this one a bit
-    let g:material_theme_style = 'ocean'
-    let g:material_terminal_italics = 1
-    colorscheme material
+    " material schemes don't do it for me, as the contrast is not big enough:
+    "   - background is too light
+    "   - letters look dimmed a bit too much (might just need a change in
+    "   background to fix)
+    colorscheme aurora
   else
     colorscheme molokai
   endif

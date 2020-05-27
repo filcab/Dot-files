@@ -1,12 +1,13 @@
 # Color themes (should really just have one... :P )
 opt/molokai|git|https://github.com/tomasr/molokai.git
 # testing
-opt/material.vim|git|https://github.com/kaicataldo/material.vim.git
 opt/ayu-vim|git|https://github.com/ayu-theme/ayu-vim.git
 opt/vim-aurora|git|https://github.com/rafalbromirski/vim-aurora.git
 opt/neodark.vim|git|https://github.com/KeitaNakamura/neodark.vim.git
 opt/vim-one|git|https://github.com/rakr/vim-one.git
 opt/challenger-deep-theme|git|https://github.com/challenger-deep-theme/vim.git
+
+opt/vim-scriptease|git|https://github.com/tpope/vim-scriptease.git
 
 # tests
 opt/vim-matchup|git|https://github.com/andymass/vim-matchup.git
