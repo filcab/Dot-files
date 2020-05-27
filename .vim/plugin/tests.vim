@@ -1,7 +1,10 @@
 command -nargs=0 -bar EnableMatchUp packadd vim-matchup
 
 " Remove line numbers in :terminal buffers (when in normal mode)
-autocmd TerminalOpen * setlocal nonumber
+augroup filcabTerminal
+  autocmd!
+  autocmd TerminalOpen * setlocal nonumber
+augroup END
 
 " make it easier to know which line we're on
 " cursorline ends up behaving in funky ways in some colorthemes.
