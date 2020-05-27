@@ -217,7 +217,9 @@ function filcab#updatePackages()
 
   " FIXME: Maybe in the future try and use :py3f in vim, but still have it be
   " async...
-  execute ":terminal" "++open" pythonCmd "get-files"
+  let script = shellescape(myPackDir."/get-files")
+  let sourcesFile = shellescape(myPackDir."/sources")
+  execute ":terminal" "++open" pythonCmd script "-o" shellescape(myPackDir) sourcesFile
 endfunction
 
 " Function to run helptags on all the opt packages. Regular packages are
