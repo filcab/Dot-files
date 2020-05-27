@@ -235,3 +235,14 @@ function filcab#packOptHelpTags() abort
     endfor
   endfor
 endfunction
+
+" Move the cursor to a terminal window if we have one open
+function filcab#gotoTermWindow() abort
+  let term_bufs = term_list()
+  for win in range(1, winnr('$'))
+    if index(term_bufs, win->winbufnr()) >=0
+      echom 'going to win:' win
+      call win_gotoid(win_getid(win))
+    endif
+  endfor
+endfunction

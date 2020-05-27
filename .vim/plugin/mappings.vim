@@ -30,6 +30,10 @@ noremap <unique> <leader>d1 :Dispatch!<cr>
 " Also add regular <cr> terminated, for consistency (no benefit vs d<cr>)
 noremap <unique> <leader>d<cr> :Dispatch<cr>
 
+" use <leader>t to get to the first terminal window (if open, otherwise it's a
+" no-op)
+nnoremap <unique> <leader>t :GotoTerminalWindow<cr>
+
 " Help for some bindings:
 noremap <unique><expr> <Leader>? ':<C-u>WhichKey "'.get(g:, 'mapleader', '\\').'"<cr>'
 noremap <unique><expr> <LocalLeader>? ':<C-u>WhichKey "'.g:maplocalleader.'"<cr>'

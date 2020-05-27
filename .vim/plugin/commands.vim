@@ -4,6 +4,10 @@
 command -nargs=+ -bar -complete=file_in_path Vsf vert sfind <args>
 command -nargs=+ -bar -complete=file_in_path Vsv vert sview <args>
 
+" go to the first window with a terminal buffer
+" FIXME: maybe in the future it'll go to the *next* terminal buffer?
+command -nargs=0 -bar GotoTerminalWindow call filcab#gotoTermWindow()
+
 " misc debugging/updating commands
 command -nargs=0 -bar DebugSyntaxHighlights call filcab#debug#syntax()
 command -nargs=0 -bar RebuildHelptags helptags ALL | call filcab#packOptHelpTags()
