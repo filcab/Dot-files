@@ -5,6 +5,7 @@
 from distutils.spawn import find_executable
 from pathlib import Path
 
+import glob
 import os
 import platform
 import subprocess
@@ -61,6 +62,7 @@ tentative_llvm_paths = [
     "C:/code/llvm/install",
     "C:/code/llvm/build",
     "/usr/lib/llvm-9",
+    "/usr/lib/llvm-10",
 ]
 
 for d in tentative_llvm_paths:
@@ -92,9 +94,8 @@ assert lib_suffix
 print("Library file suffix: {}".format(lib_suffix))
 
 
-os.environ[
-    "EXTRA_CMAKE_ARGS"
-] = "-DEXTERNAL_LIBCLANG_PATH:FILEPATH={}/lib/libclang.{}".format(llvm_root, lib_suffix)
+os.environ["EXTRA_CMAKE_ARGS"] = "-DEXTERNAL_LIBCLANG_PATH:FILEPATH={}".format(
+    glob.glob("{}/lib/libclang.{}*".format(llvm_root, lib_suffix))[0])
 
 
 # For some reason we need this on Windows
