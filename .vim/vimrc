@@ -178,10 +178,13 @@ endif
 
 
 " From https://vimways.org/2018/the-power-of-diff/
-" Use the patience diff algorithm, to usually get more readable diffs
-set diffopt+=algorithm:patience
-" Use indentation as a heuristic. Might be better as an on-demand thing?
-set diffopt+=indent-heuristic
+" macOS Catalina's vim doesn't have these yet. Figure out a better test
+if v:version > 801
+  " Use the patience diff algorithm, to usually get more readable diffs
+  set diffopt+=algorithm:patience
+  " Use indentation as a heuristic. Might be better as an on-demand thing?
+  set diffopt+=indent-heuristic
+endif
 
 """"""""""""" End of FilCab's stuff
 
