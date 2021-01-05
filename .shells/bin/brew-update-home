@@ -1,0 +1,19 @@
+#!/bin/sh
+
+BREW=~/dev/brew
+CORE_TAP="$BREW/Library/Taps/homebrew/homebrew-core"
+
+set -e
+
+# Update homebrew itself
+git -C "$BREW" stash
+brew update
+git -C "$BREW" stash pop
+
+# Update homebrew-core tap
+git -C "$CORE_TAP" fetch upstream
+git -C "$CORE_TAP" stash
+git -C "$CORE_TAP" merge --ff-only upstream/master
+
+# automatically start mergetool to fix stuff
+git -C "$CORE_TAP" stash pop || git -C "$CORE_TAP" mergetool
