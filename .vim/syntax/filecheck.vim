@@ -55,7 +55,9 @@ syn cluster cCommentGroup add=filecheckDirective
 
 " Allows us to use the Number group to highlight the counts
 syn match filecheckCount "COUNT-\zs\d\+\ze:" contained containedin=filecheckDirective
-
+" FIXME: Since we're using a syn region, it seems NOT won't be highlighted
+" inside the start of the region
+" syn keyword filecheckNot NOT contained containedin=filecheckDirective
 
 " Regions have delimiters with the Delimiter group so we don't call the user's
 " attention to them, just their contents.
@@ -100,7 +102,8 @@ if version >= 508 || !exists("did_c_syn_inits")
   endif
 
   HiLink filecheckDirective Normal
-  HiLink filecheckDirectiveHeader Constant
+  "HiLink filecheckDirectiveHeader Constant
+  HiLink filecheckNot Identifier
   HiLink filecheckCount Number
   HiLink filecheckSubst Special
   HiLink filecheckSubstNumeric PreProc
