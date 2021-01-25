@@ -187,6 +187,10 @@ if v:version > 802
   set diffopt+=indent-heuristic
 endif
 
+" Let's try not folding (especially useful with foldmethod=indent) if there's
+" now enough lines for it to be worth it.
+set foldminlines=5
+
 """"""""""""" End of FilCab's stuff
 
 " display settings

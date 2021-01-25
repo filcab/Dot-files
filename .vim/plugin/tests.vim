@@ -1,5 +1,19 @@
 command -nargs=0 -bar EnableMatchUp packadd vim-matchup
 
+" Use space as the leader as it's much more accessible, especially in UK
+" keyboards (and US Mac keyboards on Windows)
+let mapleader = ' '
+
+" I've been trying out tabs for a few things... let's see if this pans out
+" The only of [] {} () where neither char is bound in default C-w sequences is ()
+nnoremap <c-w>( :tabprev<cr>
+nnoremap <c-w>) :tabnext<cr>
+" escape to EX mode first
+tnoremap <c-w>( <c-w>:tabprev<cr>
+tnoremap <c-w>) <c-w>:tabnext<cr>
+xnoremap <c-w>( :tabprev<cr>
+xnoremap <c-w>) :tabnext<cr>
+
 " Remove line numbers in :terminal buffers (when in normal mode)
 augroup filcabTerminal
   autocmd!
