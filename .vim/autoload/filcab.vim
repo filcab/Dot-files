@@ -1,4 +1,12 @@
-function filcab#CTRL_W_Help()
+if executable('python3')
+  let s:pythonCmd = 'python3'
+elseif executable('python')
+  let s:pythonCmd = 'python'
+else
+  echoerr "Couldn't find python3 or python: UpdatePackages and RecompileYCM commands won't work"
+endif
+
+function! filcab#CTRL_W_Help()
   echo 'Default CTRL-W key bindings. Also work as C-w C-<whatever>'
   echo 'command		action in Normal mode'
   echo '----------------------------------------------------------'
@@ -56,7 +64,7 @@ function filcab#CTRL_W_Help()
   map <C-w>
 endfunction
 
-function filcab#CTRL_X_Help()
+function! filcab#CTRL_X_Help()
   echo 'Default CTRL-X key bindings for completion.'
   echo 'command		completion action'
   echo '----------------------------------------------------------'
@@ -92,7 +100,7 @@ endfunction
 " Highlight all instances of word under cursor, when idle.
 " Useful when studying strange source code.
 " Type z/ to toggle highlighting on/off.
-function filcab#AutoHighlightToggle()
+function! filcab#AutoHighlightToggle()
   let @/ = ''
   if exists('#auto_highlight')
     au! auto_highlight
@@ -113,7 +121,7 @@ endfunction
 
 " Find programs given search paths
 let s:exe_suffix = has('win32') ? '.exe' : ''
-function filcab#FindProgram(prog_name, dirs)
+function! filcab#FindProgram(prog_name, dirs)
   " First search the passed in dirs
   for dir in a:dirs
     let l:maybe_prog = expand(dir . '/' . a:prog_name . s:exe_suffix)
@@ -133,7 +141,7 @@ function filcab#FindProgram(prog_name, dirs)
 endfunction
 
 " Shared between C/C++ and Javascript
-function filcab#ClangFormat()
+function! filcab#ClangFormat()
   " Doesn't do any verification. We've warned before.
   if !has('python') && !has('python3')
     echo 'Could not clang-format. Python not available.'
@@ -159,7 +167,7 @@ function filcab#ClangFormat()
 endfunction
 
 " Shared amongst all YCM-using languages
-function filcab#packaddYCM()
+function! filcab#packaddYCM()
   packadd YouCompleteMe
   " FIXME: submit a PR for YCM. It always complains about fugitive files in
   " big repos anyway.
@@ -167,19 +175,19 @@ function filcab#packaddYCM()
   let g:ycm_filetype_blacklist['fugitive'] = 1
 endfunction
 
-function filcab#ShowYCMNumberOfWarningsAndErrors()
+function! filcab#ShowYCMNumberOfWarningsAndErrors()
   if !get(g:, 'disable_youcompleteme', v:false) && get(g:, 'loaded_youcompleteme', v:false)
     echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount()
         \ . ' Warnings: ' . youcompleteme#GetWarningCount()
   endif
 endfunction
 
-function filcab#recompileYCM()
+function! filcab#recompileYCM()
   let recompileScript = $MYVIMRUNTIME.'/pack/filcab/recompile-ycm'
   execute  ":terminal" "python3" recompileScript
 endfunction
 
-function filcab#updatePackagesOld()
+function! filcab#updatePackagesOld()
   let myPackDir = $MYVIMRUNTIME.'/pack/filcab'
   if executable('perl')
     let perlCmd = 'perl'
@@ -205,16 +213,8 @@ function filcab#updatePackagesOld()
   exe ":chdir" cwd
 endfunction
 
-function filcab#updatePackages()
+function! filcab#updatePackages()
   let myPackDir = $MYVIMRUNTIME.'/pack/filcab'
-  if executable('python3')
-    let pythonCmd = 'python3'
-  elseif executable('python')
-    let pythonCmd = 'python'
-  else
-    echoerr "Couldn't find python3 or python"
-  endif
-
   " FIXME: Maybe in the future try and use :py3f in vim, but still have it be
   " async...
   let script = shellescape(myPackDir."/get-files")
@@ -224,7 +224,7 @@ endfunction
 
 " Function to run helptags on all the opt packages. Regular packages are
 " already in |rtp|, so will have their helptags done with :helptags ALL
-function filcab#packOptHelpTags() abort
+function! filcab#packOptHelpTags() abort
   for d in split(&packpath, ',')
     " pack/$any/opt/$name/doc
     let dir = d.'/pack/*/opt/*/doc'
@@ -239,7 +239,7 @@ function filcab#packOptHelpTags() abort
 endfunction
 
 " Move the cursor to a terminal window if we have one open
-function filcab#gotoTermWindow() abort
+function! filcab#gotoTermWindow() abort
   let term_bufs = term_list()
   for win in range(1, winnr('$'))
     if index(term_bufs, win->winbufnr()) >=0
