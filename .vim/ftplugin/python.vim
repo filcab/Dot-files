@@ -1,8 +1,3 @@
-" Set python mode to python3 if available
-if has('python3') || has('python3/dyn')
-  let g:pymode_python = 'python3'
-endif
-
 " Adjust black's virtualenv directory as we might end up hitting the same
 " directory from several different vim executables
 let g:black_virtualenv = $MYVIMRUNTIME . '/black'

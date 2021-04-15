@@ -24,3 +24,11 @@ if (has('win32') || has('win32unix')) && !filereadable(&pythonthreedll)
     endif
   endif
 endif
+
+" python for windows doesn't install an executable named python3, so pymode
+" will just fail to see that we have python
+" This needs to be done before pymode is loaded, or they'll set the variable
+" to 'disable' and just break down
+if has('python3') || has('python3/dyn')
+  let g:pymode_python = 'python3'
+endif
