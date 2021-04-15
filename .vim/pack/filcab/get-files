@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from zipfile import ZipFile
+from pathlib import Path
 from urllib.request import urlopen
+from zipfile import ZipFile
 
 import argparse
 import concurrent.futures as futures
@@ -114,7 +115,7 @@ def get_files(ui, args):
             bool, [re.sub("#.*", "", line).strip() for line in f.readlines()]
         )
 
-    basedir = args.output_directory
+    basedir = Path(args.output_directory)
     no_updater = []
     updaters = []
     for line in content:
@@ -124,7 +125,7 @@ def get_files(ui, args):
             no_updater.append((type, dst))
             continue
 
-        dst = os.path.join(basedir, dst)
+        dst = basedir / dst
         # don't create the actual directory, just the containing one
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         updaters.append(updater_class(ui, type, dst, rest))
@@ -235,7 +236,7 @@ def main(progname, argv):
     args = parser.parse_args(argv)
 
     if not os.path.isfile(args.sources):
-        args.sources = os.path.join(os.path.dirname(__file__), "sources")
+        args.sources = os.path.dirname(__file__) / "sources"
 
     if args.output_directory is None:
         args.output_directory = os.path.dirname(args.sources)
