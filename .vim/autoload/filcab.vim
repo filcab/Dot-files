@@ -184,7 +184,7 @@ endfunction
 
 function! filcab#recompileYCM()
   let recompileScript = $MYVIMRUNTIME.'/pack/filcab/recompile-ycm'
-  execute  ":terminal" "python3" recompileScript
+  execute  ":terminal" "++shell" pythonCmd shellescape(recompileScript)
 endfunction
 
 function! filcab#updatePackagesOld()
@@ -219,7 +219,11 @@ function! filcab#updatePackages()
   " async...
   let script = shellescape(myPackDir."/get-files")
   let sourcesFile = shellescape(myPackDir."/sources")
-  execute ":terminal" "++open" pythonCmd script "-o" shellescape(myPackDir) sourcesFile
+  " use shell escapes and the ++shell argument as otherwise we'll get split on
+  " spaces. I couldn't find a proper way to quote the arguments whilst still
+  " not using shell (quotes would end up getting included in the arguments
+  " themselves)
+  execute ":terminal" "++open" "++shell" s:pythonCmd script "-o" shellescape(myPackDir) sourcesFile
 endfunction
 
 " Function to run helptags on all the opt packages. Regular packages are
