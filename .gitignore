@@ -1,9 +1,14 @@
+# version tracking files (local by default)
+/.config/configstore/update-notifier-npm.json
+
 /.subversion/*
 !/.subversion/config
-/.vim/black
+
+/.vim/black_*
 /.vim/view
 /.vim/.netrwhist
 /.vim/yankring_history_v2.txt
 
 # Local configurations
 /.vim/after/plugin/autoset-rules-local.vim
+/.shells/rc.local*
