@@ -184,7 +184,7 @@ endfunction
 
 function! filcab#recompileYCM()
   let recompileScript = $MYVIMRUNTIME.'/pack/filcab/recompile-ycm'
-  execute  ":terminal" "++shell" pythonCmd shellescape(recompileScript)
+  execute  ":terminal" "++shell" s:pythonCmd shellescape(recompileScript)
 endfunction
 
 function! filcab#updatePackagesOld()
