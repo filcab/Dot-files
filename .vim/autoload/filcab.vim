@@ -152,8 +152,8 @@ function! filcab#ClangFormat()
   if !filereadable(path)
     echom 'Not running clang-format: File is not readable: ' . path
     return
-  elseif path =~# '^fugitive://' && !get(g:, 'clang_format_fugitive', v:false)
-    echo 'Skipping clang-format: File is a fugitive:// file (use g:clang_format_fugitive to change this)'
+  elseif path =~# '^fugitive://'
+    echo 'Skipping clang-format: File is a fugitive:// file'
     return
   else
     echom 'Running clang-format!'
