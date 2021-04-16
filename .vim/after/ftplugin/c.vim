@@ -28,6 +28,12 @@ else
   echom 'Python3/Python not available, skipping clang-format mappings'
 endif
 
+if executable(g:clang_format_path)
+  let &equalprg=g:clang_format_path
+  " seems this is failing due to different line ending expectations on Windows
+  "let &formatprg=g:clang_format_path
+endif
+
 " Setup clang-format on save functionality only in C/C++ files
 augroup FilcabCFtAutoCommands
   autocmd!
