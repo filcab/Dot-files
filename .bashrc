@@ -1,3 +1,1 @@
-#!/bin/bash
-
-source ~/.shells/shrc
+[ -f ~/.bash_profile ] && source ~/.bash_profile

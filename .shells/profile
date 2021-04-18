@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# rc => interactive shells (usually (on macOS at least) they're also login shells)
+# profile => login shell (this is where we want to put most env var setting)
+
 SHELL_RESOURCES=~/.shells
 
 # All code here should be POSIX-compliant. We can switch on $0 to use other

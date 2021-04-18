@@ -7,6 +7,6 @@
 typeset -gU path
 typeset -gU fpath
 
-source ~/.shells/shrc
+source ~/.shells/profile
 
 # zprof
