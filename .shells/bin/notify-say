@@ -1,0 +1,21 @@
+#!/bin/sh
+
+
+case $(uname -s) in
+  Darwin)
+    #say << EOF &
+    #$@
+    #EOF
+    say "$@" &
+
+    #alert
+    #X="$@" osascript -e 'display alert system attribute "X"'
+    #notification
+    X="$*" osascript -e 'display notification system attribute "X"'
+    #display notification "message" with title "title" subtitle "subtitle"
+    #display notification "message" sound name "Sound Name"
+    ;;
+  *)
+    echo not supported on this system: $(uname -s)
+    ;;
+esac
