@@ -61,3 +61,5 @@
 	fsckobjects = true
 [receive]
 	fsckObjects = true
+[init]
+	defaultBranch = main
