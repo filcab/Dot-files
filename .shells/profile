@@ -15,7 +15,7 @@ uname_s=$(uname -s)
 if [ ! -z "$ZSH_VERSION" ]; then
   # echo "zsh funcs!"
   # For now, no need to include compat.sh
-  source ${SHELL_RESOURCES}/compat.zsh
+  . ${SHELL_RESOURCES}/compat.zsh
 else
   case ${0} in
     # git-bash will have $0 as /usr/bin/bash
