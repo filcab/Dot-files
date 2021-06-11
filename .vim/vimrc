@@ -263,9 +263,13 @@ if &t_Co > 2 || has('gui_running')
     "   - background is too light
     "   - letters look dimmed a bit too much (might just need a change in
     "   background to fix)
-    colorscheme aurora
+    " Don't error if the colorscheme doesn't exist (most likely reason: we
+    " didn't fetch the packages)
+    silent! colorscheme aurora
   else
-    colorscheme molokai
+    " Don't error if the colorscheme doesn't exist (most likely reason: we
+    " didn't fetch the packages)
+    silent! colorscheme molokai
   endif
 
   if has('macunix') && has('gui_running') && has('vim_starting')
