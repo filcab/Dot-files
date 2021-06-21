@@ -63,6 +63,11 @@ tentative_llvm_paths = [
     "C:/code/llvm/build",
     "/usr/lib/llvm-9",
     "/usr/lib/llvm-10",
+    "/usr/lib/llvm-11",
+    "/usr/lib/llvm-12",
+    "/usr/lib/llvm-13",
+    "/usr/lib/llvm-14",
+    "/usr/lib/llvm-15",
 ]
 
 for d in tentative_llvm_paths:
