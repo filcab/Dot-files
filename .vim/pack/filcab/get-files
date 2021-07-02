@@ -120,6 +120,12 @@ def get_files(ui, args):
     updaters = []
     for line in content:
         dst, type, rest = line.split("|", 2)
+
+        # rename directory if needed
+        base_dst = os.path.basename(dst)
+        base_dst = args.renames.get(base_dst, base_dst)
+        dst = os.path.join(os.path.dirname(dst), base_dst)
+
         updater_class = find_updater(dst, type, rest)
         if updater_class is None:
             no_updater.append((type, dst))
@@ -233,7 +239,14 @@ def main(progname, argv):
         "--output-directory",
         help="Directory to clone the files into, according to the sources file",
     )
+    parser.add_argument(
+        "-r",
+        "--rename",
+        dest="renames", default=[], action="append",
+        help="Rename output directories from the default pass default=new_name pairs",
+    )
     args = parser.parse_args(argv)
+    args.renames = dict(map(lambda x: x.split('='), args.renames))
 
     if not os.path.isfile(args.sources):
         args.sources = os.path.dirname(__file__) / "sources"

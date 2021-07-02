@@ -168,10 +168,18 @@ endfunction
 
 " Shared amongst all YCM-using languages
 function! filcab#packaddYCM()
-  packadd YouCompleteMe
+  " install different variants so we can control what library gets added
+  if has("win32unix")
+    packadd YouCompleteMe.win32unix
+  elseif has("win32")
+    packadd YouCompleteMe.win32
+  else
+    packadd YouCompleteMe
+  endif
   " FIXME: submit a PR for YCM. It always complains about fugitive files in
   " big repos anyway.
   " Would be "nice" to be able to goto definition, but do we care?
+  let g:ycm_filetype_blacklist = get(g:, 'ycm_filetype_blacklist', {})
   let g:ycm_filetype_blacklist['fugitive'] = 1
 endfunction
 
@@ -183,34 +191,17 @@ function! filcab#ShowYCMNumberOfWarningsAndErrors()
 endfunction
 
 function! filcab#recompileYCM()
-  let recompileScript = $MYVIMRUNTIME.'/pack/filcab/recompile-ycm'
-  execute  ":terminal" "++shell" s:pythonCmd shellescape(recompileScript)
-endfunction
-
-function! filcab#updatePackagesOld()
-  let myPackDir = $MYVIMRUNTIME.'/pack/filcab'
-  if executable('perl')
-    let perlCmd = 'perl'
+  " install different variants so we can control what library gets added
+  if has("win32unix")
+    let ycm_suffix = ".win32unix"
+  elseif has("win32")
+    let ycm_suffix = ".win32"
   else
-    " win32: let's check the git install directory for its included perl and use that
-    " no need to check has('win32') as we're adding .exe at the end of the git
-    " executable
-    let gitInstallDir = fnamemodify(exepath('git.exe'), ":p:h")
-    let maybePerl = gitInstallDir.'/../usr/bin/perl.exe'
-    if filereadable(maybePerl)
-      let perlCmd = shellescape(maybePerl)
-    else
-      echoerr "Couldn't find perl executable."
-      return
-    endif
+    let ycm_suffix = ""
   endif
 
-  let cwd = getcwd()
-  " FIXME: This will lose any lcd on the current window... But works on the
-  " oldest Debian I want to support
-  exe ":chdir" myPackDir
-  execute ":terminal" "++open" perlCmd "get-files.pl"
-  exe ":chdir" cwd
+  let recompileScript = $MYVIMRUNTIME.'/pack/filcab/recompile-ycm'
+  execute  ":terminal" "++shell" s:pythonCmd shellescape(recompileScript) "opt/YouCompleteMe".ycm_suffix
 endfunction
 
 function! filcab#updatePackages()
@@ -223,7 +214,16 @@ function! filcab#updatePackages()
   " spaces. I couldn't find a proper way to quote the arguments whilst still
   " not using shell (quotes would end up getting included in the arguments
   " themselves)
-  execute ":terminal" "++open" "++shell" s:pythonCmd script "-o" shellescape(myPackDir) sourcesFile
+
+  if has("win32unix")
+    let ycm_rename = "YouCompleteMe=YouCompleteMe.win32unix"
+  elseif has("win32")
+    let ycm_rename = "YouCompleteMe=YouCompleteMe.win32"
+  else
+    let ycm_rename = "YouCompleteMe=YouCompleteMe"
+  endif
+
+  execute ":terminal" "++open" "++shell" s:pythonCmd script "-o" shellescape(myPackDir) "--rename" ycm_rename sourcesFile
 endfunction
 
 " Function to run helptags on all the opt packages. Regular packages are
