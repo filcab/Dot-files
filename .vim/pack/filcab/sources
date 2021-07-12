@@ -33,7 +33,7 @@ opt/vim-abolish|git|https://github.com/tpope/vim-abolish.git
 opt/vim-afterimage|git|https://github.com/tpope/vim-afterimage.git
 ## remaining general utilities
 start/vim-which-key|git|https://github.com/liuchengxu/vim-which-key.git
-start/ack-vim|git|https://github.com/mileszs/ack.vim.git
+start/vim-grepper|git|https://github.com/mhinz/vim-grepper.git
 start/vim-characterize|git|https://github.com/tpope/vim-characterize.git
 start/vim-commentary|git|https://github.com/tpope/vim-commentary.git
 start/vim-dispatch|git|https://github.com/tpope/vim-dispatch.git

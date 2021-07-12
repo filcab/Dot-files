@@ -74,22 +74,25 @@ let maplocalleader=','
 let g:clang_tools_search_paths = ['~/dev/llvm/install/bin', '~/dev/llvm/build/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
 let g:binary_search_paths = ['~/dev/brew/bin', '~/dev/homebrew/bin']
 
-" Try finding ripgrep to use with vim's grep functionality and ack plugin
+" minimize + re-sort tools to put ripgrep near the top
+" start with git assuming stuff works. I sometimes am on a git repo and want
+" to search another one, so let's see if this is not an issue.
+let g:grepper = get(g:, 'grepper', {})
+let g:grepper.tools =
+      \ ['git', 'rg', 'ack', 'ack-grep', 'grep', 'findstr']
+
+" Try finding ripgrep to use with vim's grep functionality
 if executable('rg')
   " Assume ripgrep is in cargo directory (if available), and that's in PATH
-  let g:ackprg = "rg --vimgrep --smart-case"
-  let &grepprg = g:ackprg
+  let &grepprg = "rg --vimgrep --smart-case"
 elseif executable("/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe")
-  let g:ackprg = "/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe --vimgrep --smart-case"
-  let &grepprg = g:ackprg
-else
-  " Try ack if rg is not available
-  if executable('ack')
-    let g:ackprg = 'ack -H --nocolor --nogroup --column --smart-case'
-  else
-    let g:ackprg = filcab#FindProgram('ack', g:binary_search_paths) . ' -H --nocolor --nogroup --column --smart-case'
-  endif
-  let &grepprg = g:ackprg
+  " special vimgrep case for WSL (won't be able to search WSL drives,
+  " though...)
+  let &grepprg = "/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe --vimgrep --smart-case"
+elseif executable('ack')
+  " Use ack if rg is not available
+  let &grepprg = 'ack -H --nocolor --nogroup --column --smart-case'
+" else leave it alone
 endif
 
 " Make ninja the default makeprg and make clang the default compiler (for errorformat)
