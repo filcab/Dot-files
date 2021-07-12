@@ -52,6 +52,10 @@ class GitUpdater(Updater):
                 return job.run(
                     [
                         "git",
+                        # These repos are all very small and not often needed, don't
+                        # spin up fsmonitors
+                        "-c",
+                        "core.useBuiltinFSMonitor=false",
                         "-C",
                         self.dst,
                         "pull",
