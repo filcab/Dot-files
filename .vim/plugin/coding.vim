@@ -39,3 +39,15 @@ let g:lsp_signs_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
 "let g:lsp_log_verbose = 0
 "let g:lsp_log_file = expand('~/vim-lsp.log')
+
+" Adjust black's virtualenv directory as we might end up hitting the same
+" directory from several different vim executables. Do this before any
+" ftplugin, and only once per session.
+let g:black_virtualenv = expand($MYVIMRUNTIME . '/black')
+if has('win32unix')
+  let g:black_virtualenv .= '_win32unix'
+elseif has('win32')
+  let g:black_virtualenv .= '_win32'
+elseif has('unix')
+  let g:black_virtualenv .= '_unix'
+endif
