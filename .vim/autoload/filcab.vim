@@ -168,6 +168,9 @@ endfunction
 
 " Shared amongst all YCM-using languages
 function! filcab#packaddYCM()
+  if get(g:, 'ycm_enable', 0)
+    return
+  endif
   " install different variants so we can control what library gets added
   if has("win32unix")
     packadd YouCompleteMe.win32unix

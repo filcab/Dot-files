@@ -14,7 +14,11 @@ let g:clang_format_on_save = 0
 
 " LSP setup is not ready yet
 "let g:disable_youcompleteme = 0
-"let g:disable_lsp = 0
+let g:ycm_enable = 0
+let g:lsp_enable = 0
+" force us to :call lsp#enable() to enable vim-lsp
+" will still define commands and plug mappings
+let g:lsp_auto_enable = 0
 
 " Set this wether or not we're disabling ycm, since we might not find the LSP
 " programs

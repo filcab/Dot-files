@@ -14,7 +14,6 @@ function filcab#python#init() abort
       \ 'cmd': {server_info->['pyls']},
       \ 'whitelist': ['python'],
       \ })
-    call lsp#enable()
   endif
 
   if !get(g:, 'disable_youcompleteme', v:false)

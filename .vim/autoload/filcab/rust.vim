@@ -23,7 +23,6 @@ function filcab#rust#init() abort
       \ 'cmd': {server_info->['rls']},
       \ 'whitelist': ['rust'],
       \ })
-    call lsp#enable()
   endif
 
   if !get(g:, 'disable_youcompleteme', v:false)

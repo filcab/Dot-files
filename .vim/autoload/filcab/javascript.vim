@@ -14,7 +14,6 @@ function filcab#javascript#init() abort
       \ 'cmd': {server_info->['tern']},
       \ 'whitelist': ['javascript'],
       \ })
-    call lsp#enable()
   endif
 
   if !get(g:, 'disable_youcompleteme', v:false)

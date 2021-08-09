@@ -76,7 +76,6 @@ function filcab#c#init() abort
             \ 'cmd': {server_info->[g:clangd_path] + g:ycm_clangd_args},
             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
             \ })
-    call lsp#enable()
   endif
 
   if !get(g:, 'disable_youcompleteme', v:false)
