@@ -124,7 +124,7 @@ if platform.system() == "Windows":
 
 class Completers(object):
     def __init__(self):
-        self.enabled = ["clang"]
+        self.enabled = []
         self.skipped = []
 
     def ok(self, completer):
