@@ -1,0 +1,60 @@
+# config file comments are the default config, generated with starship
+# print-config without a configuration file set
+
+# Warning: This config does not include keys that have an unset value
+#format = '$all'
+#scan_timeout = 30
+#command_timeout = 500
+#add_newline = true
+
+[[battery.display]]
+# ye olde laptop does not last long...
+threshold = 50
+
+[cmake]
+format = '[$symbol($version )]($style)'
+
+[cmd_duration]
+show_notifications = false
+min_time_to_notify = 45000
+
+[directory]
+truncation_length = 5
+truncate_to_repo = false
+truncation_symbol = '…'
+
+[golang]
+format = '[$symbol($version )]($style)'
+
+#[line_break]
+#disabled = true
+
+[perl]
+format = '[$symbol($version )]($style)'
+
+[python]
+python_binary = ['python3', 'python', 'python2']
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+
+[ruby]
+format = '[$symbol($version )]($style)'
+
+[rust]
+format = '[$symbol($version )]($style)'
+
+[status]
+disabled = false
+
+[swift]
+format = '[$symbol($version )]($style)'
+
+#[time]
+#format = 'at [$time]($style) '
+#style = 'bold yellow'
+#use_12hr = false
+#disabled = true
+#utc_time_offset = 'local'
+#time_range = '-'
+
+#[custom]
+
