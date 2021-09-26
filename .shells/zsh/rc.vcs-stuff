@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-if [ "$FILCAB_SHELL_ALREADY_SETUP" = yes ]; then
+if [ "$FILCAB_PROMPT_ALREADY_SETUP" = yes ]; then
   return
 fi
 

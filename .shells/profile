@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ "$FILCAB_SHELL_INIT" = yes ]; then
+  return
+fi
+
 # rc => interactive shells (usually (on macOS at least) they're also login shells)
 # profile => login shell (this is where we want to put most env var setting)
 
@@ -37,4 +41,4 @@ for rc in ${SHELL_RESOURCES}/rc.*; do
   . ${rc}
 done
 
-export FILCAB_SHELL_INIT=1
+export FILCAB_SHELL_INIT=yes

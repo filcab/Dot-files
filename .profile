@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/bin/sh
 
 . ~/.shells/profile

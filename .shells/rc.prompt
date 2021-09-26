@@ -15,7 +15,7 @@ then
       export PS1="$(whoami)"'@\h \w \$ '
       ;;
   esac
-  FILCAB_SHELL_ALREADY_SETUP=yes
+  FILCAB_PROMPT_ALREADY_SETUP=yes
 else
   case "$(ps -p $$ -oargs=)" in
     -bash | */bash | */bash.exe)
