@@ -14,6 +14,7 @@ git -C "$BREW" stash pop
 git -C "$CORE_TAP" fetch upstream
 git -C "$CORE_TAP" stash
 git -C "$CORE_TAP" merge --ff-only upstream/master
+git -C "$CORE_TAP" push
 
 # automatically start mergetool to fix stuff
 git -C "$CORE_TAP" stash pop || git -C "$CORE_TAP" mergetool
