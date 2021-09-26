@@ -38,5 +38,3 @@ for rc in ${SHELL_RESOURCES}/rc.*; do
 done
 
 export FILCAB_SHELL_INIT=1
-
-unset uname_s
