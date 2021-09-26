@@ -172,18 +172,5 @@ maybe_start_ssh_agent() {
 maybe_start_ssh_agent
 
 
-### Setup PS1
-# FIXME: Convert all the PS1/prompt setups in one file.
-case "$0" in
-  -bash|bash)
-    export PS1='[\[\e[01;32m\]\u\[\e[00m\]@\[\e[01;31m\]\h\[\e[01;34m\] \w\[\e[00m\]] \$ '
-    ;;
-  -sh|sh|-ash|ash|-dash|dash)
-    # maybe when I understand why FreeBSD's sh doesn't color...
-    #export PS1=$'[\e[01;31m\\u\e[00m@\e[01;31m\\h\e[01;34m \\w\e[00m] \\$ '
-    export PS1="$(whoami)"'@\h \w \$ '
-    ;;
-esac
-
 ### Ninja status: "time [left/running/finished]"
 export NINJA_STATUS="$(tput bold)%e$(tput sgr0) [$(tput bold)$(tput setaf 1)%u$(tput sgr0)/$(tput bold)$(tput setaf 3)%r$(tput sgr0)/$(tput bold)$(tput setaf 2)%f$(tput sgr0)] "

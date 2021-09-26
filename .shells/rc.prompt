@@ -1,0 +1,45 @@
+#!/bin/sh
+
+if command -v starship &> /dev/null
+then
+  case "$(ps -p $$ -oargs=)" in
+    -bash | */bash | */bash.exe)
+      eval "$(starship init bash)"
+      ;;
+    -zsh | */zsh)
+      eval "$(starship init zsh)"
+      ;;
+    -sh | */sh | -ash | */ash | -dash | */dash)
+      # maybe when I understand why FreeBSD's sh doesn't color...
+      #export PS1=$'[\e[01;31m\\u\e[00m@\e[01;31m\\h\e[01;34m \\w\e[00m] \\$ '
+      export PS1="$(whoami)"'@\h \w \$ '
+      ;;
+  esac
+  FILCAB_SHELL_ALREADY_SETUP=yes
+else
+  case "$(ps -p $$ -oargs=)" in
+    -bash | */bash | */bash.exe)
+      source "$SHELL_RESOURCES"/lib/git-prompt.sh
+      export PS1='[\[\e[01;32m\]\u\[\e[00m\]@\[\e[01;31m\]\h\[\e[01;34m\] \w\[\e[00m\]]$(__git_ps1 " (%s)")\$ '
+      ;;
+    -zsh | */zsh)
+      ## git stuff
+      # autoload completion by having it in fpath
+      fpath=( "$SHELL_RESOURCES/lib" $fpath )
+      source "$SHELL_RESOURCES"/lib/git-prompt.sh
+
+      # prompt
+      autoload -U promptinit
+      promptinit
+      #prompt walters
+
+      setopt prompt_subst
+
+      ;;
+    -sh | */sh | -ash | */ash | -dash | */dash)
+      # maybe when I understand why FreeBSD's sh doesn't color...
+      #export PS1=$'[\e[01;31m\\u\e[00m@\e[01;31m\\h\e[01;34m \\w\e[00m] \\$ '
+      export PS1="$(whoami)"'@\h \w \$ '
+      ;;
+  esac
+fi

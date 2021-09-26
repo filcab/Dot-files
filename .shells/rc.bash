@@ -9,7 +9,6 @@ fi
 for f in "$SHELL_RESOURCES"/lib/*.bash; do
   source "$f"
 done
-source "$SHELL_RESOURCES"/lib/git-prompt.sh
 
 if [ -d ~/dev/brew/etc/bash_completion.d ]; then
   for f in ~/dev/brew/etc/bash_completion.d; do

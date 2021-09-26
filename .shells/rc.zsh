@@ -19,11 +19,6 @@ for f in "$SHELL_RESOURCES"/zsh/rc.*; do
   source $f
 done
 
-## git stuff
-# autoload completion by having it in fpath
-fpath=( "$SHELL_RESOURCES/lib" $fpath )
-source "$SHELL_RESOURCES"/lib/git-prompt.sh
-
 if [ -d ~/dev/brew/share/zsh/site-functions ]; then
   fpath=( ~/dev/brew/share/zsh/site-functions $fpath )
 fi
@@ -38,14 +33,8 @@ compinit
 # correction
 setopt correctall
 
-# prompt
-autoload -U promptinit
-promptinit
-#prompt walters
-
 autoload colors
 colors
-setopt prompt_subst
 
 # If a pattern doesn't glob, use it verbatim in the command
 unsetopt nomatch

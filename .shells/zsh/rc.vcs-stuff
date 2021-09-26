@@ -1,5 +1,9 @@
 #!/bin/zsh
 
+if [ "$FILCAB_SHELL_ALREADY_SETUP" = yes ]; then
+  return
+fi
+
 # set some colors
 for COLOR in RED GREEN YELLOW WHITE BLACK CYAN; do
   eval PR_$COLOR='%{$fg[${(L)COLOR}]%}'
