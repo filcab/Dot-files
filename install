@@ -1,16 +1,20 @@
 #!/usr/bin/env python
-from __future__ import print_function
 import argparse
 import os
 import sys
 
+from pathlib import Path
 
 DEFAULT_COMMAND = 'validate'
 # TODO: Do we want to possibly install elsewhere?
-HOME = os.path.expanduser('~')
+HOME = Path.home()
 non_installable = ['.git', '.gitignore', 'install']
 
-exceptions = {}
+exceptions = {
+    "Microsoft.PowerShell_profile.ps1": (
+        Path.home()/"Documents/PowerShell/Microsoft.PowerShell_profile.ps1"
+    ),
+}
 non_installable += exceptions.keys()
 
 
@@ -35,7 +39,7 @@ if sys.platform == "win32":
         flags = 0
         if source is not None and os.path.isdir(source):
             flags = 1
-        if __CSL(link_name, source, flags) == 0:
+        if __CSL(str(link_name), str(source), flags) == 0:
             raise ctypes.WinError()
 else:
     def symlink(source, link_name):
@@ -43,15 +47,15 @@ else:
 
 
 def validate_link(lnk, dst, config):
-    if not os.path.exists(lnk):
+    if not lnk.exists():
         error('symlink to {} is not installed at {}'.format(dst, lnk))
         had_error = True
         return
-    if not os.path.islink(lnk):
+    if not lnk.is_symlink():
         error('{} exists but is not a symlink'.format(lnk))
         had_error = True
         return
-    link = os.readlink(lnk)
+    link = lnk.readlink().resolve()
     if link != dst:
         error('{} exists but is not a symlink to {}, it points to {}'.format(lnk, dst, link))
         had_error = True
@@ -68,20 +72,24 @@ def validate(d, config):
                 print('Non-installable file: {}'.format(f))
             continue
 
-        abs_f = os.path.realpath(os.path.join(d, f))
-        HOME_f = os.path.join(HOME, f)
+        abs_f = (Path(d)/f).resolve()
+        HOME_f = Path(HOME)/f
         validate_link(HOME_f, abs_f, config)
 
     for dst, lnk in exceptions.items():
-        lnk = os.path.realpath(os.path.expanduser(lnk))
-        dst = os.path.realpath(dst)
+        lnk = lnk.expanduser()
+        dst = Path(dst)
+        if not dst.is_absolute():
+            dst = Path.cwd()/dst
+        dst.resolve()
+
         validate_link(lnk, dst, config)
 
     info('All seems to be ok!')
 
 
 def symlink_is_ok(lnk, dst):
-    return os.path.exists(lnk) and os.path.islink(lnk) and os.readlink(lnk) == dst
+    return lnk.exists() and lnk.is_symlink() and lnk.readlink().resolve() == dst
 
 
 def install(d, config):
@@ -98,24 +106,30 @@ def install(d, config):
                 if config.verbose:
                     print('  Already ok: {} -> {}'.format(lnk, dst))
             else:
-                if os.path.islink(lnk):
-                    print('  Changing {} from {} to {}'.format(lnk, os.readlink(lnk), dst))
-                    os.remove(lnk)
+                if lnk.is_symlink():
+                    resolved = lnk.readlink().resolve()
+                    print('  Changing {} from {} to {}'.format(lnk, resolved, dst))
+                    lnk.unlink()
                 else:
                     print('  Creating symlink: {} -> {}'.format(lnk, dst))
+                    lnk.parent.mkdir(parents=True, exist_ok=True)
                 symlink(dst, lnk)
 
     had_error = False
     for f in os.listdir(d):
         if f in non_installable:
             continue
-        abs_f = os.path.realpath(os.path.join(d, f))
-        HOME_f = os.path.join(HOME, f)
+        abs_f = (Path(d)/f).resolve()
+        HOME_f = HOME / f
         symlink_file(HOME_f, abs_f)
 
     for dst, lnk in exceptions.items():
-        lnk = os.path.realpath(os.path.expanduser(lnk))
-        dst = os.path.realpath(dst)
+        lnk = lnk.expanduser()
+        dst = Path(dst)
+        if not dst.is_absolute():
+            dst = Path.cwd()/dst
+        dst.resolve()
+
         symlink_file(lnk, dst)
 
 
