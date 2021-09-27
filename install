@@ -12,7 +12,7 @@ non_installable = [".git", ".gitignore", "install"]
 
 exceptions = {
     "Microsoft.PowerShell_profile.ps1": (
-        Path.home() / "Documents/PowerShell/Microsoft.PowerShell_profile.ps1"
+        Path.home() / "Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
     ),
 }
 non_installable += exceptions.keys()
