@@ -15,7 +15,7 @@ opt/vim-matchup|git|https://github.com/andymass/vim-matchup.git
 opt/hexokinase|git|https://github.com/RRethy/vim-hexokinase.git
 
 # Language tools (to be packadd-ed by me)
-# Not wel behaved. Load only when needed
+# Not well behaved. Load only when needed
 opt/YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
 # Well behaved mode, plugin only sets defaults and two commands
 start/python-mode|git|https://github.com/klen/python-mode.git
