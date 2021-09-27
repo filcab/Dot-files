@@ -1,8 +1,14 @@
 #!/bin/sh
+# cygwin doesn't support this ps invocation
+if [ -f "/proc/$$/exename" ]; then
+  filcab_shell_exe=$(cat /proc/$$/exename)
+else
+  filcab_shell_exe=$(ps -p $$ -oargs=)
+fi
 
 if command -v starship &> /dev/null
 then
-  case "$(ps -p $$ -oargs=)" in
+  case "$filcab_shell_exe" in
     -bash | */bash | */bash.exe)
       eval "$(starship init bash)"
       ;;
@@ -17,7 +23,7 @@ then
   esac
   FILCAB_PROMPT_ALREADY_SETUP=yes
 else
-  case "$(ps -p $$ -oargs=)" in
+  case "$filcab_shell_exe" in
     -bash | */bash | */bash.exe)
       source "$SHELL_RESOURCES"/lib/git-prompt.sh
       export PS1='[\[\e[01;32m\]\u\[\e[00m\]@\[\e[01;31m\]\h\[\e[01;34m\] \w\[\e[00m\]]$(__git_ps1 " (%s)")\$ '
@@ -43,3 +49,5 @@ else
       ;;
   esac
 fi
+
+unset filcab_shell_exe
