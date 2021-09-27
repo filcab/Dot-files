@@ -22,10 +22,13 @@ let g:lsp_auto_enable = 0
 
 " Set this wether or not we're disabling ycm, since we might not find the LSP
 " programs
-let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = expand($MYVIMRUNTIME . '/ycm_extra_conf.py')
 " Set in all our shells (Maybe set it if it wasn't set? (e.g: GUI vim in some
 " platforms))
 let g:ycm_rust_src_path = $RUST_SRC_PATH
+if executable("rustc")
+  let g:ycm_rust_toolchain_root = system("rustc --print sysroot")
+endif
 
 " completion (CTRL+N) options
 if !exists( "g:loaded_youcompleteme" )
