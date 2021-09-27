@@ -79,7 +79,7 @@ let g:binary_search_paths = ['~/dev/brew/bin', '~/dev/homebrew/bin']
 " to search another one, so let's see if this is not an issue.
 let g:grepper = get(g:, 'grepper', {})
 let g:grepper.tools =
-      \ ['git', 'rg', 'ack', 'ack-grep', 'grep', 'findstr']
+      \ ['rg', 'git', 'ack', 'ack-grep', 'grep', 'findstr']
 
 " Try finding ripgrep to use with vim's grep functionality
 if executable('rg')
