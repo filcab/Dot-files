@@ -105,7 +105,7 @@ set makeprg=ninja
 "   - With and without winpty:
 "     - git-bash running installed (up-to-date) vim (same installation as previous gvim.exe)
 "     - git-bash running an older vim.exe (distributed with it)
-if has('win32unix') " only enter if we're on mingw/cygwin
+if has("win32") || has('win32unix') " only enter for stuff running on windows
   if &winptydll != ''
     " We're on Windows-land, make sure we're using the regular Windows shell,
     " if the one we have is invalid.
@@ -280,9 +280,10 @@ if &t_Co > 2 || has('gui_running')
   endif
 
   if has('win32') && has('gui_running') && has('vim_starting')
+    " FiraCode NerdFont: nice font, with added icons
     " Consolas: Good, default Windows fonts (after Win7)
     " Cascadia: Seems a bit nicer
-    set guifont=Cascadia\ Code:h13,Cascadia\ Mono:h13,Consolas:h13
+    set guifont=FiraCode\ NF:h12,Cascadia\ Code:h13,Cascadia\ Mono:h13,Consolas:h13
     " Make the window larger by default. This should fit 3 side-by-side panes
     " very easily.
     set lines=80 columns=280
