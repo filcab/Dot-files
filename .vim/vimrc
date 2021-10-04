@@ -95,10 +95,6 @@ elseif executable('ack')
 " else leave it alone
 endif
 
-" Make ninja the default makeprg and make clang the default compiler (for errorformat)
-"compiler! clang
-set makeprg=ninja
-
 " Always use proper slashes on Windows if our shell looks like a *NIX one.
 " Windows shell settings require special care so they always work on:
 "   - Regular Windows (gvim.exe)
