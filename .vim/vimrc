@@ -41,6 +41,7 @@ set encoding=utf-8    " filcab: Not in sensible
 " I once had a problem with › where it would show up wrong. Use ` instead
 " (I've actually come to prefer it, since it is smaller).
 set listchars=tab:`\ ,trail:⎕ ",eol:$
+set list
 
 set formatoptions+=j " Delete comment character when joining commented lines
 
@@ -154,13 +155,7 @@ set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 
 " When in a git repo, tell us the current branch
 " Only set it if we have fugitive available. Check with a variable it defines
-if get(g:, 'fugitive_git_executable', v:false)
-  let &statusline = '%{fugitive#statusline()} ' . &statusline
-endif
-
-" From silvas' vimrc:
-" Showing invisible characters {{{
-set list
+let &statusline = '%{fugitive#statusline()} ' . &statusline
 
   " macOS' Terminal.app doesn't support 24-bit colours :-(
 if !has('macunix') || has('gui_running')
@@ -298,8 +293,3 @@ autocmd BufReadPost *
 " experimental. note that \%# is used to match the cursor position, so that
 " we aren't marking red the area that we are just typing.
 match Error /\s\+\%#\@!$/
-
-"nerdtree
-" From: https://vimawesome.com/plugin/nerdtree-red
-"       Close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
