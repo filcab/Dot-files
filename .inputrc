@@ -1,5 +1,4 @@
 # .inputrc file for configuring libreadline applications
-
 set blink-matching-paren   on
 
 # Useful for Mac OS X's file names
@@ -16,7 +15,12 @@ set page-completions off
 # way as ls -F works.
 set visible-stats on
 
-# When inserting parens, close them automatically (not working...)
-#"\e(": "()\C-b"
-#"\e[": "[]\C-b"
+# try immediately showing all completion if it's ambiguous, instead of
+# requiring a second tab
+set show-all-if-ambiguous on
 
+$if Bash
+  # In bash only, enable "magic space" so that typing space will show
+  # completions. i.e. !!_ (where _ is space) will expand !! for you.
+  Space: magic-space
+$endif
