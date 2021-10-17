@@ -18,7 +18,10 @@ case "${uname_s}" in
   Darwin)
     # Export SDKROOT to the current SDK on Xcode (TODO: Make this the generic symlink)
     if command -v xcrun &>/dev/null; then
-      export SDKROOT="$(xcrun --show-sdk-path)"
+      export SDKROOT="$(xcrun --show-sdk-path 2>/dev/null)"
+      if [ -z "$SDKROOT" ]; then
+        unset SDKROOT
+      fi
     fi
 
     # MacTeX
