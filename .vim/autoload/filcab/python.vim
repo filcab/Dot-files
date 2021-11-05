@@ -1,5 +1,41 @@
 let filcab#python#initted = v:false
 let filcab#python#completer_flavours = []
+
+let s:default_venv_names = ['venv', 'virtualenv']
+" override point for users (must be done before this call)
+let g:venv_names = get(g:, 'venv_names', s:default_venv_names)
+
+function! filcab#python#find_venv() abort
+  let current = expand("%")
+
+  let next = fnamemodify(current, ":h")
+  while current != next
+    let current = next
+    for attempt in g:venv_names
+      let maybe_venv = current."/".attempt
+      echom "python: looking at: ".maybe_venv
+      if isdirectory(maybe_venv) && filereadable(maybe_venv."/Scripts/activate")
+        return maybe_venv
+      endif
+    endfor
+
+    let next = fnamemodify(current, ":h")
+  endwhile
+  return ''
+endfunction
+
+if len($VIRTUAL_ENV) != 0
+  let g:pymode_virtualenv_enabled = v:true
+  let g:pymode_virtualenv_path = $VIRTUAL_ENV
+else
+  " try autodetecting a venv
+  let maybe_venv = filcab#python#find_venv()
+  if maybe_venv != ''
+    let g:pymode_virtualenv_enabled = v:true
+    let g:pymode_virtualenv_path = maybe_venv
+  endif
+endif
+
 function filcab#python#init() abort
   if g:filcab#python#initted
     return
