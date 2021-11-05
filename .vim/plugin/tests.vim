@@ -61,4 +61,6 @@ if executable("fzf")
 
   nnoremap <unique> <leader>fg <Cmd>:Commits<cr>
   nnoremap <unique> <leader>fG <Cmd>:BCommits<cr>
+
+  nnoremap <unique> <leader>f <Cmd>WhichKey "<space>"<cr>f
 endif
