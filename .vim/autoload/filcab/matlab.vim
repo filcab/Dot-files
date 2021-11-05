@@ -83,6 +83,9 @@ function! filcab#matlab#sendToOctaveREPL(repl_name = g:octave_repl_name) abort
     let lines = getline(from_lnum, to_lnum)
     let lines[0] = lines[0][from_col-1:]
     let lines[-1] = lines[-1][:to_col-1]
+  elseif mode() ==# "i"
+    let curline = line(".")
+    let lines = getline(curline, curline)
   else
     echoerr "unsupported mode: ".mode()
   endif

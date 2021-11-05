@@ -13,3 +13,7 @@ nnoremap <localleader>r <Cmd>REPLOctaveFocus<cr>
 " e for eval... as a fallback is <enter> is being weird
 noremap <localleader>e <Cmd>REPLOctaveSend<cr>
 noremap <localleader><enter> <Cmd>REPLOctaveSend<cr>
+
+" one of the few free keys in insert mode:
+" https://vim.fandom.com/wiki/Unused_keys
+inoremap <C-B><enter> <Cmd>REPLOctaveSend<cr>
