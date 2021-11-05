@@ -35,16 +35,16 @@ noremap <unique> <leader>d<cr> :Dispatch<cr>
 nnoremap <unique> <leader>t :GotoTerminalWindow<cr>
 
 " Help for some bindings:
-noremap <unique><expr> <Leader>? ':<C-u>WhichKey "'.get(g:, 'mapleader', '\\').'"<cr>'
-noremap <unique><expr> <LocalLeader>? ':<C-u>WhichKey "'.g:maplocalleader.'"<cr>'
-nnoremap <unique> [? :<C-u>WhichKey '['<cr>
-nnoremap <unique> ]? :<C-u>WhichKey ']'<cr>
-tnoremap <unique> [? :<C-u>WhichKey '['<cr>
-tnoremap <unique> ]? :<C-u>WhichKey ']'<cr>
-nnoremap <unique> <C-w>? :call filcab#CTRL_W_Help()<cr>
-tnoremap <unique> <C-w>? :call filcab#CTRL_W_Help()<cr>
-inoremap <unique> <C-w>? <C-o>:call filcab#CTRL_W_Help()<cr>
-inoremap <unique> <C-x>? <C-o>:call filcab#CTRL_X_Help()<cr>
+noremap <unique><expr> <Leader>? '<Cmd>WhichKey "'.get(g:, 'mapleader', '\\').'"<cr>'
+noremap <unique><expr> <LocalLeader>? '<Cmd>WhichKey "'.g:maplocalleader.'"<cr>'
+nnoremap <unique> [? <Cmd>WhichKey '['<cr>
+nnoremap <unique> ]? <Cmd>WhichKey ']'<cr>
+tnoremap <unique> [? <Cmd>WhichKey '['<cr>
+tnoremap <unique> ]? <Cmd>WhichKey ']'<cr>
+nnoremap <unique> <C-w>? <Cmd>call filcab#CTRL_W_Help()<cr>
+tnoremap <unique> <C-w>? <Cmd>call filcab#CTRL_W_Help()<cr>
+inoremap <unique> <C-w>? <Cmd>call filcab#CTRL_W_Help()<cr>
+inoremap <unique> <C-x>? <Cmd>call filcab#CTRL_X_Help()<cr>
 " FIXME: Add one for netrw
 " FIXME: Maybe fugitive buffers?
 

@@ -6,13 +6,13 @@ let mapleader = ' '
 
 " I've been trying out tabs for a few things... let's see if this pans out
 " The only of [] {} () where neither char is bound in default C-w sequences is ()
-nnoremap <c-w>( :tabprev<cr>
-nnoremap <c-w>) :tabnext<cr>
+nnoremap <unique> <c-w>( <Cmd>tabprev<cr>
+nnoremap <unique> <c-w>) <Cmd>tabnext<cr>
 " escape to EX mode first
-tnoremap <c-w>( <c-w>:tabprev<cr>
-tnoremap <c-w>) <c-w>:tabnext<cr>
-xnoremap <c-w>( :tabprev<cr>
-xnoremap <c-w>) :tabnext<cr>
+tnoremap <unique> <c-w>( <Cmd>tabprev<cr>
+tnoremap <unique> <c-w>) <Cmd>tabnext<cr>
+xnoremap <unique> <c-w>( <Cmd>tabprev<cr>
+xnoremap <unique> <c-w>) <Cmd>tabnext<cr>
 
 " Remove line numbers in :terminal buffers (when in normal mode)
 augroup filcabTerminal
