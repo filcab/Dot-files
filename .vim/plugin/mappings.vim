@@ -43,7 +43,6 @@ tnoremap <unique> [? <Cmd>WhichKey '['<cr>
 tnoremap <unique> ]? <Cmd>WhichKey ']'<cr>
 nnoremap <unique> <C-w>? <Cmd>call filcab#CTRL_W_Help()<cr>
 tnoremap <unique> <C-w>? <Cmd>call filcab#CTRL_W_Help()<cr>
-inoremap <unique> <C-w>? <Cmd>call filcab#CTRL_W_Help()<cr>
 inoremap <unique> <C-x>? <Cmd>call filcab#CTRL_X_Help()<cr>
 " FIXME: Add one for netrw
 " FIXME: Maybe fugitive buffers?
