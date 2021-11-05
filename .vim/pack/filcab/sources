@@ -13,6 +13,9 @@ opt/vim-scriptease|git|https://github.com/tpope/vim-scriptease.git
 opt/vim-matchup|git|https://github.com/andymass/vim-matchup.git
 # display colors (has two versions: v1 (older, sync), v2 (needs go executable, async)
 opt/hexokinase|git|https://github.com/RRethy/vim-hexokinase.git
+# fzf needs these two
+opt/fzf|git|https://github.com/junegunn/fzf.git
+opt/fzf.vim|git|https://github.com/junegunn/fzf.vim.git
 
 # Language tools (to be packadd-ed by me)
 # Not well behaved. Load only when needed
