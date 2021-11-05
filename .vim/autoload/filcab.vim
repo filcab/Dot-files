@@ -7,61 +7,74 @@ else
 endif
 
 function! filcab#CTRL_W_Help()
-  echo 'Default CTRL-W key bindings. Also work as C-w C-<whatever>'
-  echo 'command		action in Normal mode'
-  echo '----------------------------------------------------------'
-  echo 'CTRL-W "	terminal window: paste register'
-  echo 'CTRL-W +	increase current window height N lines'
-  echo 'CTRL-W -	decrease current window height N lines'
-  echo 'CTRL-W .	terminal window: type CTRL-W'
-  echo 'CTRL-W :	same as |:|, edit a command line'
-  echo 'CTRL-W <	decrease current window width N columns'
-  echo 'CTRL-W =	make all windows the same height & width'
-  echo 'CTRL-W >	increase current window width N columns'
-  echo 'CTRL-W H	move current window to the far left'
-  echo 'CTRL-W J	move current window to the very bottom'
-  echo 'CTRL-W K	move current window to the very top'
-  echo 'CTRL-W L	move current window to the far right'
-  echo 'CTRL-W N	terminal window: go to Terminal Normal mode'
-  echo 'CTRL-W P	go to preview window'
-  echo 'CTRL-W R	rotate windows upwards N times'
-  echo 'CTRL-W S	same as "CTRL-W s"'
-  echo 'CTRL-W T	move current window to a new tab page'
-  echo 'CTRL-W W	go to N previous window (wrap around)'
-  echo 'CTRL-W ]	split window and jump to tag under cursor'
-  echo 'CTRL-W ^	split current window and edit alternate file N'
-  echo 'CTRL-W _	set current window height to N (default: very high)'
-  echo 'CTRL-W b	go to bottom window'
-  echo 'CTRL-W c	close current window (like |:close|)'
-  echo 'CTRL-W d	split window and jump to definition under the cursor'
-  echo 'CTRL-W f	split window and edit file name under the cursor'
-  echo 'CTRL-W F	split window and edit file name under the cursor and jump to the line number following the file name.'
-  echo 'CTRL-W g CTRL-]	split window and do |:tjump| to tag under cursor'
-  echo 'CTRL-W g ]	split window and do |:tselect| for tag under cursor'
-  echo 'CTRL-W g }	do a |:ptjump| to the tag under the cursor'
-  echo 'CTRL-W g f	edit file name under the cursor in a new tab page'
-  echo 'CTRL-W g F	edit file name under the cursor in a new tab page and jump to the line number following the file name.'
-  echo 'CTRL-W h	go to Nth left window (stop at first window)'
-  echo 'CTRL-W i	split window and jump to declaration of identifier under the cursor'
-  echo 'CTRL-W j	go N windows down (stop at last window)'
-  echo 'CTRL-W k	go N windows up (stop at first window)'
-  echo 'CTRL-W l	go to Nth right window (stop at last window)'
-  echo 'CTRL-W n	open new window, N lines high'
-  echo 'CTRL-W o	close all but current window (like |:only|)'
-  echo 'CTRL-W p	go to previous (last accessed) window'
-  echo 'CTRL-W q	quit current window (like |:quit|)'
-  echo 'CTRL-W r	rotate windows downwards N times'
-  echo 'CTRL-W s	split current window in two parts, new window N lines high'
-  echo 'CTRL-W t	go to top window'
-  echo 'CTRL-W v	split current window vertically, new window N columns wide'
-  echo 'CTRL-W w	go to N next window (wrap around)'
-  echo 'CTRL-W x	exchange current window with window N (default: next window)'
-  echo 'CTRL-W z	close preview window set window width to N columns'
-  echo 'CTRL-W }	show tag under cursor in preview window'
-  echo ' '
-  echo 'CTRL-W ?	filcab: Show help'
-  " show any extra maps
-  map <C-w>
+  let lines = [
+    \ 'command		action in Normal mode',
+    \ '----------------------------------------------------------',
+    \ 'CTRL-W "	terminal window: paste register',
+    \ 'CTRL-W +	increase current window height N lines',
+    \ 'CTRL-W -	decrease current window height N lines',
+    \ 'CTRL-W .	terminal window: type CTRL-W',
+    \ 'CTRL-W :	same as |:|, edit a command line',
+    \ 'CTRL-W <	decrease current window width N columns',
+    \ 'CTRL-W =	make all windows the same height & width',
+    \ 'CTRL-W >	increase current window width N columns',
+    \ 'CTRL-W H	move current window to the far left',
+    \ 'CTRL-W J	move current window to the very bottom',
+    \ 'CTRL-W K	move current window to the very top',
+    \ 'CTRL-W L	move current window to the far right',
+    \ 'CTRL-W N	terminal window: go to Terminal Normal mode',
+    \ 'CTRL-W P	go to preview window',
+    \ 'CTRL-W R	rotate windows upwards N times',
+    \ 'CTRL-W S	same as "CTRL-W s"',
+    \ 'CTRL-W T	move current window to a new tab page',
+    \ 'CTRL-W W	go to N previous window (wrap around)',
+    \ 'CTRL-W ]	split window and jump to tag under cursor',
+    \ 'CTRL-W ^	split current window and edit alternate file N',
+    \ 'CTRL-W _	set current window height to N (default: very high)',
+    \ 'CTRL-W b	go to bottom window',
+    \ 'CTRL-W c	close current window (like |:close|)',
+    \ 'CTRL-W d	split window and jump to definition under the cursor',
+    \ 'CTRL-W f	split window and edit file name under the cursor',
+    \ 'CTRL-W F	split window and edit file name under the cursor and jump to the line number following the file name.',
+    \ 'CTRL-W g CTRL-]	split window and do |:tjump| to tag under cursor',
+    \ 'CTRL-W g ]	split window and do |:tselect| for tag under cursor',
+    \ 'CTRL-W g }	do a |:ptjump| to the tag under the cursor',
+    \ 'CTRL-W g f	edit file name under the cursor in a new tab page',
+    \ 'CTRL-W g F	edit file name under the cursor in a new tab page and jump to the line number following the file name.',
+    \ 'CTRL-W h	go to Nth left window (stop at first window)',
+    \ 'CTRL-W i	split window and jump to declaration of identifier under the cursor',
+    \ 'CTRL-W j	go N windows down (stop at last window)',
+    \ 'CTRL-W k	go N windows up (stop at first window)',
+    \ 'CTRL-W l	go to Nth right window (stop at last window)',
+    \ 'CTRL-W n	open new window, N lines high',
+    \ 'CTRL-W o	close all but current window (like |:only|)',
+    \ 'CTRL-W p	go to previous (last accessed) window',
+    \ 'CTRL-W q	quit current window (like |:quit|)',
+    \ 'CTRL-W r	rotate windows downwards N times',
+    \ 'CTRL-W s	split current window in two parts, new window N lines high',
+    \ 'CTRL-W t	go to top window',
+    \ 'CTRL-W v	split current window vertically, new window N columns wide',
+    \ 'CTRL-W w	go to N next window (wrap around)',
+    \ 'CTRL-W x	exchange current window with window N (default: next window)',
+    \ 'CTRL-W z	close preview window set window width to N columns',
+    \ 'CTRL-W }	show tag under cursor in preview window',
+    \ ' ',
+    \ 'CTRL-W ?	filcab: Show help'
+    \ ]
+
+  redir => maps
+  " get any extra maps
+  silent map <C-w>
+  redir END
+  let lines += split(maps, "\n")
+
+  let options = #{
+    \ title: ' Default CTRL-W key bindings. Also work as C-w C-<whatever> ',
+    \ padding: [0,1,0,1],
+    \ border: [],
+    \ filter: 'popup_filter_yesno',
+    \ }
+  call popup_dialog(lines, options)
 endfunction
 
 function! filcab#CTRL_X_Help()
