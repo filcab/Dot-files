@@ -1,12 +1,17 @@
 " trim empty lines at the start and end of any lines sent to the repl
 let g:repl_trim_outer_lines = get(g:, 'repl_trim_outer_lines', v:true)
 
-" TODO: find out where octave is in a portable way
-let s:tentative_octave_dir = "C:\\Program Files\\GNU Octave\\Octave-6.3.0"
-" TODO: Set octave_dir/octave_executable from the other one, if only one is
-" defined
-let g:octave_dir = get(g:, 'octave_dir', s:tentative_octave_dir)
-let g:octave_executable = get(g:, 'octave_executable', g:octave_dir."\\mingw64\\bin\\octave-gui.exe")
+if has('win32') || has('win32unix')
+  " TODO: find out where octave is in a portable way
+  let s:tentative_octave_dir = "C:\\Program Files\\GNU Octave\\Octave-6.3.0"
+  " TODO: Set octave_dir/octave_executable from the other one, if only one is
+  " defined
+  let g:octave_dir = get(g:, 'octave_dir', s:tentative_octave_dir)
+  let g:octave_executable = get(g:, 'octave_executable', g:octave_dir."\\mingw64\\bin\\octave-gui.exe")
+elseif has('mac')
+  let g:octave_executable = get(g:, 'octave_executable',
+      \ '/Applications/Octave-6.2.0.app/Contents/Resources/usr/Cellar/octave-octave-app@6.2.0/6.2.0/bin/octave-cli')
+endif
 
 let s:default_repl_name = "Octave-REPL"
 let g:octave_repl_name = get(g:, 'octave_repl_name', s:default_repl_name)
@@ -16,7 +21,21 @@ function! s:octaveReplExists(repl_name) abort
   return buf_num != -1 && term_getstatus(buf_num) !=# "finished"
 endfunction
 
-function! s:startNewRepl(repl_name, select_repl, use_curwin) abort
+" on the mac we have scripts that start the repl with the correct env, and
+" don't create a console window just for that, so we can just execute the
+" process
+function! s:startNewReplMac(repl_name, select_repl, use_curwin) abort
+  let options = {"term_name": a:repl_name, "curwin": a:use_curwin}
+  call term_start([g:octave_executable, "--no-gui"], options)
+  if !a:select_repl
+    wincmd w
+  endif
+endfunction
+
+" on windows, Octave will open a new console window, which is not what we want
+" when using vim, so we re-do all the env logic and start the actual octave
+" program
+function! s:startNewReplWin(repl_name, select_repl, use_curwin) abort
   " following the instructions in octave.vbs
   let msys_path = g:octave_dir."\\usr"
   let msys_prefix = g:octave_dir."\\mingw64"
@@ -120,7 +139,11 @@ function! filcab#matlab#openOctaveREPL(repl_name = g:octave_repl_name, select_re
   else
     " remove the old, finished REPL, if there is one
     let buf_num = bufnr(a:repl_name)
-    call s:startNewRepl(a:repl_name, a:select_repl, buf_num != -1)
+    if has('win32') || has('win32unix')
+      call s:startNewReplWin(a:repl_name, a:select_repl, buf_num != -1)
+    elseif has('mac')
+      call s:startNewReplMac(a:repl_name, a:select_repl, buf_num != -1)
+    endif
 
     if buf_num != -1
       exe "bwipeout" buf_num
