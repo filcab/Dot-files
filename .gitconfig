@@ -14,13 +14,6 @@
 [core]
 	autocrlf = false
 
-[credential]
-	helper = filcab
-	# git-credential-filcab tries these in succession:
-	#helper = osxkeychain
-	#helper = wincred
-	#helper = cache
-
 [diff]
 	algorithm = histogram
 [merge]
