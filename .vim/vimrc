@@ -16,6 +16,7 @@ endif
 
 set autoindent
 set backspace=indent,eol,start
+set clipboard=
 set complete+=d
 set incsearch
 set smarttab
@@ -222,6 +223,7 @@ set smartindent         " smart auto indenting
 set magic               " change the way backslashes are used in search patterns
 set backupdir=$MYVIMRUNTIME/backups     " Hide backups in the .vim directory
 set directory=$MYVIMRUNTIME/swapfiles// " Hide swap files in the .vim directory
+set viminfofile=$MYVIMRUNTIME/viminfo   " don't dump the viminfo file in $HOME
 
 set tabstop=4           " number of spaces a tab counts for
 set shiftwidth=2        " spaces for autoindents

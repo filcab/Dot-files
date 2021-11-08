@@ -6,6 +6,7 @@
 
 /.vim/black_*
 /.vim/view
+/.vim/viminfo
 /.vim/.netrwhist
 /.vim/yankring_history_v2.txt
 
