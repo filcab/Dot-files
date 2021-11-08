@@ -104,17 +104,21 @@ endif
 "     - git-bash running installed (up-to-date) vim (same installation as previous gvim.exe)
 "     - git-bash running an older vim.exe (distributed with it)
 if has("win32") || has('win32unix') " only enter for stuff running on windows
-  if &winptydll != ''
-    " We're on Windows-land, make sure we're using the regular Windows shell,
-    " if the one we have is invalid.
-    if executable(&shell) != 1
-      " Our 'shell' option is invalid. Possibly due to / vs \ and dirs with
-      " spaces. Revert to the Windows default.
-      set shell=C:\\WINDOWS\\system32\\cmd.exe
-      set shellxquote=(
-      set shellcmdflag=/c
-      " Other shell options seem the same between Windows and git-bash vim
-    endif
+  " 2021-11-08 FIXME: Seems this shouldn't be needed. Can't remember the issue that made
+  " me add it. Will keep it around with added messages
+  " We're on Windows-land, make sure we're using the regular Windows shell,
+  " if the one we have is invalid.
+  if executable(&shell) != 1
+    echom "filcab: shell is not executable!"
+    echom executable(&shell)
+    echom "shellxquote: '".&shellxquote."', shellcmdflag: ".&shellcmdflag
+
+    " Our 'shell' option is invalid. Possibly due to / vs \ and dirs with
+    " spaces. Revert to the Windows default.
+    set shell=C:\\WINDOWS\\system32\\cmd.exe
+    set shellxquote=(
+    set shellcmdflag=/c
+    " Other shell options seem the same between Windows and git-bash vim
   endif
 endif
 
