@@ -12,6 +12,9 @@ endif
 " the global
 let g:clang_format_on_save = 0
 
+" tell clangd to query the driver for extra arguments (e.g: include paths)
+let g:clangd_args = ["--query-driver=*"] + get(g:, 'clangd_args', [])
+
 " LSP setup is not ready yet
 "let g:disable_youcompleteme = 0
 let g:ycm_enable = 0

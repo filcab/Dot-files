@@ -28,7 +28,6 @@ if !executable(g:clangd_path)
   echom "Can't find clangd binary. Please set g:clang_tools_search_paths or g:clangd_path"
 else
   let g:ycm_clangd_binary_path = g:clangd_path
-  let g:ycm_clangd_args = ["--query-driver=*"] + get(g:, 'clangd_args', [])
 endif
 
 function s:ClangCheckImpl(cmd)
