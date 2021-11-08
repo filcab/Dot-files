@@ -4,15 +4,24 @@ import os
 import sys
 
 from pathlib import Path
+from typing import List, NamedTuple
 
 DEFAULT_COMMAND = "validate"
 # TODO: Do we want to possibly install elsewhere?
 HOME = Path.home()
 non_installable = [".git", ".gitignore", "install"]
 
+
+class InstallSpecial(NamedTuple):
+    path: Path
+    platforms: List[str]
+
+
 exceptions = {
-    "Microsoft.PowerShell_profile.ps1": (
-        Path.home() / "Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
+    "Microsoft.PowerShell_profile.ps1": InstallSpecial(
+        path=Path.home()
+        / "Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1",
+        platforms=["win32"],
     ),
 }
 non_installable += exceptions.keys()
@@ -56,12 +65,11 @@ else:
 def validate_link(lnk, dst, config):
     if not lnk.exists():
         error("symlink to {} is not installed at {}".format(dst, lnk))
-        had_error = True
-        return
+        return True
     if not lnk.is_symlink():
         error("{} exists but is not a symlink".format(lnk))
-        had_error = True
-        return
+        return True
+
     link = lnk.readlink().resolve()
     if link != dst:
         error(
@@ -69,34 +77,48 @@ def validate_link(lnk, dst, config):
                 lnk, dst, link
             )
         )
-        had_error = True
-        return
+        return True
+
     if config.verbose:
         info("OK: {} -> {}".format(lnk, dst))
+    return False
 
 
 def validate(d, config):
     had_error = False
     for f in os.listdir(d):
         if f in non_installable:
+            # only mention if it's an exception
             if config.verbose and f not in exceptions:
                 print("Non-installable file: {}".format(f))
             continue
 
         abs_f = (Path(d) / f).resolve()
         HOME_f = Path(HOME) / f
-        validate_link(HOME_f, abs_f, config)
+        had_error |= validate_link(HOME_f, abs_f, config)
 
-    for dst, lnk in exceptions.items():
-        lnk = lnk.expanduser()
+    for dst, special in exceptions.items():
+        if sys.platform not in special.platforms:
+            if config.verbose:
+                print(
+                    "Non-installable file: {} (sys.platform: {}, platforms: {})".format(
+                        dst, sys.platform, special.platforms
+                    )
+                )
+            continue
+
+        lnk = special.path.expanduser()
         dst = Path(dst)
         if not dst.is_absolute():
             dst = Path.cwd() / dst
         dst.resolve()
 
-        validate_link(lnk, dst, config)
+        had_error |= validate_link(lnk, dst, config)
 
-    info("All seems to be ok!")
+    if not had_error:
+        info("All seems to be ok!")
+    else:
+        error("whoops!")
 
 
 def symlink_is_ok(lnk, dst):
@@ -126,7 +148,6 @@ def install(d, config):
                     lnk.parent.mkdir(parents=True, exist_ok=True)
                 symlink(dst, lnk)
 
-    had_error = False
     for f in os.listdir(d):
         if f in non_installable:
             continue
@@ -134,8 +155,17 @@ def install(d, config):
         HOME_f = HOME / f
         symlink_file(HOME_f, abs_f)
 
-    for dst, lnk in exceptions.items():
-        lnk = lnk.expanduser()
+    for dst, special in exceptions.items():
+        if sys.platform not in special.platforms:
+            if config.verbose:
+                print(
+                    "Non-installable file: {} (sys.platform: {}, platforms: {})".format(
+                        dst, sys.platform, special.platforms
+                    )
+                )
+            continue
+
+        lnk = special.path.expanduser()
         dst = Path(dst)
         if not dst.is_absolute():
             dst = Path.cwd() / dst
@@ -152,7 +182,7 @@ command_functions = {
 
 def function_for_command(command, parser):
     if command not in command_functions:
-        print('The only available command is "validate"')
+        print("The only available commands are install and validate")
         return lambda *args: parser.print_usage()
     return command_functions[command]
 
