@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+
+import argparse
+import subprocess
+import sys
+
+from functools import reduce
+
+
+parser = argparse.ArgumentParser(prog=sys.argv[0])
+parser.add_argument(
+    "-s", "--session-name", default="main", help="Session name to search for and use"
+)
+parser.add_argument(
+    "-c",
+    "--command",
+    default="start-git-bash",
+    help="Default command to run when creating a session",
+)
+args = parser.parse_args(sys.argv[1:])
+
+
+# set a few defaults for tmux calls
+def tmux(*argv, capture_output=True, check=True, text=True, **kwargs):
+    cmd = ["wsl", "tmux", *argv]
+    print("$", " ".join(cmd))
+    return subprocess.run(
+        cmd, check=check, capture_output=capture_output, text=text, **kwargs
+    )
+
+
+def create_session(args):
+    new_session = ["new-session", "-d", "-s", args.session_name, "-d", args.command]
+    default_cmd = ["set", "default-command", args.command]
+    attach = ["attach-session", "-t", args.session_name]
+
+    # escaped because it's going through our shell (via wsl.exe)
+    separator = "\\;"
+    tmux_cmd = reduce(
+        lambda a, b: a + [separator] + b, [new_session, default_cmd, attach]
+    )
+    return tmux(*tmux_cmd, capture_output=False)
+
+
+def attach_session(args):
+    return tmux("attach-session", "-t", args.session_name, capture_output=False)
+
+
+def session_exists_p(session_name):
+    p = tmux("info", check=False)
+    if p.returncode != 0 and "no server running" in p.stderr:
+        return False
+
+    # weirdly, taking out that space before the session_name var seems to make tmux
+    # think there's no argument. We'll just strip the string
+    p = tmux("list-sessions", "-F", " #{session_name}", check=False)
+    return p.returncode != 0 or session_name not in p.stdout
+
+
+if session_exists_p(args.session_name):
+    p = attach_session(args)
+else:
+    p = create_session(args)
+
+sys.exit(p.returncode)
