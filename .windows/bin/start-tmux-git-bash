@@ -54,7 +54,7 @@ def session_exists_p(session_name):
     # weirdly, taking out that space before the session_name var seems to make tmux
     # think there's no argument. We'll just strip the string
     p = tmux("list-sessions", "-F", " #{session_name}", check=False)
-    return p.returncode != 0 or session_name not in p.stdout
+    return p.returncode != 0 or session_name in p.stdout
 
 
 if session_exists_p(args.session_name):
