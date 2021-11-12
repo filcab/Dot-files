@@ -41,3 +41,10 @@ _bash_history_sync() {
   builtin history -c
   builtin history -r
 }
+
+history() {
+  _bash_history_sync
+  builtin history "$@"
+}
+
+export PROMPT_COMMAND=_bash_history_sync
