@@ -14,6 +14,7 @@ set page-completions off
 # being appended to any file-names returned by completion, in much the same
 # way as ls -F works.
 set visible-stats on
+set colored-stats on
 
 # try immediately showing all completion if it's ambiguous, instead of
 # requiring a second tab
