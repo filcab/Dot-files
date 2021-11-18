@@ -5,6 +5,10 @@ if [ -z "$BASH_VERSION" ]; then
   return 0
 fi
 
+# set the terminal's word-erase char to C-h (should be ctrl+backspace on Windows bash)
+# after setting that, inputrc's binding from C-w to unix-filename-rubout should
+# work (bash overrides whatever is bound to the terminal's werase char)
+stty werase '^h'
 
 for f in "$SHELL_RESOURCES"/lib/*.bash; do
   source "$f"

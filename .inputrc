@@ -19,6 +19,13 @@ set visible-stats on
 # requiring a second tab
 set show-all-if-ambiguous on
 
+# set these for all readline programs for now
+# kill to previous space or / (unix filename component)
+# another option: backward-kill-word (M-DEL) (what I have in zsh)
+Control-w: unix-filename-rubout
+# regular c-w key rebound to c-W (welp, that's not how keyboards work in the terminal)
+# Control-W: unix-word-rubout
+
 $if Bash
   # In bash only, enable "magic space" so that typing space will show
   # completions. i.e. !!_ (where _ is space) will expand !! for you.
