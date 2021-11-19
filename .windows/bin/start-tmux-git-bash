@@ -43,7 +43,18 @@ def tmux(*argv, capture_output=True, check=True, text=True, encoding="utf-8", **
 
 
 def create_session(args):
-    new_session = ["new-session", "-d", "-s", args.session_name, "-d", args.command]
+    # FIXME: set the cwd in tmux to the cwd we're in now
+    new_session = [
+        "new-session",
+        "-d",
+        "-s",
+        args.session_name,
+        # set the default-command
+        "-d",
+        args.command,
+        # execute this command on the initial pane without a shell
+        args.command,
+    ]
     default_cmd = ["set", "default-command", args.command]
     attach = ["attach-session", "-t", args.session_name]
 
@@ -61,7 +72,8 @@ def attach_session(args):
 
 def session_exists_p(session_name):
     p = tmux("info", check=False)
-    # windows uses utf-16 by default, I guess. If WSL can't initialize, we'll get a windows error, in utf-16
+    # windows uses utf-16 by default, I guess. If WSL can't initialize, we'll get a
+    # windows error, in utf-16
     winerror_stdout = p.stdout.encode("utf-8").decode("utf-16-le")
     if WSL_ERROR in winerror_stdout or WSL_ERROR_LOGON in winerror_stdout:
         print(
