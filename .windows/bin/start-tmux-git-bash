@@ -8,11 +8,16 @@ from functools import reduce
 
 
 WSL_ERROR = "operation is not supported for the type of object referenced"
-WSL_ERROR_LOGON = "Logon failure: the user has not been granted the requested logon type"
+WSL_ERROR_LOGON = (
+    "Logon failure: the user has not been granted the requested logon type"
+)
 
 parser = argparse.ArgumentParser(prog=sys.argv[0])
 parser.add_argument(
-    "-s", "--session-name", default="main", help="Session name to search for and use"
+    "-s",
+    "--session-name",
+    default="git-bash",
+    help="Session name to search for and use",
 )
 parser.add_argument(
     "-c",
