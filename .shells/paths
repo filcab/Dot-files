@@ -45,15 +45,16 @@ path_prepend_dirs "$HOME/dev/brew/bin"
 case $0 in
   # FIXME: add bash
   *zsh)
-    fpath+="$HOME/dev/brew/share/zsh/site-functions"
+    if [ -d "$HOME/dev/brew/share/zsh/site-functions" ]; then
+      fpath+="$HOME/dev/brew/share/zsh/site-functions"
+    fi
     ;;
 esac
 
 ### Add some weirdly-placed programs to PATH
-if [ -d $HOME/dev/phabricator/arcanist/bin ]; then
-  path_append_dirs "$HOME/dev/phabricator/arcanist/bin"
-fi
+path_append_dirs "$HOME/dev/phabricator/arcanist/bin"
 
+### rust stuff
 path_prepend_dirs "$HOME/.cargo/bin"
 
 # Rust src, when installed
@@ -61,4 +62,6 @@ if hash rustc 2>/dev/null; then
   export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 fi
 
-export GOPATH="$HOME/dev/go"
+if [ -d "$HOME/dev/go" ]; then
+  export GOPATH="$HOME/dev/go"
+fi
