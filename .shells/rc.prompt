@@ -3,7 +3,7 @@
 if [ -f "/proc/$$/exename" ]; then
   filcab_shell_exe=$(cat /proc/$$/exename)
 else
-  filcab_shell_exe=$(ps -p $$ -oargs=)
+  filcab_shell_exe=$(ps -p $$ -ocomm=)
 fi
 
 if command -v starship &> /dev/null
@@ -12,7 +12,7 @@ then
     -bash | */bash | */bash.exe)
       eval "$(starship init bash)"
       ;;
-    -zsh | */zsh)
+    -zsh | */zsh | zsh)
       eval "$(starship init zsh)"
       ;;
     -sh | */sh | -ash | */ash | -dash | */dash)
