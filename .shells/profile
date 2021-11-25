@@ -37,4 +37,6 @@ for rc in ${SHELL_RESOURCES}/rc.*; do
   . ${rc}
 done
 
-export FILCAB_SHELL_INIT=yes
+unset uname_s
+
+FILCAB_SHELL_INIT=yes
