@@ -63,6 +63,11 @@ case ${uname_s} in
       # MINGW/WSL path for a vim installation (works on both)
       vim_install=$($pathcmd "C:/Program Files/Vim/vim82")
 
+      if [ -f "$vim_install"/vim.exe ]; then
+        alias vim="\"$vim_install/vim.exe\""
+        alias vimdiff="vim -d"
+      fi
+
       # Alias gvim on both, as WSL opening a Windows gvim makes sense
       if [ -f "$vim_install"/gvim.exe ]; then
         alias gvim="\"$vim_install/gvim.exe\""
