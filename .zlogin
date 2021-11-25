@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+# echo sourced zlogin
 
 # When profiling, uncomment this and (optionally) the last line
 # zmodload zsh/zprof
