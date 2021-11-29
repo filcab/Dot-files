@@ -6,6 +6,13 @@ import sys
 
 from functools import reduce
 
+DEBUG = False
+
+
+def debug(*args, file=sys.stderr, **kwargs):
+    if DEBUG:
+        print('debug:', *args, file=file, **kwargs)
+
 
 WSL_ERROR = "operation is not supported for the type of object referenced"
 WSL_ERROR_LOGON = (
@@ -43,6 +50,7 @@ def tmux(*argv, capture_output=True, check=True, text=True, encoding="utf-8", **
 
 
 def create_session(args):
+    debug(f"creating session: {args}")
     # FIXME: set the cwd in tmux to the cwd we're in now
     new_session = [
         "new-session",
@@ -67,28 +75,38 @@ def create_session(args):
 
 
 def attach_session(args):
+    debug(f"attaching to session: {args}")
     return tmux("attach-session", "-t", args.session_name, capture_output=False)
 
 
 def session_exists_p(session_name):
     p = tmux("info", check=False)
-    # windows uses utf-16 by default, I guess. If WSL can't initialize, we'll get a
-    # windows error, in utf-16
-    winerror_stdout = p.stdout.encode("utf-8").decode("utf-16-le")
-    if WSL_ERROR in winerror_stdout or WSL_ERROR_LOGON in winerror_stdout:
-        print(
-            "Problem in WSL: can't boot. "
-            "Use that powershell command to restart the windows services"
-        )
-        sys.exit(1)
+    debug("stdout:", p.stdout)
+    debug("stderr:", p.stderr)
+    if p.returncode != 0:
+        # windows uses utf-16 by default, I guess. If WSL can't initialize, we'll get a
+        # windows error, in utf-16
+        if '\0' in p.stdout:
+            winerror_stdout = p.stdout.encode("utf-8").decode("utf-16-le")
+        else:
+            winerror_stdout = p.stdout
 
-    if p.returncode != 0 and "no server running" in p.stderr:
+        if WSL_ERROR in winerror_stdout or WSL_ERROR_LOGON in winerror_stdout:
+            print(
+                "Problem in WSL: can't boot. "
+                "Use that powershell command to restart the windows services"
+            )
+            sys.exit(1)
+
+    if "no server running" in p.stderr:
         print("no server running")
         return False
 
     # weirdly, taking out that space before the session_name var seems to make tmux
     # think there's no argument. We'll just strip the string
     p = tmux("list-sessions", "-F", " #{session_name}", check=False)
+    debug("stdout:", p.stdout)
+    debug("stderr:", p.stderr)
     return p.returncode != 0 or session_name in p.stdout
 
 
