@@ -35,8 +35,8 @@ noremap <unique> <leader>d<cr> :Dispatch<cr>
 nnoremap <unique> <leader>t :GotoTerminalWindow<cr>
 
 " Help for some bindings:
-noremap <unique><expr> <Leader>? '<Cmd>WhichKey "'.get(g:, 'mapleader', '\\').'"<cr>'
-noremap <unique><expr> <LocalLeader>? '<Cmd>WhichKey "'.g:maplocalleader.'"<cr>'
+noremap <unique><expr> <Leader> '<Cmd>WhichKey "'.get(g:, 'mapleader', '\\').'"<cr>'
+noremap <unique><expr> <LocalLeader> '<Cmd>WhichKey "'.g:maplocalleader.'"<cr>'
 nnoremap <unique> [? <Cmd>WhichKey '['<cr>
 nnoremap <unique> ]? <Cmd>WhichKey ']'<cr>
 tnoremap <unique> [? <Cmd>WhichKey '['<cr>
