@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import subprocess
+import os
 import sys
 
 from pathlib import Path, PureWindowsPath
@@ -12,6 +12,4 @@ else:
     CMD = Path("C:/Windows/System32/cmd.exe")
 
 BASH_CMD = [PureWindowsPath("C:/Program Files/Git/bin/bash.exe"), "--login", "-i"]
-# don't use execlp as it doesn't gain us much and will end up with two processes
-# fighting for terminal control if run from git-bash
-subprocess.run([CMD, '/C'] + BASH_CMD)
+os.execl(CMD, CMD, '/C', *BASH_CMD)
