@@ -56,3 +56,5 @@
 	fsckObjects = true
 [init]
 	defaultBranch = main
+[rerere]
+	enabled = 1
