@@ -48,8 +48,7 @@ function! s:set_pythonthreedll() abort
       echoerr "plugin/vim-python: weird python glob() result:" string(globbed)
       echom "pythonthreedll not set!"
     else
-      " unsure when this happens nowadays
-      echom 'setting pythonthreedll from' &pythonthreedll 'to' globbed[0]
+      " echom 'setting pythonthreedll from' &pythonthreedll 'to' globbed[0]
       let &pythonthreedll = globbed[0]
     endif
   endif
@@ -57,6 +56,9 @@ endfunction
 
 if has('win32') || has('win32unix')
   call s:set_pythonthreedll()
+endif
+
+if has('win32unix')
   " adjust the temporary file directory as mingw vim will set TMP, etc to
   " /tmp, which other libraries (loaded python) won't know what to do with
   " know what to do with and will fallback to the SYSTEM temp dir
