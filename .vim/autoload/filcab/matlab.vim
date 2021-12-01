@@ -9,8 +9,11 @@ if has('win32') || has('win32unix')
   let g:octave_dir = get(g:, 'octave_dir', s:tentative_octave_dir)
   let g:octave_executable = get(g:, 'octave_executable', g:octave_dir."\\mingw64\\bin\\octave-gui.exe")
 elseif has('mac')
+  " TODO: find out where octave is in a portable way
+  let s:tentative_octave_dir = "/Applications/Octave-6.2.0.app/Contents/Resources"
+  let g:octave_dir = get(g:, 'octave_dir', s:tentative_octave_dir)
   let g:octave_executable = get(g:, 'octave_executable',
-      \ '/Applications/Octave-6.2.0.app/Contents/Resources/usr/Cellar/octave-octave-app@6.2.0/6.2.0/bin/octave-cli')
+      \ g:octave_dir . '/usr/Cellar/octave-octave-app@6.2.0/6.2.0/bin/octave-cli')
 endif
 
 let s:default_repl_name = "Octave-REPL"
@@ -25,7 +28,16 @@ endfunction
 " don't create a console window just for that, so we can just execute the
 " process
 function! s:startNewReplMac(repl_name, select_repl, use_curwin) abort
-  let options = {"term_name": a:repl_name, "curwin": a:use_curwin}
+  " from looking at g:octave_dir/Scripts/main.scpt
+  let env = {}
+  let env["GS_OPTIONS"] = "-sICCProfilesDir=".g_octave_dir."/usr/opt/ghostscript/share/ghostscript/9.53.3/iccprofiles/ -sGenericResourceDir=".g_octave_dir."/usr/opt/ghostscript/share/ghostscript/9.53.3/Resource/ -sFontResourceDir=".g_octave_dir."/usr/opt/ghostscript/share/ghostscript/9.53.3/Resource/Font"
+  let env["GNUTERM"] = "qt"
+  let env["FC"] = "".g_octave_dir."/usr/bin/gfortran"
+  let env["F77"] = "".g_octave_dir."/usr/bin/gfortran"
+  let env["PATH"] = "".g_octave_dir."/usr/bin/:".g_octave_dir."/usr/opt/gnuplot-octave-app/bin:".$PATH
+  let env["DYLD_FALLBACK_LIBRARY_PATH"] = "".g_octave_dir."/usr/lib:/lib:/usr/lib"
+
+  let options = {"env": env, "term_name": a:repl_name, "curwin": a:use_curwin}
   call term_start([g:octave_executable, "--no-gui"], options)
   if !a:select_repl
     wincmd w
