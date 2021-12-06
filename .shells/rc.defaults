@@ -34,6 +34,10 @@ case ${uname_s} in
     # Use native symlinks on Windows by default. Assumes we have perms for
     # that, which needs to be done once per machine
     export MSYS="winsymlinks:nativestrict enable_pcon"
+    # if win32-vim is installed, use that as an EDITOR, msys vim is just weird
+    if command -v vim.bat >/dev/null 2>/dev/null; then
+      export EDITOR=vim.bat
+    fi
     ;;
 esac
 
