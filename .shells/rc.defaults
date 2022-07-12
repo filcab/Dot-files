@@ -34,10 +34,13 @@ case ${uname_s} in
     # Use native symlinks on Windows by default. Assumes we have perms for
     # that, which needs to be done once per machine
     export MSYS="winsymlinks:nativestrict enable_pcon"
+    # test: not doing this and relying on git-for-windows' vim
     # if win32-vim is installed, use that as an EDITOR, msys vim is just weird
-    if command -v vim.bat >/dev/null 2>/dev/null; then
-      export EDITOR=vim.bat
-    fi
+    # if type vim.bat >/dev/null 2>/dev/null; then
+    #   export EDITOR="winpty vim.bat"
+    #   alias vim="winpty vim.bat"
+    #   alias vimdiff="vim -d"
+    # fi
     ;;
 esac
 
@@ -51,55 +54,20 @@ case ${uname_s} in
   linux|Linux|MINGW*)
     alias ls="ls -F --color"
 
-    # The following only applies on Windows (WSL or MINGW)
-    # Outside of Windows, we just won't find the pathcmd and directory
-    if [ ${uname_s} = Linux ]; then
-      pathcmd=wslpath
-      # No winpty in WSL
-      winpty=
-    else
-      pathcmd=cygpath
-      # Include the space to use as prefix
-      winpty_prefix="winpty "
+    # Alias gvim on both, as WSL opening a Windows gvim makes sense
+    if type gvim.bat >/dev/null 2>/dev/null; then
+      alias gvim="gvim.bat"
+      alias gvimdiff="gvim -d"
     fi
-
-    if type "$pathcmd" >/dev/null 2>&1; then
-      # MINGW/WSL path for a vim installation (works on both)
-      vim_install=$($pathcmd "C:/Program Files/Vim/vim82")
-
-      if [ -f "$vim_install"/vim.exe ]; then
-        alias vim="\"$vim_install/vim.exe\""
-        alias vimdiff="vim -d"
-      fi
-
-      # Alias gvim on both, as WSL opening a Windows gvim makes sense
-      if [ -f "$vim_install"/gvim.exe ]; then
-        alias gvim="\"$vim_install/gvim.exe\""
-        alias gvimdiff="gvim -d"
-      fi
-
-      # FIXME: This is probably not needed anymore, as git-bash now ships an
-      # pdated (8.2 or later) vim binary
-      # alias vim only on MINGW, as it ships with an old vim
-      # if [ -f "$vim_install"/vim.exe ]; then
-      #   # Also alias vim/gvim so we get the updated version in most places
-      #   alias vim="$winpty_prefix\"$vim_install/vim.exe\""
-      #   # alias view="$winpty_prefix\"$vim_install/view.exe\""
-      #   alias vimdiff="vim -d"
-      #   export EDITOR="$winpty_prefix\"$vim_install/vim.exe\""
-      # fi
-    fi
-
-    unset pathcmd
-    unset winpty
-
     ;;
 esac
 
 case $(uname -r) in
   *[Mm]icrosoft*)
+    # find where C: is mounted. This can be changed in wsl.conf
+    mount_c=$(findmnt C:\\ -o target -n)
     # WSL only, not used in MINGW, as that'll be git-bash already
-    alias git-bash="\"/mnt/c/Program Files/Git/bin/bash.exe\" --login -i"
+    alias git-bash="\"/${mount_c}c/Program Files/Git/bin/bash.exe\" --login -i"
     ;;
 esac
 
