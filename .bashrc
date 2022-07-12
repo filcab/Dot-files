@@ -1,1 +1,1 @@
-[ -f ~/.bash_profile ] && source ~/.bash_profile
+[ -f ~/.profile ] && source ~/.profile
