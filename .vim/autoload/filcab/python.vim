@@ -13,8 +13,10 @@ function! filcab#python#find_venv() abort
     let current = next
     for attempt in g:venv_names
       let maybe_venv = current."/".attempt
-      echom "python: looking at: ".maybe_venv
+      " TODO: check if other OS have other paths
+      " TODO: venv vs virtualenv
       if isdirectory(maybe_venv) && filereadable(maybe_venv."/Scripts/activate")
+        echom "python: found venv: ".maybe_venv
         return maybe_venv
       endif
     endfor
