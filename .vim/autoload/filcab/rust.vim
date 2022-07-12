@@ -14,23 +14,26 @@ function filcab#rust#init() abort
     let s:first_call = v:false
   endif
 
-  if !get(g:, 'disable_lsp', v:false) && executable('rls')
-    echo "Setting up vim-lsp for Rust"
-    call add(g:filcab#rust#completer_flavours, 'lsp')
-    " cargo install rls
-    call lsp#register_server({
-      \ 'name': 'rls',
-      \ 'cmd': {server_info->['rls']},
-      \ 'whitelist': ['rust'],
-      \ })
+  let g:ycm_rust_src_path = system('rustc +nightly --print sysroot')->trim()
+
+  if g:ycm_rust_src_path == ''
+    " don't set initted to v:true so we try searching for rust-analyzer again
+    return
   endif
 
-  if !get(g:, 'disable_youcompleteme', v:false)
+  if get(g:, 'ycm_enable', v:false)
     echo "Setting up YouCompleteMe for Rust"
-    let g:ycm_rls_binary_path='rls'
-    let g:ycm_rustc_binary_path='rustc'
     call add(g:filcab#rust#completer_flavours, 'ycm')
     call filcab#packaddYCM()
+  elseif get(g:, 'lsp_enable', v:false)
+    echo "Setting up vim-lsp for Rust"
+    call add(g:filcab#rust#completer_flavours, 'lsp')
+    packadd vim-lsp
+    call lsp#register_server({
+      \ 'name': 'rust-analyzer',
+      \ 'cmd': {server_info->['rustup', '+nightly', 'run', 'rust-analyzer']},
+      \ 'whitelist': ['rust'],
+      \ })
   endif
 
   let g:filcab#rust#initted = v:true
