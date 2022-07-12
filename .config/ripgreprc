@@ -1,0 +1,12 @@
+# visual-studio related types
+--type-add
+sln:*.sln
+
+--type-add
+vcxproj:*.vcxproj
+
+--type-add
+tlog:*.tlog
+
+--type-add
+binlog:*.binlog
