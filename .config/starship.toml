@@ -42,6 +42,11 @@ format = '[$symbol($version )]($style)'
 [rust]
 format = '[$symbol($version )]($style)'
 
+[shell]
+bash_indicator = "bash"
+powershell_indicator = "PS"
+disabled = false
+
 [status]
 disabled = false
 
