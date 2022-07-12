@@ -5,21 +5,19 @@ function filcab#javascript#init() abort
     return
   endif
 
-  if !get(g:, 'disable_lsp', v:false) && executable('javascript-language-server')
+  if get(g:, 'ycm_enable', v:false)
+    echo "Setting up YouCompleteMe for Javascript"
+    call add(g:filcab#javascript#completer_flavours, 'ycm')
+    call filcab#packaddYCM()
+  elseif get(g:, 'lsp_enable', v:false) && executable('javascript-typescript-langserver')
     echo "Setting up vim-lsp for Javascript"
     call add(g:filcab#javascript#completer_flavours, 'lsp')
     " pip install python-language-server
     call lsp#register_server({
       \ 'name': 'tern',
-      \ 'cmd': {server_info->['tern']},
+      \ 'cmd': {server_info->['javascript-typescript-langserver']},
       \ 'whitelist': ['javascript'],
       \ })
-  endif
-
-  if !get(g:, 'disable_youcompleteme', v:false)
-    echo "Setting up YouCompleteMe for Javascript"
-    call add(g:filcab#javascript#completer_flavours, 'ycm')
-    call filcab#packaddYCM()
   endif
 
   let g:filcab#javascript#initted = v:true
