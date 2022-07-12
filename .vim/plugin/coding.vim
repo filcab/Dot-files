@@ -15,8 +15,7 @@ let g:clang_format_on_save = 0
 " tell clangd to query the driver for extra arguments (e.g: include paths)
 let g:clangd_args = ["--query-driver=*"] + get(g:, 'clangd_args', [])
 
-" LSP setup is not ready yet
-"let g:disable_youcompleteme = 0
+" LSP setup is not ready yet. Enable only one of these
 let g:ycm_enable = 0
 let g:lsp_enable = 0
 " force us to :call lsp#enable() to enable vim-lsp
@@ -60,4 +59,6 @@ elseif has('win32')
   let g:black_virtualenv .= '_win32'
 elseif has('unix')
   let g:black_virtualenv .= '_unix'
+else
+  echomsg "Unknown vim platform! !win32, !unix, !win32unix. python's black compilation dir will have no suffix"
 endif
