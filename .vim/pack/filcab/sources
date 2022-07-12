@@ -18,17 +18,20 @@ opt/fzf|git|https://github.com/junegunn/fzf.git
 opt/fzf.vim|git|https://github.com/junegunn/fzf.vim.git
 
 # Language tools (to be packadd-ed by me)
+## LSP-related
 # Not well behaved. Load only when needed
 opt/YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git
+# Async.vim is required for vim-lsp (autocmd only)
+opt/async|git|https://github.com/prabirshrestha/async.vim.git
+# won't auto enable if g:lsp_auto_enable is 0
+opt/vim-lsp|git|https://github.com/prabirshrestha/vim-lsp.git
+##
+
 # Well behaved mode, plugin only sets defaults and two commands
 start/python-mode|git|https://github.com/klen/python-mode.git
 # Well behaved enough. Should add a variable to not define all the :C* commands
 start/vim-rust|git|https://github.com/rust-lang/rust.vim.git
 start/vim-toml|git|https://github.com/cespare/vim-toml.git
-# Async.vim is required for vim-lsp (autocmd only)
-start/async|git|https://github.com/prabirshrestha/async.vim.git
-# won't auto enable if g:lsp_auto_enable is 0
-start/vim-lsp|git|https://github.com/prabirshrestha/vim-lsp.git
 
 # Utilities (vcs, etc)
 ## filetype specific, packadd will be called by us
