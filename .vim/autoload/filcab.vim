@@ -190,6 +190,7 @@ function! filcab#packaddYCM()
   elseif has("win32")
     packadd YouCompleteMe.win32
   else
+    echomsg "unknown vim version: not win32unix nor win32"
     packadd YouCompleteMe
   endif
   " FIXME: submit a PR for YCM. It always complains about fugitive files in
