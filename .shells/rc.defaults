@@ -149,9 +149,15 @@ maybe_start_ssh_agent() {
   # Set the variables in Windows, hopefully getting us a (git-bash) git.exe
   # call that always chats to the agent
   if type -p cmd.exe >/dev/null; then
-    # throw these in the background, no use waiting for them
-    cmd.exe //c setx SSH_AUTH_SOCK "${SSH_AUTH_SOCK}" >/dev/null &
-    cmd.exe //c setx SSH_AGENT_PID "${SSH_AGENT_PID}" >/dev/null &
+    case $(uname -r) in
+      *[Mm]icrosoft*)
+        # don't want to run this on WSL as the socket won't be accessible for sure
+        ;;
+      *)
+        cmd.exe /c setx SSH_AUTH_SOCK "${SSH_AUTH_SOCK}" >/dev/null
+        cmd.exe /c setx SSH_AGENT_PID "${SSH_AGENT_PID}" >/dev/null
+        ;;
+    esac
   fi
 }
 maybe_start_ssh_agent
