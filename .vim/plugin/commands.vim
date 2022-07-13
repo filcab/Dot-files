@@ -26,3 +26,6 @@ command -nargs=0 TryAyu call <SID>ColorSchemeCommand("ayu-vim", "ayu")
 command -nargs=0 TryAurora call <SID>ColorSchemeCommand("vim-aurora", "aurora")
 command -nargs=0 TryNeoDark call <SID>ColorSchemeCommand("neodark.vim", "neodark")
 command -nargs=0 TryOne call <SID>ColorSchemeCommand("vim-one", "one")
+
+" lazy load :Man command
+command -nargs=+ -complete=shellcmd Man delcommand Man | runtime ftplugin/man.vim | :Man <args>
