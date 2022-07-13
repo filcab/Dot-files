@@ -28,7 +28,7 @@ else
       source "$SHELL_RESOURCES"/lib/git-prompt.sh
       export PS1='[\[\e[01;32m\]\u\[\e[00m\]@\[\e[01;31m\]\h\[\e[01;34m\] \w\[\e[00m\]]$(__git_ps1 " (%s)")\$ '
       ;;
-    -zsh | */zsh)
+    -zsh | zsh | */zsh)
       ## git stuff
       # autoload completion by having it in fpath
       fpath=( "$SHELL_RESOURCES/lib" $fpath )
