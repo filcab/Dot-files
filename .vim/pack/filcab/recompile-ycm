@@ -64,36 +64,11 @@ if os.path.isdir(ycm_dir):
     os.chdir(ycm_dir)
 
 
-tentative_llvm_paths = list(map(Path, [
-    "~/dev/llvm/install",
-    "~/dev/llvm/build",
-    "~/work/llvm-cmake",
-    "C:/code/llvm/install",
-    "C:/code/llvm/build",
-    "/usr/lib/llvm-9",
-    "/usr/lib/llvm-10",
-    "/usr/lib/llvm-11",
-    "/usr/lib/llvm-12",
-    "/usr/lib/llvm-13",
-    "/usr/lib/llvm-14",
-    "/usr/lib/llvm-15",
-]))
-
-for d in tentative_llvm_paths:
-    d = Path(os.path.expanduser(d)).resolve()
-    if d.is_dir():
-        llvm_root = str(d.as_posix()) + "/"
-        break
-# We'll actually get an exception if we didn't find it
-assert llvm_root
-print("LLVM root: {}".format(llvm_root))
-
-
 if platform.system() == "Darwin":
     lib_suffix = "dylib"
 elif platform.system() == "Windows":
     lib_suffix = "lib"
-elif platform.system() == "Linux":
+elif platform.system() in ["Linux", "FreeBSD"]:
     lib_suffix = "so"
 else:
     print(
@@ -103,6 +78,39 @@ else:
         file=sys.stderr,
     )
     sys.exit(1)
+
+
+tentative_llvm_paths = list(map(Path, [
+    # common dev paths
+    "~/dev/llvm/install",
+    "~/dev/llvm/build",
+    "~/work/llvm-cmake",
+    "C:/code/llvm/install",
+    "C:/code/llvm/build",
+    # linux (debian, at least)
+    "/usr/lib/llvm-9",
+    "/usr/lib/llvm-10",
+    "/usr/lib/llvm-11",
+    "/usr/lib/llvm-12",
+    "/usr/lib/llvm-13",
+    "/usr/lib/llvm-14",
+    "/usr/lib/llvm-15",
+    # freebsd ports
+    "/usr/local/llvm14",
+    "/usr/local/llvm15",
+]))
+
+for d in tentative_llvm_paths:
+    d = Path(os.path.expanduser(d)).resolve()
+    maybe_libclang = d / f'lib/libclang.{lib_suffix}'
+    if d.is_dir() and maybe_libclang.is_file():
+        llvm_root = str(d.as_posix()) + "/"
+        break
+# We'll actually get an exception if we didn't find it
+assert llvm_root
+print("LLVM root: {}".format(llvm_root))
+
+
 # We'll actually get an exception if we didn't find it
 assert lib_suffix
 print("Library file suffix: {}".format(lib_suffix))
