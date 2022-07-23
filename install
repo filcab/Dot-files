@@ -125,35 +125,36 @@ def symlink_is_ok(lnk, dst):
     return lnk.exists() and lnk.is_symlink() and lnk.readlink().resolve() == dst
 
 
-def install(d, config):
-    def symlink_file(lnk, dst):
-        # TODO: Maybe install + validate in the same run?
-        if config.dry_run:
-            if symlink_is_ok(lnk, dst):
-                if config.verbose:
-                    print("  Already ok: {} -> {}".format(lnk, dst))
-            else:
-                print("  Would install: {} -> {}".format(lnk, dst))
+def symlink_file(config, lnk, dst):
+    # TODO: Maybe install + validate in the same run?
+    if config.dry_run:
+        if symlink_is_ok(lnk, dst):
+            if config.verbose:
+                print("  Already ok: {} -> {}".format(lnk, dst))
         else:
-            if symlink_is_ok(lnk, dst):
-                if config.verbose:
-                    print("  Already ok: {} -> {}".format(lnk, dst))
+            print("  Would install: {} -> {}".format(lnk, dst))
+    else:
+        if symlink_is_ok(lnk, dst):
+            if config.verbose:
+                print("  Already ok: {} -> {}".format(lnk, dst))
+        else:
+            if lnk.is_symlink():
+                resolved = lnk.readlink().resolve()
+                print("  Changing {} from {} to {}".format(lnk, resolved, dst))
+                lnk.unlink()
             else:
-                if lnk.is_symlink():
-                    resolved = lnk.readlink().resolve()
-                    print("  Changing {} from {} to {}".format(lnk, resolved, dst))
-                    lnk.unlink()
-                else:
-                    print("  Creating symlink: {} -> {}".format(lnk, dst))
-                    lnk.parent.mkdir(parents=True, exist_ok=True)
-                symlink(dst, lnk)
+                print("  Creating symlink: {} -> {}".format(lnk, dst))
+                lnk.parent.mkdir(parents=True, exist_ok=True)
+            symlink(dst, lnk)
 
+
+def install(d, config):
     for f in os.listdir(d):
         if f in non_installable:
             continue
         abs_f = (Path(d) / f).resolve()
         HOME_f = HOME / f
-        symlink_file(HOME_f, abs_f)
+        symlink_file(config, HOME_f, abs_f)
 
     for dst, special in exceptions.items():
         if sys.platform not in special.platforms:
@@ -171,7 +172,7 @@ def install(d, config):
             dst = Path.cwd() / dst
         dst.resolve()
 
-        symlink_file(lnk, dst)
+        symlink_file(config, lnk, dst)
 
 
 command_functions = {
