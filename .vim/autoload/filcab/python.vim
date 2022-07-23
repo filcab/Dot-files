@@ -43,8 +43,8 @@ function filcab#python#init() abort
     return
   endif
 
-  if executable('pyls') != 1
-    echoerr "pyls not found, not enabling YCM or vim-lsp for python"
+  if executable('pylsp') != 1
+    echoerr "pylsp not found, not enabling YCM or vim-lsp for python"
     return
   endif
 
@@ -52,14 +52,14 @@ function filcab#python#init() abort
     echo "Setting up YouCompleteMe for Python"
     call add(g:filcab#python#completer_flavours, 'ycm')
     call filcab#packaddYCM()
-  elseif get(g:, 'lsp_enable', v:false) && executable('pyls')
+  elseif get(g:, 'lsp_enable', v:false) && executable('pylsp')
     echo "Setting up vim-lsp for Python"
     call add(g:filcab#python#completer_flavours, 'lsp')
     packadd vim-lsp
     " pip install python-language-server
     call lsp#register_server({
-      \ 'name': 'pyls',
-      \ 'cmd': {server_info->['pyls']},
+      \ 'name': 'pylsp',
+      \ 'cmd': {server_info->['pylsp']},
       \ 'whitelist': ['python'],
       \ })
   endif
