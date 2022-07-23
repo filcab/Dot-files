@@ -1,11 +1,11 @@
 #log enable lldb verbose target symbol
 
-command source ~/work/llvm/tools/lldb/examples/summaries/lldb
-type category enable lldb
+# command source ~/work/llvm/tools/lldb/examples/summaries/lldb
+# type category enable lldb
 
-command source ~/work/llvm/tools/lldb/examples/summaries/essentials
-command script import ~/work/llvm/utils/lldbDataFormatters.py
-command script import ~/work/llvm/tools/clang/utils/ClangDataFormat.py
+# command source ~/work/llvm/tools/lldb/examples/summaries/essentials
+# command script import ~/work/llvm/utils/lldbDataFormatters.py
+# command script import ~/work/llvm/tools/clang/utils/ClangDataFormat.py
 
 # Dump PyObject* values
 command regex pyrepr 's/^(.*)$/expr -- (char*)PyString_AsString((PyObject*)PyObject_Repr((PyObject*) (%1) ))/'
@@ -17,4 +17,4 @@ settings set stop-disassembly-count 20
 # LLDB command version
 #target stop-hook add -o 'memory read -f i -c 20 -a $pc'
 
-command script import /Users/filcab/Library/Python/2.7/lib/python/site-packages/voltron/entry.py
+# command script import /Users/filcab/Library/Python/2.7/lib/python/site-packages/voltron/entry.py
