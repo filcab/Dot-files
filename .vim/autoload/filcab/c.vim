@@ -65,17 +65,15 @@ function filcab#c#init() abort
     return
   endif
 
+  " allow users to set ninja paths easily
+  let g:ninja = get(g:, 'ninja', 'ninja')
+
   " Latch onto the YCM var and use those args for lsp too
   let g:ycm_clangd_args = get(g:, 'clangd_args', [])
 
-  if get(g:, 'ycm_enable', v:false)
-    echo "Setting up YouCompleteMe for C/C++"
-    call add(g:filcab#c#completer_flavours, 'ycm')
-    call filcab#packaddYCM()
-  elseif get(g:, 'lsp_enable', v:false) && executable(g:clangd_path)
+  call filcab#lsp#setup()
+  if get(g:, 'lsp_impl', '') == "vim-lsp" && executable(g:clangd_path)
     echo "Setting up vim-lsp for C/C++"
-    call add(g:filcab#c#completer_flavours, 'lsp')
-    packadd vim-lsp
     call lsp#register_server({
             \ 'name': 'clangd',
             \ 'cmd': {server_info->[g:clangd_path] + g:ycm_clangd_args},

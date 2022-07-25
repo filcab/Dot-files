@@ -179,34 +179,6 @@ function! filcab#ClangFormat()
   endif
 endfunction
 
-" Shared amongst all YCM-using languages
-function! filcab#packaddYCM()
-  if get(g:, 'ycm_enable', 0)
-    return
-  endif
-  " install different variants so we can control what library gets added
-  if has("win32unix")
-    packadd YouCompleteMe.win32unix
-  elseif has("win32")
-    packadd YouCompleteMe.win32
-  else
-    echomsg "unknown vim version: not win32unix nor win32"
-    packadd YouCompleteMe
-  endif
-  " FIXME: submit a PR for YCM. It always complains about fugitive files in
-  " big repos anyway.
-  " Would be "nice" to be able to goto definition, but do we care?
-  let g:ycm_filetype_blacklist = get(g:, 'ycm_filetype_blacklist', {})
-  let g:ycm_filetype_blacklist['fugitive'] = 1
-endfunction
-
-function! filcab#ShowYCMNumberOfWarningsAndErrors()
-  if !get(g:, 'disable_youcompleteme', v:false) && get(g:, 'loaded_youcompleteme', v:false)
-    echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount()
-        \ . ' Warnings: ' . youcompleteme#GetWarningCount()
-  endif
-endfunction
-
 function! filcab#recompileYCM()
   " install different variants so we can control what library gets added
   if has("win32unix")

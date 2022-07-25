@@ -16,7 +16,7 @@ let s:completer_functions["lsp"] = {
   \ "goto-inc": {-> execute(":YcmCompleter GoToInclude", "")},
   \ "goto-refs": {-> execute(":YcmCompleter GoToReferences", "")},
   \ "goto-smart": {-> execute(":YcmCompleter GoToDefinitionElseDeclaration", "")},
-  \ "stats": function('filcab#ShowYCMNumberOfWarningsAndErrors'),
+  \ "stats": function('filcab#lsp#ShowYCMNumberOfWarningsAndErrors'),
   \ }
 let s:completer_functions["ycm"] = {
   \ "refresh": {-> execute(":YcmForceCompileAndDiagnostics", "")},
@@ -32,7 +32,7 @@ let s:completer_functions["ycm"] = {
   \ "get-doc": {-> execute(":YcmCompleter GetDoc", "")},
   \ "get-doc-fast": {-> execute(":YcmCompleter GetDocImprecise", "")},
   \ "fixit": {-> execute(":YcmCompleter FixIt")},
-  \ "stats": function('filcab#ShowYCMNumberOfWarningsAndErrors'),
+  \ "stats": function('filcab#lsp#ShowYCMNumberOfWarningsAndErrors'),
   \ }
 
 function s:call_completer_function(flavours, name)

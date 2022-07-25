@@ -8,7 +8,7 @@ function filcab#javascript#init() abort
   if get(g:, 'ycm_enable', v:false)
     echo "Setting up YouCompleteMe for Javascript"
     call add(g:filcab#javascript#completer_flavours, 'ycm')
-    call filcab#packaddYCM()
+    call filcab#lsp#packaddYCM()
   elseif get(g:, 'lsp_enable', v:false) && executable('javascript-typescript-langserver')
     echo "Setting up vim-lsp for Javascript"
     call add(g:filcab#javascript#completer_flavours, 'lsp')

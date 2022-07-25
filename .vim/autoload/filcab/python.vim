@@ -51,7 +51,7 @@ function filcab#python#init() abort
   if get(g:, 'ycm_enable', v:false)
     echo "Setting up YouCompleteMe for Python"
     call add(g:filcab#python#completer_flavours, 'ycm')
-    call filcab#packaddYCM()
+    call filcab#lsp#packaddYCM()
   elseif get(g:, 'lsp_enable', v:false) && executable('pylsp')
     echo "Setting up vim-lsp for Python"
     call add(g:filcab#python#completer_flavours, 'lsp')

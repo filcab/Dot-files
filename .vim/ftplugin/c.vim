@@ -9,15 +9,17 @@ set commentstring=//\ %s
 compiler! clang
 
 if filereadable('build.ninja')
-  setlocal makeprg=ninja
+  let &l:makeprg=g:ninja
 " give priority to a plain 'build' directory
 elseif filereadable('build/build.ninja')
-  setlocal makeprg=ninja\ -C\ build
+  let &l:makeprg=g:ninja . join(["-C", "build"], " ")
 else
   let s:globbed = glob('build*/build.ninja', v:true, v:true)
   if len(s:globbed) > 0
     " just pick the first one, we have no proper way to disambiguate
     let dir_name = fnamemodify(s:globbed[0], ":h")
-    let &l:makeprg='ninja -C ' . shellescape(dir_name)
+    let &l:makeprg=g:ninja . join(["-C", shellescape(dir_name)], " ")
   endif
 endif
+
+call filcab#lsp#install_mappings()

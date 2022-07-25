@@ -15,6 +15,9 @@ let g:clang_format_on_save = 0
 " tell clangd to query the driver for extra arguments (e.g: include paths)
 let g:clangd_args = ["--query-driver=*"] + get(g:, 'clangd_args', [])
 
+" lsp implementations to try
+let g:lsp_impls = ["ycm", "vim-lsp"]
+
 " LSP setup is not ready yet. Enable only one of these
 let g:ycm_enable = 0
 let g:lsp_enable = 0

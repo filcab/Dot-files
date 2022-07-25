@@ -24,7 +24,7 @@ function filcab#rust#init() abort
   if get(g:, 'ycm_enable', v:false)
     echo "Setting up YouCompleteMe for Rust"
     call add(g:filcab#rust#completer_flavours, 'ycm')
-    call filcab#packaddYCM()
+    call filcab#lsp#packaddYCM()
   elseif get(g:, 'lsp_enable', v:false)
     echo "Setting up vim-lsp for Rust"
     call add(g:filcab#rust#completer_flavours, 'lsp')
