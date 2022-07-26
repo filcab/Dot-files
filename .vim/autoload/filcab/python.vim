@@ -44,7 +44,7 @@ function filcab#python#init() abort
   endif
 
   call filcab#lsp#setup()
-  if get(g:, 'lsp_impl', '') == "vim-lsp") && executable('pylsp')
+  if get(g:, 'lsp_impl', '') == "vim-lsp" && executable('pylsp')
     echo "Setting up vim-lsp for Python"
     " pip install python-lsp-server
     call lsp#register_server({
