@@ -8,12 +8,12 @@ command! REPLOctaveSend call filcab#matlab#sendToOctaveREPL()
 " command! -range REPLOctaveSendRange <line1>,<line2>call filcab#matlab#sendToOctaveREPL()
 
 " normal only, as visual probably doesn't want to lose the selection?
-nnoremap <localleader>r <Cmd>REPLOctaveFocus<cr>
+nnoremap <unique><buffer> <localleader>r <Cmd>REPLOctaveFocus<cr>
 
 " e for eval... as a fallback is <enter> is being weird
-noremap <localleader>e <Cmd>REPLOctaveSend<cr>
-noremap <localleader><enter> <Cmd>REPLOctaveSend<cr>
+noremap <unique><buffer> <localleader>e <Cmd>REPLOctaveSend<cr>
+noremap <unique><buffer> <localleader><enter> <Cmd>REPLOctaveSend<cr>
 
 " one of the few free keys in insert mode:
 " https://vim.fandom.com/wiki/Unused_keys
-inoremap <C-B><enter> <Cmd>REPLOctaveSend<cr>
+inoremap <unique><buffer> <C-B><enter> <Cmd>REPLOctaveSend<cr>
