@@ -85,7 +85,12 @@ function! s:install_mapping(keys, command, ...)
     let map_type = a:1
   end
 
-  execute map_type.'map' '<buffer><unique>' '<localleader>'.a:keys '<plug>(FilcabLsp'.a:command.')'
+  " only map if the <plug> mapping exists. we might have different commands
+  " available depending on the language
+  let map_arg = '<plug>(FilcabLsp'.a:command.')'
+  if maparg(map_arg)
+    execute map_type.'map' '<buffer><unique>' '<localleader>'.a:keys map_arg
+  endif
 endfunction
 
 function! filcab#lsp#install_mappings() abort

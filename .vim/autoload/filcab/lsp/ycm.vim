@@ -28,21 +28,61 @@ function! s:ycm_mapping(...) abort
 endfunction
 
 function! filcab#lsp#ycm#init() abort
-  call s:ycm_mapping("Fixit")
-  call s:ycm_mapping("Format")
+  " TODO: Maybe add these commands (they're active in python at least)
+  " GoToDeclaration
+  " GoToDefinition
+  " GoToType
+
+  let subcommands = join(py3eval('ycm_state.GetDefinedSubcommands()'), "\n")
+
+  if index(subcommands, "Fixit") != -1
+      call s:ycm_mapping("Fixit")
+  endif
+
+  if index(subcommands, "Format") != -1
+    call s:ycm_mapping("Format")
+  endif
+
   call s:ycm_mapping("GetDoc")
-  call s:ycm_mapping("GetParent")
-  call s:ycm_mapping("GetTypeFast", "GetTypeImprecise")
+
+  if index(subcommands, "GetParent") != -1
+    call s:ycm_mapping("GetParent")
+  endif
+
+  " fallback to regular GetType if GetTypeImprecise is not supported
+  let gettypefast = "GetTypeImprecise"
+  if index(subcommands, gettypefast) == -1
+    let gettypefast = "GetType"
+  endif
+  call s:ycm_mapping("GetTypeFast", gettypefast)
   call s:ycm_mapping("GetType", "GetType")
+
   " maybe have some goto-declaration/goto-definition/goto-implementation
   call s:ycm_mapping("GoTo")
-  call s:ycm_mapping("GoToCallers")
-  call s:ycm_mapping("GoToCallees")
-  call s:ycm_mapping("GoToDocumentOutline")
-  call s:ycm_mapping("GoToFast", "GoToImprecise")
-  call s:ycm_mapping("GoToInclude")
+
+  if index(subcommands, "GoToCallers") != -1
+    call s:ycm_mapping("GoToCallers")
+  endif
+  if index(subcommands, "GoToCallees") != -1
+    call s:ycm_mapping("GoToCallees")
+  endif
+  if index(subcommands, "GoToDocumentOutline") != -1
+    call s:ycm_mapping("GoToDocumentOutline")
+  endif
+
+  let gotofast = "GoToImprecise"
+  if index(subcommands, gotofast) == -1
+    let gotofast = "GoTo"
+  endif
+  call s:ycm_mapping("GoToFast", gotofast)
+
+  if index(subcommands, "GoToInclude") != -1
+    call s:ycm_mapping("GoToInclude")
+  endif
+
   call s:ycm_mapping("GoToReferences")
   call s:ycm_mapping("GoToSymbol")
+
   call s:ycm_mapping("Rename", "RefactorRename")
   call s:ycm_mapping("Refresh", ":YcmForceCompileAndDiagnostics")
 endfunction
