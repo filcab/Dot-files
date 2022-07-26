@@ -142,7 +142,7 @@ maybe_start_ssh_agent() {
   fi
 
   if [ ! "$SSH_AUTH_SOCK" -o "$agent_run_state" = 2 -o "$agent_run_state" = 1 ]; then
-      [ "${uname_s}" = "Darwin" ] && ssh-add -A
+      [ "${uname_s}" = "Darwin" ] && ssh-add --apple-load-keychain
       ssh-add
   fi
 
