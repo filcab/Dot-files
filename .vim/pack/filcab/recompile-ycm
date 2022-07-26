@@ -85,11 +85,11 @@ tentative_llvm_paths = list(map(Path, [
     "~/dev/llvm/install",
     "~/dev/llvm/build",
     "~/work/llvm-cmake",
+    # homebrew installed. Should use globs here and for the linux ones
+    "~/dev/brew/Cellar/llvm/14.0.6_1",
     "C:/code/llvm/install",
     "C:/code/llvm/build",
     # linux (debian, at least)
-    "/usr/lib/llvm-9",
-    "/usr/lib/llvm-10",
     "/usr/lib/llvm-11",
     "/usr/lib/llvm-12",
     "/usr/lib/llvm-13",
