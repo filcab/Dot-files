@@ -1,18 +1,6 @@
 " valid lsp implementations
 let s:lsp_impl_list = ["ycm", "vim-lsp"]
 
-function! s:YCMName() abort
-  if has("win32unix")
-    return "YouCompleteMe.win32unix"
-  elseif has("win32")
-    return "YouCompleteMe.win32"
-  else
-    echomsg "unknown vim version: not win32unix nor win32"
-    return "YouCompleteMe"
-  endif
-endfunction
-let s:ycm_name = s:YCMName()
-
 function! s:ycm_setup() abort
   " YCM has already been loaded
   if get(g:, 'loaded_youcompleteme', v:false)
@@ -25,7 +13,6 @@ function! s:ycm_setup() abort
   elseif has("win32")
     packadd YouCompleteMe.win32
   else
-    echomsg "unknown vim version: not win32unix nor win32"
     packadd YouCompleteMe
   endif
 
