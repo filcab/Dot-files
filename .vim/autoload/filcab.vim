@@ -179,7 +179,8 @@ function! filcab#ClangFormat()
   endif
 endfunction
 
-function! filcab#recompileYCM()
+" args: options to term_start()
+function! s:recompileYCM(...)
   " install different variants so we can control what library gets added
   if has("win32unix")
     let ycm_suffix = ".win32unix"
@@ -190,19 +191,24 @@ function! filcab#recompileYCM()
   endif
 
   let recompileScript = $MYVIMRUNTIME.'/pack/filcab/recompile-ycm'
-  execute  ":terminal" "++shell" s:pythonCmd shellescape(recompileScript) "opt/YouCompleteMe".ycm_suffix
+  if a:0 == 0
+    execute  ":terminal" "++shell" s:pythonCmd shellescape(recompileScript) "opt/YouCompleteMe".ycm_suffix
+  else
+    let options = {
+	  \ 'term_name': 'YCM compilation',
+	  \ 'norestore': v:true,
+	  \ }
+    let options = extend(options, a:1)
+    let cmd = join([s:pythonCmd, recompileScript, "opt/YouCompleteMe".ycm_suffix], " ")
+    return term_start(cmd, options)
+  endif
 endfunction
 
-function! filcab#updatePackages()
+" argument: optional options for term_start() function
+function! s:updatePackages(...)
   let myPackDir = $MYVIMRUNTIME.'/pack/filcab'
   " FIXME: Maybe in the future try and use :py3f in vim, but still have it be
   " async...
-  let script = shellescape(myPackDir."/get-files")
-  let sourcesFile = shellescape(myPackDir."/sources")
-  " use shell escapes and the ++shell argument as otherwise we'll get split on
-  " spaces. I couldn't find a proper way to quote the arguments whilst still
-  " not using shell (quotes would end up getting included in the arguments
-  " themselves)
 
   if has("win32unix")
     let ycm_rename = "YouCompleteMe=YouCompleteMe.win32unix"
@@ -212,12 +218,33 @@ function! filcab#updatePackages()
     let ycm_rename = "YouCompleteMe=YouCompleteMe"
   endif
 
-  execute ":terminal" "++open" "++shell" s:pythonCmd script "-o" shellescape(myPackDir) "--rename" ycm_rename sourcesFile
+  let script = myPackDir."/get-files"
+  let sourcesFile = myPackDir."/sources"
+
+  if a:0 == 0
+    " no exit_cb was provided
+    " use shell escapes and the ++shell argument as otherwise we'll get split on
+    " spaces. I couldn't find a proper way to quote the arguments whilst still
+    " not using shell (quotes would end up getting included in the arguments
+    " themselves)
+    let script = shellescape(script)
+    let sourcesFile = shellescape(sourcesFile)
+    let cmd = join([s:pythonCmd, script, "-o", shellescape(myPackDir), "--rename", ycm_rename, sourcesFile], " ")
+    execute ":terminal" "++noclose" "++shell" cmd
+  else
+    let options = {
+	  \ 'term_name': 'Vim package updates',
+	  \ 'norestore': v:true,
+	  \ }
+    let options = extend(options, a:1)
+    let cmd = join([s:pythonCmd, script, "-o", myPackDir, "--rename", ycm_rename, sourcesFile], " ")
+    return term_start(cmd, options)
+  end
 endfunction
 
 " Function to run helptags on all the opt packages. Regular packages are
 " already in |rtp|, so will have their helptags done with :helptags ALL
-function! filcab#packOptHelpTags() abort
+function! s:packOptHelpTags() abort
   for d in split(&packpath, ',')
     " skip any global plugins
     if stridx(d, $VIMRUNTIME) == 0
@@ -231,6 +258,33 @@ function! filcab#packOptHelpTags() abort
       exe 'helptags '.fnameescape(doc)
     endfor
   endfor
+endfunction
+
+function! s:updatePackages_step2(job, status) abort
+  if a:status == 0
+    helptags ALL
+    call s:packOptHelpTags()
+    " reuse the other term window if it's visible
+    let bufnr = ch_getbufnr(a:job, "out")
+    let winnr = bufwinnr(bufnr)
+    if winnr == -1
+      let options = {'term_opencmd': winnr..'wincmd w|buffer %d'}
+    else
+      let options = {}
+    endif
+    call s:recompileYCM(options)
+    execute ":bdelete" bufnr
+  else
+    echohl WarningMsg
+    echom "UpdatePackages: Failed to update all packages, not running recompile script"
+    echohl None
+  endif
+endfunction
+
+" maybe do away with the previous commands. This one should stop on any error
+" anyway
+function! filcab#updatePackages()
+  call s:updatePackages({'exit_cb': funcref('s:updatePackages_step2')})
 endfunction
 
 " Move the cursor to a terminal window if we have one open

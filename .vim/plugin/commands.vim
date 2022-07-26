@@ -11,18 +11,8 @@ command -nargs=0 -bar GotoTerminalWindow call filcab#gotoTermWindow()
 " misc debugging/updating commands
 command -nargs=0 -bar DebugSyntaxHighlights call filcab#debug#syntax()
 
-command -nargs=0 -bar RebuildHelptags helptags ALL | call filcab#packOptHelpTags()
-command -nargs=0 -bar RecompileYCM call filcab#recompileYCM()
+" fetches new packages, rebuilds help tags for everything, and recompiles YCM
 command -nargs=0 -bar UpdatePackages call filcab#updatePackages()
-
-" maybe do away with the previous commands. This one should stop on any error
-" anyway
-function! s:UpdatePackagesFull()
-  UpdatePackages
-  RebuildHelptags
-  RecompileYCM
-endfunction
-command -nargs=0 -bar UpdatePackagesFull call s:UpdatePackagesFull()
 
 function s:ColorSchemeCommand(packname, schemename)
   exe "packadd" a:packname
