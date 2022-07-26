@@ -2,8 +2,9 @@
 " Calling this function multiple times is ok, all but the first call will be a
 " no-op.
 call filcab#c#init()
+call filcab#lsp#install_mappings()
 
-set commentstring=//\ %s
+setlocal commentstring=//%s
 
 " Make ninja the default makeprg and make clang the default compiler (for errorformat)
 compiler! clang
@@ -22,4 +23,3 @@ else
   endif
 endif
 
-call filcab#lsp#install_mappings()

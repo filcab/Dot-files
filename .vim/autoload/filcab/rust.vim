@@ -21,14 +21,9 @@ function filcab#rust#init() abort
     return
   endif
 
-  if get(g:, 'ycm_enable', v:false)
-    echo "Setting up YouCompleteMe for Rust"
-    call add(g:filcab#rust#completer_flavours, 'ycm')
-    call filcab#lsp#packaddYCM()
-  elseif get(g:, 'lsp_enable', v:false)
-    echo "Setting up vim-lsp for Rust"
-    call add(g:filcab#rust#completer_flavours, 'lsp')
-    packadd vim-lsp
+  " not checking for executable, as rust-analyzer might not be accessible via
+  " $PATH
+  if get(g:, 'lsp_impl', '') == "vim-lsp"
     call lsp#register_server({
       \ 'name': 'rust-analyzer',
       \ 'cmd': {server_info->['rustup', '+nightly', 'run', 'rust-analyzer']},

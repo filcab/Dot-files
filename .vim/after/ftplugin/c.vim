@@ -3,20 +3,11 @@ if exists("b:did_filcab_after_c_ftplugin")
   finish
 endif
 
-" Always default to the clang compiler
-compiler clang
-
-if index(g:filcab#c#completer_flavours, 'lsp') != -1
-  " YCM doesn't use omnifunc, so this allows us to have YCM and LSP at the
-  " same time
+if get(g:, 'lsp_impl', '') == 'vim-lsp'
   setlocal omnifunc=lsp#complete
-endif
-
-nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
-
-" clang-format integration: only used when we have no LSP implementation
-" available
-if get(g:, 'lsp_impl', '') == ''
+elseif get(g:, 'lsp_impl', '') == ''
+  " clang-format integration: only used when we have no LSP implementation
+  " available
   if has('python3')
     nnoremap <buffer><unique> <LocalLeader><Tab> :py3f $MYVIMRUNTIME/clang-format.py<cr>
     vnoremap <buffer><unique> <LocalLeader><Tab> :py3f $MYVIMRUNTIME/clang-format.py<cr>
@@ -35,7 +26,7 @@ if get(g:, 'lsp_impl', '') == ''
     "let &formatprg=g:clang_format_path
   endif
 
-  " Setup clang-format on save functionality only in C/C++ files
+  " might want to extract this, but I'm not using it that much
   augroup FilcabCFtAutoCommands
     autocmd!
     autocmd BufWritePre <buffer>
@@ -44,17 +35,23 @@ if get(g:, 'lsp_impl', '') == ''
       \ endif
   augroup END
 
+  function! FilcabCFtPluginUndo()
+    setlocal omnifunc<
+    nunmap <buffer> <LocalLeader><Tab>
+    vunmap <buffer> <LocalLeader><Tab>
+    iunmap <buffer> <C-Tab><Tab>
+    nunmap <buffer> <F5>
+    autocmd! FilcabCFtAutoCommands
+  endfunction
+
   " Add to the rest of the undo_ftplugin commands
   let b:undo_ftplugin .= "|call FilcabCFtPluginUndo()"
 endif
 
-function! FilcabCFtPluginUndo()
-  setlocal omnifunc<
-  nunmap <buffer> <LocalLeader><Tab>
-  vunmap <buffer> <LocalLeader><Tab>
-  iunmap <buffer> <C-Tab><Tab>
-  nunmap <buffer> <F5>
-  autocmd! FilcabCFtAutoCommands
-endfunction
+" Always default to the clang compiler
+compiler clang
+
+" Extra clang-check keybinding. Mostly unused
+nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
 
 let b:did_filcab_after_c_ftplugin = 1

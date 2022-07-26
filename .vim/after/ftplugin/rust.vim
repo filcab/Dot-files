@@ -2,8 +2,7 @@ if exists("b:did_filcab_after_rust")
   finish
 endif
 
-call filcab#completers#setup_mappings('rust')
-if index(g:filcab#rust#completer_flavours, 'lsp') != -1
+if get(g:, 'lsp_impl', '') == 'vim-lsp'
   setlocal omnifunc=lsp#complete
 endif
 
