@@ -2,6 +2,8 @@ if exists("b:did_filcab_after_python_ftplugin")
   finish
 endif
 
+call filcab#lsp#ftplugin()
+
 if get(g:, 'lsp_impl', '') == 'vim-lsp'
   setlocal omnifunc=lsp#complete
 elseif get(g:, 'lsp_impl', '') == ''

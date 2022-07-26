@@ -15,15 +15,9 @@ let g:clang_format_on_save = 0
 " tell clangd to query the driver for extra arguments (e.g: include paths)
 let g:clangd_args = ["--query-driver=*"] + get(g:, 'clangd_args', [])
 
-" lsp implementations to try
+" lsp implementations to try, in the desired order
 let g:lsp_impls = ["ycm", "vim-lsp"]
-
-" LSP setup is not ready yet. Enable only one of these
-let g:ycm_enable = 0
-let g:lsp_enable = 0
-" force us to :call lsp#enable() to enable vim-lsp
-" will still define commands and plug mappings
-let g:lsp_auto_enable = 0
+" let g:lsp_verbosity = 0
 
 " Set this wether or not we're disabling ycm, since we might not find the LSP
 " programs

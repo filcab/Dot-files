@@ -29,7 +29,6 @@ function! s:ycm_setup() abort
   let g:ycm_filetype_blacklist = get(g:, 'ycm_filetype_blacklist', {})
   let g:ycm_filetype_blacklist['fugitive'] = 1
 
-  call filcab#lsp#ycm#init()
   return v:true
 endfunction
 
@@ -71,24 +70,58 @@ function! filcab#lsp#setup() abort
   endfor
 endfunction
 
-function! filcab#lsp#ShowYCMNumberOfWarningsAndErrors()
-  if !get(g:, 'disable_youcompleteme', v:false) && get(g:, 'loaded_youcompleteme', v:false)
-    echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount()
-        \ . ' Warnings: ' . youcompleteme#GetWarningCount()
+" \ "vim-lsp": {->...},
+let s:lsp_impl_is_ready = {
+      \ "ycm": {->filcab#lsp#ycm#is_ready()},
+      \ }
+let s:lsp_impl_ftplugin = {
+      \ "ycm": {->filcab#lsp#ycm#ftplugin()},
+      \ }
+
+function! s:log(level, ...) abort
+  if get(g:, 'lsp_verbosity', 0) >= a:level
+    execute "echom" "'lsp'" "'"..join(a:000, " ").."'"
   endif
 endfunction
 
-" s:install_mapping(keys, command, map_type='n')
-function! s:install_mapping(keys, command, ...)
-  let map_type = 'n'
-  if a:0 > 0
-    let map_type = a:1
-  end
+" wait at most one second: 100 * 10ms
+let s:ftplugin_max_retries = 100
+let s:ftplugin_wait_time = 10
+let s:ftplugin_num_retries = 0
+function! filcab#lsp#ftplugin() abort
+  " if we're starting up, YCM hasn't yet connected, so we'll need to wait
+  if has('vim_starting')
+    call s:log(1, "vim is starting, setting up autocmd")
+    autocmd VimEnter * call filcab#lsp#ftplugin()
+    return
+  endif
 
-  " only map if the <plug> mapping exists. we might have different commands
-  " available depending on the language
+  if s:ftplugin_num_retries < s:ftplugin_max_retries && !s:lsp_impl_is_ready[g:lsp_impl]()
+    let s:ftplugin_num_retries = s:ftplugin_num_retries - 1
+    call s:log(2, "setting timer for 10ms, then calling filcab#lsp#ftplugin()")
+    call timer_start(s:ftplugin_wait_time, {->filcab#lsp#ftplugin()})
+    return
+  elseif s:ftplugin_num_retries == s:ftplugin_max_retries
+    echohl WarningMsg
+    echom "LSP server took too long to become ready. Reverting to no LSP"
+    let g:lsp_impl = ''
+    echohl None
+  endif
+
+  if get(g:, 'lsp_impl', '') != ''
+    call s:lsp_impl_ftplugin[g:lsp_impl]()
+  endif
+
+  call filcab#lsp#install_mappings()
+endfunction
+
+" s:install_mapping(keys, command)
+function! s:install_mapping(keys, command)
+  let map_type = 'n'
+
   let map_arg = '<plug>(FilcabLsp'.a:command.')'
-  if maparg(map_arg)
+  " only setup the mapping if the plug mapping exists
+  if maparg(map_arg) != ''
     execute map_type.'map' '<buffer><unique>' '<localleader>'.a:keys map_arg
   endif
 endfunction
