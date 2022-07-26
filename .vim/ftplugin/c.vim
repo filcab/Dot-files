@@ -2,7 +2,7 @@
 " Calling this function multiple times is ok, all but the first call will be a
 " no-op.
 call filcab#c#init()
-call filcab#lsp#install_mappings()
+call filcab#lsp#ftplugin()
 
 setlocal commentstring=//%s
 

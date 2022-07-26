@@ -12,7 +12,6 @@ inoremap <buffer><unique> <C-Tab><Tab> <C-o>:RustFmtRange<cr><cr>
 
 let b:undo_ftplugin .= '|setlocal omnifunc<'
 function! FilcabRustFtPluginUndo()
-  call filcab#completers#setup_mappings('rust', v:true)
   setlocal omnifunc<
   nunmap <buffer> <LocalLeader><Tab>
   vunmap <buffer> <LocalLeader><Tab>
