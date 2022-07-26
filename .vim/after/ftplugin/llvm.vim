@@ -6,8 +6,6 @@ if exists("b:did_filcab_after_llvm_ftplugin")
   finish
 endif
 
-setlocal softtabstop=2 shiftwidth=2
-setlocal expandtab
 setlocal iskeyword+=@ iskeyword+=%
 "setlocal comments+=:;
 setlocal comments=s0:\ -,m0:;,e0:;;,:;
