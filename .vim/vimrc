@@ -48,7 +48,7 @@ set formatoptions+=j " Delete comment character when joining commented lines
 
 " FIXME: huh?
 if has('path_extra')
-  setglobal tags-=./tags tags-=./tags; tags^=./tags;
+  set tags-=./tags tags-=./tags; tags^=./tags;
 endif
 
 " Automatically reload changed files
@@ -268,8 +268,8 @@ if &t_Co > 2 || has('gui_running')
 
   if has('win32') && has('gui_running') && has('vim_starting')
     " FiraCode NerdFont: nice font, with added icons
-    " Consolas: Good, default Windows fonts (after Win7)
     " Cascadia: Seems a bit nicer
+    " Consolas: Good, default Windows fonts (after Win7)
     set guifont=FiraCode\ NF:h12,Cascadia\ Code:h13,Cascadia\ Mono:h13,Consolas:h13
     " Make the window larger by default. This should fit 3 side-by-side panes
     " very easily.
