@@ -1,7 +1,5 @@
 set cmdheight=2
 
-command! -nargs=0 -bar EnableMatchUp packadd vim-matchup
-
 " Use space as the leader as it's much more accessible, especially in UK
 " keyboards (and US Mac keyboards on Windows)
 let mapleader = ' '

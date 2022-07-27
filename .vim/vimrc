@@ -60,12 +60,6 @@ set tabpagemax=50
 set viminfo^=!
 set sessionoptions-=options
 
-" FIXME: Probably should remove this
-" Load matchit.vim, but only if the user hasn't installed a newer version.
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-  runtime! macros/matchit.vim
-endif
-
 " End of tpope's sensible.vim stuff
 """"""""""""""""""""""""""""""""""""""""""
 
@@ -295,3 +289,12 @@ autocmd BufReadPost *
 " experimental. note that \%# is used to match the cursor position, so that
 " we aren't marking red the area that we are just typing.
 match Error /\s\+\%#\@!$/
+
+packadd vim-matchup
+if !get(g:, 'loaded_matchup', 0)
+  " FIXME: Probably should remove this
+  " Load matchit.vim, but only if the user hasn't installed a newer version.
+  if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+    runtime! macros/matchit.vim
+  end
+end
