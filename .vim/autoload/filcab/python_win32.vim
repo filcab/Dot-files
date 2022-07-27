@@ -5,7 +5,7 @@ let g:filcab_vim_python_use_debug = get(g:, 'filcab_vim_python_use_debug', v:fal
 " search for a system-wide python3 and set pythonthreedll
 " This is needed so git-for-windows' vim can find the system installed python3 dll
 " Only set it if it's not already set to something readable
-function! s:set_pythonthreedll() abort
+function! filcab#python_win32#set_pythonthreedll() abort
   if filereadable(&pythonthreedll)
     " nothing needed, it's already readable
     return
@@ -53,32 +53,3 @@ function! s:set_pythonthreedll() abort
     endif
   endif
 endfunction
-
-if has('win32') || has('win32unix')
-  call s:set_pythonthreedll()
-endif
-
-if has('win32unix')
-  " adjust the temporary file directory as mingw vim will set TMP, etc to
-  " /tmp, which other libraries (loaded python) won't know what to do with
-  " know what to do with and will fallback to the SYSTEM temp dir
-  " and will fallback to the SYSTEM temp dir
-  " TODO: should we instead be setting $TMP on the python stuff? It's not set
-  " by default (but vim's is)
-  py3 import tempfile
-  let cygpath_tmp = system('cygpath -m "$TMP"')->trim()
-  execute "py3" "tempfile.tempdir" "=" "'".fnameescape(cygpath_tmp)."'"
-
-  " let python know where our HOME is (YCM needs this)
-  py3 import os
-  let cygpath_home = system('cygpath -m "$USERPROFILE"')->trim()
-  execute "py3" "os.environ['USERPROFILE']" "=" "'".fnameescape(cygpath_home)."'"
-endif
-
-" python for windows doesn't install an executable named python3, so pymode
-" will just fail to see that we have python
-" This needs to be done before pymode is loaded, or they'll set the variable
-" to 'disable' and just break down
-if has('python3') || has('python3/dyn')
-  let g:pymode_python = 'python3'
-endif
