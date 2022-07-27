@@ -21,7 +21,12 @@ let g:lsp_impls = ["ycm", "vim-lsp"]
 
 " Set this wether or not we're disabling ycm, since we might not find the LSP
 " programs
+let g:ycm_add_preview_to_completeopt = "popup"
+let g:ycm_always_populate_location_list = 1
+let g:ycm_show_detailed_diag_in_popup = 1
+let g:ycm_enable_semantic_highlighting = 1
 let g:ycm_global_ycm_extra_conf = expand($MYVIMRUNTIME . '/ycm_extra_conf.py')
+
 " Set in all our shells (Maybe set it if it wasn't set? (e.g: GUI vim in some
 " platforms))
 let g:ycm_rust_src_path = $RUST_SRC_PATH
@@ -32,14 +37,11 @@ endif
 " completion (CTRL+N) options
 if !exists( "g:loaded_youcompleteme" )
   " filcab:
-  " If we set this variable and then reload vimrc, when YouCompleteMe is
+  " If we set this variable and then reload this file, when YouCompleteMe is
   " enabled, we end up with some weird behaviour where words which YCM tries
   " to complete will get deleted whilst being written.
   set completeopt+=longest
 endif
-
-" don't immediately load vim-lsp. Let's just do it as needed
-let g:lsp_auto_enable = 0
 
 let g:lsp_signs_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
