@@ -12,7 +12,7 @@ command -nargs=0 -bar GotoTerminalWindow call filcab#gotoTermWindow()
 command -nargs=0 -bar DebugSyntaxHighlights call filcab#debug#syntax()
 
 " fetches new packages, rebuilds help tags for everything, and recompiles YCM
-command -nargs=0 -bar UpdatePackages call filcab#updatePackages()
+command -nargs=0 -bar UpdatePackages call filcab#update_packages#updatePackages()
 
 function s:ColorSchemeCommand(packname, schemename)
   exe "packadd" a:packname
