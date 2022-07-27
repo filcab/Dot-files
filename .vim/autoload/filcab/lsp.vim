@@ -180,6 +180,8 @@ endfunction
 
 function! filcab#lsp#install_mappings() abort
   " these are valid for ycm for sure. Needs checking with vim-lsp
+  call s:install_mapping('fw', "FindSymbolInWorkspace")
+  call s:install_mapping('fd', "FindSymbolInDocument")
   call s:install_mapping('f', 'Fixit')
   call s:install_mapping('<tab>', 'Format')
   call s:install_mapping('d', "GetDoc")

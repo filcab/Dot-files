@@ -10,6 +10,9 @@ function! s:ycm_mapping(subcommands, ...) abort
     if a:2[0] == ':'
       let base_ycm_command = ''
       let ycm_command = ':<C-u>'..a:2[1:]
+    elseif a:2[0][:6] ==? "<plug>"
+      let base_ycm_command = ''
+      let ycm_command = a:2
     else
       let base_ycm_command = a:2
     end
@@ -79,6 +82,9 @@ function! filcab#lsp#ycm#ftplugin() abort
 
   call s:ycm_mapping(subcommands, "Refresh", ":YcmForceCompileAndDiagnostics")
   call s:ycm_mapping(subcommands, "Stats", ":call filcab#lsp#ycm#ShowYCMNumberOfWarningsAndErrors()")
+
+  call s:ycm_mapping(subcommands, "FindSymbolInWorkspace", "<plug>(YCMFindSymbolInWorkspace)")
+  call s:ycm_mapping(subcommands, "FindSymbolInDocument", "<plug>(YCMFindSymbolInDocument)")
 
   if get(g:, 'lsp_verbosity', 0) >= 2
     for com in subcommands
