@@ -1,26 +1,50 @@
 " valid lsp implementations
 let s:lsp_impl_list = ["ycm", "vim-lsp"]
 
+if has("win32unix")
+  let s:ycm_name = "YouCompleteMe.win32unix"
+elseif has("win32")
+  let s:ycm_name = "YouCompleteMe.unix"
+else
+  let s:ycm_name = "YouCompleteMe"
+endif
+
+" This function just checks if the very basic plugin/youcompleteme.vim has
+" been loaded. It doesn't validate the state of the server. That part is
+" assumed to be ok and something that the lsp#ycm#ftplugin() function will
+" handle
 function! s:ycm_setup() abort
+  call s:log(2, "setting up YCM")
+
   " YCM has already been loaded
   if get(g:, 'loaded_youcompleteme', v:false)
-    return v:true
+    let succeeded = py3eval('"ycm_state" in globals()')
+    call s:log(2, "setting up YCM: already loaded. ycm_state is available?" succeeded)
+    return succeeded
   endif
 
   " install different variants so we can control what library gets added
-  if has("win32unix")
-    packadd YouCompleteMe.win32unix
-  elseif has("win32")
-    packadd YouCompleteMe.win32
-  else
-    packadd YouCompleteMe
-  endif
+  call s:log(2, "setting up YCM: calling packadd", s:ycm_name)
+  try
+    " packadd will fail if the YCM bits haven't been compiled, so we need to
+    " wrap it in try/endtry statements
+    execute "packadd" s:ycm_name
+  endtry
 
   if !get(g:, 'loaded_youcompleteme', v:false)
     echohl WarningMsg
-    echo "could not load YouCompleteMe: Maybe it wasn't found?"
+    echo "could not find and load YouCompleteMe via packadd" s:ycm_name
     echohl None
     return v:false
+  end
+
+  " this function only runs after vim_starting is false, so ycm will
+  " immediately try to load its python library and setup its state
+  " if there's no ycm_state at this point, YCM failed to load its library
+  let succeeded = py3eval('"ycm_state" in globals()')
+  if !succeeded
+    call s:log(2, "setting up YCM: ycm_state is available?", succeeded)
+    return succeeded
   end
 
   " FIXME: submit a PR for YCM. It always complains about fugitive files in
@@ -34,6 +58,7 @@ endfunction
 
 " TODO: vim-lsp handling
 function! s:vim_lsp_setup() abort
+  echom "vim-lsp setup is not implemented yet!"
 endfunction
 
 " can_use and setup need to be in a non-impl-specific file, otherwise we
@@ -52,6 +77,19 @@ function! filcab#lsp#setup() abort
     return
   end
 
+  if has('vim_starting')
+    " YouCompleteMe will postpone initialization until after VimEnter (check
+    " its plugin/youcompleteme.vim). Let's do the same so we pick up just
+    " after (if YCM was already loaded) its autocmd, or just in time for us to
+    " packadd
+    augroup filcabLspSetup
+      autocmd!
+      autocmd VimEnter * call filcab#lsp#setup()
+    augroup END
+    return
+  end
+
+  call s:log(2, "hello filcab#lsp#setup")
   for lsp_impl in get(g:, 'lsp_impls', s:lsp_impl_list)
     if index(s:lsp_impl_list, lsp_impl) < 0
       echohl WarningMsg
@@ -60,12 +98,16 @@ function! filcab#lsp#setup() abort
       continue
     end
 
+    " FIXME: Maybe send error output somewhere?
+    " If YCM is available *but* errors (e.g: compiled bits aren't compiled),
+    " do we want to show the error? Do we want to try another impl?
     if !s:lsp_impl_setup[lsp_impl]()
-      echo "prerequisites failed for" lsp_impl "lsp implementation"
+      echo "failed to setup" lsp_impl "lsp implementation"
       continue
     end
 
     let g:lsp_impl = lsp_impl
+    call extend(g:filcab_features, ["lsp", g:lsp_impl])
     break
   endfor
 endfunction
@@ -89,12 +131,20 @@ let s:ftplugin_max_retries = 100
 let s:ftplugin_wait_time = 10
 let s:ftplugin_num_retries = 0
 function! filcab#lsp#ftplugin() abort
+  call s:log(2, "call lsp#ftplugin. vim_starting:", has('vim_starting'))
+
   " if we're starting up, YCM hasn't yet connected, so we'll need to wait
+  " let's assume other lsp implementations work similarly
   if has('vim_starting')
     call s:log(1, "vim is starting, setting up autocmd")
     autocmd VimEnter * call filcab#lsp#ftplugin()
     return
   endif
+
+  if get(g:, 'lsp_impl', '') == ''
+    call s:log(1, "lsp#ftplugin() is running but no lsp_impl is set")
+    return
+  end
 
   if s:ftplugin_num_retries < s:ftplugin_max_retries && !s:lsp_impl_is_ready[g:lsp_impl]()
     let s:ftplugin_num_retries = s:ftplugin_num_retries - 1
@@ -106,9 +156,11 @@ function! filcab#lsp#ftplugin() abort
     echom "LSP server took too long to become ready. Reverting to no LSP"
     let g:lsp_impl = ''
     echohl None
+    return
   endif
 
   if get(g:, 'lsp_impl', '') != ''
+    call s:log(2, "call lsp#ftplugin for", g:lsp_impl)
     call s:lsp_impl_ftplugin[g:lsp_impl]()
   endif
 
