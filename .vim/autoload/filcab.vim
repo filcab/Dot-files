@@ -101,6 +101,22 @@ function! filcab#CTRL_X_Help()
   map <C-x>
 endfunction
 
+function! filcab#map_Help(maparg) abort
+  redir => maps
+  " get any extra maps
+  execute "silent" "map" a:maparg
+  redir END
+  let lines = split(maps, "\n")
+
+  let options = #{
+    \ title: a:maparg..' key bindings',
+    \ padding: [0,1,0,1],
+    \ border: [],
+    \ filter: 'popup_filter_yesno',
+    \ }
+  call popup_dialog(lines, options)
+endfunction
+
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 " Highlight all instances of word under cursor, when idle.
 " Useful when studying strange source code.
