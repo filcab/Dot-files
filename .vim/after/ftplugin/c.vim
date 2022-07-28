@@ -58,4 +58,6 @@ compiler clang
 " Extra clang-check keybinding. Mostly unused
 nnoremap <buffer><silent><unique> <F5> :call filcab#c#ClangCheck()<CR><CR>
 
+
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '').."|call filcab#lsp#undo_mappings()"
 let b:did_filcab_after_c_ftplugin = 1

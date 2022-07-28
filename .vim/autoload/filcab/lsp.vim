@@ -167,35 +167,65 @@ function! filcab#lsp#ftplugin() abort
   call filcab#lsp#install_mappings()
 endfunction
 
-" s:install_mapping(keys, command)
-function! s:install_mapping(keys, command)
-  let map_type = 'n'
-
-  let map_arg = '<plug>(FilcabLsp'.a:command.')'
+function! s:install_mapping(map_type, keys, map_arg)
   " only setup the mapping if the plug mapping exists
-  if maparg(map_arg) != ''
-    execute map_type.'map' '<buffer><unique>' '<localleader>'.a:keys map_arg
+  if maparg(a:map_arg, a:map_type) != ''
+    execute a:map_type.'map' '<buffer><unique>' a:keys a:map_arg
   endif
 endfunction
 
-function! filcab#lsp#install_mappings() abort
+function! s:uninstall_mapping(map_type, keys, map_arg) abort
+  " only remove the mapping if the plug mapping is what we expect
+  if maparg(a:keys) == a:map_arg
+    execute a:map_type.'unmap' '<buffer>' a:keys
+  endif
+endfunction
+
+function! s:do_mappings(func) abort
+  let map_type = 'n'
+  let prefix = '<localleader>'
+
   " these are valid for ycm for sure. Needs checking with vim-lsp
-  call s:install_mapping('fw', "FindSymbolInWorkspace")
-  call s:install_mapping('fd', "FindSymbolInDocument")
-  call s:install_mapping('f', 'Fixit')
-  call s:install_mapping('<tab>', 'Format')
-  call s:install_mapping('d', "GetDoc")
-  call s:install_mapping('p', "GetParent")
-  call s:install_mapping('T', "GetType")
-  call s:install_mapping('t', "GetTypeFast")
-  call s:install_mapping('G', "GoTo")
-  call s:install_mapping('C', "GoToCallers")
-  call s:install_mapping('c', "GoToCallees")
-  call s:install_mapping('o', "GoToDocumentOutline")
-  call s:install_mapping('g', "GoToFast")
-  call s:install_mapping('i', "GoToInclude")
-  call s:install_mapping('r', "GoToReferences")
-  call s:install_mapping('s', "GoToSymbol")
-  call s:install_mapping('R', "Rename")
-  call s:install_mapping('<f5>', "Refresh")
+  let mappings = {
+        \ 'fw': "FindSymbolInWorkspace",
+        \ 'fd': "FindSymbolInDocument",
+        \ 'f': 'Fixit',
+        \ '<tab>': 'Format',
+        \ 'd': "GetDoc",
+        \ 'p': "GetParent",
+        \ 'T': "GetType",
+        \ 't': "GetTypeFast",
+        \ 'G': "GoTo",
+        \ 'C': "GoToCallers",
+        \ 'c': "GoToCallees",
+        \ 'o': "GoToDocumentOutline",
+        \ 'g': "GoToFast",
+        \ 'i': "GoToInclude",
+        \ 'r': "GoToReferences",
+        \ 's': "GoToSymbol",
+        \ 'R': "Rename",
+        \ '<f5>': "Refresh",
+        \ }
+
+  for [keys, command] in items(mappings)
+    call a:func(map_type, prefix..keys, '<plug>(FilcabLsp'.command.')')
+  endfor
+endfunction
+
+function! filcab#lsp#install_mappings() abort
+  if get(b:, 'filcab_lsp_mappings', v:false)
+    return
+  endif
+
+  call s:do_mappings(funcref('s:install_mapping'))
+  let b:filcab_lsp_mappings = v:true
+endfunction
+
+function! filcab#lsp#undo_mappings() abort
+  if !get(b:, 'filcab_lsp_mappings', v:false)
+    return
+  endif
+
+  call s:do_mappings(funcref('s:uninstall_mapping'))
+  let b:filcab_lsp_mappings = v:false
 endfunction
