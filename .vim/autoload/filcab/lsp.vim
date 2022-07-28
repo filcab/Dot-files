@@ -4,7 +4,7 @@ let s:lsp_impl_list = ["ycm", "vim-lsp"]
 if has("win32unix")
   let s:ycm_name = "YouCompleteMe.win32unix"
 elseif has("win32")
-  let s:ycm_name = "YouCompleteMe.unix"
+  let s:ycm_name = "YouCompleteMe.win32"
 else
   let s:ycm_name = "YouCompleteMe"
 endif
@@ -19,7 +19,7 @@ function! s:ycm_setup() abort
   " YCM has already been loaded
   if get(g:, 'loaded_youcompleteme', v:false)
     let succeeded = py3eval('"ycm_state" in globals()')
-    call s:log(2, "setting up YCM: already loaded. ycm_state is available?" succeeded)
+    call s:log(2, "setting up YCM: already loaded. ycm_state is available?", succeeded)
     return succeeded
   endif
 

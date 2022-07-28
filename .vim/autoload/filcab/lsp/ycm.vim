@@ -1,16 +1,27 @@
 " arguments:
 " ycm_mapping(plugname, command=':YcmCompleter '.plugname, end='<cr>')
 function! s:ycm_mapping(subcommands, ...) abort
-  breakadd here
   let plug_name = a:1
   let base_ycm_command = a:1
   let map_type = "n"
 
+  let end_str = '<cr>'
+  if a:0 >= 3
+    let end_str = a:3
+  end
+
+  let nore = 'nore'
   if a:0 >= 2
     if a:2[0] == ':'
       let base_ycm_command = ''
-      let ycm_command = ':<C-u>'..a:2[1:]
-    elseif a:2[0][:6] ==? "<plug>"
+      if end_str == '<cr>'
+        let ycm_command = '<cmd>'..a:2[1:]
+      else
+        let ycm_command = ':<C-u>'..a:2[1:]
+      endif
+    elseif a:2[:5] ==? "<plug>"
+      " <plug> mappings need can't have 'nore'(map) to function
+      let nore = ''
       let base_ycm_command = ''
       let ycm_command = a:2
     else
@@ -22,12 +33,7 @@ function! s:ycm_mapping(subcommands, ...) abort
     if index(a:subcommands, base_ycm_command) == -1
       return
     end
-    let ycm_command = ":<C-u>YcmCompleter "..base_ycm_command
-  end
-
-  let end_str = '<cr>'
-  if a:0 >= 3
-    let end_str = a:3
+    let ycm_command = "<cmd>YcmCompleter "..base_ycm_command
   end
 
   " unneeded for now
@@ -35,7 +41,7 @@ function! s:ycm_mapping(subcommands, ...) abort
   "   let map_type = a:3
   " end
 
-  execute map_type."noremap" "<unique><buffer>" "<plug>(FilcabLsp".plug_name.")" ycm_command..end_str
+  execute map_type..nore.."map" "<unique><buffer>" "<plug>(FilcabLsp".plug_name.")" ycm_command..end_str
 endfunction
 
 function! filcab#lsp#ycm#is_ready() abort
