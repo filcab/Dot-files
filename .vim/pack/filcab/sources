@@ -27,8 +27,9 @@ opt/async|git|https://github.com/prabirshrestha/async.vim.git
 opt/vim-lsp|git|https://github.com/prabirshrestha/vim-lsp.git
 ##
 
-# Well behaved mode, plugin only sets defaults and two commands
-start/python-mode|git|https://github.com/klen/python-mode.git
+# This mode isn't ready for being used from win32unix, so we need to only add
+# it if that's not the case
+opt/python-mode|git|https://github.com/klen/python-mode.git
 # Well behaved enough. Should add a variable to not define all the :C* commands
 start/vim-rust|git|https://github.com/rust-lang/rust.vim.git
 start/vim-toml|git|https://github.com/cespare/vim-toml.git

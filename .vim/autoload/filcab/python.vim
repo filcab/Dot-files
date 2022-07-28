@@ -43,6 +43,12 @@ function filcab#python#init() abort
     return
   endif
 
+  if !has('win32unix')
+    " python-mode gets its paths screwed up when being run from win32unix,
+    " which means it can't add its path to sys.path
+    packadd python-mode
+  endif
+
   call filcab#lsp#setup()
   if get(g:, 'lsp_impl', '') == "vim-lsp" && executable('pylsp')
     echo "Setting up vim-lsp for Python"
