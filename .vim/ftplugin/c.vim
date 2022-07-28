@@ -4,8 +4,6 @@
 call filcab#c#init()
 call filcab#lsp#ftplugin()
 
-setlocal commentstring=//%s
-
 " Make ninja the default makeprg and make clang the default compiler (for errorformat)
 compiler! clang
 

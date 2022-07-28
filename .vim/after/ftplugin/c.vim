@@ -3,6 +3,10 @@ if exists("b:did_filcab_after_c_ftplugin")
   finish
 endif
 
+" This is set in vim's ftplugin/c.vim which is loaded after our
+" ftplugin/c.vim, so am setting it in after/ftplugin
+setlocal commentstring=//%s
+
 if get(g:, 'lsp_impl', '') == 'vim-lsp'
   setlocal omnifunc=lsp#complete
 elseif get(g:, 'lsp_impl', '') == ''
