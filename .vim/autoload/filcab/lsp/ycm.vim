@@ -41,7 +41,14 @@ function! s:ycm_mapping(subcommands, ...) abort
   "   let map_type = a:3
   " end
 
-  execute map_type..nore.."map" "<unique><buffer>" "<plug>(FilcabLsp".plug_name.")" ycm_command..end_str
+  " these are buffer local because different buffers with different languages
+  " might have different commands
+  let plug_cmd = "<plug>(FilcabLsp".plug_name.")"
+  " on file reload, don't overwrite the command (should be defined to the same
+  " thing anyway)
+  if maparg(plug_cmd) == ''
+    execute map_type..nore.."map" "<unique><buffer>" plug_cmd ycm_command..end_str
+  endif
 endfunction
 
 function! filcab#lsp#ycm#is_ready() abort
