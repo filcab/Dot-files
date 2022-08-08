@@ -154,6 +154,8 @@ function! filcab#lsp#ftplugin() abort
   elseif s:ftplugin_num_retries == s:ftplugin_max_retries
     echohl WarningMsg
     echom "LSP server took too long to become ready. Reverting to no LSP"
+    call remove(g:filcab_features, "lsp", g:lsp_impl)
+    call remove(g:filcab_features, g:lsp_impl)
     let g:lsp_impl = ''
     echohl None
     return

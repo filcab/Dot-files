@@ -81,13 +81,16 @@ let g:grepper.tools =
 
 " Try finding ripgrep to use with vim's grep functionality
 if executable('rg')
+  call extend(g:filcab_features, ["ripgrep"])
   " Assume ripgrep is in cargo directory (if available), and that's in PATH
   let &grepprg = "rg --vimgrep --smart-case"
 elseif executable("/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe")
+  call extend(g:filcab_features, ["ripgrep"])
   " special vimgrep case for WSL (won't be able to search WSL drives,
   " though...)
   let &grepprg = "/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe --vimgrep --smart-case"
 elseif executable('ack')
+  call extend(g:filcab_features, ["ack"])
   " Use ack if rg is not available
   let &grepprg = 'ack -H --nocolor --nogroup --column --smart-case'
 " else leave it alone
@@ -294,7 +297,6 @@ match Error /\s\+\%#\@!$/
 
 packadd vim-matchup
 if !get(g:, 'loaded_matchup', 0)
-  " FIXME: Probably should remove this
   " Load matchit.vim, but only if the user hasn't installed a newer version.
   if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
     runtime! macros/matchit.vim

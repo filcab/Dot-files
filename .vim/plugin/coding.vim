@@ -31,6 +31,7 @@ let g:ycm_global_ycm_extra_conf = expand($MYVIMRUNTIME . '/ycm_extra_conf.py')
 " platforms))
 let g:ycm_rust_src_path = $RUST_SRC_PATH
 if executable("rustc")
+  call extend(g:filcab_features, ["rustc"])
   let g:ycm_rust_toolchain_root = system("rustc --print sysroot")
 endif
 
