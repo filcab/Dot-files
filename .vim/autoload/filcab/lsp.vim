@@ -184,32 +184,31 @@ function! s:uninstall_mapping(map_type, keys, map_arg) abort
 endfunction
 
 function! s:do_mappings(func) abort
-  let map_type = 'n'
   let prefix = '<localleader>'
 
   " these are valid for ycm for sure. Needs checking with vim-lsp
-  let mappings = {
-        \ 'fw': "FindSymbolInWorkspace",
-        \ 'fd': "FindSymbolInDocument",
-        \ 'f': 'Fixit',
-        \ '<tab>': 'Format',
-        \ 'd': "GetDoc",
-        \ 'p': "GetParent",
-        \ 'T': "GetType",
-        \ 't': "GetTypeFast",
-        \ 'G': "GoTo",
-        \ 'C': "GoToCallers",
-        \ 'c': "GoToCallees",
-        \ 'o': "GoToDocumentOutline",
-        \ 'g': "GoToFast",
-        \ 'i': "GoToInclude",
-        \ 'r': "GoToReferences",
-        \ 's': "GoToSymbol",
-        \ 'R': "Rename",
-        \ '<f5>': "Refresh",
-        \ }
+  let mappings = [
+        \ ['', '<tab>', 'Format'],
+        \ ['n', 'fw', "FindSymbolInWorkspace"],
+        \ ['n', 'fd', "FindSymbolInDocument"],
+        \ ['n', 'f', 'Fixit'],
+        \ ['n', 'd', "GetDoc"],
+        \ ['n', 'p', "GetParent"],
+        \ ['n', 'T', "GetType"],
+        \ ['n', 't', "GetTypeFast"],
+        \ ['n', 'G', "GoTo"],
+        \ ['n', 'C', "GoToCallers"],
+        \ ['n', 'c', "GoToCallees"],
+        \ ['n', 'o', "GoToDocumentOutline"],
+        \ ['n', 'g', "GoToFast"],
+        \ ['n', 'i', "GoToInclude"],
+        \ ['n', 'r', "GoToReferences"],
+        \ ['n', 's', "GoToSymbol"],
+        \ ['n', 'R', "Rename"],
+        \ ['n', '<f5>', "Refresh"],
+        \ ]
 
-  for [keys, command] in items(mappings)
+  for [map_type, command, keys] in mappings
     call a:func(map_type, prefix..keys, '<plug>(FilcabLsp'.command.')')
   endfor
 endfunction
