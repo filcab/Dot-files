@@ -41,15 +41,15 @@ nnoremap <unique> [? <Cmd>WhichKey '['<cr>
 nnoremap <unique> ]? <Cmd>WhichKey ']'<cr>
 tnoremap <unique> [? <Cmd>WhichKey '['<cr>
 tnoremap <unique> ]? <Cmd>WhichKey ']'<cr>
-nnoremap <unique> <C-w>? <Cmd>call filcab#CTRL_W_Help()<cr>
-tnoremap <unique> <C-w>? <Cmd>call filcab#CTRL_W_Help()<cr>
-inoremap <unique> <C-x>? <Cmd>call filcab#CTRL_X_Help()<cr>
+nnoremap <unique> <C-w>? <Cmd>call filcab#help#CTRL_W_Help()<cr>
+tnoremap <unique> <C-w>? <Cmd>call filcab#help#CTRL_W_Help()<cr>
+inoremap <unique> <C-x>? <Cmd>call filcab#help#CTRL_X_Help()<cr>
 " FIXME: Add one for netrw
 " FIXME: Maybe fugitive buffers?
 
 " From http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 nnoremap <unique> z/ :if filcab#AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
-noremap <unique> <localleader>? <Cmd>call filcab#map_Help('<localleader>')<cr>
+noremap <unique> <localleader>? <Cmd>call filcab#help#map_Help('<localleader>')<cr>
 
 let g:loaded_mappings = 1
