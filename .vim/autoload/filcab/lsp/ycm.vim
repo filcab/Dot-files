@@ -33,7 +33,11 @@ function! s:ycm_mapping(subcommands, ...) abort
     if index(a:subcommands, base_ycm_command) == -1
       return
     end
-    let ycm_command = "<cmd>YcmCompleter "..base_ycm_command
+    if end_str ==? "<cr>"
+      let ycm_command = "<cmd>YcmCompleter "..base_ycm_command
+    else
+      let ycm_command = ":<c-u>YcmCompleter "..base_ycm_command
+    endif
   end
 
   " unneeded for now
@@ -94,7 +98,7 @@ function! filcab#lsp#ycm#ftplugin() abort
   call s:ycm_mapping(subcommands, "Rename", "RefactorRename", " ")
 
   call s:ycm_mapping(subcommands, "Refresh", ":YcmForceCompileAndDiagnostics")
-  call s:ycm_mapping(subcommands, "Stats", ":call filcab#lsp#ycm#ShowYCMNumberOfWarningsAndErrors()")
+  call s:ycm_mapping(subcommands, "Stats", ":call <SID>ShowYCMNumberOfWarningsAndErrors()")
 
   call s:ycm_mapping(subcommands, "FindSymbolInWorkspace", "<plug>(YCMFindSymbolInWorkspace)")
   call s:ycm_mapping(subcommands, "FindSymbolInDocument", "<plug>(YCMFindSymbolInDocument)")
@@ -108,7 +112,7 @@ function! filcab#lsp#ycm#ftplugin() abort
   endif
 endfunction
 
-function! filcab#lsp#ycm#ShowYCMNumberOfWarningsAndErrors()
+function! s:ShowYCMNumberOfWarningsAndErrors()
   if !get(g:, 'disable_youcompleteme', v:false) && get(g:, 'loaded_youcompleteme', v:false)
     echo 'YCM reports: Errors: ' . youcompleteme#GetErrorCount()
         \ . ' Warnings: ' . youcompleteme#GetWarningCount()
