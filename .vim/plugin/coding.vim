@@ -13,7 +13,8 @@ endif
 let g:clang_format_on_save = 0
 
 " tell clangd to query the driver for extra arguments (e.g: include paths)
-let g:clangd_args = ["--query-driver=*"] + get(g:, 'clangd_args', [])
+" '-log=verbose'
+let g:clangd_args = ['--query-driver=*', '--clang-tidy', '--suggest-missing-includes'] + get(g:, 'clangd_args', [])
 
 " lsp implementations to try, in the desired order
 let g:lsp_impls = ["ycm", "vim-lsp"]
@@ -62,3 +63,6 @@ elseif has('unix')
 else
   echomsg "Unknown vim platform! !win32, !unix, !win32unix. python's black compilation dir will have no suffix"
 endif
+
+
+let g:filecheck_auto_enable = v:true
