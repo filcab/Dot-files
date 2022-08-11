@@ -14,7 +14,10 @@ if has('python3') || has('python3/dyn')
   let g:pymode_python = 'python3'
 endif
 
-if has('win32unix')
+" FIXME: vim from git-bash will crash upon loading python if it was invoked
+" from git commit as an editor. Let's not issue any 'py3' commands if it looks
+" like that's the case, those editors are very short-lived anyway
+if has('win32unix') && expand("%:t") !=# "COMMIT_EDITMSG"
   " adjust the temporary file directory as mingw vim will set TMP, etc to
   " /tmp, which other libraries (loaded python) won't know what to do with
   " know what to do with and will fallback to the SYSTEM temp dir
