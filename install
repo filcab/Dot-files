@@ -70,7 +70,8 @@ def validate_link(lnk, dst, config):
         error("{} exists but is not a symlink".format(lnk))
         return True
 
-    link = lnk.readlink().resolve()
+    dst = dst.resolve()
+    link = lnk.resolve()
     if link != dst:
         error(
             "{} exists but is not a symlink to {}, it points to {}".format(
