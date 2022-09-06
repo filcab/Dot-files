@@ -61,6 +61,9 @@ endfunction
 
 function! filcab#lsp#ycm#ftplugin() abort
   let subcommands = py3eval('ycm_state.GetDefinedSubcommands()')
+  if get(g:, 'lsp_verbosity', 0) >= 1
+    echom "subcommands:" subcommands
+  endif
 
   call s:ycm_mapping(subcommands, "Fixit")
   call s:ycm_mapping(subcommands, "Format")
@@ -105,7 +108,7 @@ function! filcab#lsp#ycm#ftplugin() abort
 
   if get(g:, 'lsp_verbosity', 0) >= 2
     for com in subcommands
-      if !hasmapto(":<C-u>YcmCompleter "..com)
+      if !hasmapto(":<C-u>YcmCompleter "..com) && !hasmapto("<cmd>YcmCompleter "..com)
         echom "missing YcmCompleter command in plugs:" com
       endif
     endfor

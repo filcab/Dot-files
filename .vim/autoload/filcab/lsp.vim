@@ -208,7 +208,7 @@ function! s:do_mappings(func) abort
         \ ['n', '<f5>', "Refresh"],
         \ ]
 
-  for [map_type, command, keys] in mappings
+  for [map_type, keys, command] in mappings
     call a:func(map_type, prefix..keys, '<plug>(FilcabLsp'.command.')')
   endfor
 endfunction
