@@ -94,7 +94,8 @@ fi
 
 ## cmake
 # So ctest shows us the output if a test failed
-export CTEST_OUTPUT_ON_FAILURE=1
+export CTEST_OUTPUT_ON_FAILURE=On
+export CMAKE_EXPORT_COMPILE_COMMANDS=On
 
 ## color for manpages:
 export LESS_TERMCAP_mb=$'\e[01;31m'
