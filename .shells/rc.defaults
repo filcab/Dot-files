@@ -116,6 +116,12 @@ export LESS_TERMCAP_ue=$'\e[0m'
 
 ### Load ssh-agent settings or start it and export its settings
 maybe_start_ssh_agent() {
+  case "$(which ssh-agent)" in
+    /c/WINDOWS/System32/*)
+      return
+      ;;
+  esac
+
   # Bail out if we're using ssh-agent forwarding
   if [ ! -z "${SSH_CONNECTION}" -a -S "${SSH_AUTH_SOCK}" ]; then
     # Don't print anything if we're under tmux (we've probably already
