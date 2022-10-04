@@ -106,6 +106,11 @@ function! filcab#lsp#ycm#ftplugin() abort
   call s:ycm_mapping(subcommands, "FindSymbolInWorkspace", "<plug>(YCMFindSymbolInWorkspace)")
   call s:ycm_mapping(subcommands, "FindSymbolInDocument", "<plug>(YCMFindSymbolInDocument)")
 
+  call s:ycm_mapping(subcommands, "ToggleInlayHints", "<plug>(YCMToggleInlayHints)", "")
+  call s:ycm_mapping(subcommands, "Hover", "<plug>(YCMHover)", "")
+
+  call s:ycm_mapping(subcommands, "ShowDetailedDiagnostic", ":YcmShowDetailedDiagnostic ")
+
   if get(g:, 'lsp_verbosity', 0) >= 2
     for com in subcommands
       if !hasmapto(":<C-u>YcmCompleter "..com) && !hasmapto("<cmd>YcmCompleter "..com)

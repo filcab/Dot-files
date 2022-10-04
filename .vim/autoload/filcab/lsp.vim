@@ -206,6 +206,9 @@ function! s:do_mappings(func) abort
         \ ['n', 's', "GoToSymbol"],
         \ ['n', 'R', "Rename"],
         \ ['n', '<f5>', "Refresh"],
+        \ ['n', 'h', "ToggleInlayHints"],
+        \ ['n', 'H', "Hover"],
+        \ ['n', 'D', "ShowDetailedDiagnostic"],
         \ ]
 
   for [map_type, keys, command] in mappings
