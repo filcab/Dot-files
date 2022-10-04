@@ -1,11 +1,13 @@
+" This is set in vim's ftplugin/c.vim which is loaded after our
+" ftplugin/c.vim, so am setting it in after/ftplugin
+" that file also gets loaded more times, so dump this *before* the check for
+" did_filcab_after_c_ftplugin
+setlocal commentstring=//%s
+
 " This file will also be sourced by the cpp ftplugin
 if exists("b:did_filcab_after_c_ftplugin")
   finish
 endif
-
-" This is set in vim's ftplugin/c.vim which is loaded after our
-" ftplugin/c.vim, so am setting it in after/ftplugin
-setlocal commentstring=//%s
 
 if get(g:, 'lsp_impl', '') == 'vim-lsp'
   setlocal omnifunc=lsp#complete
