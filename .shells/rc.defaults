@@ -68,6 +68,13 @@ case $(uname -r) in
     mount_c=$(findmnt C:\\ -o target -n)
     # WSL only, not used in MINGW, as that'll be git-bash already
     alias git-bash="\"/${mount_c}c/Program Files/Git/bin/bash.exe\" --login -i"
+    # don't use colors for ninja on Windows, as between mingw and Windows
+    # console defaults, we might lose the colors and get mangled characters
+    export NINJA_STATUS="%e [%u/%r/%f] "
+    ;;
+  *)
+    ### Ninja status: "time [left/running/finished]"
+    export NINJA_STATUS="$(tput bold)%e$(tput sgr0) [$(tput bold)$(tput setaf 1)%u$(tput sgr0)/$(tput bold)$(tput setaf 3)%r$(tput sgr0)/$(tput bold)$(tput setaf 2)%f$(tput sgr0)] "
     ;;
 esac
 
@@ -167,9 +174,6 @@ maybe_start_ssh_agent() {
 }
 maybe_start_ssh_agent
 
-
-### Ninja status: "time [left/running/finished]"
-export NINJA_STATUS="$(tput bold)%e$(tput sgr0) [$(tput bold)$(tput setaf 1)%u$(tput sgr0)/$(tput bold)$(tput setaf 3)%r$(tput sgr0)/$(tput bold)$(tput setaf 2)%f$(tput sgr0)] "
 
 ### Tell ripgrep where its configuration file is (there's no default set path)
 export RIPGREP_CONFIG_PATH=~/.config/ripgreprc
