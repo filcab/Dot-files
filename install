@@ -35,33 +35,6 @@ def error(*args, **kwargs):
     print("[E]", *args, **kwargs)
 
 
-if sys.platform == "win32":
-    __CSL = None
-
-    def symlink(source, link_name):
-        """symlink(source, link_name)
-        Creates a symbolic link pointing to source named link_name"""
-        global __CSL
-        if __CSL is None:
-            import ctypes
-
-            csl = ctypes.windll.kernel32.CreateSymbolicLinkW
-            csl.argtypes = (ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint32)
-            csl.restype = ctypes.c_ubyte
-            __CSL = csl
-        flags = 0
-        if source is not None and os.path.isdir(source):
-            flags = 1
-        if __CSL(str(link_name), str(source), flags) == 0:
-            raise ctypes.WinError()
-
-
-else:
-
-    def symlink(source, link_name):
-        return os.symlink(source, link_name)
-
-
 def validate_link(lnk, dst, config):
     if not lnk.exists():
         error("symlink to {} is not installed at {}".format(dst, lnk))
@@ -146,7 +119,7 @@ def symlink_file(config, lnk, dst):
             else:
                 print("  Creating symlink: {} -> {}".format(lnk, dst))
                 lnk.parent.mkdir(parents=True, exist_ok=True)
-            symlink(dst, lnk)
+            os.symlink(dst, lnk)
 
 
 def install(d, config):
