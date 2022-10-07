@@ -5,8 +5,19 @@
 
 ### Set $EDITOR to be whatever vim we find. We might override it later
 # FIXME: Just loop over the possible paths and set EDITOR once, accordingly
-if [ -z "$EDITOR" ] && hash vim > /dev/null 2>&1; then
-  export EDITOR=vim
+if [ -z "$EDITOR" ]; then
+  case ${uname_s} in
+    MINGW*)
+      if hash vim.bat > /dev/null 2>&1; then
+        export EDITOR=vim
+      fi
+      ;;
+    *)
+      if hash vim > /dev/null 2>&1; then
+        export EDITOR=vim
+      fi
+      ;;
+  esac
 fi
 
 
