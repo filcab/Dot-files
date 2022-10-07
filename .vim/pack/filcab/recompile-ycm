@@ -4,7 +4,6 @@
 
 from pathlib import Path
 
-import glob
 import argparse
 import os
 import platform
@@ -72,58 +71,51 @@ elif platform.system() in ["Linux", "FreeBSD"]:
     lib_suffixes = ["so", "so.1"]
 else:
     print(
-        "Unknown platform: {}. Please edit this script and add it.".format(
-            platform.system()
-        ),
+        f"Unknown platform: {platform.system()}. Please edit this script and add it.",
         file=sys.stderr,
     )
     sys.exit(1)
 
 
-tentative_llvm_paths = list(map(Path, [
-    # common dev paths
-    "~/dev/llvm/install",
-    "~/dev/llvm/build",
-    "~/work/llvm-cmake",
-    "~/dev/brew/opt/llvm",
-    "C:/code/llvm/install",
-    "C:/code/llvm/build",
-    # linux (debian, at least)
-    "/usr/lib/llvm-11",
-    "/usr/lib/llvm-12",
-    "/usr/lib/llvm-13",
-    "/usr/lib/llvm-14",
-    "/usr/lib/llvm-15",
-    # freebsd ports
-    "/usr/local/llvm14",
-    "/usr/local/llvm15",
-]))
+tentative_llvm_paths = list(
+    map(Path.resolve,
+        map(Path, [
+            # common dev paths
+            "~/dev/llvm/install",
+            "~/dev/llvm/build",
+            "~/work/llvm-cmake",
+            "~/dev/brew/opt/llvm",
+            "C:/code/llvm/install",
+            "C:/code/llvm/build",
+            # linux (debian, at least)
+            "/usr/lib/llvm-11",
+            "/usr/lib/llvm-12",
+            "/usr/lib/llvm-13",
+            "/usr/lib/llvm-14",
+            "/usr/lib/llvm-15",
+            # freebsd ports
+            "/usr/local/llvm14",
+            "/usr/local/llvm15",
+        ]))
+)
 
-for d in tentative_llvm_paths:
-    d = Path(os.path.expanduser(d)).resolve()
-    for lib_suffix in lib_suffixes:
-        maybe_libclang = d / f'lib/libclang.{lib_suffix}'
-        if d.is_dir() and maybe_libclang.is_file():
-            llvm_root = str(d.as_posix()) + "/"
-            break
+libclang_lib, lib_suffix = next(
+    (x, lib_suffix)
+    for d in tentative_llvm_paths
+    for lib_suffix in lib_suffixes
+    for x in d.glob(f"lib/lib*clang.{lib_suffix}")
+)
+
 # We'll actually get an exception if we didn't find it
-assert llvm_root
-print("LLVM root: {}".format(llvm_root))
+assert libclang_lib
+
+llvm_root = libclang_lib.parent.parent
+print(f"LLVM root: {llvm_root}")
 
 
 # We'll actually get an exception if we didn't find it
 assert lib_suffix
-print("Library file suffix: {}".format(lib_suffix))
-
-
-os.environ["EXTRA_CMAKE_ARGS"] = "-DEXTERNAL_LIBCLANG_PATH:FILEPATH={}".format(
-    glob.glob("{}/lib/libclang.{}*".format(llvm_root, lib_suffix))[0]
-).replace('\\', '/')
-
-
-# For some reason we need this on Windows
-if platform.system() == "Windows":
-    os.environ["EXTRA_CMAKE_ARGS"] += " -DPATH_TO_LLVM_ROOT:PATH={}".format(llvm_root)
+print(f"Library file suffix: {lib_suffix}")
 
 
 # Default to enabling clang, assuming the code above is ok
@@ -142,7 +134,7 @@ class Completers(object):
         self.skipped.append(completer)
 
     def cli_args(self):
-        return ["--{}-completer".format(c) for c in self.enabled]
+        return [f"--{c}-completer" for c in self.enabled]
 
     def warn_skipped(self, prefix="\n"):
         if not self.skipped:
@@ -150,7 +142,7 @@ class Completers(object):
 
         print(f"{prefix}Skipped completers:")
         for c in self.skipped:
-            print("  {}".format(c))
+            print(f"  {c}")
 
 
 completers = Completers()
@@ -171,11 +163,18 @@ find_executable_enable_completer("node", "ts")
 # Warn before building so users can cancel if they want
 completers.warn_skipped()
 
+env = os.environ.copy()
+env["EXTRA_CMAKE_ARGS"] = f"-DEXTERNAL_LIBCLANG_PATH:FILEPATH={libclang_lib.as_posix()}"
+# For some reason we need this on Windows
+if platform.system() == "Windows":
+    env["EXTRA_CMAKE_ARGS"] += f" -DPATH_TO_LLVM_ROOT:PATH={llvm_root.as_posix()}"
+
+
 # , '--build-dir={}'.format(os.path.join(os.getcwd(), platform.system()))
 cmd = [sys.executable, "install.py"] + completers.cli_args()
 # ensure all stdout lines were printed before we exec
-print("Executing: {}".format(" ".join(cmd)), flush=True)
-subprocess.check_call(cmd, env=os.environ)
+print(f"Executing: {' '.join(cmd)}", flush=True)
+subprocess.check_call(cmd, env=env)
 
 # Also warn at the end, as we might have a big backlog
 completers.warn_skipped()
