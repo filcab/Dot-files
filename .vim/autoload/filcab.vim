@@ -44,6 +44,10 @@ endfunction
 
 " Shared between C/C++ and Javascript
 function! filcab#ClangFormat()
+  if !get(g:, 'clang_format_path', 0)
+    echoerr "Could not find clang-format"
+  endif
+
   " Doesn't do any verification. We've warned before.
   if !has('python') && !has('python3')
     echo 'Could not clang-format. Python not available.'
