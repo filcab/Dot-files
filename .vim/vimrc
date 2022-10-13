@@ -117,15 +117,20 @@ if has("win32") || has('win32unix') " only enter for stuff running on windows
   endif
 endif
 
+"Auto-reload vimrc (with whatever path vim might have)
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC
+" resolve any symlinks in $MYVIMRC
+let $MYVIMRC = resolve($MYVIMRC)
+
+"Auto-reload vimrc (with the resolved path)
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC
+
 " Set $MYVIMRUNTIME from $MYVIMRC so we can use it in many other places
 let $MYVIMRUNTIME = fnamemodify($MYVIMRC, ":p:h")
 if has('win32unix')
   " we're on cygwin/mingw, so switch /X to X:
   let $MYVIMRUNTIME = substitute($MYVIMRUNTIME, '^/\(.\)\(.*\)$', '\1:\2', '')
 endif
-
-"Auto-reload vimrc
-autocmd! BufWritePost $MYVIMRC source $MYVIMRC
 
 " Allow some common commands with the first letter(s) capitalized
 command! -bang -nargs=? -complete=file E e<bang> <args>
