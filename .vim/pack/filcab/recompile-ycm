@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-# TODO: Use vswhere to locate and use vcvarsall
-
 from pathlib import Path
 
 import argparse
@@ -78,7 +76,7 @@ else:
 
 
 tentative_llvm_paths = list(
-    map(Path.resolve,
+    map(Path.resolve, map(Path.expanduser,
         map(Path, [
             # common dev paths
             "~/dev/llvm/install",
@@ -96,7 +94,7 @@ tentative_llvm_paths = list(
             # freebsd ports
             "/usr/local/llvm14",
             "/usr/local/llvm15",
-        ]))
+        ])))
 )
 
 libclang_lib, lib_suffix = next(
