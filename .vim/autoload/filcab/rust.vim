@@ -1,6 +1,6 @@
 let filcab#rust#initted = v:false
 let filcab#rust#completer_flavours = []
-function filcab#rust#init() abort
+function! filcab#rust#init() abort
   if g:filcab#rust#initted
     return
   endif
@@ -21,6 +21,7 @@ function filcab#rust#init() abort
     return
   endif
 
+  call filcab#lsp#setup()
   " not checking for executable, as rust-analyzer might not be accessible via
   " $PATH
   if get(g:, 'lsp_impl', '') == "vim-lsp"
