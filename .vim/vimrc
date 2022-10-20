@@ -204,9 +204,8 @@ if has('wildmenu')
   set wildignore+=*.pyc
   set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png
   set wildignore+=.DS_Store,.git,.hg,.svn
-  set wildignore+=*.framework
-  set wildignore+=*~,*.swp,*.tmp
-  set wildmenu            " completion with menu
+  set wildignore+=*.swp,*.tmp
+  set wildmenu          " completion with menu
   set wildmode=longest:full " complete longest match and show menu
   " Make filename completion case-insensitive
   set wildignorecase
