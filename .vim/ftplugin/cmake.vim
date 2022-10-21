@@ -24,12 +24,5 @@ setlocal includeexpr=FilCabCMakeIncludeExpr(v:fname)
 " this first one probably doesn't work, but it's hard to debug
 setlocal suffixesadd=/CMakeLists.txt,.cmake
 
-" testing: this may be a bit too much. Can be useful if we get "find in
-" included files" working. Otherwise, we should just have path=.
-let globbed = map(glob('./**/CMakeLists.txt', v:true, v:true),
-      \           {key, val->fnamemodify(val, ":h")})
-execute "setlocal" "path="..globbed->join(',')
-
-
 noremap <buffer> <plug>(FilcabCMakeOpenSubdirCMakeLists) <cmd>execute ":edit" FilCabCMakeIncludeExpr(getline('.'))<cr>
 map <buffer> ,g <plug>(FilcabCMakeOpenSubdirCMakeLists)
