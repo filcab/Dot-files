@@ -67,12 +67,29 @@ function! filcab#hover#hover(word) abort
         \ 'callback': {x -> s:popup_closed() }
         \ })
   let s:current_popup = { 'id': popup_id, 'word': a:word }
-
-  " hack: copy &ft, for now. Should change to textprop or have a way for the
-  " functions to signal what we should do
-  call win_execute(popup_id, 'set ft='..&ft)
 endfunction
 
 function! s:popup_closed() abort
   let s:current_popup = s:null_popup
+endfunction
+
+function! filcab#hover#enable_with_example() abort
+  call filcab#hover#enable()
+
+  if prop_type_get("hoverPrefix") == {}
+    call prop_type_add("hoverPrefix", {"highlight": "Statement"})
+  endif
+  if prop_type_get("hoverThing") == {}
+    call prop_type_add("hoverThing", {"highlight": "Type"})
+  endif
+
+  let b:hover_functions = [
+        \ { x -> x[0] == 'a'
+        \   ? [{
+        \        'text': 'this is '..x,
+        \        'props': [{"col": 1, "type": "hoverPrefix", "length": 8},
+        \                  {"col": 9, "type": "hoverThing", 'length': len(x)}]
+        \     }]
+        \   : []
+        \ }]
 endfunction
