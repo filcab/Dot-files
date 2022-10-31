@@ -69,8 +69,16 @@ set sessionoptions-=options
 let maplocalleader=','
 
 " Dirs to search for programs used by plugins
-let g:clang_tools_search_paths = ['~/dev/llvm/install/bin', '~/dev/llvm/build/bin', 'c:/code/llvm/install/bin', 'c:/code/llvm/build/bin', 'c:/code/llvm/build-ninja/bin',  'c:/code/llvm/build-vs/bin']
-let g:binary_search_paths = ['~/dev/brew/bin', '~/dev/homebrew/bin']
+let g:clang_tools_search_paths = [
+      \ '~/dev/llvm/install/bin',
+      \ '~/dev/llvm/build/bin',
+      \ 'c:/code/llvm/install/bin',
+      \ 'c:/code/llvm/build/bin',
+      \ 'c:/code/llvm/build-ninja/bin',
+      \ 'c:/code/llvm/build-vs/bin',
+      \ '/usr/local/bin',
+      \ '/usr/bin',
+      \ ]
 
 " minimize + re-sort tools to put ripgrep near the top
 " start with git assuming stuff works. I sometimes am on a git repo and want
