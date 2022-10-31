@@ -43,7 +43,7 @@ set encoding=utf-8    " filcab: Not in sensible
 " Use Knuth-y underspace for trailing space
 " I once had a problem with › where it would show up wrong. Use ` instead
 " (I've actually come to prefer it, since it is smaller).
-set listchars=tab:`\ ,trail:⎕ ",eol:$
+set listchars=tab:`\ ,trail:⨯ ",eol:$
 set list
 
 set formatoptions+=j " Delete comment character when joining commented lines
