@@ -244,6 +244,8 @@ set hidden              " remember undo after quitting
 
 set mouse=v             " use mouse in visual mode (not normal,insert,command,help mode
 
+set nofixendofline      " don't add an end of line if the file doesn't already have one
+
 let g:yankring_history_dir = $MYVIMRUNTIME
 
 
