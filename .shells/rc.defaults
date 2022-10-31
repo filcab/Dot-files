@@ -204,4 +204,10 @@ maybe_start_ssh_agent
 
 
 ### Tell ripgrep where its configuration file is (there's no default set path)
+# always set this, as an inner shell might have rg
 export RIPGREP_CONFIG_PATH=~/.config/ripgreprc
+
+if hash rg > /dev/null 2>&1; then
+  ### Use rg as the default fzf content provider
+  export FZF_DEFAULT_COMMAND='rg --files'
+fi
