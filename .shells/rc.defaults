@@ -8,8 +8,22 @@
 if [ -z "$EDITOR" ]; then
   case ${uname_s} in
     MINGW*)
-      if hash vim.bat > /dev/null 2>&1; then
-        export EDITOR=vim
+      # special case, as it might not be tagged as executable, for some reason
+      if -f /c/Windows/vim.bat > /dev/null 2>&1; then
+        export EDITOR=vim.bat
+      fi
+      # test: not doing this and relying on git-for-windows' vim
+      # if win32-vim is installed, use that as an EDITOR, msys vim is just weird
+      # if type vim.bat >/dev/null 2>/dev/null; then
+      #   export EDITOR="winpty vim.bat"
+      #   alias vim="winpty vim.bat"
+      #   alias vimdiff="vim -d"
+      # fi
+      ;;
+    Darwin)
+      # Have we brewed a vim?
+      if [ -f ~/dev/brew/bin/vim -a -x ~/dev/brew/bin/vim ]; then
+        export EDITOR=~/dev/brew/bin/vim
       fi
       ;;
     *)
@@ -26,11 +40,6 @@ case ${uname_s} in
   Darwin)
     alias ldd='otool -L'
 
-    # Have we brewed a vim?
-    if [ -f ~/dev/brew/bin/vim -a -x ~/dev/brew/bin/vim ]; then
-      export EDITOR=~/dev/brew/bin/vim
-    fi
-
     ## Homebrew settings
     # Always build from source
     export HOMEBREW_BUILD_FROM_SOURCE=1
@@ -45,13 +54,6 @@ case ${uname_s} in
     # Use native symlinks on Windows by default. Assumes we have perms for
     # that, which needs to be done once per machine
     export MSYS="winsymlinks:nativestrict enable_pcon"
-    # test: not doing this and relying on git-for-windows' vim
-    # if win32-vim is installed, use that as an EDITOR, msys vim is just weird
-    # if type vim.bat >/dev/null 2>/dev/null; then
-    #   export EDITOR="winpty vim.bat"
-    #   alias vim="winpty vim.bat"
-    #   alias vimdiff="vim -d"
-    # fi
     ;;
 esac
 
