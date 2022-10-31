@@ -2,6 +2,26 @@ if !has('win32') && !has('win32unix')
   finish
 endif
 
+" Always use proper slashes on Windows if our shell looks like a *NIX one.
+" Windows shell settings require special care so they always work on:
+"   - Regular Windows (gvim.exe)
+"   - With and without winpty:
+"     - git-bash running installed (up-to-date) vim (same installation as previous gvim.exe)
+"     - git-bash running an older vim.exe (distributed with it)
+" 2021-11-09: Previously, I'd set the shell to cmd.exe on all Windows
+" executions. Let's try just on win32, but not on win32unix
+  " 2021-11-09: When executing gvim from a git-for-windows shell, we end up
+  " with &shell=='', as well as a Windows &shellcmdflag=='/c'
+if executable(&shell) != 1
+  " Our 'shell' option is invalid. Possibly due to / vs \ and dirs with
+  " spaces. Revert to the Windows default.
+  set shell=C:\\WINDOWS\\system32\\cmd.exe
+  set shellxquote=(
+  set shellcmdflag=/c
+  " Other shell options seem the same between Windows and git-bash vim
+endif
+
+
 " We need this call to execute befor has('python3') gets enabled on win32unix
 " (at least)
 call filcab#python_win32#set_pythonthreedll()

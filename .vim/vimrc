@@ -92,37 +92,16 @@ if executable('rg')
   call extend(g:filcab_features, ["ripgrep"])
   " Assume ripgrep is in cargo directory (if available), and that's in PATH
   let &grepprg = "rg --vimgrep --smart-case"
-elseif executable("/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe")
+elseif executable("/c/Users/gbcabecfi/.cargo/bin/rg.exe")
   call extend(g:filcab_features, ["ripgrep"])
   " special vimgrep case for WSL (won't be able to search WSL drives,
   " though...)
-  let &grepprg = "/mnt/c/Users/gbcabecfi/.cargo/bin/rg.exe --vimgrep --smart-case"
+  let &grepprg = "/c/Users/gbcabecfi/.cargo/bin/rg.exe --vimgrep --smart-case"
 elseif executable('ack')
   call extend(g:filcab_features, ["ack"])
   " Use ack if rg is not available
   let &grepprg = 'ack -H --nocolor --nogroup --column --smart-case'
 " else leave it alone
-endif
-
-" Always use proper slashes on Windows if our shell looks like a *NIX one.
-" Windows shell settings require special care so they always work on:
-"   - Regular Windows (gvim.exe)
-"   - With and without winpty:
-"     - git-bash running installed (up-to-date) vim (same installation as previous gvim.exe)
-"     - git-bash running an older vim.exe (distributed with it)
-" 2021-11-09: Previously, I'd set the shell to cmd.exe on all Windows
-" executions. Let's try just on win32, but not on win32unix
-if has("win32") || has('win32unix') " only enter for stuff running on windows
-  " 2021-11-09: When executing gvim from a git-for-windows shell, we end up
-  " with &shell=='', as well as a Windows &shellcmdflag=='/c'
-  if executable(&shell) != 1
-    " Our 'shell' option is invalid. Possibly due to / vs \ and dirs with
-    " spaces. Revert to the Windows default.
-    set shell=C:\\WINDOWS\\system32\\cmd.exe
-    set shellxquote=(
-    set shellcmdflag=/c
-    " Other shell options seem the same between Windows and git-bash vim
-  endif
 endif
 
 "Auto-reload vimrc (with whatever path vim might have)
