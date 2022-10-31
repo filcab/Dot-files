@@ -23,12 +23,19 @@ endfunction
 
 " Find programs given search paths
 let s:exe_suffix = has('win32') ? '.exe' : ''
-function! filcab#FindProgram(prog_name, dirs)
+function! filcab#FindProgram(prog_name, dirs, ...)
+  if a:0 > 0
+    " allow having suffixes at the end of the program name (e.g: clang14 or
+    " gcc-11)
+    let allow_suffixes = a:1
+  endif
+
   " First search the passed in dirs
   for dir in a:dirs
-    let l:maybe_prog = expand(dir . '/' . a:prog_name . s:exe_suffix)
-    if executable(l:maybe_prog) == 1
-      return l:maybe_prog
+    let l:maybe_prog = glob(expand(dir) .. '/' .. a:prog_name .. '*' .. s:exe_suffix,
+                          \ v:true, v:true)
+    if len(l:maybe_prog) > 0 && executable(l:maybe_prog[0]) == 1
+      return l:maybe_prog[0]
     endif
   endfor
 
