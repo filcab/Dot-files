@@ -171,14 +171,14 @@ endfunction
 
 function! s:install_mapping(map_type, keys, map_arg)
   " only setup the mapping if the plug mapping exists
-  if maparg(a:map_arg, a:map_type) != ''
+  if maparg(a:keys, a:map_type) == ''
     execute a:map_type.'map' '<buffer><unique>' a:keys a:map_arg
   endif
 endfunction
 
 function! s:uninstall_mapping(map_type, keys, map_arg) abort
   " only remove the mapping if the plug mapping is what we expect
-  if maparg(a:keys) == a:map_arg
+  if maparg(a:keys, a:map_type) == a:map_arg
     execute a:map_type.'unmap' '<buffer>' a:keys
   endif
 endfunction
