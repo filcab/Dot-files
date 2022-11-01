@@ -161,6 +161,13 @@ function! filcab#lsp#ftplugin() abort
     return
   endif
 
+  " impl is ready, but let it finish setting up the lsp and finalize the
+  " defined subcommands. Execute the ftplugin functions in 100ms
+  " TODO: Is this enough time on most platforms I use? (e.g: rpi)
+  call timer_start(s:ftplugin_wait_time * 10, {->filcab#lsp#do_ftplugin()})
+endfunction
+
+function! filcab#lsp#do_ftplugin() abort
   if get(g:, 'lsp_impl', '') != ''
     call s:log(2, "call lsp#ftplugin for", g:lsp_impl)
     call s:lsp_impl_ftplugin[g:lsp_impl]()
@@ -170,8 +177,9 @@ function! filcab#lsp#ftplugin() abort
 endfunction
 
 function! s:install_mapping(map_type, keys, map_arg)
-  " only setup the mapping if the plug mapping exists
-  if maparg(a:keys, a:map_type) == ''
+  " only setup the mapping if the plug mapping exists and the keys aren't
+  " mapped to something
+  if maparg(a:map_arg, a:map_type) != '' && maparg(a:keys, a:map_type) == ''
     execute a:map_type.'map' '<buffer><unique>' a:keys a:map_arg
   endif
 endfunction
