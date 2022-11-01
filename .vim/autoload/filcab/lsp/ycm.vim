@@ -60,7 +60,7 @@ function! filcab#lsp#ycm#is_ready() abort
 endfunction
 
 function! filcab#lsp#ycm#ftplugin() abort
-  let subcommands = py3eval('ycm_state.GetDefinedSubcommands()')
+  let subcommands = youcompleteme#GetDefinedSubcommands()
   if get(g:, 'lsp_verbosity', 0) >= 1
     echom "subcommands:" subcommands
   endif
