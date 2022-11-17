@@ -9,7 +9,7 @@ if [ -z "$EDITOR" ]; then
   case ${uname_s} in
     MINGW*|MSYS*)
       # special case, as it might not be tagged as executable, for some reason
-      if -f /c/Windows/vim.bat > /dev/null 2>&1; then
+      if [ -f /c/Windows/vim.bat > /dev/null 2>&1 ]; then
         export EDITOR=vim.bat
       fi
       # test: not doing this and relying on git-for-windows' vim
