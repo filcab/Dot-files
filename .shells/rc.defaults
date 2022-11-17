@@ -7,7 +7,7 @@
 # FIXME: Just loop over the possible paths and set EDITOR once, accordingly
 if [ -z "$EDITOR" ]; then
   case ${uname_s} in
-    MINGW*)
+    MINGW*|MSYS*)
       # special case, as it might not be tagged as executable, for some reason
       if -f /c/Windows/vim.bat > /dev/null 2>&1; then
         export EDITOR=vim.bat
@@ -50,7 +50,7 @@ case ${uname_s} in
     export COCOAPODS_DISABLE_STATS=1
     ;;
 
-  MINGW*)
+  MINGW*|MSYS*)
     # Use native symlinks on Windows by default. Assumes we have perms for
     # that, which needs to be done once per machine
     export MSYS="winsymlinks:nativestrict enable_pcon"
@@ -64,7 +64,7 @@ case ${uname_s} in
     export CLICOLOR=1
     alias ls='ls -FG'
     ;;
-  linux|Linux|MINGW*)
+  linux|Linux|MINGW*|MSYS*)
     alias ls="ls -F --color"
 
     # Alias gvim on both, as WSL opening a Windows gvim makes sense
@@ -88,7 +88,7 @@ case $(uname -r) in
   *)
     ### Ninja status: "time [left/running/finished]"
     case ${uname_s} in
-      MINGW*)
+      MINGW*|MSYS*)
         # don't use colors for ninja on Windows, as between mingw and Windows
         # console defaults, we might lose the colors and get mangled characters
         export NINJA_STATUS="%e [%u/%r/%f] "
