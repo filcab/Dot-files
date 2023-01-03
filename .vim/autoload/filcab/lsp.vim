@@ -199,7 +199,7 @@ function! s:do_mappings(func) abort
         \ ['', '<tab>', 'Format'],
         \ ['n', 'fw', "FindSymbolInWorkspace"],
         \ ['n', 'fd', "FindSymbolInDocument"],
-        \ ['n', 'f', 'Fixit'],
+        \ ['n', 'F', 'Fixit'],
         \ ['n', 'd', "GetDoc"],
         \ ['n', 'p', "GetParent"],
         \ ['n', 'T', "GetType"],
@@ -214,8 +214,8 @@ function! s:do_mappings(func) abort
         \ ['n', 's', "GoToSymbol"],
         \ ['n', 'R', "Rename"],
         \ ['n', '<f5>', "Refresh"],
-        \ ['n', 'h', "ToggleInlayHints"],
-        \ ['n', 'H', "Hover"],
+        \ ['n', 'H', "ToggleInlayHints"],
+        \ ['n', 'h', "Hover"],
         \ ['n', 'D', "ShowDetailedDiagnostic"],
         \ ]
 
