@@ -12,10 +12,18 @@ endif
 " executions. Let's try just on win32, but not on win32unix
   " 2021-11-09: When executing gvim from a git-for-windows shell, we end up
   " with &shell=='', as well as a Windows &shellcmdflag=='/c'
+" 2022-11-03: weirdly, it looks like, when calling gvim from git-bash, &shell
+" starts as: '"C:/Program Files/Git/usr/bin/bash.exe" ' (the double quotes and
+" space are included). This means that our executable check will fail and we
+" will set the shell to cmd.exe. This seems appropriate
+" echom "filcab: switching &shell from" &shell "=>" executable(&shell)
+" echom "filcab: lolwut:" &shell[1:-1] "=>" executable(&shell[1:-2])
 if executable(&shell) != 1
   " Our 'shell' option is invalid. Possibly due to / vs \ and dirs with
   " spaces. Revert to the Windows default.
   set shell=C:\\WINDOWS\\system32\\cmd.exe
+  " also set $SHELL so any subprocesses hopefully behave ok
+  let $SHELL=&shell
   set shellxquote=(
   set shellcmdflag=/c
   " Other shell options seem the same between Windows and git-bash vim
