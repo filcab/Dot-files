@@ -14,6 +14,8 @@ function! filcab#fzf#install_fzf_and_keybindings() abort
     return
   endif
 
+  nnoremap <unique> <leader>ff <Cmd>Files<cr>
+
   " add some maps to switch buffers/windows/etc with fzf
   nnoremap <unique> <leader>fb <Cmd>Buffers<cr>
   nnoremap <unique> <leader>fh <Cmd>History<cr>
