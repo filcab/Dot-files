@@ -26,13 +26,20 @@ let s:exe_suffix = has('win32') ? '.exe' : ''
 function! filcab#FindProgram(prog_name, dirs, ...)
   " allow having version suffixes at the end of the program name (e.g: clang14
   " or gcc-11)
-  let maybe_suffixes = ['[.0-9]*', '-[.0-9]+']
+  " globs aren't very flexible, so ensure we have one of:
+  " * a number, then anything
+  " * dash, then a number, then anything
+  let maybe_suffixes = ['', '[0123456789]*', '-[0123456789]*']
 
   " First search the passed in dirs
   for dir in a:dirs
+    if !isdirectory(dir)
+      continue
+    endif
+
     for suffix in maybe_suffixes
-      let l:maybe_prog = glob(expand(dir) .. '/' .. a:prog_name .. suffix .. s:exe_suffix,
-                            \ v:true, v:true)
+      let glob_expr = expand(dir) .. '/' .. a:prog_name .. suffix .. s:exe_suffix
+      let l:maybe_prog = glob(glob_expr, v:true, v:true)
       if len(l:maybe_prog) > 0 && executable(l:maybe_prog[0]) == 1
         return l:maybe_prog[0]
       endif
