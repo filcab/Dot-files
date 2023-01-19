@@ -52,4 +52,7 @@ function! filcab#python_win32#set_pythonthreedll() abort
       let &pythonthreedll = globbed[0]
     endif
   endif
+
+  " for some reason, we started to need this on py3.11 on Windows...
+  py3 import sys; sys.path.append(sys.path[2] + '\\\\DLLs')
 endfunction
