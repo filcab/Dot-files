@@ -2,6 +2,10 @@ if exists('g:loaded_mappings')
   finish
 endif
 
+" Map <LocalLeader> to , by default (was '\', same as <Leader>)
+" need to do this before mapping both to different things, below
+let maplocalleader=','
+
 " terminal:  Use a mapping similar to tmux's copy-mode map to change to normal mode
 tmap <c-w>[ <c-w>N
 

@@ -65,9 +65,6 @@ set sessionoptions-=options
 " End of tpope's sensible.vim stuff
 """"""""""""""""""""""""""""""""""""""""""
 
-" Map <LocalLeader> to , by default (was '\', same as <Leader>)
-let maplocalleader=','
-
 " Dirs to search for programs used by plugins
 let g:clang_tools_search_paths = [
       \ '~/dev/llvm/install/bin',
