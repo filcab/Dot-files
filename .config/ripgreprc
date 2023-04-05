@@ -1,4 +1,5 @@
-# visual-studio related types
+# visual-studio related types (there's "msbuild" which covers all (?) project types and solutions, but tlog and binlog I might want to keep)
+# probably can get rid of the sln and vcxproj types
 --type-add
 sln:*.sln
 
