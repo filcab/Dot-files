@@ -5,8 +5,6 @@
 	fpush = push --force-with-lease
 	# Use the null command as a hint to git-completion.bash
 	trymerge = "!f() { : git merge; git merge --no-commit "$1" || echo FAILED, please choose an earlier commit; echo Undoing changes; git merge --abort; }; f"
-	stashed-update = "!f() { if git diff-index --quiet HEAD; then should_stash=No; else should_stash=Yes; fi; ( test $should_stash = Yes && git stash ); git pull && ( test $should_stash = Yes && git stash pop || : ) }; f"
-	stashed-svn-update = "!f() { if git diff-index --quiet HEAD; then should_stash=No; else should_stash=Yes; fi; ( test $should_stash = Yes && git stash ); git svn rebase && ( test $should_stash = Yes && git stash pop || : ) }; f"
 	uplog = log @{upstream}..
 
 [commit]
