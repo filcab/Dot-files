@@ -11,8 +11,9 @@
 	pushf = push --force-with-lease
 	fpush = push --force-with-lease
 	# Use the null command as a hint to git-completion.bash
-	trymerge = "!f() { : git merge; git merge --no-commit "$1" || echo FAILED, please choose an earlier commit; echo Undoing changes; git merge --abort; }; f"
+	trymerge = "!f() { : git merge; git merge --no-commit \"$@\" || echo FAILED, please choose an earlier commit; echo Undoing changes; git merge --abort; }; f"
 	uplog = log @{upstream}..
+	fuplog = "!f() { : git fetch; git fetch \"$@\" && git uplog; }; f"
 
 [commit]
 	verbose = true
