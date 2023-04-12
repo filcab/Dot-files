@@ -64,5 +64,14 @@ else
   echomsg "Unknown vim platform! !win32, !unix, !win32unix. python's black compilation dir will have no suffix"
 endif
 
+" from https://vim.fandom.com/wiki/Completion_using_a_syntax_file
+" if omnifunc hasn't been defined for a Filetype (by the time this runs), set
+" it to syntaxcomplete in order to have syntax keywords in the omni-completion
+if has("autocmd") && exists("+omnifunc")
+  autocmd Filetype *
+        \ if &omnifunc == "" |
+        \   setlocal omnifunc=syntaxcomplete#Complete |
+        \ endif
+endif
 
 let g:filecheck_auto_enable = v:true
