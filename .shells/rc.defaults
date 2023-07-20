@@ -214,3 +214,10 @@ if hash rg > /dev/null 2>&1; then
   ### Use rg as the default fzf content provider
   export FZF_DEFAULT_COMMAND='rg --files'
 fi
+
+### set the locale to be a decent default if it's unset or is set to C
+if [ -z "$LC_ALL" -o "$LC_ALL" = "C" ]; then
+
+  export LANG='en_US.UTF-8'
+  export LC_ALL="$LANG"
+fi
