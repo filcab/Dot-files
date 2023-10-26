@@ -221,3 +221,6 @@ if [ -z "$LC_ALL" -o "$LC_ALL" = "C" ]; then
   export LANG='en_US.UTF-8'
   export LC_ALL="$LANG"
 fi
+
+# `bat` seems like a decent cat replacement
+export BAT_THEME=Dracula
