@@ -50,14 +50,41 @@ function filcab#python#init() abort
   endif
 
   call filcab#lsp#setup()
-  if get(g:, 'lsp_impl', '') == "vim-lsp" && executable('pylsp')
-    echo "Setting up vim-lsp for Python"
-    " pip install python-lsp-server
+  if get(g:, 'lsp_impl', '') == "vim-lsp"
+    if executable('pylsp')
+      echo "Setting up vim-lsp for Python"
+      " pip install python-lsp-server
+      call lsp#register_server({
+        \ 'name': 'pylsp',
+        \ 'cmd': {server_info->['pylsp']},
+        \ 'whitelist': ['python'],
+        \ })
+    endif
+    " ruff: linter + autoformatter for python
+    " TODO: for now let's use its integration with pylsp and see if that works
     call lsp#register_server({
-      \ 'name': 'pylsp',
-      \ 'cmd': {server_info->['pylsp']},
+      \ 'name': 'ruff',
+      \ 'cmd': {server_info->['ruff-lsp']},
       \ 'whitelist': ['python'],
       \ })
+  endif
+
+  if executable('pylsp')
+    echom "adding pylsp to ycm"
+    " we don't need to call functions here, so always add it
+    let g:ycm_language_server = get(g:, 'ycm_language_server', []) +
+          \ [
+          \   {
+          \     'name': 'python',
+          \     'cmdline': ['pylsp'],
+          \     'filetypes': ['python'],
+          \   },
+          \   {
+          \     'name': 'ruff',
+          \     'cmdline': ['ruff-lsp'],
+          \     'filetypes': ['python'],
+          \   }
+          \ ]
   endif
 
   let g:filcab#python#initted = v:true
