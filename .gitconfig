@@ -22,6 +22,9 @@
 
 [diff]
 	algorithm = histogram
+	# make stat lines have a few more characters for filenames at the expense
+	# of dynamic range of the graph part
+	statGraphWidth = 5
 [merge]
 	conflictstyle = diff3
 	tool = vimdiff
