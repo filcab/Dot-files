@@ -11,3 +11,8 @@ tlog:*.tlog
 
 --type-add
 binlog:*.binlog
+
+
+# always use '/' as a path separator as tools on both Windows and everything else seem to handle it ok
+--path-separator
+/
