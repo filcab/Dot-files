@@ -87,14 +87,17 @@ case $(uname -r) in
     ;;
   *)
     ### Ninja status: "time [left/running/finished]"
+    # define this as default so we don't repeat it in the mingw/msys and the -z TERM branches below
+    export NINJA_STATUS="%e [%u/%r/%f] "
     case ${uname_s} in
       MINGW*|MSYS*)
         # don't use colors for ninja on Windows, as between mingw and Windows
         # console defaults, we might lose the colors and get mangled characters
-        export NINJA_STATUS="%e [%u/%r/%f] "
         ;;
       *)
-        export NINJA_STATUS="$(tput bold)%e$(tput sgr0) [$(tput bold)$(tput setaf 1)%u$(tput sgr0)/$(tput bold)$(tput setaf 3)%r$(tput sgr0)/$(tput bold)$(tput setaf 2)%f$(tput sgr0)] "
+        if [ ! -z "$TERM" ]; then
+          export NINJA_STATUS="$(tput bold)%e$(tput sgr0) [$(tput bold)$(tput setaf 1)%u$(tput sgr0)/$(tput bold)$(tput setaf 3)%r$(tput sgr0)/$(tput bold)$(tput setaf 2)%f$(tput sgr0)] "
+        fi
         ;;
     esac
     ;;
