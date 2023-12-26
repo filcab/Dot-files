@@ -7,7 +7,7 @@
 	# COUNT: revisions between the last state of this head to the current state
 	# if they're too many to automatically print (maybe have a git config to set this?), we just emit a message with the revs we'd print
 	# otherwise, do a git pretty between the last state of the current head and the current one
-	pul = "!f() { : git pull; MAX_COUNT=100; OLD_HEAD=\"$(git rev-parse HEAD)\"; git pull \"$@\" && { [[ \"${OLD_HEAD}\" == \"$(git rev-parse HEAD)\" ]] && return 0; $(git rev-parse @{1} >/dev/null 2>/dev/null) || return 0; COUNT=$(git rev-list --no-merges --count @{1}..); if [ \"${COUNT}\" -gt ${MAX_COUNT} ]; then echo \"too many revisions between @{1} and HEAD (${COUNT}), not doing a git pretty --no-merges $(git rev-parse --short @{1})..$(git rev-parse --short HEAD)\"; else git pretty --no-merges @{1}..; fi; }; }; f"
+	pul = "!f() { : git pull; MAX_COUNT=100; OLD_HEAD=\"$(git rev-parse HEAD)\"; git pull \"$@\" && { [ \"${OLD_HEAD}\" = \"$(git rev-parse HEAD)\" ] && return 0; $(git rev-parse @{1} >/dev/null 2>/dev/null) || return 0; COUNT=$(git rev-list --no-merges --count @{1}..); if [ \"${COUNT}\" -gt ${MAX_COUNT} ]; then echo \"too many revisions between @{1} and HEAD (${COUNT}), not doing a git pretty --no-merges $(git rev-parse --short @{1})..$(git rev-parse --short HEAD)\"; else git pretty --no-merges @{1}..; fi; }; }; f"
 	pushf = push --force-with-lease
 	fpush = push --force-with-lease
 	# Use the null command as a hint to git-completion.bash
