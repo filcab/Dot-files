@@ -92,6 +92,7 @@ function! filcab#lsp#ycm#ftplugin() abort
   call s:ycm_mapping(subcommands, "GoToDefinition")
   call s:ycm_mapping(subcommands, "GoToDocumentOutline")
   call s:ycm_mapping(subcommands, "GoToInclude")
+  call s:ycm_mapping(subcommands, "GoToImplementation")
   call s:ycm_mapping(subcommands, "GoToReferences")
 
   " FIXME: Make the selected/pre-filled word smarter, if possible

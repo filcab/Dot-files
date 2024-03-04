@@ -176,7 +176,7 @@ function! filcab#lsp#do_ftplugin() abort
   call filcab#lsp#install_mappings()
 endfunction
 
-function! s:install_mapping(map_type, keys, map_arg)
+function! s:install_mapping(map_type, keys, map_arg, ...)
   " only setup the mapping if the plug mapping exists and the keys aren't
   " mapped to something
   if maparg(a:map_arg, a:map_type) != '' && maparg(a:keys, a:map_type) == ''
@@ -199,19 +199,24 @@ function! s:do_mappings(func) abort
         \ ['', '<tab>', 'Format'],
         \ ['n', 'fw', "FindSymbolInWorkspace"],
         \ ['n', 'fd', "FindSymbolInDocument"],
-        \ ['n', 'F', 'Fixit'],
+        \ ['n', 'f', 'FixIt'],
+        \ ['n', 'F', 'FixIt'],
         \ ['n', 'd', "GetDoc"],
         \ ['n', 'p', "GetParent"],
         \ ['n', 'T', "GetType"],
         \ ['n', 't', "GetTypeFast"],
-        \ ['n', 'G', "GoTo"],
-        \ ['n', 'C', "GoToCallers"],
-        \ ['n', 'c', "GoToCallees"],
-        \ ['n', 'o', "GoToDocumentOutline"],
-        \ ['n', 'g', "GoToFast"],
-        \ ['n', 'i', "GoToInclude"],
-        \ ['n', 'r', "GoToReferences"],
-        \ ['n', 's', "GoToSymbol"],
+        \ ['n', 'gG', "GoTo"],
+        \ ['n', 'gC', "GoToCallers"],
+        \ ['n', 'gc', "GoToCallees"],
+        \ ['n', 'gd', "GoToDeclaration"],
+        \ ['n', 'gD', "GoToDefinition"],
+        \ ['n', 'go', "GoToDocumentOutline"],
+        \ ['n', 'gg', "GoToFast"],
+        \ ['n', 'gi', "GoToInclude"],
+        \ ['n', 'gI', "GoToImplementation"],
+        \ ['n', 'gr', "GoToReferences"],
+        \ ['n', 'gs', "GoToSymbol"],
+        \ ['n', 'gt', "GoToType"],
         \ ['n', 'R', "Rename"],
         \ ['n', '<f5>', "Refresh"],
         \ ['n', 'H', "ToggleInlayHints"],
