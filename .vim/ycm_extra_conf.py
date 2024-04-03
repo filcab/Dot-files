@@ -175,3 +175,40 @@ def FlagsForFile(filename):
             'flags': final_flags,
             'do_cache': True
             }
+
+def Settings(**kwargs):
+    if kwargs['language'] == 'python':
+        plugin_configs = {}
+        # FIXME: Get line length from vim/default and set it up for black and ruff
+        # default-enabled plugins:
+        # mypy for typing, configs: https://github.com/python-lsp/pylsp-mypy?tab=readme-ov-file#configuration
+        # black for indenting, configs: https://github.com/python-lsp/python-lsp-black?tab=readme-ov-file#configuration
+        # is there an easy way to find out if these plugins have been installed?
+        ALWAYS_ENABLED = ['black', 'pylsp_mypy']
+        ALWAYS_DISABLED = ['autopep8', 'yapf']
+        for plugin in ALWAYS_ENABLED:
+            plugin_configs[plugin] = {'enabled': True}
+        for plugin in ALWAYS_DISABLED:
+            plugin_configs[plugin] = {'enabled': False}
+
+        # maybe check if:
+        # ruff-lsp path is configured vim-side, if so, set to use that executable
+        # check if the executable (automatically found or via search) is there. If so,
+        # use ruff-lsp, otherwise use whatever was default
+        if shutil.which('ruff-lsp'):
+            # we found ruff, disable other plugins that do the same thing
+            for plugin in ['pycodestyle', 'pyflakes', 'mccabe']:
+                plugin_configs[plugin] = {'enabled': False}
+            plugin_configs['ruff'] = dict(
+                # https://github.com/python-lsp/python-lsp-ruff?tab=readme-ov-file#configuration
+                # defaults: https://docs.astral.sh/ruff/configuration/
+                enabled=True,
+                formatEnabled=True,
+                # lineLength=...,
+            )
+
+        return {
+            'ls': {
+                'pylsp.plugins': plugin_configs,
+            },
+        }
