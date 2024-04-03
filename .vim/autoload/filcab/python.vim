@@ -49,7 +49,31 @@ function filcab#python#init() abort
     packadd python-mode
   endif
 
+  " do this before filcab#lsp#setup() so we have everything in place before
+  " YCM queries the variable
+  if executable('pylsp')
+    echom "adding pylsp to ycm"
+    " we don't need to call functions here, so always add it
+    let g:ycm_language_server = get(g:, 'ycm_language_server', []) +
+          \ [
+          \   {
+          \     'name': 'python',
+          \     'cmdline': ['pylsp'],
+          \     'filetypes': ['python'],
+          \   }
+          \ ]
+          " \   },
+          " use ruff as a pylsp plugin instead of this by installing python-lsp-ruff
+          " \   {
+          " \     'name': 'ruff',
+          " \     'cmdline': ['ruff-lsp'],
+          " \     'filetypes': ['python'],
+  endif
+
   call filcab#lsp#setup()
+
+  " this one has to be done after filcab#lsp#setup() because we're calling
+  " their function
   if get(g:, 'lsp_impl', '') == "vim-lsp"
     if executable('pylsp')
       echo "Setting up vim-lsp for Python"
@@ -62,29 +86,11 @@ function filcab#python#init() abort
     endif
     " ruff: linter + autoformatter for python
     " TODO: for now let's use its integration with pylsp and see if that works
-    call lsp#register_server({
-      \ 'name': 'ruff',
-      \ 'cmd': {server_info->['ruff-lsp']},
-      \ 'whitelist': ['python'],
-      \ })
-  endif
-
-  if executable('pylsp')
-    echom "adding pylsp to ycm"
-    " we don't need to call functions here, so always add it
-    let g:ycm_language_server = get(g:, 'ycm_language_server', []) +
-          \ [
-          \   {
-          \     'name': 'python',
-          \     'cmdline': ['pylsp'],
-          \     'filetypes': ['python'],
-          \   },
-          \   {
-          \     'name': 'ruff',
-          \     'cmdline': ['ruff-lsp'],
-          \     'filetypes': ['python'],
-          \   }
-          \ ]
+    " call lsp#register_server({
+    "   \ 'name': 'ruff',
+    "   \ 'cmd': {server_info->['ruff-lsp']},
+    "   \ 'whitelist': ['python'],
+    "   \ })
   endif
 
   let g:filcab#python#initted = v:true

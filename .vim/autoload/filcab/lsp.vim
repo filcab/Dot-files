@@ -154,18 +154,30 @@ function! filcab#lsp#ftplugin() abort
   elseif s:ftplugin_num_retries == s:ftplugin_max_retries
     echohl WarningMsg
     echom "LSP server took too long to become ready. Reverting to no LSP"
-    call remove(g:filcab_features, "lsp", g:lsp_impl)
+    call remove(g:filcab_features, "lsp")
     call remove(g:filcab_features, g:lsp_impl)
     let g:lsp_impl = ''
     echohl None
     return
   endif
 
-  " impl is ready, but let it finish setting up the lsp and finalize the
-  " defined subcommands. Execute the ftplugin functions in 100ms
-  " TODO: Is this enough time on most platforms I use? (e.g: rpi)
-  call timer_start(s:ftplugin_wait_time * 10, {->filcab#lsp#do_ftplugin()})
+  call filcab#lsp#do_ftplugin()
+
+  " for debugging readyness of servers
+  " call filcab#lsp#report()
 endfunction
+
+" let s:count = 0
+" function! filcab#lsp#report() abort
+"   let s:count += 1
+"   let subcommands = youcompleteme#GetDefinedSubcommands()
+"   echom "DebugInfo="..py3eval("'Server State: Initialized' in ycm_state.DebugInfo()")
+"   if subcommands->len() > 2
+"     echom "finally done! called "..string(s:count).." times! subcommands: "..string(subcommands)
+"     return
+"   endif
+"   call timer_start(100, {->filcab#lsp#report()})
+" endfunction
 
 function! filcab#lsp#do_ftplugin() abort
   if get(g:, 'lsp_impl', '') != ''
@@ -192,40 +204,42 @@ function! s:uninstall_mapping(map_type, keys, map_arg) abort
 endfunction
 
 function! s:do_mappings(func) abort
-  let prefix = '<localleader>'
+  let ll = '<localleader>'
 
   " these are valid for ycm for sure. Needs checking with vim-lsp
   let mappings = [
-        \ ['', '<tab>', 'Format'],
-        \ ['n', 'fw', "FindSymbolInWorkspace"],
-        \ ['n', 'fd', "FindSymbolInDocument"],
-        \ ['n', 'f', 'FixIt'],
-        \ ['n', 'F', 'FixIt'],
-        \ ['n', 'd', "GetDoc"],
-        \ ['n', 'p', "GetParent"],
-        \ ['n', 'T', "GetType"],
-        \ ['n', 't', "GetTypeFast"],
-        \ ['n', 'gG', "GoTo"],
-        \ ['n', 'gC', "GoToCallers"],
-        \ ['n', 'gc', "GoToCallees"],
-        \ ['n', 'gd', "GoToDeclaration"],
-        \ ['n', 'gD', "GoToDefinition"],
-        \ ['n', 'go', "GoToDocumentOutline"],
-        \ ['n', 'gg', "GoToFast"],
-        \ ['n', 'gi', "GoToInclude"],
-        \ ['n', 'gI', "GoToImplementation"],
-        \ ['n', 'gr', "GoToReferences"],
-        \ ['n', 'gs', "GoToSymbol"],
-        \ ['n', 'gt', "GoToType"],
-        \ ['n', 'R', "Rename"],
+        \ ['', ll..'<tab>', 'Format'],
+        \ ['n', ll..'fw', "FindSymbolInWorkspace"],
+        \ ['n', ll..'fd', "FindSymbolInDocument"],
+        \ ['n', ll..'f', 'FixIt'],
+        \ ['n', ll..'F', 'FixIt'],
+        \ ['n', ll..'d', "GetDoc"],
+        \ ['n', ll..'p', "GetParent"],
+        \ ['n', ll..'T', "GetType"],
+        \ ['n', ll..'t', "GetTypeFast"],
+        \ ['n', ll..'gG', "GoTo"],
+        \ ['n', '<f12>', "GoTo"],
+        \ ['n', ll..'gC', "GoToCallers"],
+        \ ['n', ll..'gc', "GoToCallees"],
+        \ ['n', ll..'gd', "GoToDeclaration"],
+        \ ['n', ll..'gD', "GoToDefinition"],
+        \ ['n', ll..'go', "GoToDocumentOutline"],
+        \ ['n', ll..'gg', "GoToFast"],
+        \ ['n', ll..'gi', "GoToInclude"],
+        \ ['n', ll..'gI', "GoToImplementation"],
+        \ ['n', ll..'gr', "GoToReferences"],
+        \ ['n', ll..'gs', "GoToSymbol"],
+        \ ['n', ll..'gt', "GoToType"],
+        \ ['n', ll..'R', "Rename"],
+        \ ['n', ll..'<f5>', "Refresh"],
         \ ['n', '<f5>', "Refresh"],
-        \ ['n', 'H', "ToggleInlayHints"],
-        \ ['n', 'h', "Hover"],
-        \ ['n', 'D', "ShowDetailedDiagnostic"],
+        \ ['n', ll..'H', "ToggleInlayHints"],
+        \ ['n', ll..'h', "Hover"],
+        \ ['n', ll..'D', "ShowDetailedDiagnostic"],
         \ ]
 
   for [map_type, keys, command] in mappings
-    call a:func(map_type, prefix..keys, '<plug>(FilcabLsp'.command.')')
+    call a:func(map_type, keys, '<plug>(FilcabLsp'.command.')')
   endfor
 endfunction
 

@@ -18,7 +18,7 @@ let g:clangd_args = ['--query-driver=*', '--clang-tidy', '--suggest-missing-incl
 
 " lsp implementations to try, in the desired order
 let g:lsp_impls = ["ycm", "vim-lsp"]
-" let g:lsp_verbosity = 0
+" let g:lsp_verbosity = 2
 
 " Set this wether or not we're disabling ycm, since we might not find the LSP
 " programs

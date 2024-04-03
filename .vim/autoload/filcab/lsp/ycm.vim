@@ -55,8 +55,12 @@ function! s:ycm_mapping(subcommands, ...) abort
   endif
 endfunction
 
+let s:have_ensured_lsp_started = v:false
 function! filcab#lsp#ycm#is_ready() abort
-  return py3eval('ycm_state.IsServerReady()')
+  " I couldn't find a better way to detect if we've connected to the server
+  " (LSP, etc)
+  " This seems to work with (at least) clangd and generic LSP
+  return py3eval("'Server State: Initialized' in ycm_state.DebugInfo()")
 endfunction
 
 function! filcab#lsp#ycm#ftplugin() abort
@@ -65,7 +69,9 @@ function! filcab#lsp#ycm#ftplugin() abort
     echom "subcommands:" subcommands
   endif
 
-  call s:ycm_mapping(subcommands, "Fixit")
+  call s:ycm_mapping(subcommands, "ExecuteCommand")
+  call s:ycm_mapping(subcommands, "Fixit")  " clangd
+  call s:ycm_mapping(subcommands, "FixIt")  " python-lsp
   call s:ycm_mapping(subcommands, "Format")
   call s:ycm_mapping(subcommands, "GetDoc")
   call s:ycm_mapping(subcommands, "GetParent")
@@ -102,12 +108,14 @@ function! filcab#lsp#ycm#ftplugin() abort
   call s:ycm_mapping(subcommands, "Rename", "RefactorRename", " ")
 
   call s:ycm_mapping(subcommands, "Refresh", ":YcmForceCompileAndDiagnostics")
+  call s:ycm_mapping(subcommands, "RestartServer")
   call s:ycm_mapping(subcommands, "Stats", ":call <SID>ShowYCMNumberOfWarningsAndErrors()")
 
   call s:ycm_mapping(subcommands, "FindSymbolInWorkspace", "<plug>(YCMFindSymbolInWorkspace)")
   call s:ycm_mapping(subcommands, "FindSymbolInDocument", "<plug>(YCMFindSymbolInDocument)")
 
   call s:ycm_mapping(subcommands, "ToggleInlayHints", "<plug>(YCMToggleInlayHints)", "")
+  call s:ycm_mapping(subcommands, "GetHover")
   call s:ycm_mapping(subcommands, "Hover", "<plug>(YCMHover)", "")
 
   call s:ycm_mapping(subcommands, "ShowDetailedDiagnostic", ":YcmShowDetailedDiagnostic ")
@@ -127,3 +135,17 @@ function! s:ShowYCMNumberOfWarningsAndErrors()
         \ . ' Warnings: ' . youcompleteme#GetWarningCount()
   endif
 endfunction
+
+" some unknown (to YCM) token types need some props set
+" seems like c/c++ filetypes don't have these, but python do...
+try
+  call prop_type_add('YCM_HL_bracket', {})  " don't highlight brackets
+catch
+  " hide errors
+endtry
+
+try
+  call prop_type_add('YCM_HL_label', { 'highlight': 'Special' })  " let's try this one for labels
+catch
+  " hide errors
+endtry
