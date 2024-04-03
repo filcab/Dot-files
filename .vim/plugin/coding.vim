@@ -34,11 +34,11 @@ let g:ycm_extra_conf_vim_data = ["YcmTargetFlags()"]
 
 " Set in all our shells (Maybe set it if it wasn't set? (e.g: GUI vim in some
 " platforms))
-let g:ycm_rust_src_path = $RUST_SRC_PATH
-if executable("rustc")
-  call add(g:filcab_features, "rustc")
-  let g:ycm_rust_toolchain_root = system("rustc --print sysroot")->trim()
-endif
+" let g:ycm_rust_src_path = $RUST_SRC_PATH
+" if executable("rustc")
+"   call add(g:filcab_features, "rustc")
+"   let g:ycm_rust_toolchain_root = system("rustc --print sysroot")->trim()
+" endif
 
 " completion (CTRL+N) options
 if !exists( "g:loaded_youcompleteme" )

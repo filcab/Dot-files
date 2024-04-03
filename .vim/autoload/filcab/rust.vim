@@ -14,9 +14,13 @@ function! filcab#rust#init() abort
     let s:first_call = v:false
   endif
 
-  let g:ycm_rust_src_path = system('rustc +nightly --print sysroot')->trim()
+  if executable("rustc")
+    call add(g:filcab_features, "rustc")
+    let g:ycm_rust_toolchain_root = system('rustc +nightly --print sysroot')->trim()
+    let g:ycm_rust_src_path = system('rustc +nightly --print sysroot')->trim()
+  endif
 
-  if g:ycm_rust_src_path == ''
+  if get(g:, 'ycm_rust_src_path', '') == ''
     " don't set initted to v:true so we try searching for rust-analyzer again
     return
   endif
