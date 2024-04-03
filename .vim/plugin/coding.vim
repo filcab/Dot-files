@@ -27,6 +27,10 @@ let g:ycm_always_populate_location_list = 1
 let g:ycm_show_detailed_diag_in_popup = 1
 let g:ycm_enable_semantic_highlighting = 1
 let g:ycm_global_ycm_extra_conf = expand($MYVIMRUNTIME . '/ycm_extra_conf.py')
+function YcmTargetFlags() abort
+  return get(b:, "ycm_target_flags", get(g:, "ycm_target_flags", []))
+endfunction
+let g:ycm_extra_conf_vim_data = ["YcmTargetFlags()"]
 
 " Set in all our shells (Maybe set it if it wasn't set? (e.g: GUI vim in some
 " platforms))

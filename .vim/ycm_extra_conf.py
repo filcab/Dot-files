@@ -158,8 +158,13 @@ def FlagsForCompilationDatabase(root, filename):
     except:
         return None
 
-def FlagsForFile(filename):
-    root = os.path.realpath(filename);
+def FlagsForTarget(root, client_data):
+    # might need to be a global? It's going to be weird managing the state, for now
+    # setting the variable and then restarting ycm should be enough
+    return client_data.get("YcmTargetFlags()", [])
+
+def FlagsForFile(filename, **kwargs):
+    root = os.path.realpath(filename)
     compilation_db_flags = FlagsForCompilationDatabase(root, filename)
     if compilation_db_flags:
         final_flags = compilation_db_flags
@@ -171,6 +176,10 @@ def FlagsForFile(filename):
         include_flags = FlagsForInclude(root)
         if include_flags:
             final_flags = final_flags + include_flags
+
+        target_flags = FlagsForTarget(root, kwargs.get("client_data", {}))
+        final_flags.extend(target_flags)
+
     return {
             'flags': final_flags,
             'do_cache': True
