@@ -19,6 +19,7 @@
 	verbose = true
 [core]
 	autocrlf = false
+	longpaths = true
 
 [diff]
 	algorithm = histogram
