@@ -6,6 +6,7 @@ opt/vim-aurora|git|https://github.com/rafalbromirski/vim-aurora.git
 opt/neodark.vim|git|https://github.com/KeitaNakamura/neodark.vim.git
 opt/vim-one|git|https://github.com/rakr/vim-one.git
 opt/challenger-deep-theme|git|https://github.com/challenger-deep-theme/vim.git
+opt/dracula|git|https://github.com/dracula/vim.git
 
 opt/vim-scriptease|git|https://github.com/tpope/vim-scriptease.git
 
@@ -57,3 +58,4 @@ start/vim-surround|git|https://github.com/tpope/vim-surround.git
 start/vim-unimpaired|git|https://github.com/tpope/vim-unimpaired.git
 start/vim-vinegar|git|https://github.com/tpope/vim-vinegar.git
 start/yankring|zip|https://www.vim.org/scripts/download_script.php?src_id=26344
+start/vim-vp4|git|https://github.com/ngemily/vim-vp4.git
