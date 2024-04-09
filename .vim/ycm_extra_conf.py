@@ -11,8 +11,9 @@ BASE_FLAGS = [
         '-Wall',
         '-Wextra',
         '-ferror-limit=10000',
-        '-std=c++1z',
-        '-xc++'#,
+        '-Wno-c++17-extensions',
+        '-std=c++17',
+        '-xc++',
         #'-I/usr/lib/',
         #'-I/usr/include/'
         ]
