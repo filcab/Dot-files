@@ -206,9 +206,10 @@ maybe_start_ssh_agent() {
 maybe_start_ssh_agent
 
 
-### Tell ripgrep where its configuration file is (there's no default set path)
-# always set this, as an inner shell might have rg
+### Tell ripgrep and bat (and 'batcat') where their configuration files are (there's no default set path for ripgrep, and the bat one is weird on windows)
+# always set this, as an inner shell might have rg/bat/batcat
 export RIPGREP_CONFIG_PATH=~/.config/ripgreprc
+export BAT_CONFIG_PATH=~/.config/batrc
 
 # tell cargo to use the sparse registry, which should improve registry update times by a lot
 export CARGO_UNSTABLE_SPARSE_REGISTRY=true
@@ -218,12 +219,46 @@ if hash rg > /dev/null 2>&1; then
   export FZF_DEFAULT_COMMAND='rg --files'
 fi
 
+if hash fzf > /dev/null 2>&1; then
+  # use a dracula theme on fzf
+  export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
+fi
+
+if hash eza > /dev/null 2>&1; then
+  alias ls='eza --classify --icons'
+  # omit --git on `ll`/`lt` as it's a bit heavier
+  alias ll='eza --classify --icons --long --group --smart-group --group-directories-first'
+  alias llg='ll --git'
+  alias lt='eza --classify --icons --long --group --smart-group --group-directories-first --tree'
+  alias ltg='lt --git'
+  alias tree='eza --classify --icons --group-directories-first --tree'
+  alias treeg='tree --git'
+  # ------------------------------
+  # exa - Color Scheme Definitions for Dracula
+  # from https://github.com/dracula/exa/blob/main/exa_colors.zshrc
+  # ------------------------------
+  export EXA_COLORS="\
+  uu=36:\
+  gu=37:\
+  sn=32:\
+  sb=32:\
+  da=34:\
+  ur=34:\
+  uw=35:\
+  ux=36:\
+  ue=36:\
+  gr=34:\
+  gw=35:\
+  gx=36:\
+  tr=34:\
+  tw=35:\
+  tx=36:"
+fi
+
+
 ### set the locale to be a decent default if it's unset or is set to C
 if [ -z "$LC_ALL" -o "$LC_ALL" = "C" ]; then
 
   export LANG='en_US.UTF-8'
   export LC_ALL="$LANG"
 fi
-
-# `bat` seems like a decent cat replacement
-export BAT_THEME=Dracula
