@@ -95,7 +95,7 @@ case $(uname -r) in
         # console defaults, we might lose the colors and get mangled characters
         ;;
       *)
-        if [ ! -z "$TERM" ]; then
+        if [ ! -z "$TERM" ] && command -v tput >/dev/null 2>&1; then
           export NINJA_STATUS="$(tput bold)%e$(tput sgr0) [$(tput bold)$(tput setaf 1)%u$(tput sgr0)/$(tput bold)$(tput setaf 3)%r$(tput sgr0)/$(tput bold)$(tput setaf 2)%f$(tput sgr0)] "
         fi
         ;;
