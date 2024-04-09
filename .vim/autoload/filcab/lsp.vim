@@ -122,7 +122,7 @@ let s:lsp_impl_ftplugin = {
 
 function! s:log(level, ...) abort
   if get(g:, 'lsp_verbosity', 0) >= a:level
-    execute "echom" "'lsp'" "'"..join(a:000, " ").."'"
+    execute "echom" "'lsp'" '"'..join(a:000, " ")..'"'
   endif
 endfunction
 
@@ -162,22 +162,7 @@ function! filcab#lsp#ftplugin() abort
   endif
 
   call filcab#lsp#do_ftplugin()
-
-  " for debugging readyness of servers
-  " call filcab#lsp#report()
 endfunction
-
-" let s:count = 0
-" function! filcab#lsp#report() abort
-"   let s:count += 1
-"   let subcommands = youcompleteme#GetDefinedSubcommands()
-"   echom "DebugInfo="..py3eval("'Server State: Initialized' in ycm_state.DebugInfo()")
-"   if subcommands->len() > 2
-"     echom "finally done! called "..string(s:count).." times! subcommands: "..string(subcommands)
-"     return
-"   endif
-"   call timer_start(100, {->filcab#lsp#report()})
-" endfunction
 
 function! filcab#lsp#do_ftplugin() abort
   if get(g:, 'lsp_impl', '') != ''
@@ -188,18 +173,38 @@ function! filcab#lsp#do_ftplugin() abort
   call filcab#lsp#install_mappings()
 endfunction
 
-function! s:install_mapping(map_type, keys, map_arg, ...)
+function! s:install_mapping(map_type, keys, map_arg, global)
   " only setup the mapping if the plug mapping exists and the keys aren't
   " mapped to something
-  if maparg(a:map_arg, a:map_type) != '' && maparg(a:keys, a:map_type) == ''
-    execute a:map_type.'map' '<buffer><unique>' a:keys a:map_arg
+  if maparg(a:map_arg, a:map_type) == ''
+    call s:log(1, "plug does not exist for", a:map_type.."map?", a:map_arg)
+    return
+  end
+
+  let old_maparg = maparg(a:keys, a:map_type)
+  if old_maparg != ''
+    if old_maparg != a:map_arg
+      " no need to warn if we already have what we want
+      call s:log(1, "mapping already taken for", a:map_type.."map?", a:keys, "->", maparg(a:keys, a:map_type), "wanted:", a:map_arg)
+    endif
+    return
+  end
+
+  let maybe_buffer = a:global ? '' : '<buffer>'
+  if a:map_type == 'i'
+    let prefix = "<c-o>"  " get out of insert mode to do the plug mapping
+  else
+    let prefix = ""
   endif
+  call s:log(3, "defining map:", a:map_type..'map', maybe_buffer..'<unique>', a:keys, prefix..a:map_arg)
+  execute a:map_type..'map' maybe_buffer..'<unique>' a:keys prefix..a:map_arg
 endfunction
 
-function! s:uninstall_mapping(map_type, keys, map_arg) abort
+function! s:uninstall_mapping(map_type, keys, map_arg, global) abort
   " only remove the mapping if the plug mapping is what we expect
   if maparg(a:keys, a:map_type) == a:map_arg
-    execute a:map_type.'unmap' '<buffer>' a:keys
+    let maybe_buffer = global ? '' : '<buffer>'
+    execute a:map_type.'unmap' maybe_buffer a:keys
   endif
 endfunction
 
@@ -208,8 +213,10 @@ function! s:do_mappings(func) abort
 
   " these are valid for ycm for sure. Needs checking with vim-lsp
   let mappings = [
-        \ ['', ll..'<tab>', 'Format'],
-        \ ['n', ll..'fw', "FindSymbolInWorkspace"],
+        \ ['n', ll..'<tab>', 'Format'],
+        \ ['v', ll..'<tab>', 'Format'],
+        \ ['i', '<C-Tab>', 'Format'],
+        \ ['n', ll..'fw', "FindSymbolInWorkspace", "global"],
         \ ['n', ll..'fd', "FindSymbolInDocument"],
         \ ['n', ll..'f', 'FixIt'],
         \ ['n', ll..'F', 'FixIt'],
@@ -234,12 +241,18 @@ function! s:do_mappings(func) abort
         \ ['n', ll..'<f5>', "Refresh"],
         \ ['n', '<f5>', "Refresh"],
         \ ['n', ll..'H', "ToggleInlayHints"],
+        \ ['n', ll..'s', "ToggleSignatureHelp"],
         \ ['n', ll..'h', "Hover"],
         \ ['n', ll..'D', "ShowDetailedDiagnostic"],
         \ ]
+        " these aren't working right:
+        " \ ['i', '<c-b>h', "ToggleInlayHints"],
+        " \ ['i', '<c-b>s', "ToggleSignatureHelp"],
 
-  for [map_type, keys, command] in mappings
-    call a:func(map_type, keys, '<plug>(FilcabLsp'.command.')')
+  for [map_type, keys, command; extra_props] in mappings
+    call s:log(4, "extra_props:", string(extra_props), "index(..., global):", index(extra_props, "global"))
+    let global = index(extra_props, "global") != -1
+    call a:func(map_type, keys, '<plug>(FilcabLsp'.command.')', global)
   endfor
 endfunction
 
