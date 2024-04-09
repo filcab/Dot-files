@@ -1,0 +1,148 @@
+#!/bin/bash
+
+if [ ! -z "$BASH_VERSION" ]; then
+  # test setting up fzf on bash (maybe add the zsh one too)
+  eval "$(fzf --bash)"
+
+  __has() {
+    command -v "$1" >/dev/null 2>&1
+  }
+
+  # override _fzf_compgen_{path,dir} if fd is available as it's much faster than find (default)
+  # taken from README.md
+  # TODO: Maybe add CDPATH, $(dirs), etc, to the search?
+  _fzf_compgen_path() {
+    fd --hidden --follow --exclude ".git" . "$1"
+  }
+  _fzf_compgen_dir() {
+    fd --type d --hidden --follow --exclude ".git" . "$1"
+  }
+
+  # cross-platform finding of commands to do some things
+  cmd_tree="echo no preview command available for file viewing"
+  if __has batcat; then
+    # if we have a `batcat`, it's very likely that it's the program we want, so prefer that to plain `bat`, just in case
+    cmd_cat="batcat -n --color=always {}"
+  elif __has bat; then
+    cmd_cat="bat -n --color=always {}"
+  else
+    # assume `cat` is available
+    cmd_cat="cat -n {}"
+  fi
+
+  cmd_tree="echo no preview command available for tree listing"
+  if __has eza; then
+    cmd_tree="eza --color=always --tree --group-directories-first --classify --icons {}"
+  elif __has tree; then
+    cmd_tree="tree -C {}"
+  elif __has tree.com && __has rg; then
+    # cowboy windows command seems to work ok
+    # rg is there for removing "empty" lines of text where we only have pipes and spaces
+    # FIXME: Maybe change to be a grep (or rg if available, of course) command?
+    cmd_tree="MSYS_NO_PATHCONV=1 tree.com /a /f {} | rg -v \"^(\\s*\\|)+\\s*\$\" | tail -n +3"
+  elif __has fd; then
+    # not a proper tree, just listing of files and directories
+    cmd_tree="fd {}"
+  elif __has find; then
+    # not a proper tree, just listing of files and directories
+    cmd_tree="find {}"
+  fi
+
+  if __has pbcopy; then
+    cmd_copy="pbcopy"
+  elif __has clip.exe; then
+    cmd_copy="clip.exe"
+  elif __has xclip; then
+    # from https://superuser.com/questions/288320/whats-like-osxs-pbcopy-for-linux/288333#288333
+    # assume the command works if it's been found
+    cmd_copy="xclip -selection clipboard"
+  elif __has xsel; then
+    # assume the command works if it's been found
+    # from https://superuser.com/questions/288320/whats-like-osxs-pbcopy-for-linux/288333#288333
+    cmd_copy="xsel --clipboard --input"
+  fi
+
+  # Preview file content using bat (https://github.com/sharkdp/bat)
+  FZF_CTRL_T_OPTS="\
+    --walker-skip .git,node_modules,target \
+    --preview '$cmd_cat || $cmd_tree' \
+    --bind 'ctrl-/:change-preview-window(down|hidden|)' \
+    --bind 'ctrl-e:accept-or-print-query' \
+    "
+  if [ ! -z "$cmd_copy" ]; then
+    FZF_CTRL_T_OPTS+="--bind 'ctrl-y:execute-silent(echo -n {2..} | $cmd_copy)+abort'"
+  fi
+  export FZF_CTRL_T_OPTS
+
+  # CTRL-/ to toggle small preview window to see the full command
+  # CTRL-Y to copy the command into clipboard using pbcopy
+  FZF_CTRL_R_OPTS="\
+    --preview 'echo {}' --preview-window up:3:hidden:wrap \
+    --color header:italic \
+    --header 'Press CTRL-Y to copy command into clipboard' \
+    --bind 'ctrl-/:toggle-preview' \
+    --bind 'ctrl-e:accept-or-print-query' \
+    "
+  if [ ! -z "$cmd_copy" ]; then
+    FZF_CTRL_R_OPTS+="--bind 'ctrl-y:execute-silent(echo -n {2..} | $cmd_copy)+abort'"
+  fi
+  export FZF_CTRL_R_OPTS
+
+  # Print tree structure in the preview window
+  FZF_ALT_C_OPTS="\
+    --walker-skip .git,node_modules,target \
+    --preview '$cmd_tree' \
+    --bind 'ctrl-e:accept-or-print-query' \
+    "
+  if [ ! -z "$cmd_copy" ]; then
+    FZF_ALT_C_OPTS+="--bind 'ctrl-y:execute-silent(echo -n {2..} | $cmd_copy)+abort'"
+  fi
+  export FZF_ALT_C_OPTS
+
+  # Advanced customization of fzf options via _fzf_comprun function
+  # - The first argument to the function is the name of the command.
+  # - You should make sure to pass the rest of the arguments to fzf.
+  # this is the command we run when expanding the ** token
+  _fzf_comprun() {
+    local command=$1
+    shift
+
+    preview_args=""
+    case "$command" in
+      cd)
+        __has tree && preview_args="--preview '$cmd_tree | head -200'"
+        ;;
+      export|unset)
+        preview_args="--preview \"eval 'echo \$'{}\""
+        ;;
+      ssh)
+        __has dig && preview_args="--preview 'dig {}'"
+        ;;
+      *)
+        preview_args="--preview '$cmd_cat || $cmd_tree'"
+        ;;
+    esac
+
+    fzf $preview_args "$@"
+  }
+
+  # for ssh, complete without needing the '**' token
+  # unsure I want this, as it'll do the completion anywhere in the line, not just where a host is expected
+  # _fzf_complete_ssh_notrigger() {
+  #   FZF_COMPLETION_TRIGGER='' _fzf_host_completion
+  # }
+  # complete -o bashdefault -o default -F _fzf_complete_ssh_notrigger ssh
+
+  # # this seems super slow on Windows, spawns tons of bash instances...
+  # # also added https://github.com/lincheney/fzf-tab-completion
+  # # setup some variables to behaviours I like more
+  # FZF_COMPLETION_AUTO_COMMON_PREFIX=true
+  # FZF_COMPLETION_AUTO_COMMON_PREFIX_PART=true
+  # # now bind it if it's available
+  # if hash fzf_bash_completion 2>/dev/null; then
+  #   bind -x '"\t": fzf_bash_completion'
+  # fi
+
+  unset __has
+fi
+
