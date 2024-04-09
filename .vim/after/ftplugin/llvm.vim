@@ -10,7 +10,7 @@ setlocal iskeyword+=@ iskeyword+=%
 "setlocal comments+=:;
 setlocal comments=s0:\ -,m0:;,e0:;;,:;
 
-let s:undo_ftplugin = 'setlocal softtabstop< shiftwidth< expandtab< iskeyword< comments<'
+let s:undo_ftplugin = 'setlocal softtabstop< shiftwidth< expandtab< iskeyword< comments<|unlet b:did_filcab_after_llvm_ftplugin'
 if exists('b:undo_ftplugin')
   let b:undo_ftplugin .= '|'.s:undo_ftplugin
 else

@@ -23,7 +23,7 @@ if found_trailing_ws
 endif
 let b:pymode_trim_whitespaces = !found_trailing_ws
 
-let s:undo_ftplugin = 'setlocal omnifunc< textwidth< | nunmap <buffer> <LocalLeader><Tab> | unlet b:did_filcab_after_python_ftplugin'
+let s:undo_ftplugin = 'setlocal omnifunc< textwidth< | silent! nunmap <buffer> <LocalLeader><Tab> | unlet b:did_filcab_after_python_ftplugin'
 if exists('b:undo_ftplugin')
   let b:undo_ftplugin .= '|'.s:undo_ftplugin
 else

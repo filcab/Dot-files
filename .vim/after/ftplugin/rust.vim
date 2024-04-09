@@ -19,5 +19,5 @@ function! FilcabRustFtPluginUndo()
 endfunction
 
 " Add to the rest of the undo_ftplugin commands
-let b:undo_ftplugin .= "|call FilcabRustFtPluginUndo()"
+let b:undo_ftplugin .= "|call FilcabRustFtPluginUndo()|unlet b:did_filcab_after_rust"
 let b:did_filcab_after_rust = 1

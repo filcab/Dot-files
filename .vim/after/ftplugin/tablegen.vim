@@ -10,5 +10,5 @@ setlocal matchpairs+=<:>
 setlocal softtabstop=2 shiftwidth=2
 setlocal expandtab
 
-let b:undo_ftplugin = get(b:, 'undo_ftplugin', '') . '|setlocal matchpairs< softtabstop< shiftwidth< expandtab<'
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '') . '|setlocal matchpairs< softtabstop< shiftwidth< expandtab<|unlet b:did_ftplugin'
 let b:did_ftplugin = 1

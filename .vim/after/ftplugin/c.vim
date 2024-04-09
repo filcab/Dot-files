@@ -63,5 +63,5 @@ compiler clang
 nnoremap <buffer><silent><unique> <F5> <cmd>call filcab#c#ClangCheck()<cr>
 
 
-let b:undo_ftplugin = get(b:, 'undo_ftplugin', '').."|call filcab#lsp#undo_mappings()"
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '').."|call filcab#lsp#undo_mappings()|unlet b:did_filcab_after_c_ftplugin"
 let b:did_filcab_after_c_ftplugin = 1

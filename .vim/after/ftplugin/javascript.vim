@@ -43,7 +43,7 @@ elseif get(g:, 'lsp_impl', '') == ''
   endfunction
 
   " Add to the rest of the undo_ftplugin commands
-  let b:undo_ftplugin .= "|call FilcabJavascriptFtPluginUndo()"
+  let b:undo_ftplugin .= "|call FilcabJavascriptFtPluginUndo()|unlet b:did_filcab_after_js_ftplugin"
 endif
 
 let b:did_filcab_after_js_ftplugin = 1
