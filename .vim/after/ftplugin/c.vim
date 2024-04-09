@@ -45,10 +45,13 @@ elseif get(g:, 'lsp_impl', '') == ''
 
   function! FilcabCFtPluginUndo()
     setlocal omnifunc<
-    nunmap <buffer> <LocalLeader><Tab>
-    vunmap <buffer> <LocalLeader><Tab>
-    iunmap <buffer> <C-Tab><Tab>
-    nunmap <buffer> <F5>
+    silent! nunmap <buffer> <LocalLeader><Tab>
+    silent! vunmap <buffer> <LocalLeader><Tab>
+    silent! iunmap <buffer> <C-Tab><Tab>
+    if get(b:, "filcab_c_has_clang_check", v:false)
+      silent! nunmap <buffer> <F5>
+      unlet b:filcab_c_has_clang_check
+    endif
     autocmd! FilcabCFtAutoCommands
   endfunction
 
@@ -60,7 +63,10 @@ endif
 compiler clang
 
 " Extra clang-check keybinding. Mostly unused
-nnoremap <buffer><silent><unique> <F5> <cmd>call filcab#c#ClangCheck()<cr>
+if index(g:filcab_features, "lsp") < 0
+  nnoremap <buffer><silent><unique> <F5> <cmd>call filcab#c#ClangCheck()<cr>
+  let b:filcab_c_has_clang_check = v:true
+endif
 
 
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '').."|call filcab#lsp#undo_mappings()|unlet b:did_filcab_after_c_ftplugin"
