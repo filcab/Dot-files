@@ -20,6 +20,16 @@ if [ -d ~/dev/brew/etc/bash_completion.d ]; then
   done
 fi
 
+case ${uname_s} in
+  MINGW*|MSYS*)
+    # do not try to crawl $PATH looking for programs when nothing has been typed
+    # yet and TAB is pressed.  this action usually hangs Windows machines due to
+    # bad FS perf for what bash is doing (especially when antivirus programs are
+    # installed and looking at all those executables)
+    shopt -s no_empty_cmd_completion
+    ;;
+esac
+
 # fix spelling errors for cd, only in interactive shell
 shopt -s cdspell
 
