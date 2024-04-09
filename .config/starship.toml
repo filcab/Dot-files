@@ -19,9 +19,30 @@ show_notifications = false
 min_time_to_notify = 45000
 
 [directory]
+# show one char per "truncated" path component
+fish_style_pwd_dir_length = 1
+# don't truncate the last five path components
 truncation_length = 5
+# interesting, but I think it truncates too much in general (I'm at the top of
+# the repo most of the time anyway)
 truncate_to_repo = false
 truncation_symbol = '…'
+# underline the repo root. 'bold cyan' is the default style
+before_repo_root_style = 'bold cyan'
+repo_root_style = 'bold cyan underline'
+# always use '/' as a path separator, even on Windows
+use_os_path_sep = false
+
+[git_metrics]
+# let's try this out... Doesn't seem to be too slow, even in huge repos
+disabled = false
+
+[git_status]
+# some non-defaults to get more information
+ahead = '⇡${count}'
+diverged = '⇕⇡ahead_count}⇣${behind_count}'
+behind = '⇣${count}'
+staged = '[++\($count\)](green)'
 
 [golang]
 format = '[$symbol($version )]($style)'
@@ -29,11 +50,15 @@ format = '[$symbol($version )]($style)'
 #[line_break]
 #disabled = true
 
+[os]
+disabled = false
+
 [perl]
 format = '[$symbol($version )]($style)'
 
 [python]
-python_binary = ['python3', 'python', 'python2']
+# linux stuff should be kind-of sorted already, so try 'python' first
+# python_binary = ['python3', 'python', 'python2']
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
 [ruby]
@@ -44,22 +69,35 @@ format = '[$symbol($version )]($style)'
 
 [shell]
 bash_indicator = "bash"
-powershell_indicator = "PS"
+powershell_indicator = "pwsh"
 disabled = false
 
 [status]
+disabled = false
+format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
+
+[sudo]
 disabled = false
 
 [swift]
 format = '[$symbol($version )]($style)'
 
-#[time]
-#format = 'at [$time]($style) '
-#style = 'bold yellow'
-#use_12hr = false
-#disabled = true
-#utc_time_offset = 'local'
-#time_range = '-'
+# If I want the time, it's on the right side of the prompt, so would need to
+# re-do the top-level `format` key to have `$all$time$line_break...` repeating
+# everything that's after `$line_break` on the default prompt
+# let's not do that for now
+# [time]
+# disabled = false
 
 #[custom]
 
+# from https://github.com/starship/starship/discussions/1252#discussioncomment-8738230
+[custom.reponame]
+# require_repo = true
+# symbol = ' '
+# # weirdly, *all* solutions work in `starship explain`, but not in the shell proper... on *one* repo (url is of the form `host:three/path/components`)
+# # command = "git ls-remote --get-url | sed 's_^.*:__;s_\\.git$__;s#\\([^/]\\+/[^/]\\+\\)$#__ESCAPE__\\1#;s#^.*__ESCAPE__##';"
+# this one might be weird when there's only one path component (i.e: `host:path`)
+# command = "git ls-remote --get-url | perl -n -e 's/^.*://;s/\\.git$//;@components=split(\"/\");print join(\"/\", @components[-2..-1])';"
+# description = "The github-like repository name ($user_or_org/$repo)"
+# when = true
