@@ -1,12 +1,11 @@
 # From https://jonasdevlieghere.com/a-better-youcompleteme-config/
 # Got version in https://github.com/JDevlieghere/dotfiles on 2018/May/03
 
+import logging
 import os
 import os.path
-import fnmatch
-import logging
+import shutil
 import ycm_core
-import re
 
 BASE_FLAGS = [
         '-Wall',
@@ -187,16 +186,29 @@ def FlagsForFile(filename, **kwargs):
 
 def Settings(**kwargs):
     if kwargs['language'] == 'python':
-        plugin_configs = {}
         # FIXME: Get line length from vim/default and set it up for black and ruff
+        line_length = 88  # same as python's black
+        # vimsupport isn't available on ycmd, just on the python side of ycm
+        # unsure how to best propagate this information to the lsp
+        # line_length = vimsupport.GetIntValue('&textwidth')
+
+        plugin_configs = {}
         # default-enabled plugins:
         # mypy for typing, configs: https://github.com/python-lsp/pylsp-mypy?tab=readme-ov-file#configuration
-        # black for indenting, configs: https://github.com/python-lsp/python-lsp-black?tab=readme-ov-file#configuration
+        # black for indenting (if ruff is not available, check further down), configs: https://github.com/python-lsp/python-lsp-black?tab=readme-ov-file#configuration
         # is there an easy way to find out if these plugins have been installed?
-        ALWAYS_ENABLED = ['black', 'pylsp_mypy']
+        plugin_configs['pylsp_mypy'] = {
+            'enabled': True,
+            'dmypy': True,
+            'report_progress': True,
+        }
+        plugin_configs['black'] = {
+            'enabled': True,
+            'line_length': line_length,
+        }
+
+        # remove other formatters, assume we always have black or ruff
         ALWAYS_DISABLED = ['autopep8', 'yapf']
-        for plugin in ALWAYS_ENABLED:
-            plugin_configs[plugin] = {'enabled': True}
         for plugin in ALWAYS_DISABLED:
             plugin_configs[plugin] = {'enabled': False}
 
@@ -205,15 +217,16 @@ def Settings(**kwargs):
         # check if the executable (automatically found or via search) is there. If so,
         # use ruff-lsp, otherwise use whatever was default
         if shutil.which('ruff-lsp'):
-            # we found ruff, disable other plugins that do the same thing
-            for plugin in ['pycodestyle', 'pyflakes', 'mccabe']:
+            # we found ruff, disable other plugins that do the same thing, including
+            # 'black', which we've setup earlier
+            for plugin in ['pycodestyle', 'pyflakes', 'mccabe', 'black']:
                 plugin_configs[plugin] = {'enabled': False}
             plugin_configs['ruff'] = dict(
                 # https://github.com/python-lsp/python-lsp-ruff?tab=readme-ov-file#configuration
                 # defaults: https://docs.astral.sh/ruff/configuration/
                 enabled=True,
                 formatEnabled=True,
-                # lineLength=...,
+                lineLength=line_length,
             )
 
         return {
