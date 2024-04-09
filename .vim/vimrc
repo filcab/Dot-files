@@ -257,15 +257,17 @@ if &t_Co > 2 || has('gui_running')
     silent! colorscheme molokai
   endif
 
+  " protect against changing the font when we reload vimrc (only do this when
+  " has('vim_starting')), just so we don't jump around too much
   if has('macunix') && has('gui_running') && has('vim_starting')
-    set guifont=Monaco:h14
+    set guifont=FiraCode\ Nerd\ Font:h12,Monaco:h14
   endif
-
   if has('win32') && has('gui_running') && has('vim_starting')
     " FiraCode NerdFont: nice font, with added icons
     " Cascadia: Seems a bit nicer
     " Consolas: Good, default Windows fonts (after Win7)
-    set guifont=FiraCode\ NF:h12,Cascadia\ Code:h13,Cascadia\ Mono:h13,Consolas:h13
+    " 'FiraCode NF' was the older version. Keep it around for a bit
+    set guifont=FiraCode\ Nerd\ Font:h12,FiraCode\ NF:h12,Cascadia\ Code:h13,Cascadia\ Mono:h13,Consolas:h13
     " Make the window larger by default. This should fit 3 side-by-side panes
     " very easily.
     set lines=80 columns=280
