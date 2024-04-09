@@ -1,0 +1,159 @@
+#!/usr/bin/env python
+
+from pathlib import Path
+
+import json
+import subprocess
+import os
+import sys
+
+
+VSWHERE = (
+    # this getenv should always give a decent value. If not, we'll complain that the
+    # directory doesn't exist anyway
+    Path(os.getenv("ProgramFiles(x86)"))  # type: ignore
+    / "Microsoft Visual Studio/Installer/vswhere.exe"
+)
+
+
+def find_vs_path():
+    proc = subprocess.run(
+        [VSWHERE, "-latest", "-format", "json", "-utf8"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    installation = json.loads(proc.stdout)
+    assert len(installation) == 1
+    return Path(installation[0]["installationPath"])
+
+
+def find_win_sdk_version():
+    import winreg
+    # FIXME: what about windows SDKs != 10?
+    key = winreg.OpenKey(
+        winreg.HKEY_LOCAL_MACHINE,
+        r"SOFTWARE\\WOW6432Node\\Microsoft\\Microsoft SDKs\\Windows\\v10.0"
+    )
+
+    ver, folder = None, None
+    try:
+        ver = winreg.QueryValueEx(key, "ProductVersion")[0]
+    except OSError as e:
+        print("failed to query windows sdk version:", e, file=sys.stderr)
+
+    try:
+        folder = Path(winreg.QueryValueEx(key, "InstallationFolder")[0])
+    except OSError as e:
+        print("failed to query windows sdk folder:", e, file=sys.stderr)
+
+    return ver, folder
+
+
+def main(prog, argv):
+    if sys.platform != "win32":
+        # nothing to do, don't even care about warning...
+        sys.exit(0)
+
+    vs_path = find_vs_path()
+    assert vs_path.is_dir()
+
+    vc_dir = vs_path / "VC"
+    # grab the vctools and vcredist versions from the text files in VC directories
+    vc_build_dir = vc_dir / "Auxiliary/Build"
+    assert vc_build_dir.is_dir()
+
+    vctools_ver = (
+        (vc_build_dir / "Microsoft.VCToolsVersion.default.txt").read_text().strip()
+    )
+    vcredist_ver = (
+        (vc_build_dir / "Microsoft.VCRedistVersion.default.txt").read_text().strip()
+    )
+    x64_dir = vc_dir / f"Tools/MSVC/{vctools_ver}/bin/Hostx64/x64"
+    print(x64_dir)
+    assert x64_dir.is_dir()
+
+    winsdk_ver, winsdk_dir = find_win_sdk_version()
+    info = dict(
+        vc_dir=vc_dir,
+        x64_dir=x64_dir,
+        vctools=vctools_ver,
+        vcredist=vcredist_ver,
+    )
+
+    if winsdk_ver:
+        info['winsdk'] = winsdk_ver
+        if winsdk_dir:
+            # that extra ".0"... never seen anything other than that...
+            winsdk_bindir = winsdk_dir / f"bin/{winsdk_ver}.0/x64"
+            print("winsdk_dir:", winsdk_dir)
+            print("winsdk_bindir:", winsdk_bindir)
+            assert winsdk_dir.is_dir()
+            assert winsdk_bindir.is_dir()
+            info['winsdk_dir'] = winsdk_dir
+            info['winsdk_bindir'] = winsdk_bindir
+
+    print(info)
+
+    if not argv:
+        # use the current directory only, if nothing was passed in
+        argv = ["."]
+
+    for d in map(Path, argv):
+        cache = d / "CMakeCache.txt"
+        if not cache.is_file():
+            print("Doesn't look like a cmake build dir:", d)
+            continue
+
+        adjust_cache_paths_to_vs_install(cache, info)
+
+
+CMAKE_VARS_VCTOOLS = [
+    "CMAKE_AR",
+    "CMAKE_ASM_MASM_COMPILER",
+    "CMAKE_CXX_COMPILER",
+    "CMAKE_C_COMPILER",
+    "CMAKE_LINKER",
+]
+CMAKE_VARS_WINSDK_TOOLS = [
+    "CMAKE_MT",
+    "CMAKE_RC_COMPILER",
+]
+
+
+def adjust_cache_paths_to_vs_install(cache, info):
+    in_contents = cache.read_text().splitlines()
+    out_contents = []
+    for line in in_contents:
+        if not line or line.startswith("//") or line.startswith("#"):
+            out_contents.append(line)
+            continue
+
+        # use maxsplit as we might have '=' in the value
+        var_decl, value = line.split("=", maxsplit=1)
+        # don't use maxsplit as we really only expect one ':' in there
+        var_name, var_type = var_decl.split(":")
+        if var_name in CMAKE_VARS_VCTOOLS:
+            tool = Path(value).name
+            new_exe = info['x64_dir'] / tool
+            new_line = f"{var_decl}={new_exe.as_posix()}"
+            print(f"changing var:\n{line}\n{new_line}")
+        elif var_name in CMAKE_VARS_WINSDK_TOOLS:
+            tool = Path(value).name
+            new_exe = info['winsdk_bindir'] / tool
+            new_line = f"{var_decl}={new_exe.as_posix()}"
+            print(f"changing var:\n{line}\n{new_line}")
+        else:
+            new_line = line
+        out_contents.append(new_line)
+
+    if in_contents != out_contents:
+        # cache.write_text("\n".join(out_contents))
+        print("would write", cache)
+    else:
+        print("no change in", cache)
+
+
+if __name__ == "__main__":
+    prog, *args = sys.argv
+    sys.exit(main(prog, args))
