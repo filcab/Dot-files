@@ -2,6 +2,11 @@
 # a command-line option that you want to pass to `bat` by default. You can
 # run `bat --help` to get a list of all possible configuration options.
 
+# customize style components to remove `grid` and add `header-filesize` and
+# `rule` which splits files only applies when called interactively/with
+# --color=always
+--style=changes,header,header-filesize,numbers,rule,snip
+
 # Specify desired highlighting theme (e.g. "TwoDark"). Run `bat --list-themes`
 # for a list of all available themes
 --theme="Dracula"
