@@ -203,7 +203,7 @@ endfunction
 function! s:uninstall_mapping(map_type, keys, map_arg, global) abort
   " only remove the mapping if the plug mapping is what we expect
   if maparg(a:keys, a:map_type) == a:map_arg
-    let maybe_buffer = global ? '' : '<buffer>'
+    let maybe_buffer = a:global ? '' : '<buffer>'
     execute a:map_type.'unmap' maybe_buffer a:keys
   endif
 endfunction
