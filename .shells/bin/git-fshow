@@ -1,0 +1,10 @@
+#!/bin/sh
+# no args for git show for now, they all get passed to git log
+
+selected=$(git pretty --all --color=always "$@" | fzf --ansi --multi --no-sort --layout=reverse-list | sed -e 's/^[^0-9a-f]*\([0-9a-f]\+\)[^0-9a-f].*$/\1/')
+if [ ! -z "$selected" ]; then
+  git show $selected
+else
+  : echo canceled...
+fi
+exit "$?"
