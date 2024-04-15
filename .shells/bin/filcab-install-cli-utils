@@ -1,0 +1,236 @@
+#!/usr/bin/env python
+
+from dataclasses import dataclass
+from shutil import which
+from typing import List, Optional  # , Union
+
+# import multiprocessing
+import argparse
+import logging
+import os
+import sys
+
+logger = logging.getLogger(__name__)
+
+
+class ToolSource:
+    pass
+
+
+class Brew(ToolSource):
+    pass
+
+
+class Cargo(ToolSource):
+    # assume we're always building for the current CPU anyway, so let's get all the
+    # features
+    ENV_EXTRAS = dict(RUSTFLAGS="-C target-cpu=native")
+    pass
+
+
+class Pkg(ToolSource):
+    pass
+
+
+class WinGet(ToolSource):
+    # this one can get multiple packages as argument but will install serially
+    # to see if a specific package is installed:
+    # seems to need to go through powershell in order to run grep on it, so python might
+    # need to do the same
+    # f'powershell -NoProfile -Command "winget list -query {pkg_id} --exact"'
+    # show what packages are upgradeable: "winget upgrade"
+    # (maybe use that one when we want to upgrade installed packages?)
+    # then winget upgrade --exact ... takes multiple package IDs
+    pass
+
+
+SOURCES = dict(
+    brew=Brew,
+    cargo=Cargo,
+    winget=WinGet,
+)
+
+
+@dataclass
+class Tool:
+    # default name for the package (in most sources)
+    name:          str
+    # if which() finds any of the strings in this list, we assume the tool is installed
+    executables:    List[str] = []
+    os:             List[str] = []
+    # if not None: lists which sources have the package
+    available:      List[str] = []
+    # the opposite, for when it's just not available in one or two sources
+    not_available:  List[str] = []
+    # platforms (per sys.platform) where this tool is available (empty list for "all")
+    platforms:      List[str] = []
+    # categories for filtering
+    categories:     List[str] = []
+    # let's explicitly list all program sources, at least for now, to allow for
+    # overrides. maybe use a dict for these?
+    # FIXME: have a way to say it's unavailable? I think most will have all packages
+    brew:           Optional[str] = None
+    cargo:          Optional[str] = None
+    pkg:            Optional[str] = None
+    winget:         Optional[str] = None
+    dnf:            Optional[str] = None
+    apt:            Optional[str] = None
+
+    def is_installed(self):
+        return any(which(exe, os.X_OK) is not None for exe in self.executables)
+
+    def update(self):
+        """
+        returns: (was_updated, reason)
+        reason is only valid is was_updated==False
+        """
+        if not self.is_installed():
+            return False, "not installed"
+
+
+# 7zip has a bad name for kwargs, but I don't want to quote all the keys
+# TOOLS = {"7zip": Tool(name="7zip", winget="7zip.7zip")} | dict(
+TOOLS = dict(
+    bat=Tool(
+        categories=["extra"],
+        executables=["bat", "batcat"],
+        name="bat",
+        winget="sharkdp.bat",
+    ),
+    # cmake=Tool(winget=["Kitware.CMake"]),
+    eza=Tool(
+        categories=["extra"],
+        dnf="rust-eza",
+        executables=["eza"],
+        name="eza",
+        winget="eza-community.eza",
+    ),
+    fd=Tool(
+        brew="fd",
+        categories=["extra"],
+        executables=["fd", "fd-find"],
+        name="fd-find",
+        winget="sharkdp.fd",
+    ),
+    fzf=Tool(
+        categories=["extra"],
+        executables=["fzf"],
+        name="fzf",
+        not_available=["cargo"],
+        winget="junegunn.fzf",
+    ),
+    # git=Tool(winget="Git.Git"),
+    # imhex=Tool(winget="WerWolv.ImHex"),
+    # nmap=Tool(winget="Insecure.Nmap"),
+    ripgrep=Tool(
+        categories=["default"],
+        executables=['rg', 'ripgrep'],
+        name="ripgrep",
+        winget="BurntSushi.ripgrep.MSVC",
+    ),
+    rustup=Tool(
+        available=["winget"],
+        categories=["default"],
+        executables=["rustup"],
+        # maybe have some way to install elsewhere... for now just use the name that
+        # apt, etc, might find...
+        name="rustup",
+        winget="Rustlang.Rustup",
+    ),
+    # p4v=Tool(winget=["Perforce.P4V"]),
+    starship=Tool(
+        categories=["default"],
+        executables=["starship"],
+        name="starship",
+        winget="Starship.Starship",
+    ),
+    # maybe add some sysinternals stuff?
+    # Microsoft.Sysinternals.ProcessMonitor
+    # Microsoft.Sysinternals.ProcessExplorer
+    # Microsoft.Sysinternals.Handle?
+    # Microsoft.Sysinternals.PsTools?
+    # ...
+    # TortoiseSVN=Tool(
+    #     name="TortoiseSVN.TortoiseSVN",
+    #     available=["winget"],
+    # ),
+    # TortoiseSVN=Tool(
+    #     name="TortoiseSVN.TortoiseSVN",
+    #     available=["winget"],
+    # ),
+    vim=Tool(
+        categories=["default"],
+        # maybe don't need the 'gui' category...
+        executables=["vim", "gvim"],
+        name="vim",
+        winget="vim.vim",
+    ),
+
+    # maybe extract it to get "Notepad++" as the key
+    # NotepadPlusPlus=Tool(winget="Notepad++.Notepad++"),
+
+    # WinDirStat=Tool(
+    #     available=["winget"],
+    #     categories=["extra", "gui"],
+    #     name="WinDirStat.WinDirStat",
+    #     platforms=["win32"],
+    # ),
+    # PowerToys=Tool(winget="Microsoft.PowerToys"),
+    # Python=Tool(winget="Python.Python.3.12"),  # Python: version is in winget pkg ID
+    WindowsTerminal=Tool(
+        # special tool... hmm
+        available=["winget"],
+        categories=["extra", "gui"],
+        platforms=["win32"],
+        name="Microsoft.WindowsTerminal",
+    ),
+    # WinMerge=Tool(winget="WinMerge.WinMerge"),
+    # WinSCP=Tool(winget="WinSCP.WinSCP"),
+    # Wireshark=Tool(
+    #     categories=["extra", "gui"],
+    #     name="WiresharkFoundation.Wireshark",
+    #     platform=["win32"],
+    # ),
+
+    # some additions that might be interesting if I don't want to install full Visual
+    # Studio stuff:
+    # winget:
+    # Microsoft.WindowsSDK.10.0.19041
+    # Microsoft.VCRedist.2015+.x64
+    # Microsoft.VisualStudio.2022.Professional(...?) (well...)
+)
+
+
+def parse_args(argv):
+    p = argparse.ArgumentParser(
+        prog,
+        description="Install most CLI utilities I rely on"
+    )
+    p.add_argument(
+        "--log-level",
+        choices=logging.getLevelNamesMapping().keys(),
+        default=logging.INFO,
+    )
+    p.add_argument(
+        "--extras",
+        action="store_true",
+        help="Install some extra utilities which I'm looking at",
+    )
+    # default to all sources, but if any was specified, only use those
+    p.add_argument("--source", action="append", dest="sources", choices=SOURCES)
+    args = p.parse_args(argv)
+
+    if not args.sources:
+        args.sources = SOURCES.keys()
+
+    return args
+
+
+def main(prog, argv):
+    args = parse_args(argv)
+    print(args)
+
+
+if __name__ == "__main__":
+    prog, *argv = sys.argv
+    sys.exit(main(prog, argv))
