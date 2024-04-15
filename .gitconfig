@@ -1,6 +1,7 @@
 [alias]
-	pretty = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-	pretty2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
+	pretty = log --graph --date-order --pretty=mypretty --abbrev-commit --date=relative
+	# fshow = "!f() { : git log; selected=$(git pretty --all --color=always \"$@\" | fzf --ansi | cut -d \\' -f2 | cut -d ' ' -f1); test \"$?\" -eq 0 && git show \"$selected\"; }; f"
+	pretty2 = log --graph --all --format=mypretty2 --abbrev-commit
 	# "git pul" => git pull + git pretty with the updated revisions
 	# save current HEAD (avoid logging later if we didn't update it)
 	# git rev-parse @{1} trick is so we don't log if we don't have enough reflog (we need two entries for this head in the reflog for this head to be useful)
@@ -36,9 +37,17 @@
 
 # Test diff-highlight, which should be a bit better than regular word highlight
 [pager]
-	log = diff-highlight | less -R
-	show = diff-highlight | less -R
-	diff = diff-highlight | less -R
+	log = diff-highlight | less -RF
+	show = diff-highlight | less -RF
+	diff = diff-highlight | less -RF
+
+# pretty formats to abbreviate the git pretty commands
+[pretty.mypretty]
+	format = format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
+[pretty.mypretty2]
+	format = format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)'
+
 
 [rebase]
 	autoSquash = true
