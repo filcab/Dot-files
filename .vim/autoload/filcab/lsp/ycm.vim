@@ -47,7 +47,7 @@ function! filcab#lsp#ycm#is_ready() abort
   " I couldn't find a better way to detect if we've connected to the server
   " (LSP, etc)
   " This seems to work with (at least) clangd and generic LSP
-  return py3eval("'Server State: Initialized' in ycm_state.DebugInfo()")
+  return exists("b:ycm_completing") && py3eval("'Server State: Initialized' in ycm_state.DebugInfo()")
 endfunction
 
 function! filcab#lsp#ycm#ftplugin() abort
@@ -59,7 +59,7 @@ function! filcab#lsp#ycm#ftplugin() abort
   " ideal, but I don't feel like polling for a bit until we give up.
   if !exists('b:ycm_completing')
     let wait_time = 16 " hopefully this is enough for any machine I use
-    call s:log(2, "waiting", 16.."ms", "as ycm is not setup yet")
+    call s:log(0, "waiting", 16.."ms", "as ycm is not setup yet")
     call timer_start(wait_time, {->filcab#lsp#ycm#do_ftplugin()})
   else
     call filcab#lsp#ycm#do_ftplugin()
@@ -79,7 +79,15 @@ function! filcab#lsp#ycm#do_ftplugin() abort
   call s:ycm_mapping(subcommands, {"plug_name": "Format"}) " map_type: n
   call s:ycm_mapping(subcommands, {"plug_name": "Format", "map_type": "v"})
   call s:ycm_mapping(subcommands, {"plug_name": "Format", "map_type": "i"})
+
   call s:ycm_mapping(subcommands, {"plug_name": "GetDoc"})
+  " fallback to regular GetDoc if GetDocImprecise is not supported
+  let getdocfast = "GetDocImprecise"
+  if index(subcommands, getdocfast) == -1
+    let getdocfast = "getdoc"
+  endif
+  call s:ycm_mapping(subcommands, {"plug_name": "GetDocFast", "ycm_command": getdocfast})
+
   call s:ycm_mapping(subcommands, {"plug_name": "GetParent"})
 
   " fallback to regular GetType if GetTypeImprecise is not supported
@@ -98,6 +106,7 @@ function! filcab#lsp#ycm#do_ftplugin() abort
   endif
   call s:ycm_mapping(subcommands, {"plug_name": "GoToFast", "ycm_command": gotofast})
 
+  call s:ycm_mapping(subcommands, {"plug_name": "GoToAlternateFile"})
   call s:ycm_mapping(subcommands, {"plug_name": "GoToCallers"})
   call s:ycm_mapping(subcommands, {"plug_name": "GoToCallees"})
   call s:ycm_mapping(subcommands, {"plug_name": "GoToDeclaration"})
