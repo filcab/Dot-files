@@ -16,11 +16,19 @@
 	uplog = log @{upstream}..
 	fuplog = "!f() { : git fetch; git fetch \"$@\" && git uplog; }; f"
 
+[column]
+	ui = auto
+	# ui = auto,row,dense
+
+
 [commit]
 	verbose = true
 [core]
 	autocrlf = false
 	longpaths = true
+	# speeds up git status on huge repos by a log
+	# run `git update-index --test-untracked-cache` to ensure the current FS supports it properly
+	untrackedcache = true
 
 [diff]
 	algorithm = histogram
@@ -51,6 +59,9 @@
 	format = format:%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)
 
 
+[fetch]
+	# write commit graphs on fetch to get faster log --graph when maintenance is not on
+	writeCommitGraph = true
 [rebase]
 	autoSquash = true
 	autoStash = true
