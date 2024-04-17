@@ -167,8 +167,8 @@ endfunction
 function! filcab#lsp#do_ftplugin() abort
   if get(g:, 'lsp_impl', '') != ''
     call s:log(2, "call lsp#ftplugin for", g:lsp_impl)
-    call s:lsp_impl_ftplugin[g:lsp_impl]()
   endif
+  call s:lsp_impl_ftplugin[g:lsp_impl]()
 
   call filcab#lsp#install_mappings()
 endfunction
