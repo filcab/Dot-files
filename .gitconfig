@@ -37,9 +37,11 @@
 
 # Test diff-highlight, which should be a bit better than regular word highlight
 [pager]
-	log = diff-highlight | less -RF
-	show = diff-highlight | less -RF
-	diff = diff-highlight | less -RF
+	# less -RFX. -X (--no-init) is because termcap's deinit stuff sometimes
+	# clears the screen and I don't want that
+	log = diff-highlight | less --RAW-CONTROL-CHARS --quit-if-one-screen --no-init
+	show = diff-highlight | less --RAW-CONTROL-CHARS --quit-if-one-screen --no-init
+	diff = diff-highlight | less --RAW-CONTROL-CHARS --quit-if-one-screen --no-init
 
 # pretty formats to abbreviate the git pretty commands
 [pretty.mypretty]
