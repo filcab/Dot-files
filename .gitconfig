@@ -95,3 +95,37 @@
 	defaultBranch = main
 [rerere]
 	enabled = 1
+
+
+##########################################
+# testing delta:
+[core]
+	pager = delta
+# overwrite the previously-set values
+[pager]
+	log = delta
+	show = delta
+	diff = delta
+
+[interactive]
+	# https://github.com/dandavison/delta/issues/1650
+	# seems like only piping diffFilter through cat fixes the `git add -p`
+	# hang, --paging=never on delta is not enough
+	diffFilter = delta --color-only | cat
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
+
+[include]
+	path = ./.git-delta-themes
+[delta]
+	; navigate = true  # use n and N to move between diff sections
+	tabs = 4
+	# must run `bat cache --build` before this takes properly:
+	syntax-theme = Dracula  # any `bat` theme
+	features = arctic-fox zebra-dark
+##########################################
+
