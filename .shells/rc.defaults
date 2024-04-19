@@ -121,14 +121,14 @@ if hash vimpager 2>/dev/null;
 then
   export PAGER=vimpager
 else
-  export PAGER="less --RAW-CONTROL-CHARS --quit-if-one-screen"
+  export PAGER=less
 fi
 # do smart-case searching (if there's no uppercase letters, it's
 # case-insensitive) by default
 # maybe try out:
 # --quit-at-eof (quits the second time it reaches EOF)
 # --status-column (eh... maybe not?)
-export LESS="--ignore-case"
+export LESS="--RAW-CONTROL-CHARS --quit-if-one-screen --no-init --ignore-case"
 # TODO: Eventually setup some LESSOPEN/LESSCLOSE env vars to help with viewing files?
 
 ## cmake
