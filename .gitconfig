@@ -1,4 +1,6 @@
 [alias]
+	word-diff = diff --word-diff
+	diffword = diff --word-diff
 	pretty = log --graph --date-order --pretty=mypretty --abbrev-commit --date=relative
 	# fshow = "!f() { : git log; selected=$(git pretty --all --color=always \"$@\" | fzf --ansi | cut -d \\' -f2 | cut -d ' ' -f1); test \"$?\" -eq 0 && git show \"$selected\"; }; f"
 	pretty2 = log --graph --all --format=mypretty2 --abbrev-commit
@@ -14,8 +16,11 @@
 	# Use the null command as a hint to git-completion.bash
 	trymerge = "!f() { : git merge; git merge --no-commit \"$@\" || echo FAILED, please choose an earlier commit; echo Undoing changes; git merge --abort; }; f"
 	uplog = log @{upstream}..
+	# probably doesn'y need the null command as we want to complete the very first command which should be auto-detected
 	fuplog = "!f() { : git fetch; git fetch \"$@\" && git uplog; }; f"
 
+[branch]
+	sort = -committerdate
 [column]
 	ui = auto
 	# ui = auto,row,dense
