@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# TODO: In the future, do all the local-only updates once per day/week
+
+fetch() {
+  printf "fetching $2 "
+  outfile=$(curl --write-out "%{filename_effective}" --fail --silent --show-error -L -o "$1" "$2")
+  # we get here if we succeeded
+  printf "\r\033[Kwrote ${outfile}\n"
+}
+
+# args: output repo repo-path
+# repo-path: branch + path
+# fetches from github repos into ~/.shells/lib
+fetch_shelllib_gh() {
+  fetch "$HOME/.shells/lib/$1" "https://github.com/$2/raw/$3"
+}
+
+sleep 1
+# dump zsh compdef files into something that doesn't end in .zsh so we don't
+# source them when globbing lib/*.zsh
+set -e
+fetch_shelllib_gh ninja.bash ninja-build/ninja master/misc/bash-completion
+fetch_shelllib_gh ninja.zsh_compdef ninja-build/ninja master/misc/zsh-completion
+fetch_shelllib_gh git-completion.bash git/git master/contrib/completion/git-completion.bash
+fetch_shelllib_gh git-completion.zsh_compdef git/git master/contrib/completion/git-completion.zsh
+
+fetch_shelllib_gh git-prompt.sh git/git master/contrib/completion/git-prompt.sh
+
+if type rustup; then
+  printf "updating rustup and cargo completions for bash and zsh"
+  rustup completions bash rustup > ~/.shells/lib/rustup.bash
+  rustup completions zsh rustup > ~/.shells/lib/rustup.zsh_compdef
+  rustup completions bash cargo > ~/.shells/lib/cargo.bash
+  rustup completions zsh cargo > ~/.shells/lib/cargo.zsh_compdef
+  printf "\r\033[Kupdated rustup and cargo completions for bash and zsh"
+fi
