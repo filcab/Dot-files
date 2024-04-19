@@ -6,7 +6,10 @@ opt/vim-aurora|git|https://github.com/rafalbromirski/vim-aurora.git
 opt/neodark.vim|git|https://github.com/KeitaNakamura/neodark.vim.git
 opt/vim-one|git|https://github.com/rakr/vim-one.git
 opt/challenger-deep-theme|git|https://github.com/challenger-deep-theme/vim.git
-opt/dracula|git|https://github.com/dracula/vim.git
+# dracula needs to be in `start` as it relies on autoload picking it up
+# properly, which it does not unless we do a `packadd dracula` before
+# `colorscheme dracula`
+start/dracula|git|https://github.com/dracula/vim.git
 
 opt/vim-scriptease|git|https://github.com/tpope/vim-scriptease.git
 
