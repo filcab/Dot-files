@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -x
+for i in "$@"; do
+  # use short paths to avoid as many issues as we can
+  winpath="$(cygpath -ws "${i//&/^&}")"
+  "$COMSPEC" //c explorer "$winpath"
+done
