@@ -49,7 +49,7 @@ class GitUpdater(Updater):
         with self.ui.job(self.name) as job:
             if os.path.isdir(self.dst):
                 job.state("updating")
-                return job.run(
+                job.run(
                     [
                         "git",
                         # These repos are all very small and not often needed, don't
@@ -63,6 +63,22 @@ class GitUpdater(Updater):
                         "--autostash",
                     ]
                 )
+                job.run(
+                    [
+                        "git",
+                        # These repos are all very small and not often needed, don't
+                        # spin up fsmonitors
+                        "-c",
+                        "core.fsmonitor=false",
+                        "-C",
+                        self.dst,
+                        "submodule",
+                        "update",
+                        "--init",
+                        "--recursive",
+                    ]
+                )
+
             else:
                 job.state("cloning")
                 return job.run(
