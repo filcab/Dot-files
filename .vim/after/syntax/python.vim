@@ -5,12 +5,12 @@
 
 " add some newer built-in functions that python-mode doesn't have
 
-if g:pymode_syntax_builtin_types
+if get(g:, "pymode_syntax_builtin_types", 1)
   syn keyword pythonBuiltinTypeExtra memoryview
   hi def link pythonBuiltinTypeExtra Type
 endif
 
-if g:pymode_syntax_builtin_funcs
+if get(g:, "pymode_syntax_builtin_funcs", 1)
   syntax keyword pythonBuiltinFuncExtra aiter anext ascii breakpoint
   hi def link pythonBuiltinFuncExtra Function
 endif
