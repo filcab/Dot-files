@@ -267,7 +267,10 @@ if &t_Co > 2 || has('gui_running')
     " Cascadia: Seems a bit nicer
     " Consolas: Good, default Windows fonts (after Win7)
     " 'FiraCode NF' was the older version. Keep it around for a bit
-    set guifont=FiraCode\ Nerd\ Font:h12,FiraCode\ NF:h12,Cascadia\ Code:h13,Cascadia\ Mono:h13,Consolas:h13
+    " Needs the 'Mono' version of the fonts, only the GTK gui allows all fonts
+    set guifont=FiraCode\ Nerd\ Font\ Mono:h12,FiraCode\ NFM:h12,Cascadia\ Code:h13,Cascadia\ Mono:h13,Consolas:h13
+    " maybe check the other options?
+    set renderoptions=type:directx
     " Make the window larger by default. This should fit 3 side-by-side panes
     " very easily.
     set lines=80 columns=280
