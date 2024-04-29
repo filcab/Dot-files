@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from shutil import which
-from typing import List, Optional  # , Union
+from typing import List, Optional, Set  # , Union
 
 # import multiprocessing
 import argparse
@@ -14,22 +14,35 @@ logger = logging.getLogger(__name__)
 
 
 class ToolSource:
-    pass
+    @classmethod
+    def is_available(klass):
+        return which(klass.executable, os.X_OK)
+
+    def __init__(self):
+        self.queued: List[Tool] = []
+
+    def queue_for_install(self, name):
+        """return True if it's not installed and we will install"""
+        if self.is_installed(name):
+            return False
+        if self.can_install(name):
+            self.queued.append(name)
+            return True
 
 
 class Brew(ToolSource):
-    pass
+    executable = "brew"
 
 
 class Cargo(ToolSource):
+    executable = "cargo"
     # assume we're always building for the current CPU anyway, so let's get all the
     # features
     ENV_EXTRAS = dict(RUSTFLAGS="-C target-cpu=native")
-    pass
 
 
 class Pkg(ToolSource):
-    pass
+    executable = "pkg"
 
 
 class WinGet(ToolSource):
@@ -41,7 +54,7 @@ class WinGet(ToolSource):
     # show what packages are upgradeable: "winget upgrade"
     # (maybe use that one when we want to upgrade installed packages?)
     # then winget upgrade --exact ... takes multiple package IDs
-    pass
+    executable = "winget"
 
 
 SOURCES = dict(
@@ -56,19 +69,18 @@ class Tool:
     # default name for the package (in most sources)
     name:          str
     # if which() finds any of the strings in this list, we assume the tool is installed
-    executables:    List[str] = []
-    os:             List[str] = []
+    executables:    List[str] = field(default_factory=list)
+    os:             List[str] = field(default_factory=list)
     # if not None: lists which sources have the package
-    available:      List[str] = []
+    available:      List[str] = field(default_factory=list)
     # the opposite, for when it's just not available in one or two sources
-    not_available:  List[str] = []
+    not_available:  List[str] = field(default_factory=list)
     # platforms (per sys.platform) where this tool is available (empty list for "all")
-    platforms:      List[str] = []
+    platforms:      List[str] = field(default_factory=list)
     # categories for filtering
-    categories:     List[str] = []
+    categories:     List[str] = field(default_factory=list)
     # let's explicitly list all program sources, at least for now, to allow for
     # overrides. maybe use a dict for these?
-    # FIXME: have a way to say it's unavailable? I think most will have all packages
     brew:           Optional[str] = None
     cargo:          Optional[str] = None
     pkg:            Optional[str] = None
@@ -212,12 +224,20 @@ def parse_args(argv):
         default=logging.INFO,
     )
     p.add_argument(
-        "--extras",
+        "-n",
+        "--dry-run",
         action="store_true",
-        help="Install some extra utilities which I'm looking at",
+        help="don't actually run the commands to install/update, just show them"
     )
+    p.add_argument(
+        "-c",
+        "--categories",
+        nargs="+",
+        help="categories of tools to install",
+    )
+    p.add_argument("tools", metavar="TOOL", nargs="*", help="tools to install")
     # default to all sources, but if any was specified, only use those
-    p.add_argument("--source", action="append", dest="sources", choices=SOURCES)
+    p.add_argument("-s", "--source", action="append", dest="sources", choices=SOURCES)
     args = p.parse_args(argv)
 
     if not args.sources:
@@ -228,7 +248,33 @@ def parse_args(argv):
 
 def main(prog, argv):
     args = parse_args(argv)
+    enabled_sources = [
+        SOURCES[s]()
+        for s in args.sources
+        if SOURCES[s].is_available()
+    ]
     print(args)
+    print(enabled_sources)
+
+    will_try_install: Set[str] = set()
+    for cat in args.categories:
+        print("adding tools in category:", cat)
+        for k, t in TOOLS.items():
+            if cat in t.categories:
+                will_try_install.add(k)
+                break
+
+    for tool in args.tools:
+        print("adding tool", tool)
+        if tool in TOOLS:
+            will_try_install.add(tool)
+
+    print("will try to install these tools:", will_try_install)
+    for tool in will_try_install:
+        for source in enabled_sources:
+            if source.queue_for_install(tool):
+                # got queued, no need to check other sources
+                break
 
 
 if __name__ == "__main__":
