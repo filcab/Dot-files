@@ -19,8 +19,9 @@ fi
 
 if __has fzf; then
   git-fbranches() {
-    output="$(git rev-parse --abbrev-ref HEAD; # current branch name
-      { git branch | grep -v '\*' | cut -c 3-; } # other branches
+    # current branch name, then the other ones
+    output="$(git rev-parse --abbrev-ref HEAD;
+      { git branch | grep -v '\*' | cut -c 3-; }
     )"
     ret="$?"
     if [ "$ret" -ne 0 ]; then
@@ -49,7 +50,7 @@ if __has fzf; then
     fd --type d --hidden --follow --exclude ".git" . "$1"
   }
 
-  __setup_bash_fzf() {
+  __setup_fzf() {
     # do these commands in a function so we don't leak definitions, just the vars we exported
     max_lines=300
 
@@ -110,22 +111,21 @@ if __has fzf; then
       common_args+=(--bind "ctrl-y:execute-silent(echo -n {2..} | $cmd_copy)")
     fi
 
-    export FZF_CTRL_T_OPTS="${common_args[@]@Q}"" \
-      --preview "'$cmd_cat || { $cmd_tree | head -n $max_lines; }'" \
-      "
+    printf -v FZF_CTRL_T_OPTS " %q" "${common_args[@]}" \
+      --preview "$cmd_cat || { $cmd_tree | head -n $max_lines; }"
+    export FZF_CTRL_T_OPTS
 
     # use a special c-/ binding so we don't have three modes, and the preview here is not as useful
-    export FZF_CTRL_R_OPTS="${common_args[@]@Q}"" \
-      --bind 'ctrl-/:toggle-preview' \
+    printf -v FZF_CTRL_R_OPTS " %q" "${common_args[@]}" \
+      --bind ctrl-/:toggle-preview \
       --preview 'echo {}' --preview-window up:3:hidden:wrap \
-      "
       # --color header:italic \
       # --header 'Press CTRL-Y to copy command into clipboard' \
+    export FZF_CTRL_R_OPTS
 
     # Print tree structure in the preview window
-    export FZF_ALT_C_OPTS="${common_args[@]@Q}"" \
-      --preview "'$cmd_tree'" \
-      "
+    printf -v FZF_ALT_C_OPTS " %q" "${common_args[@]}" --preview "$cmd_tree"
+    export FZF_ALT_C_OPTS
 
     # Advanced customization of fzf options via _fzf_comprun function
     # - The first argument to the function is the name of the command.
@@ -154,8 +154,8 @@ if __has fzf; then
       fzf "${common_args[@]}" "${preview_args[@]}" "$@"
     }
   }
-  __setup_bash_fzf
-  unset __setup_bash_fzf
+  __setup_fzf
+  unset __setup_fzf
 
   # for ssh, complete without needing the '**' token
   # unsure I want this, as it'll do the completion anywhere in the line, not just where a host is expected
@@ -174,4 +174,3 @@ if __has fzf; then
   #   bind -x '"\t": fzf_bash_completion'
   # fi
 fi
-
