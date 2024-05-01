@@ -100,12 +100,12 @@
 ##########################################
 # testing delta:
 [core]
-	pager = delta
+	pager = delta || diff-highlight | less
 # overwrite the previously-set values
 [pager]
-	log = delta
-	show = delta
-	diff = delta
+	log = delta || diff-highlight | less
+	show = delta || diff-highlight | less
+	diff = delta || diff-highlight | less
 
 [interactive]
 	# https://github.com/dandavison/delta/issues/1650
