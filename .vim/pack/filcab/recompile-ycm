@@ -91,6 +91,11 @@ tentative_llvm_paths = list(
             "/usr/lib/llvm-13",
             "/usr/lib/llvm-14",
             "/usr/lib/llvm-15",
+            "/usr/lib/llvm-16",
+            "/usr/lib/llvm-17",
+            "/usr/lib/llvm-18",
+            "/usr/lib/llvm-19",
+            "/usr/lib/llvm-20",
             # freebsd ports
             "/usr/local/llvm14",
             "/usr/local/llvm15",
@@ -169,7 +174,7 @@ if platform.system() == "Windows":
 
 
 # , '--build-dir={}'.format(os.path.join(os.getcwd(), platform.system()))
-cmd = [sys.executable, "install.py"] + completers.cli_args()
+cmd = [sys.executable, "install.py", "--ninja"] + completers.cli_args()
 # ensure all stdout lines were printed before we exec
 print(f"Executing: {' '.join(cmd)}", flush=True)
 subprocess.check_call(cmd, env=env)
