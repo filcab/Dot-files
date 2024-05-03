@@ -1,5 +1,8 @@
-BoldAsFont=-1
+BoldAsFont=yes
 CursorType=block
 CursorBlinks=no
 ScrollbackLines=100000
 Term=xterm-256color
+ThemeFile=dracula
+Font=FiraCode Nerd Font Mono
+FontHeight=11
