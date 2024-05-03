@@ -8,7 +8,7 @@ else
 endif
 
 " args: options to term_start()
-function! s:recompileYCM(...)
+function! filcab#update_packages#recompileYCM(...)
   " install different variants so we can control what library gets added
   if has("win32unix")
     let ycm_suffix = ".win32unix"
@@ -24,7 +24,8 @@ function! s:recompileYCM(...)
     py3 << trim EOF
       if 'ycm_state' in globals():
         ycm_state.OnVimLeave()
-    EOF
+EOF
+  " not indented above so we get back to vim syntax
   endif
 
   let recompileScript = $MYVIMRUNTIME.'/pack/filcab/recompile-ycm'
@@ -109,7 +110,7 @@ function! s:updatePackages_step2(job, status) abort
     else
       let options = {}
     endif
-    call s:recompileYCM(options)
+    call filcab#update_packages#recompileYCM(options)
     execute ":bdelete" bufnr
   else
     echohl WarningMsg
@@ -120,6 +121,6 @@ endfunction
 
 " maybe do away with the previous commands. This one should stop on any error
 " anyway
-function! filcab#update_packages#updatePackages()
+function! filcab#update_packages#updatePackages() abort
   call s:updatePackages({'exit_cb': funcref('s:updatePackages_step2')})
 endfunction
