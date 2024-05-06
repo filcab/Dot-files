@@ -45,6 +45,8 @@ case ${uname_s} in
     export HOMEBREW_BUILD_FROM_SOURCE=1
     # No analytics
     export HOMEBREW_NO_ANALYTICS=1
+    # *sigh*: `brew install` ignores locally edited casks and formulae if
+    export HOMEBREW_NO_INSTALL_FROM_API=1
 
     ## Disable the creepy, unacceptable, stats requests by CocoaPods
     export COCOAPODS_DISABLE_STATS=1
