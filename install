@@ -9,7 +9,7 @@ from typing import List, NamedTuple
 DEFAULT_COMMAND = "validate"
 # TODO: Do we want to possibly install elsewhere?
 HOME = Path.home()
-non_installable = [".git", ".gitignore", "install", "TODO.md"]
+non_installable = [".DS_Store", ".git", ".gitignore", "install", "TODO.md"]
 
 
 class InstallSpecial(NamedTuple):
