@@ -1,4 +1,9 @@
 #!/bin/sh
+
+# if the shell is not interactive, it's not useful to setup the prompt or anything
+[[ $- != *i* ]] && return
+
+
 # cygwin doesn't support this ps invocation
 if [ -f "/proc/$$/exename" ]; then
   filcab_shell_exe=$(cat /proc/$$/exename)
