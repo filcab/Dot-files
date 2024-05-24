@@ -10,123 +10,149 @@ import sys
 
 
 # from ansible: check these files
-APT_UPDATE_SUCCESS_STAMP_PATH = Path("/var/lib/apt/periodic/update-success-stamp")
+APT_UPDATE_SUCCESS_STAMP_PATH = Path(
+  "/var/lib/apt/periodic/update-success-stamp"
+)
 APT_LISTS_PATH = Path("/var/lib/apt/lists")
 
 CACHE_UPDATE_FMT = "%Y/%m/%d %H:%M (%A)"
 
+
 def detect_package_manager():
-  if Path("/etc/debian_version").is_file():
-    if shutil.which("apt"):
-      return "apt"
-    print("warning: /etc/debian_version exists but can't find `apt`. Trying others")
+    if Path("/etc/debian_version").is_file():
+        if shutil.which("apt"):
+            return "apt"
+        print(
+          "warning: /etc/debian_version exists but can't find `apt`. "
+          "Trying others"
+        )
 
-  if sys.platform.startswith("freebsd"):
-    if shutil.which("pkg"):
-      return "pkg"
-    print("warning: sys.platform looks like `freebsd` but can't find `pkg`. Trying others")
+    if sys.platform.startswith("freebsd"):
+        if shutil.which("pkg"):
+            return "pkg"
+        print(
+            "warning: sys.platform looks like `freebsd` "
+            "but can't find `pkg`. Trying others"
+        )
 
-  raise Exception("ruh roh, no package manager matches the current system")
+    raise Exception("ruh roh, no package manager matches the current system")
+
+
+def pkg_parse(lines):
+    updates = {}
+    state = None
+    for line in lines:
+        if not line:
+            state = None
+            continue
+
+        if line.endswith("done") or line.startswith("Number"):
+            continue
+
+        old_state = state
+        if line == "New packages to be INSTALLED:":
+            state = "installs"
+        elif line == "Installed packages to be UPGRADED:":
+            state = "upgrades"
+        elif line == "Installed packages to be REINSTALLED:":
+            state = "reinstalls"
+
+        if state != old_state:
+            # print("switching states:", old_state, "->", state)
+            continue
+
+        if state:
+            if ":" in line:
+                pkg, data = map(str.strip, line.split(": "))
+                updates.setdefault(state, {})[pkg] = data
+            else:
+                pkg, *rest = line.strip().split()
+                updates.setdefault(state, {})[pkg] = " ".join(rest)
+
+            continue
+
+        if (
+            line.startswith("The following")
+            or line.startswith("The process")
+            or line.endswith("downloaded.")
+        ):
+            continue
+        print("unhandled line:", line)
 
 
 def pkg_list_updates():
-  cmd = ["pkg", "upgrade", "--dry-run"]
-  stdout = subprocess.run(
-    cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-  ).stdout.splitlines()
+    cmd = ["pkg", "upgrade", "--dry-run"]
+    lines = subprocess.run(
+        cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+    ).stdout.splitlines()
 
-  updates = {}
-  state = None
-  for line in stdout:
-    if not line:
-      state = None
-      continue
-
-    if line.endswith("done") or line.startswith("Number"):
-      continue
-
-    old_state = state
-    if line == "New packages to be INSTALLED:":
-      state = "installs"
-    elif line == "Installed packages to be UPGRADED:":
-      state = "upgrades"
-    elif line == "Installed packages to be REINSTALLED:":
-      state = "reinstalls"
-
-    if state != old_state:
-      # print("switching states:", old_state, "->", state)
-      continue
-
-    if state:
-      if ":" in line:
-        pkg, data = map(str.strip, line.split(": "))
-        updates.setdefault(state, {})[pkg] = data
-      else:
-        pkg, *rest = line.strip().split()
-        updates.setdefault(state, {})[pkg] = " ".join(rest)
-
-      continue
-
-    if line.startswith("The following") or line.startswith("The process") or line.endswith("downloaded."):
-      continue
-    print("unhandled line:", line)
-
-  maxlen = max(len(name) for pkgs in updates.values() for name in pkgs)
-  for label, pkgs in updates.items():
-    print(f"{label}:")
-    for name, data in pkgs.items():
-      print(f"  {name:{maxlen}}", data)
+    updates = pkg_parse(lines)
+    maxlen = max(len(name) for pkgs in updates.values() for name in pkgs)
+    for label, pkgs in updates.items():
+        print(f"{label}:")
+        for name, data in pkgs.items():
+            print(f"  {name:{maxlen}}", data)
 
 
-APT_INST_RE = re.compile(r'Inst (?P<name>\S+) \[(?P<cur>\S+)\] \((?P<new>\S+) (?P<repo>.*)\)')
+APT_INST_RE = re.compile(
+    r"Inst (?P<name>\S+) \[(?P<cur>\S+)\] \((?P<new>\S+) (?P<repo>.*)\)"
+)
+
+
 def apt_list_updates():
-  last_update = None
-  if APT_UPDATE_SUCCESS_STAMP_PATH.exists():
-    last_update = APT_UPDATE_SUCCESS_STAMP_PATH.stat().st_mtime
-  elif APT_LISTS_PATH.exists():
-    last_update = APT_LISTS_PATH.stat().st_mtime
+    last_update = None
+    if APT_UPDATE_SUCCESS_STAMP_PATH.exists():
+        last_update = APT_UPDATE_SUCCESS_STAMP_PATH.stat().st_mtime
+    elif APT_LISTS_PATH.exists():
+        last_update = APT_LISTS_PATH.stat().st_mtime
 
-  cmd = ["apt-get", "-s", "upgrade"]
-  stdout = subprocess.check_output(cmd, text=True)
-  directives = (l for l in stdout.splitlines() if l.startswith("Inst"))
-  repo_updates = {}
-  for line in directives:
-    if m := APT_INST_RE.match(line):
-      name, version_from, version_to, repo = m.groups()
-      repo_updates.setdefault(repo, {})[name] = version_from, version_to
-    else:
-      print("unmatched line:", line)
+    cmd = ["apt-get", "-s", "upgrade"]
+    stdout = subprocess.check_output(cmd, text=True)
+    directives = (
+      line for line in stdout.splitlines() if line.startswith("Inst")
+    )
+    repo_updates = {}
+    for line in directives:
+        if m := APT_INST_RE.match(line):
+            name, version_from, version_to, repo = m.groups()
+            repo_updates.setdefault(repo, {})[name] = version_from, version_to
+        else:
+            print("unmatched line:", line)
 
-  print_repo_names = len(repo_updates) > 1
-  if last_update:
-    formatted = datetime.fromtimestamp(last_update).strftime(CACHE_UPDATE_FMT)
-    print("Last cache update:", formatted)
-  if not repo_updates:
-    print("No updates")
-    return
+    print_repo_names = len(repo_updates) > 1
+    if last_update:
+        ts = datetime.fromtimestamp(last_update)
+        formatted = ts.strftime(CACHE_UPDATE_FMT)
+        print("Last cache update:", formatted)
+    if not repo_updates:
+        print("No updates")
+        return
 
-  maxlen = max(len(name) for updates in repo_updates.values() for name in updates)
-  for repo, updates in repo_updates.items():
-    if print_repo_names:
-      print(f"{repo}:")
-    for name, (version_from, version_to) in updates.items():
-      # maybe trim the version string?
-      print(f"  {name:{maxlen}}", version_from, "=>", version_to)
+    maxlen = max(
+        len(name) for updates in repo_updates.values() for name in updates
+    )
+    for repo, updates in repo_updates.items():
+        if print_repo_names:
+            print(f"{repo}:")
+        for name, (version_from, version_to) in updates.items():
+            # maybe trim the version string?
+            print(f"  {name:{maxlen}}", version_from, "=>", version_to)
 
 
 PKG_MANAGERS = dict(
-  apt=apt_list_updates,
-  pkg=pkg_list_updates,
+    apt=apt_list_updates,
+    pkg=pkg_list_updates,
 )
 
 
 def main(prog, argv):
-  package_manager = detect_package_manager()
-  func = PKG_MANAGERS.get(package_manager, None)
-  if func is None:
-    print("unknown package manager:", package_manager)
-  func()
+    package_manager = detect_package_manager()
+    func = PKG_MANAGERS.get(package_manager, None)
+    if func is None:
+        print("unknown package manager:", package_manager)
+    func()
+
 
 if __name__ == "__main__":
-  prog, *argv = sys.argv
-  sys.exit(main(prog, argv))
+    prog, *argv = sys.argv
+    sys.exit(main(prog, argv))
