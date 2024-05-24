@@ -30,7 +30,52 @@ def detect_package_manager():
 
 
 def pkg_list_updates():
-  pass
+  cmd = ["pkg", "upgrade", "--dry-run"]
+  stdout = subprocess.run(
+    cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+  ).stdout.splitlines()
+
+  updates = {}
+  state = None
+  for line in stdout:
+    if not line:
+      state = None
+      continue
+
+    if line.endswith("done") or line.startswith("Number"):
+      continue
+
+    old_state = state
+    if line == "New packages to be INSTALLED:":
+      state = "installs"
+    elif line == "Installed packages to be UPGRADED:":
+      state = "upgrades"
+    elif line == "Installed packages to be REINSTALLED:":
+      state = "reinstalls"
+
+    if state != old_state:
+      # print("switching states:", old_state, "->", state)
+      continue
+
+    if state:
+      if ":" in line:
+        pkg, data = map(str.strip, line.split(": "))
+        updates.setdefault(state, {})[pkg] = data
+      else:
+        pkg, *rest = line.strip().split()
+        updates.setdefault(state, {})[pkg] = " ".join(rest)
+
+      continue
+
+    if line.startswith("The following") or line.startswith("The process") or line.endswith("downloaded."):
+      continue
+    print("unhandled line:", line)
+
+  maxlen = max(len(name) for pkgs in updates.values() for name in pkgs)
+  for label, pkgs in updates.items():
+    print(f"{label}:")
+    for name, data in pkgs.items():
+      print(f"  {name:{maxlen}}", data)
 
 
 APT_INST_RE = re.compile(r'Inst (?P<name>\S+) \[(?P<cur>\S+)\] \((?P<new>\S+) (?P<repo>.*)\)')
