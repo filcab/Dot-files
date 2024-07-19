@@ -1,0 +1,1 @@
+C:/Dev/dot-files/.windows/bin/vs2022run.bat
