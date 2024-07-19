@@ -129,3 +129,5 @@
 	features = arctic-fox zebra-dark
 ##########################################
 
+[submodule]
+	recurse = true
