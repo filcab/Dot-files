@@ -30,6 +30,7 @@
 	verbose = true
 [core]
 	autocrlf = false
+	hooksPath = ~/.config/git-hooks
 	longpaths = true
 	# speeds up git status on huge repos by a log
 	# run `git update-index --test-untracked-cache` to ensure the current FS supports it properly
