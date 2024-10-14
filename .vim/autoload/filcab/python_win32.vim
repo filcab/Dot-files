@@ -2,6 +2,17 @@
 " vim --cmd 'let g:filcab_vim_python_use_debug=v:true' ...
 let g:filcab_vim_python_use_debug = get(g:, 'filcab_vim_python_use_debug', v:false)
 
+function! s:wherePython3() abort
+  let whereCmd = 'where '.shellescape(&pythonthreedll)
+  try
+    let whereOutput = system(whereCmd)->split('\r\?\n\+')[0]
+  catch
+    echom "couldn't find a pythonthreedll"
+    return v:none
+  endtry
+  return whereOutput
+endfunction
+
 " search for a system-wide python3 and set pythonthreedll
 " This is needed so git-for-windows' vim can find the system installed python3 dll
 " Only set it if it's not already set to something readable
@@ -11,8 +22,15 @@ function! filcab#python_win32#set_pythonthreedll() abort
     return
   endif
 
-  let whereCmd = 'where '.shellescape(&pythonthreedll)
-  let whereOutput = trim(system(whereCmd))
+  " hack it. prerequisite: symlink of the pythons in git-sdk-for-windows into
+  " git-for-windows. or we can probably just always use the git-sdk for our
+  " git stuff...
+  if has('win32unix')
+    let whereOutput = "/usr/bin/"..&pythonthreedll
+  else
+    let whereOutput = s:wherePython3()
+  endif
+
   " if `where` can find the dll, adjust for the debug version or just leave it
   " be, as the option will work
   if g:filcab_vim_python_use_debug
@@ -22,7 +40,6 @@ function! filcab#python_win32#set_pythonthreedll() abort
     let maybeDebugDLL = stem."_d.".extension
     if filereadable(maybeDebugDLL)
       let whereOutput = maybeDebugDLL
-      let &pythonthreedll = maybeDebugDLL
     endif
   endif
 
@@ -54,5 +71,8 @@ function! filcab#python_win32#set_pythonthreedll() abort
   endif
 
   " for some reason, we started to need this on py3.11 on Windows...
-  py3 import sys; sys.path.append(sys.path[2] + '\\\\DLLs')
+  if stridx(&pythonthreedll, "msys") == -1
+    " only needed if we're not using an msys python
+    py3 import sys; sys.path.append(sys.path[2] + '\\\\DLLs')
+  endif
 endfunction
