@@ -5,13 +5,13 @@ endif
 if get(g:, 'lsp_impl', '') == 'vim-lsp'
   setlocal omnifunc=lsp#complete
 elseif get(g:, 'lsp_impl', '') == ''
-  noremap <buffer><unique> <LocalLeader><Tab> :Black<cr>
+  silent! noremap <buffer><unique> <LocalLeader><Tab> :Black<cr>
   " default vim plugins have a decent function, it seems
   setlocal omnifunc=python3complete#Complete
   " python-mode also has some completion stuff
 endif
 
-let s:undo_ftplugin = 'setlocal omnifunc< textwidth< | silent! nunmap <buffer> <LocalLeader><Tab> | unlet b:did_filcab_after_python_ftplugin'
+let s:undo_ftplugin = 'setlocal omnifunc< textwidth< | silent! unmap <buffer> <LocalLeader><Tab> | unlet b:did_filcab_after_python_ftplugin'
 if exists('b:undo_ftplugin')
   let b:undo_ftplugin .= '|'.s:undo_ftplugin
 else
