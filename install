@@ -23,6 +23,11 @@ exceptions = {
         / "Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1",
         platforms=["win32"],
     ),
+    "NotepadPlusPlus-Dracula.xml": InstallSpecial(
+        path=Path(os.environ.get('AppData', ""))
+        / "Notepad++/themes/Dracula.xml",
+        platforms=["win32"],
+    ),
 }
 non_installable += exceptions.keys()
 
