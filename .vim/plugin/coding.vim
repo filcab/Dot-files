@@ -14,7 +14,9 @@ let g:clang_format_on_save = 0
 
 " tell clangd to query the driver for extra arguments (e.g: include paths)
 " '-log=verbose'
-let g:clangd_args = ['--query-driver=*', '--clang-tidy', '--suggest-missing-includes'] + get(g:, 'clangd_args', [])
+" --completion-style=bundled  <- default, overloads are bundled
+" --completion-style=detailed <- overloads are split
+let g:clangd_args = ['--query-driver=*', '--all-scopes-completion', '--clang-tidy', '--completion-style=detailed', '--suggest-missing-includes', ] + get(g:, 'clangd_args', [])
 
 " lsp implementations to try, in the desired order
 let g:lsp_impls = ["ycm", "vim-lsp"]
@@ -31,6 +33,8 @@ function YcmTargetFlags() abort
   return get(b:, "ycm_target_flags", get(g:, "ycm_target_flags", []))
 endfunction
 let g:ycm_extra_conf_vim_data = ["YcmTargetFlags()"]
+" make inlay hints a bit more visible than the default NonText highlight
+hi link YcmInlayHint Comment
 
 " Set in all our shells (Maybe set it if it wasn't set? (e.g: GUI vim in some
 " platforms))
