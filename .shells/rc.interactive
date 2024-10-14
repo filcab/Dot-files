@@ -58,25 +58,6 @@ case $(uname -r) in
     mount_c=$(findmnt C:\\ -o target -n)
     # WSL only, not used in MINGW, as that'll be git-bash already
     alias git-bash="\"/${mount_c}c/Program Files/Git/bin/bash.exe\" --login -i"
-    # don't use colors for ninja on Windows, as between mingw and Windows
-    # console defaults, we might lose the colors and get mangled characters
-    export NINJA_STATUS="%e [%u/%r/%f] "
-    ;;
-  *)
-    ### Ninja status: "time [left/running/finished]"
-    # define this as default so we don't repeat it in the mingw/msys and the -z TERM branches below
-    export NINJA_STATUS="%e [%u/%r/%f] "
-    case ${uname_s} in
-      MINGW*|MSYS*)
-        # don't use colors for ninja on Windows, as between mingw and Windows
-        # console defaults, we might lose the colors and get mangled characters
-        ;;
-      *)
-        if [ ! -z "$TERM" ] && command -v tput >/dev/null 2>&1; then
-          export NINJA_STATUS="$(tput bold)%e$(tput sgr0) [$(tput bold)$(tput setaf 1)%u$(tput sgr0)/$(tput bold)$(tput setaf 3)%r$(tput sgr0)/$(tput bold)$(tput setaf 2)%f$(tput sgr0)] "
-        fi
-        ;;
-    esac
     ;;
 esac
 
@@ -100,6 +81,7 @@ then
 else
   export PAGER=less
 fi
+
 # do smart-case searching (if there's no uppercase letters, it's
 # case-insensitive) by default
 # maybe try out:
@@ -107,11 +89,6 @@ fi
 # --status-column (eh... maybe not?)
 export LESS="--RAW-CONTROL-CHARS --quit-if-one-screen --no-init --ignore-case"
 # TODO: Eventually setup some LESSOPEN/LESSCLOSE env vars to help with viewing files?
-
-## cmake
-# So ctest shows us the output if a test failed
-export CTEST_OUTPUT_ON_FAILURE=On
-export CMAKE_EXPORT_COMPILE_COMMANDS=On
 
 ## color for manpages:
 export LESS_TERMCAP_mb=$'\e[01;31m'
@@ -126,84 +103,76 @@ export LESS_TERMCAP_ue=$'\e[0m'
 ### Load ssh-agent settings or start it and export its settings
 maybe_start_ssh_agent() {
   case "$(which ssh-agent)" in
-    /c/WINDOWS/System32/*)
-      return
+    /c/WINDOWS/System32/ssh-agent|"/c/Program Files/OpenSSH/ssh-agent")
+      # just assume we have no keys
+      agent_run_state=1
       ;;
+    *)
+      # all others must guarantee we have an ssh-agent before calling ssh-add
+
+    # Bail out if we're using ssh-agent forwarding
+    if [ ! -z "${SSH_CONNECTION}" -a -S "${SSH_AUTH_SOCK}" ]; then
+      # Don't print anything if we're under tmux (we've probably already
+      # reported)
+      if [ -z "$TMUX" -o \( ! -S "$(echo $TMUX | cut -d, -f 1)" \) ]; then
+        echo detected SSH_AUTH_SOCK from forwarded agent
+      fi
+      return
+    fi
+
+    # Avoid clashing between MINGW and Linux on the same machine, otherwise we
+    # end up with several ssh-agents running because the environments can't
+    # interoperate
+    local uname_s="$(uname -s)"
+    local env="$HOME/.ssh/agent.env.${uname_s}"
+
+    agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
+
+    agent_start () {
+        echo Starting a new ssh-agent
+        (umask 077; ssh-agent >| "$env")
+        . "$env" >| /dev/null ;
+    }
+
+    agent_load_env
+
+    # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+    agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
+
+    if [ ! "$SSH_AUTH_SOCK" -o "$agent_run_state" = 2 ]; then
+        agent_start
+    fi
   esac
 
-  # Bail out if we're using ssh-agent forwarding
-  if [ ! -z "${SSH_CONNECTION}" -a -S "${SSH_AUTH_SOCK}" ]; then
-    # Don't print anything if we're under tmux (we've probably already
-    # reported)
-    if [ -z "$TMUX" -o \( ! -S "$(echo $TMUX | cut -d, -f 1)" \) ]; then
-      echo detected SSH_AUTH_SOCK from forwarded agent
-    fi
-    return
-  fi
-
-  # Avoid clashing between MINGW and Linux on the same machine, otherwise we
-  # end up with several ssh-agents running because the environments can't
-  # interoperate
-  local uname_s="$(uname -s)"
-  local env="$HOME/.ssh/agent.env.${uname_s}"
-
-  agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
-
-  agent_start () {
-      echo Starting a new ssh-agent
-      (umask 077; ssh-agent >| "$env")
-      . "$env" >| /dev/null ;
-  }
-
-  agent_load_env
-
-  # agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
-  agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
-
-  if [ ! "$SSH_AUTH_SOCK" -o "$agent_run_state" = 2 ]; then
-      agent_start
-  fi
-
+  # agent should have started, let's add the keys
   if [ ! "$SSH_AUTH_SOCK" -o "$agent_run_state" = 2 -o "$agent_run_state" = 1 ]; then
       [ "${uname_s}" = "Darwin" ] && ssh-add --apple-load-keychain
-      ssh-add
+      # add all private keys at bootup
+      # probably should just AddKeysToAgent on a few/all hosts...
+      ssh-add $(printf "%s\n" ~/.ssh/id_* | grep -v \\.pub)
   fi
 
-  # Set the variables in Windows, hopefully getting us a (git-bash) git.exe
-  # call that always chats to the agent
-  if type -p setx.exe >/dev/null; then
-    case $(uname -r) in
-      *[Mm]icrosoft*)
-        # don't want to run this on WSL as the socket won't be accessible for sure
-        ;;
-      *)
-        # run these background commands in a subshell so bash doesn't report that they're done just before our prompt shows
-        (
-          # double-slash due to mingw interpretation, also throw them in the background
-          setx SSH_AUTH_SOCK "${SSH_AUTH_SOCK}" >/dev/null &
-          setx SSH_AGENT_PID "${SSH_AGENT_PID}" >/dev/null &
-        )
-        ;;
-    esac
-  fi
+  ### this is not useful nowadays, we're using the Windows ssh-agent as a service
+  # # Set the variables in Windows, hopefully getting us a (git-bash) git.exe
+  # # call that always chats to the agent
+  # if type -p setx.exe >/dev/null; then
+  #   case $(uname -r) in
+  #     *[Mm]icrosoft*)
+  #       # don't want to run this on WSL as the socket won't be accessible for sure
+  #       ;;
+  #     *)
+  #       # run these background commands in a subshell so bash doesn't report that they're done just before our prompt shows
+  #       (
+  #         # double-slash due to mingw interpretation, also throw them in the background
+  #         setx SSH_AUTH_SOCK "${SSH_AUTH_SOCK}" >/dev/null &
+  #         setx SSH_AGENT_PID "${SSH_AGENT_PID}" >/dev/null &
+  #       )
+  #       ;;
+  #   esac
+  # fi
 }
 maybe_start_ssh_agent
 
-
-### Tell ripgrep and bat (and 'batcat') where their configuration files are (there's no default set path for ripgrep, and the bat one is weird on windows)
-# always set this, as an inner shell might have rg/bat/batcat
-export RIPGREP_CONFIG_PATH=~/.config/ripgreprc
-export BAT_CONFIG_PATH=~/.config/batrc
-
-if hash rg > /dev/null 2>&1; then
-  ### Use rg as the default fzf content provider
-  export FZF_DEFAULT_COMMAND='rg --files'
-fi
-
-if hash fzf > /dev/null 2>&1; then
-  # use a dracula theme on fzf
-  export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
-fi
 
 if hash eza > /dev/null 2>&1; then
   alias ls='eza --classify --icons'
@@ -214,26 +183,6 @@ if hash eza > /dev/null 2>&1; then
   alias ltg='lt --git'
   alias tree='eza --classify --icons --group-directories-first --tree'
   alias treeg='tree --git'
-  # ------------------------------
-  # exa - Color Scheme Definitions for Dracula
-  # from https://github.com/dracula/exa/blob/main/exa_colors.zshrc
-  # ------------------------------
-  export EXA_COLORS="\
-  uu=36:\
-  gu=37:\
-  sn=32:\
-  sb=32:\
-  da=34:\
-  ur=34:\
-  uw=35:\
-  ux=36:\
-  ue=36:\
-  gr=34:\
-  gw=35:\
-  gx=36:\
-  tr=34:\
-  tw=35:\
-  tx=36:"
 fi
 
 
