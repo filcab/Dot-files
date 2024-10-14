@@ -86,6 +86,7 @@ def validate(d, config):
         if not dst.is_absolute():
             dst = Path.cwd() / dst
         dst.resolve()
+        lnk.parent.mkdir(parents=True, exist_ok=True)
 
         had_error |= validate_link(lnk, dst, config)
 
@@ -96,7 +97,7 @@ def validate(d, config):
 
 
 def symlink_is_ok(lnk, dst):
-    return lnk.exists() and lnk.is_symlink() and lnk.readlink().resolve() == dst
+    return lnk.exists() and lnk.is_symlink() and lnk.samefile(dst)
 
 
 def symlink_file(config, lnk, dst):
