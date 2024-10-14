@@ -113,7 +113,8 @@ autocmd! BufWritePost $MYVIMRC source $MYVIMRC
 let $MYVIMRUNTIME = fnamemodify($MYVIMRC, ":p:h")
 if has('win32unix')
   " we're on cygwin/mingw, so switch /X to X:
-  let $MYVIMRUNTIME = substitute($MYVIMRUNTIME, '^/\(.\)\(.*\)$', '\1:\2', '')
+  " let's not... for now?
+  " let $MYVIMRUNTIME = substitute($MYVIMRUNTIME, '^/\(.\)\(.*\)$', '\1:\2', '')
 endif
 
 " Allow some common commands with the first letter(s) capitalized

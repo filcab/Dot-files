@@ -45,7 +45,11 @@ endif
 " FIXME: vim from git-bash will crash upon loading python if it was invoked
 " from git commit as an editor. Let's not issue any 'py3' commands if it looks
 " like that's the case, those editors are very short-lived anyway
-if has('win32unix') && expand("%:t") !=# "COMMIT_EDITMSG"
+" don't do this if we're opening a file to edit a commit message, as it's most
+" likely we won't do anything else
+" only do this if "msys" doesn't appear in &pythonthreedll, which means we're
+" using a normal windows python
+if has('win32unix') && expand("%:t") !=# "COMMIT_EDITMSG" && stridx(&pythonthreedll, "msys") == -1
   " adjust the temporary file directory as mingw vim will set TMP, etc to
   " /tmp, which other libraries (loaded python) won't know what to do with
   " know what to do with and will fallback to the SYSTEM temp dir
