@@ -1,5 +1,6 @@
 # version tracking files (local by default)
 /.config/configstore/update-notifier-npm.json
+/.config/containers/podman/machine/wsl/*
 
 /.subversion/*
 !/.subversion/config
@@ -12,5 +13,5 @@
 /.vim/yankring_history_v2.txt
 
 # Local configurations
-/.vim/after/plugin/autoset-rules-local.vim
 /.shells/rc.local*
+/.vim/after/plugin/autoset-rules-local.vim
