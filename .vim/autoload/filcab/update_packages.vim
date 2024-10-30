@@ -1,5 +1,8 @@
 " Windows installs a useless python3 in the path, let's filter it out
-if executable('python3') && exepath('python3') !~? ".*AppInstallerPythonRedirector.exe"
+if has('win32unix')
+  " ensure we use the mingw version of python, taking *NIX paths
+  let s:pythonCmd = '/usr/bin/python'
+elseif executable('python3') && exepath('python3') !~? ".*AppInstallerPythonRedirector.exe"
   let s:pythonCmd = 'python3'
 elseif executable('python')
   let s:pythonCmd = 'python'
