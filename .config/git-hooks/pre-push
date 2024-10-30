@@ -44,7 +44,7 @@ do
 		commit=$(git rev-list -n 1 -i --grep '^WIP' --grep '^DO NOT PUSH' "$range")
 		if test -n "$commit"
 		then
-			echo >&2 "Found WIP commit in $local_ref, not pushing"
+			echo >&2 "Found WIP commit in $local_ref, not pushing due to $commit"
 			exit 1
 		fi
 	fi
