@@ -145,7 +145,13 @@ set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 
 " When in a git repo, tell us the current branch
 " Only set it if we have fugitive available. Check with a variable it defines
-let &statusline = '%{fugitive#statusline()} ' . &statusline
+function! FilcabFugitive_statusline() abort
+  if exists('*fugitive#statusline')
+    return fugitive#statusline()..' '
+  endif
+  return ''
+endfunction
+let &statusline = '%{FilcabFugitive_statusline()}' . &statusline
 
   " macOS' Terminal.app doesn't support 24-bit colours :-(
 if !has('macunix') || has('gui_running')
