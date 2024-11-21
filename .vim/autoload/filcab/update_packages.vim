@@ -103,7 +103,7 @@ endfunction
 
 function! s:updatePackages_step2(job, status) abort
   if a:status == 0
-    helptags ALL
+    silent! helptags $MYVIMRUNTIME/**/doc
     call s:packOptHelpTags()
     " reuse the other term window if it's visible
     let bufnr = ch_getbufnr(a:job, "out")

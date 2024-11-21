@@ -66,7 +66,8 @@ if platform.system() == "Darwin":
 elif platform.system() == "Windows" or platform.system().startswith("MINGW"):
     lib_suffixes = ["lib"]
 elif platform.system() in ["Linux", "FreeBSD"]:
-    lib_suffixes = ["so", "so.1"]
+    # found a .so.13 in centos 8's llvm14
+    lib_suffixes = ["so", *(f"so.{x}" for x in range(1, 14))]
 else:
     print(
         f"Unknown platform: {platform.system()}. Please edit this script and add it.",
@@ -96,9 +97,22 @@ tentative_llvm_paths = list(
             "/usr/lib/llvm-18",
             "/usr/lib/llvm-19",
             "/usr/lib/llvm-20",
+            # linux (centos, at least)
+            "/usr/lib64/llvm14",
+            "/usr/lib64/llvm15",
+            "/usr/lib64/llvm16",
+            "/usr/lib64/llvm17",
+            "/usr/lib64/llvm18",
+            "/usr/lib64/llvm19",
+            "/usr/lib64/llvm20",
             # freebsd ports
             "/usr/local/llvm14",
             "/usr/local/llvm15",
+            "/usr/local/llvm16",
+            "/usr/local/llvm17",
+            "/usr/local/llvm18",
+            "/usr/local/llvm19",
+            "/usr/local/llvm20",
         ])))
 )
 

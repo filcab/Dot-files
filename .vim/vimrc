@@ -291,7 +291,10 @@ autocmd BufReadPost *
 " we aren't marking red the area that we are just typing.
 match Error /\s\+\%#\@!$/
 
+" allow for a never-called UpdatePackages command
+" we might not have vim-matchup yet
 silent! packadd vim-matchup
+
 if !get(g:, 'loaded_matchup', 0)
   " Load matchit.vim, but only if the user hasn't installed a newer version.
   if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
