@@ -67,7 +67,8 @@ elif platform.system() == "Windows" or platform.system().startswith("MINGW"):
     lib_suffixes = ["lib"]
 elif platform.system() in ["Linux", "FreeBSD"]:
     # found a .so.13 in centos 8's llvm14
-    lib_suffixes = ["so", *(f"so.{x}" for x in range(1, 14))]
+    # and now it's .so.19.1
+    lib_suffixes = ["so", "so.1", *(f"so.{x}.1" for x in range(15, 21))]
 else:
     print(
         f"Unknown platform: {platform.system()}. Please edit this script and add it.",
@@ -98,13 +99,7 @@ tentative_llvm_paths = list(
             "/usr/lib/llvm-12",
             "/usr/lib/llvm-11",
             # linux (centos, at least)
-            "/usr/lib64/llvm20",
-            "/usr/lib64/llvm19",
-            "/usr/lib64/llvm18",
-            "/usr/lib64/llvm17",
-            "/usr/lib64/llvm16",
-            "/usr/lib64/llvm15",
-            "/usr/lib64/llvm14",
+            "/usr",
             # freebsd ports
             "/usr/local/llvm20",
             "/usr/local/llvm19",
@@ -120,7 +115,7 @@ libclang_lib, lib_suffix = next(
     (x, lib_suffix)
     for d in tentative_llvm_paths
     for lib_suffix in lib_suffixes
-    for x in d.glob(f"lib/lib*clang.{lib_suffix}")
+    for x in d.glob(f"lib*/lib*clang.{lib_suffix}")
 )
 
 # We'll actually get an exception if we didn't find it
