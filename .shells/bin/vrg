@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# to be used with this alias so we can run `v` immediately after an `rg` command:
+# alias v='eval "v$(fc -l -n -1)"'
+exec vim -q <(rg --vimgrep "$@")
