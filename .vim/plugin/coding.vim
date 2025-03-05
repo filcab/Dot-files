@@ -83,3 +83,6 @@ if has("autocmd") && exists("+omnifunc")
 endif
 
 let g:filecheck_auto_enable = v:true
+
+" we have vim-sleuth, so disble pseudo-Sleuth functionality from vim-polyglot
+let g:polyglot_disabled = ["autoindent"]
