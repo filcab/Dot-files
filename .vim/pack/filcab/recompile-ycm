@@ -63,7 +63,7 @@ if os.path.isdir(ycm_dir):
 
 if platform.system() == "Darwin":
     lib_suffixes = ["dylib"]
-elif platform.system() == "Windows":
+elif platform.system() == "Windows" or platform.system().startswith("MINGW"):
     lib_suffixes = ["lib"]
 elif platform.system() in ["Linux", "FreeBSD"]:
     lib_suffixes = ["so", "so.1"]
