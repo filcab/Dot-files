@@ -72,7 +72,8 @@ fi
 
 if hash rg > /dev/null 2>&1; then
   ### Use rg as the default fzf content provider
-  export FZF_DEFAULT_COMMAND='rg --files'
+  # default to showing all files
+  export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden'
 fi
 
 if hash fzf > /dev/null 2>&1; then
