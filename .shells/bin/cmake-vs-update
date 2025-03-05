@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import json
+import shutil
 import subprocess
 import os
 import sys
@@ -106,6 +107,10 @@ def main(prog, argv):
             continue
 
         adjust_cache_paths_to_vs_install(cache, info)
+        for f in (d/'CMakeFiles').glob('*/CMakeASM_MASMCompiler.cmake'):
+            # this file gets cached with the old path and doesn't get updated!
+            f.unlink()
+            print("Deleted:", f)
 
 
 CMAKE_VARS_VCTOOLS = [
@@ -133,23 +138,27 @@ def adjust_cache_paths_to_vs_install(cache, info):
         var_decl, value = line.split("=", maxsplit=1)
         # don't use maxsplit as we really only expect one ':' in there
         var_name, var_type = var_decl.split(":")
-        if var_name in CMAKE_VARS_VCTOOLS:
+
+        is_vctool = var_name in CMAKE_VARS_VCTOOLS
+        is_winsdk_tool = not is_vctool and var_name in CMAKE_VARS_WINSDK_TOOLS
+        if is_vctool or is_winsdk_tool:
             tool = Path(value).name
-            new_exe = info['x64_dir'] / tool
+            new_dir = info['x64_dir'] if is_vctool else info['winsdk_bindir']
+            new_exe = new_dir / tool
             new_line = f"{var_decl}={new_exe.as_posix()}"
-            print(f"changing var:\n{line}\n{new_line}")
-        elif var_name in CMAKE_VARS_WINSDK_TOOLS:
-            tool = Path(value).name
-            new_exe = info['winsdk_bindir'] / tool
-            new_line = f"{var_decl}={new_exe.as_posix()}"
-            print(f"changing var:\n{line}\n{new_line}")
+            if line != new_line:
+                print(f"changing var:\n{line}\n{new_line}")
+                out_contents.append(f" # old: {line}")
+            else:
+                print(f"not changing var: {line}")
         else:
             new_line = line
         out_contents.append(new_line)
 
     if in_contents != out_contents:
-        # cache.write_text("\n".join(out_contents))
-        print("would write", cache)
+        shutil.copyfile(cache, cache.with_suffix(".backup"))
+        cache.write_text("\n".join(out_contents))
+        print("wrote", cache)
     else:
         print("no change in", cache)
 
