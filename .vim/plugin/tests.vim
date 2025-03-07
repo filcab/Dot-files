@@ -60,3 +60,49 @@ endfunction
 " interesting shortcuts, let's try them out
 vnoremap  :Strikethrough<CR>
 vnoremap __ :Underline<CR>
+
+function! s:tmuxCopy(data)
+  call system("tmux load-buffer -w -", a:data)
+endfunction
+
+function! s:tmuxPaste()
+  let @" = system("tmux show-buffer")
+endfunction
+
+if getenv("TMUX") != v:null
+  let g:filcab_tmux = v:true
+  " default to always copying to tmux when copying to vim?
+  augroup tmux_clipboard
+    au!
+    au TextYankPost * call s:tmuxCopy(@")
+  augroup END
+  " WARNING: tmuxPaste just "imports" the tmux buffer into @"
+  " unfortunately, I couldn't find an easy way to replicate a basic 'p'
+  " command
+  command! -nargs=0 TmuxPaste call s:tmuxPaste()
+  noremap <expr> <Leader>p <SID>tmuxPaste("p")
+endif
+
+" try to get bracketed paste mode to work
+if &t_BE == ''
+  let &t_BE = "\e[?2004h"
+  let &t_BD = "\e[?2004l"
+  let &t_PS = "\e[200~"
+  let &t_PE = "\e[201~"
+endif
+
+function! s:updateEnvVarsFromTmux()
+  let vars = systemlist("tmux show-env")
+  for line in vars
+    if line[0] == '-'
+      continue
+    endif
+
+    let eqIdx = stridx(line, '=')
+    let var = line[:eqIdx-1]
+    let value = line[eqIdx+1:]
+    call setenv(var, value)
+  endfor
+endfunction
+
+command! -nargs=0 UpdateEnvVarsFromTmux call s:updateEnvVarsFromTmux()
