@@ -1,0 +1,8 @@
+#!/bin/sh
+
+tmux-update-shell-env() {
+  echo updating vars to:
+  tmux show-env
+
+  eval $(tmux show-env -s)
+}
