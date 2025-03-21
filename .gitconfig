@@ -28,6 +28,7 @@
 
 
 [commit]
+	cleanup = scissors
 	verbose = true
 [core]
 	autocrlf = false
