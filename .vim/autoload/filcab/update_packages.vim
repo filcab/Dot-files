@@ -1,7 +1,7 @@
 " Windows installs a useless python3 in the path, let's filter it out
 if has('win32unix')
   " ensure we use the mingw version of python, taking *NIX paths
-  let s:pythonCmd = '/usr/bin/python'
+  let s:pythonCmd = '/usr/bin/env python'
 elseif executable('python3') && exepath('python3') !~? ".*AppInstallerPythonRedirector.exe"
   let s:pythonCmd = 'python3'
 elseif executable('python')
@@ -9,6 +9,8 @@ elseif executable('python')
 else
   echoerr "Couldn't find python3 or python: UpdatePackages and RecompileYCM commands won't work"
 endif
+
+echom "update_packages' pythonCmd: " s:pythonCmd
 
 " args: options to term_start()
 function! filcab#update_packages#recompileYCM(...)
@@ -33,6 +35,7 @@ EOF
 
   let recompileScript = $MYVIMRUNTIME.'/pack/filcab/recompile-ycm'
   if a:0 == 0
+    echom  ":terminal" "++shell" s:pythonCmd shellescape(recompileScript) "opt/YouCompleteMe".ycm_suffix
     execute  ":terminal" "++shell" s:pythonCmd shellescape(recompileScript) "opt/YouCompleteMe".ycm_suffix
   else
     let options = {
@@ -41,6 +44,7 @@ EOF
 	  \ }
     let options = extend(options, a:1)
     let cmd = join([s:pythonCmd, recompileScript, "opt/YouCompleteMe".ycm_suffix], " ")
+    echom "term_start(" cmd ", " options ")"
     return term_start(cmd, options)
   endif
 endfunction
@@ -71,6 +75,7 @@ function! s:updatePackages(...)
     let script = shellescape(script)
     let sourcesFile = shellescape(sourcesFile)
     let cmd = join([s:pythonCmd, script, "-o", shellescape(myPackDir), "--rename", ycm_rename, sourcesFile], " ")
+    echom ":terminal" "++noclose" "++shell" cmd
     execute ":terminal" "++noclose" "++shell" cmd
   else
     let options = {
@@ -79,6 +84,7 @@ function! s:updatePackages(...)
 	  \ }
     let options = extend(options, a:1)
     let cmd = join([s:pythonCmd, script, "-o", myPackDir, "--rename", ycm_rename, sourcesFile], " ")
+    echom "term_start(" cmd ", " options ")"
     return term_start(cmd, options)
   end
 endfunction
