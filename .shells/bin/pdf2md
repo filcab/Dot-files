@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+from pathlib import Path
+
+import argparse
+import os
+import sys
+
+import pymupdf4llm
+
+def main(prog, *argv):
+    p = argparse.ArgumentParser(prog=prog)
+    p.add_argument("--force", "-f", action=argparse.BooleanOptionalAction, default=False)
+    p.add_argument("files", nargs="+", metavar="file")
+    args = p.parse_args()
+
+    failed = {}
+    for f in args.files:
+        infile = Path(f)
+        outfile = infile.with_suffix(".md")
+
+        if not args.force and outfile.exists():
+            print(f"skipping: {infile} -> {outfile} (destination exists)")
+            continue
+
+        print(f"converting: {infile} -> {outfile}")
+        # straight from the example: https://pypi.org/project/pymupdf4llm/
+        try:
+            md_text = pymupdf4llm.to_markdown(infile)
+        except Exception as e:
+            failed[infile] = e
+            continue
+
+        # now work with the markdown text, e.g. store as a UTF8-encoded file
+        outfile.write_bytes(md_text.encode())
+
+        # and set our md timestamps to be the same as the pdf for easier searched by
+        # creation/modification time
+        instat = infile.stat()
+        try:
+            os.utime(outfile, ns=(instat.st_atime_ns, instat.st_mtime_ns))
+        except Exception as e:
+            print(f"warning: could not set atime+mtime for {outfile}: {e}")
+
+
+
+if __name__ == "__main__":
+    sys.exit(main(*sys.argv))
