@@ -22,6 +22,7 @@ opt/fzf|git|https://github.com/junegunn/fzf.git
 opt/fzf.vim|git|https://github.com/junegunn/fzf.vim.git
 
 # Language tools (to be packadd-ed by me)
+start/black|git|https://github.com/psf/black.git
 ## LSP-related
 # Not well behaved. Load only when needed
 opt/YouCompleteMe|git|https://github.com/Valloric/YouCompleteMe.git

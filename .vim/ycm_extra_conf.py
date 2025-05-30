@@ -217,7 +217,7 @@ def Settings(**kwargs):
         # ruff-lsp path is configured vim-side, if so, set to use that executable
         # check if the executable (automatically found or via search) is there. If so,
         # use ruff-lsp, otherwise use whatever was default
-        if shutil.which('ruff-lsp'):
+        if shutil.which('ruff'):
             # we found ruff, disable other plugins that do the same thing, including
             # 'black', which we've setup earlier
             for plugin in ['pycodestyle', 'pyflakes', 'mccabe', 'black']:
@@ -233,5 +233,6 @@ def Settings(**kwargs):
         return {
             'ls': {
                 'pylsp.plugins': plugin_configs,
+                'ruff': plugin_configs.get('ruff', {}),
             },
         }

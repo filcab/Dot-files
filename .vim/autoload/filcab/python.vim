@@ -52,22 +52,19 @@ function filcab#python#init() abort
   " do this before filcab#lsp#setup() so we have everything in place before
   " YCM queries the variable
   if executable('pylsp')
-    echom "adding pylsp to ycm"
-    " we don't need to call functions here, so always add it
     let g:ycm_language_server = get(g:, 'ycm_language_server', []) +
           \ [
           \   {
-          \     'name': 'python',
-          \     'cmdline': ['pylsp'],
+          \     'name': 'ruff',
+          \     'cmdline': ['ruff', 'server'],
           \     'filetypes': ['python'],
-          \   }
+          \   },
           \ ]
-          " \   },
-          " use ruff as a pylsp plugin instead of this by installing python-lsp-ruff
           " \   {
-          " \     'name': 'ruff',
-          " \     'cmdline': ['ruff-lsp'],
+          " \     'name': 'python',
+          " \     'cmdline': ['pylsp'],
           " \     'filetypes': ['python'],
+          " \   }
   endif
 
   call filcab#lsp#setup()
@@ -75,22 +72,22 @@ function filcab#python#init() abort
   " this one has to be done after filcab#lsp#setup() because we're calling
   " their function
   if get(g:, 'lsp_impl', '') == "vim-lsp"
-    if executable('pylsp')
-      echo "Setting up vim-lsp for Python"
-      " pip install python-lsp-server
-      call lsp#register_server({
-        \ 'name': 'pylsp',
-        \ 'cmd': {server_info->['pylsp']},
-        \ 'whitelist': ['python'],
-        \ })
-    endif
+    " if executable('pylsp')
+    "   echo "Setting up vim-lsp for Python"
+    "   " pip install python-lsp-server
+    "   call lsp#register_server({
+    "     \ 'name': 'pylsp',
+    "     \ 'cmd': {server_info->['pylsp']},
+    "     \ 'whitelist': ['python'],
+    "     \ })
+    " endif
     " ruff: linter + autoformatter for python
     " TODO: for now let's use its integration with pylsp and see if that works
-    " call lsp#register_server({
-    "   \ 'name': 'ruff',
-    "   \ 'cmd': {server_info->['ruff-lsp']},
-    "   \ 'whitelist': ['python'],
-    "   \ })
+    call lsp#register_server({
+      \ 'name': 'ruff',
+      \ 'cmd': {server_info->['ruff', 'server']},
+      \ 'whitelist': ['python'],
+      \ })
   endif
 
   let g:filcab#python#initted = v:true
