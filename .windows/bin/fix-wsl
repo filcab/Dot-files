@@ -1,4 +1,8 @@
 #!/bin/sh
 
+echo sh fix-wsl
+set -x
 # powershell -Command "Start-Process netsh -ArgumentList winsock,reset -verb runAs ; Start-Process sc -ArgumentList stop, vmcompute -verb runAs; Start-Process sc -ArgumentList start,vmcompute -verb runAs"
-powershell -Command "Start-Process sc -ArgumentList stop, vmcompute -verb runAs; Start-Process sc -ArgumentList start,vmcompute -verb runAs"
+# powershell -Command "Start-Process sc -ArgumentList stop, vmcompute -verb runAs; Start-Process sc -ArgumentList start,vmcompute -verb runAs"
+# powershell -Command "Start-Process -verb runAs powershell -ArgumentList '-Command','{Restart-Service vmcompute}'"
+powershell -Command "Start-Process -verb runAs sc -ArgumentList stop,vmcompute"
