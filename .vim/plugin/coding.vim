@@ -3,7 +3,7 @@
 " Take the colours out of NINJA_STATUS on windows GUI, as they don't get
 " properly displayed with :Make
 if has('win32')
-  let $NINJA_STATUS = '%e [%u/%r/%f]'
+  let $NINJA_STATUS = '%e [%u/%r/%f] '
 endif
 
 " clang-format changed lines on save
@@ -29,7 +29,7 @@ let g:ycm_always_populate_location_list = 1
 let g:ycm_show_detailed_diag_in_popup = 1
 let g:ycm_enable_semantic_highlighting = 1
 let g:ycm_global_ycm_extra_conf = expand($MYVIMRUNTIME . '/ycm_extra_conf.py')
-function YcmTargetFlags() abort
+function! YcmTargetFlags() abort
   return get(b:, "ycm_target_flags", get(g:, "ycm_target_flags", []))
 endfunction
 let g:ycm_extra_conf_vim_data = ["YcmTargetFlags()"]
@@ -86,3 +86,12 @@ let g:filecheck_auto_enable = v:true
 
 " we have vim-sleuth, so disble pseudo-Sleuth functionality from vim-polyglot
 let g:polyglot_disabled = ["autoindent"]
+
+" hijack vim-dispatch's autocomplete (we should create a similar one though,
+" as we don't have the arguments)
+" FIXME: This is only a Windows thing right now. Let's add some
+" configurability and good defaults for Windows/Linux/macOS
+" FIXME: Have a way to open a solution file *and* start a debug session with
+" some args
+command -nargs=+ -complete=customlist,dispatch#command_complete Debugexe
+  \ silent !devenv -debugexe <q-args>

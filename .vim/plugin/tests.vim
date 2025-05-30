@@ -1,21 +1,5 @@
 set cmdheight=2
 
-" Use space as the leader as it's much more accessible, especially in UK
-" keyboards (and US Mac keyboards on Windows)
-let mapleader = ' '
-
-" I've been trying out tabs for a few things... let's see if this pans out
-" The only of [] {} () where neither char is bound in default C-w sequences is ()
-" just skip any errors. If these aren't setup, I'll just use `verbose map` to
-" see what happened
-silent! nnoremap <unique> <c-w>( <Cmd>tabprev<cr>
-silent! nnoremap <unique> <c-w>) <Cmd>tabnext<cr>
-" escape to EX mode first
-silent! tnoremap <unique> <c-w>( <Cmd>tabprev<cr>
-silent! tnoremap <unique> <c-w>) <Cmd>tabnext<cr>
-silent! xnoremap <unique> <c-w>( <Cmd>tabprev<cr>
-silent! xnoremap <unique> <c-w>) <Cmd>tabnext<cr>
-
 " Remove line numbers in :terminal buffers (when in normal mode)
 augroup filcabTerminal
   autocmd!

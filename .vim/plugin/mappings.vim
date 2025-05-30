@@ -6,6 +6,10 @@ endif
 " need to do this before mapping both to different things, below
 let maplocalleader=','
 
+" Use space as the leader as it's much more accessible, especially in UK
+" keyboards (and US Mac keyboards on Windows)
+let mapleader = ' '
+
 " terminal:  Use a mapping similar to tmux's copy-mode map to change to normal mode
 tmap <c-w>[ <c-w>N
 
@@ -55,5 +59,17 @@ inoremap <unique> <C-x>? <Cmd>call filcab#help#CTRL_X_Help()<cr>
 nnoremap <unique> z/ :if filcab#AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
 noremap <unique> <localleader>? <Cmd>call filcab#help#map_Help('<localleader>')<cr>
+
+" I've been trying out tabs for a few things... let's see if this pans out
+" The only of [] {} () where neither char is bound in default C-w sequences is ()
+" just skip any errors. If these aren't setup, I'll just use `verbose map` to
+" see what happened
+silent! nnoremap <unique> <c-w>( <Cmd>tabprev<cr>
+silent! nnoremap <unique> <c-w>) <Cmd>tabnext<cr>
+" escape to EX mode first
+silent! tnoremap <unique> <c-w>( <Cmd>tabprev<cr>
+silent! tnoremap <unique> <c-w>) <Cmd>tabnext<cr>
+silent! xnoremap <unique> <c-w>( <Cmd>tabprev<cr>
+silent! xnoremap <unique> <c-w>) <Cmd>tabnext<cr>
 
 let g:loaded_mappings = 1
