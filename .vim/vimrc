@@ -135,7 +135,8 @@ set nomodeline
 let $EDITOR = "vim"
 
 " Make %% in the command line expand to the directory of the current file
-cabbr <expr> %% expand('%:p:h:gs?\\?/?')
+" fixed: try a second sub to escape spaces and some special chars. Hopefully that's good for all OS
+cabbr <expr> %% expand('%:p:h:gs?\\?/?:gs?\([ #]\)?\\\1?')
 
 " statusline:
 "   close to the default one but with the following changes:
