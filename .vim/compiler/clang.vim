@@ -17,6 +17,7 @@ CompilerSet errorformat+=%D%*\\a:\ Entering\ directory\ `%f'
 
 " Windows and Unix-style error/warning/note formats: file(line,col): and file:line:col: ...
 CompilerSet errorformat+=%E%f\\(%l\\,%c\\)\ :\ \ %trror:\ %m
+CompilerSet errorformat+=%E%f\\(%l\\,%c\\):\ \ %trror:\ %m
 CompilerSet errorformat+=%E%f:%l:%c:\ %trror:\ %m
 CompilerSet errorformat+=%E%f:%l:\ %trror:\ %m
 CompilerSet errorformat+=%W%f\\(%l\\,%c\\)\ :\ \ %tarning:\ %m
