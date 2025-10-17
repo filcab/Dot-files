@@ -3,6 +3,22 @@
 let g:filcab_vim_python_use_debug = get(g:, 'filcab_vim_python_use_debug', v:false)
 
 function! s:wherePython3() abort
+  " assume the launcher is installed
+  let lines = systemlist('py --list-paths')
+  for line in lines
+    if stridx(line, '*') == -1
+      continue
+    endif
+    let exe = line->substitute('^[^*]\+\*\s\+', '', '')->trim()
+    let stem = fnamemodify(exe, ":r")
+    " ...python*3*.dll
+    let dll = stem.."3.dll"
+    " echom "trying" dll
+    if filereadable(dll)
+      return dll
+    endif
+  endfor
+
   let whereCmd = 'where '.shellescape(&pythonthreedll)
   try
     let whereOutput = system(whereCmd)->split('\r\?\n\+')[0]
@@ -25,11 +41,11 @@ function! filcab#python_win32#set_pythonthreedll() abort
   " hack it. prerequisite: symlink of the pythons in git-sdk-for-windows into
   " git-for-windows. or we can probably just always use the git-sdk for our
   " git stuff...
-  if has('win32unix')
-    let whereOutput = "/usr/bin/"..&pythonthreedll
-  else
+  " if has('win32unix')
+  "   let whereOutput = "/usr/bin/"..&pythonthreedll
+  " else
     let whereOutput = s:wherePython3()
-  endif
+  " endif
 
   " if `where` can find the dll, adjust for the debug version or just leave it
   " be, as the option will work
