@@ -185,4 +185,4 @@ if hash eza > /dev/null 2>&1; then
   alias treeg='tree --git'
 fi
 
-
+alias raddbg='start //b raddbg.exe'
