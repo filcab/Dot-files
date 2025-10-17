@@ -51,12 +51,17 @@ function filcab#python#init() abort
 
   " do this before filcab#lsp#setup() so we have everything in place before
   " YCM queries the variable
+  if executable('uvx')
+    let ruff_cmd = ['uvx', 'ruff@latest', 'server']
+  elseif executable('ruff')
+    let ruff_cmd = ['ruff', 'server']
+  endif
   if executable('pylsp')
     let g:ycm_language_server = get(g:, 'ycm_language_server', []) +
           \ [
           \   {
           \     'name': 'ruff',
-          \     'cmdline': ['ruff', 'server'],
+          \     'cmdline': ruff_cmd,
           \     'filetypes': ['python'],
           \   },
           \ ]
@@ -85,7 +90,7 @@ function filcab#python#init() abort
     " TODO: for now let's use its integration with pylsp and see if that works
     call lsp#register_server({
       \ 'name': 'ruff',
-      \ 'cmd': {server_info->['ruff', 'server']},
+      \ 'cmd': {server_info->ruff_cmd},
       \ 'whitelist': ['python'],
       \ })
   endif
