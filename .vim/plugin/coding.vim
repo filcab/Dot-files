@@ -95,3 +95,6 @@ let g:polyglot_disabled = ["autoindent"]
 " some args
 command -nargs=+ -complete=customlist,dispatch#command_complete Debugexe
   \ silent !devenv -debugexe <q-args>
+" FIXME: test if raddbg is available?
+command -nargs=+ -complete=customlist,dispatch#command_complete Raddbg
+  \ silent !start /b raddbg.exe <q-args>
