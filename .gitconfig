@@ -1,7 +1,9 @@
 [alias]
 	word-diff = diff --word-diff
 	diffword = diff --word-diff
-	pretty  = log --graph --date-order --pretty=mypretty      --abbrev-commit --date=relative
+	pretty  = log --graph --date-order --pretty=mypretty --abbrev-commit --date=relative
+	prettyd  = prettydescribe
+	prettydescribe  = log --graph --date-order --pretty=myprettydescribed --abbrev-commit --date=relative
 	prettyh = log --graph --date-order --pretty=myprettyhuman --abbrev-commit --date=relative
 	# fshow = "!f() { : git log; selected=$(git pretty --all --color=always \"$@\" | fzf --ansi | cut -d \\' -f2 | cut -d ' ' -f1); test \"$?\" -eq 0 && git show \"$selected\"; }; f"
 	pretty2 = log --graph --all --format=mypretty2 --abbrev-commit
@@ -64,9 +66,11 @@
 	format = format:%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset
 [pretty.myprettyhuman]
 	format = format:%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ch) %C(bold blue)<%an>%Creset
-
 [pretty.mypretty2]
 	format = format:%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)
+[pretty.myprettydescribed]
+	format = format:%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset %C(bold yellow)%(describe:match=*_release*)%C(reset)
+
 
 
 [fetch]
