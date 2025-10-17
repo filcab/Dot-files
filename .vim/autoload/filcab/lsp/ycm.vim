@@ -73,6 +73,11 @@ function! filcab#lsp#ycm#do_ftplugin() abort
   endif
   call s:log(1, "subcommands:", subcommands)
 
+  if &ft == 'python'
+    " if we have an lsp for python, disable python-mode's builtin linter
+    let b:pymode_lint = 0
+  endif
+
   call s:ycm_mapping(subcommands, {"plug_name": "ExecuteCommand"})
   call s:ycm_mapping(subcommands, {"plug_name": "Fixit"})  " clangd
   call s:ycm_mapping(subcommands, {"plug_name": "FixIt"})  " python-lsp
