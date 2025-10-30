@@ -30,7 +30,7 @@ case "${uname_s}" in
     # Python user-installed files (prepend so any user-installed pip/etc overrides the system one)
     path_prepend_dirs "$HOME/Library/Python/3.7/bin" "$HOME/Library/Python/2.7/bin"
     ;;
-  Linux)
+  Linux|MINGW*)
     path_prepend_dirs "$HOME/.local/bin"
     ;;
 esac
