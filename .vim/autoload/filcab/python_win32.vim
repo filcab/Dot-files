@@ -4,20 +4,28 @@ let g:filcab_vim_python_use_debug = get(g:, 'filcab_vim_python_use_debug', v:fal
 
 function! s:wherePython3() abort
   " assume the launcher is installed
-  let lines = systemlist('py --list-paths')
-  for line in lines
-    if stridx(line, '*') == -1
-      continue
+  if executable('py')
+    let lines = systemlist('py --list-paths')
+    for line in lines
+      if stridx(line, '*') == -1
+        continue
+      endif
+      let exe = line->substitute('^[^*]\+\*\s\+', '', '')->trim()
+      let stem = fnamemodify(exe, ":r")
+      " ...python*3*.dll
+      let dll = stem.."3.dll"
+      " echom "trying" dll
+      if filereadable(dll)
+        return dll
+      endif
+    endfor
+  elseif executable('uv')
+    let default_py = systemlist('uv python find default')[0]
+    if filereadable(default_py)
+      let default_py_dir = fnamemodify(default_py, ":p:h")
+      return default_py_dir .. "/python3.dll"
     endif
-    let exe = line->substitute('^[^*]\+\*\s\+', '', '')->trim()
-    let stem = fnamemodify(exe, ":r")
-    " ...python*3*.dll
-    let dll = stem.."3.dll"
-    " echom "trying" dll
-    if filereadable(dll)
-      return dll
-    endif
-  endfor
+  endif
 
   let whereCmd = 'where '.shellescape(&pythonthreedll)
   try
