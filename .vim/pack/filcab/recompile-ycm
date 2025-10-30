@@ -5,6 +5,7 @@ from pathlib import Path
 import argparse
 import os
 import platform
+import shlex
 import shutil
 import subprocess
 import sys
@@ -108,6 +109,9 @@ tentative_llvm_paths = list(
             "/usr/local/llvm16",
             "/usr/local/llvm15",
             "/usr/local/llvm14",
+
+            # windows installs
+            "c:/Program Files/LLVM",
         ])))
 )
 
@@ -176,10 +180,10 @@ find_executable_enable_completer("node", "ts")
 completers.warn_skipped()
 
 env = os.environ.copy()
-env["EXTRA_CMAKE_ARGS"] = f"-DEXTERNAL_LIBCLANG_PATH:FILEPATH={libclang_lib.as_posix()}"
+env["EXTRA_CMAKE_ARGS"] = f"-DEXTERNAL_LIBCLANG_PATH:FILEPATH={shlex.quote(libclang_lib.as_posix())}"
 # For some reason we need this on Windows
 if platform.system() == "Windows":
-    env["EXTRA_CMAKE_ARGS"] += f" -DPATH_TO_LLVM_ROOT:PATH={llvm_root.as_posix()}"
+    env["EXTRA_CMAKE_ARGS"] += f" -DPATH_TO_LLVM_ROOT:PATH={shlex.quote(llvm_root.as_posix())}"
 
 
 # , '--build-dir={}'.format(os.path.join(os.getcwd(), platform.system()))
