@@ -4,7 +4,7 @@ function! filcab#fzf#install_fzf_and_keybindings() abort
   let v:errmsg = ""
   silent! packadd fzf
   if v:errmsg != ""
-    echom v:errmsg
+    silent echom v:errmsg
     return
   endif
 
