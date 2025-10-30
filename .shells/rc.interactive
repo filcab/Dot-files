@@ -103,9 +103,8 @@ export LESS_TERMCAP_ue=$'\e[0m'
 ### Load ssh-agent settings or start it and export its settings
 maybe_start_ssh_agent() {
   case "$(which ssh-agent)" in
-    /c/WINDOWS/System32/ssh-agent|"/c/Program Files/OpenSSH/ssh-agent")
-      # just assume we have no keys
-      agent_run_state=1
+    /c/Windows/System32/OpenSSH/ssh-agent|"/c/Program Files/OpenSSH/ssh-agent")
+      agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
       ;;
     *)
       # all others must guarantee we have an ssh-agent before calling ssh-add
@@ -144,13 +143,14 @@ maybe_start_ssh_agent() {
     fi
   esac
 
+  # 2025/10/30: let's not add the keys, use .ssh/config's AddKeysToAgent yes
   # agent should have started, let's add the keys
-  if [ ! "$SSH_AUTH_SOCK" -o "$agent_run_state" = 2 -o "$agent_run_state" = 1 ]; then
-      [ "${uname_s}" = "Darwin" ] && ssh-add --apple-load-keychain
-      # add all private keys at bootup
-      # probably should just AddKeysToAgent on a few/all hosts...
-      ssh-add $(printf "%s\n" ~/.ssh/id_* | grep -v \\.pub)
-  fi
+  # if [ ! "$SSH_AUTH_SOCK" -o "$agent_run_state" = 2 -o "$agent_run_state" = 1 ]; then
+  #     [ "${uname_s}" = "Darwin" ] && ssh-add --apple-load-keychain
+  #     # add all private keys at bootup
+  #     # probably should just AddKeysToAgent on a few/all hosts...
+  #     ssh-add $(printf "%s\n" ~/.ssh/id_* | grep -v \\.pub)
+  # fi
 
   ### this is not useful nowadays, we're using the Windows ssh-agent as a service
   # # Set the variables in Windows, hopefully getting us a (git-bash) git.exe
