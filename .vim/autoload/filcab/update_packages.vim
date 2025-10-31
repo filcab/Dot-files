@@ -120,7 +120,7 @@ function! s:updatePackages_step2(job, status) abort
       let options = {}
     endif
     call filcab#update_packages#recompileYCM(options)
-    execute ":bdelete" bufnr
+    " execute ":bdelete" bufnr
   else
     echohl WarningMsg
     echom "UpdatePackages: Failed to update all packages, not running recompile script"
