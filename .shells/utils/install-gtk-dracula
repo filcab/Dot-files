@@ -1,0 +1,4 @@
+#!/bin/sh
+
+mkdir -p ~/.themes
+curl -L https://github.com/dracula/gtk/releases/download/v4.0.0/Dracula.tar.xz | tar -C ~/.themes -Jxf -
