@@ -10,12 +10,12 @@ function! s:wherePython3() abort
       if stridx(line, '*') == -1
         continue
       endif
-      let exe = line->substitute('^[^*]\+\*\s\+', '', '')->trim()
-      let stem = fnamemodify(exe, ":r")
+      let exe = line->substitute('^[^*]\+\*\s\+', '', '')->trim()->substitute('\\', '/', 'g')
+      let head = fnamemodify(exe, ":h")
+      let stem = fnamemodify(exe, ":t:r")->substitute('\.', '', '')
       " ...python*3*.dll
-      let dll = stem.."3.dll"
-      " echom "trying" dll
-      if filereadable(dll)
+      let dll = head .. '/' .. stem .. ".dll"
+      if executable(dll)
         return dll
       endif
     endfor
@@ -23,7 +23,11 @@ function! s:wherePython3() abort
     let default_py = systemlist('uv python find default')[0]
     if filereadable(default_py)
       let default_py_dir = fnamemodify(default_py, ":p:h")
-      return default_py_dir .. "/python3.dll"
+      if executable(default_py_dir .. "/python3t.dll")
+        return default_py_dir .. "/python3t.dll"
+      else
+        return default_py_dir .. "/python3.dll"
+      endif
     endif
   endif
 
@@ -92,6 +96,8 @@ function! filcab#python_win32#set_pythonthreedll() abort
       " echom 'setting pythonthreedll from' &pythonthreedll 'to' globbed[0]
       let &pythonthreedll = globbed[0]
     endif
+  else
+    let &pythonthreedll = whereOutput
   endif
 
   " for some reason, we started to need this on py3.11 on Windows...
