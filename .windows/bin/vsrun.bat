@@ -1,1 +1,1 @@
-C:/Dev/dot-files/.windows/bin/vs2022run.bat
+C:/dev/dot-files/.windows/bin/vs2026run.bat

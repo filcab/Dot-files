@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# run vim in the VS2026 environment for x64 host and target
+cmd //c "$(cygpath -w /c/Program\ Files/Microsoft\ Visual\ Studio/18/Professional/VC/Auxiliary/Build/vcvars64.bat)" ">/dev/null" "&" $(printf " %q" "$@")
