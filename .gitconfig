@@ -98,6 +98,7 @@
 	fsckobjects = true
 [fetch]
 	fsckobjects = true
+	parallel = 0
 [receive]
 	fsckObjects = true
 [init]
